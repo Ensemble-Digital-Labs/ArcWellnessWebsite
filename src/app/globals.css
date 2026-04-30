@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --arc-teal: #76b3a8;
+  --arc-teal-hover: #629789;
+  --arc-teal-muted: #e8f2ef;
+  --arc-cream: #f7f4ef;
+  --arc-cream-deep: #ebe6dc;
+  --arc-charcoal: #2c2c2c;
+  --arc-white: #ffffff;
+  --background: var(--arc-cream);
+  --foreground: var(--arc-charcoal);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-arc-teal: var(--arc-teal);
+  --color-arc-teal-hover: var(--arc-teal-hover);
+  --color-arc-teal-muted: var(--arc-teal-muted);
+  --color-arc-cream: var(--arc-cream);
+  --color-arc-cream-deep: var(--arc-cream-deep);
+  --color-arc-charcoal: var(--arc-charcoal);
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Locomotive / Lenis scroll happens inside `#main`; lock document scroll when active (see ArcScrollShell). */
+html.arc-scroll-lock,
+body.arc-scroll-lock {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.arc-scroll-lock {
+  scrollbar-width: none;
+}
+
+html.arc-scroll-lock::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll reveal targets (ensemble: not snap — GSAP drives enter animation). Initial hide until GSAP runs. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-scroll-section] {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-section] {
+    opacity: 1;
+  }
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+@keyframes arc-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-arc-marquee {
+  display: flex;
+  width: max-content;
+  animation: arc-marquee 32s linear infinite;
+}

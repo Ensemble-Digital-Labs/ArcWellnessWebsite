@@ -1,0 +1,28 @@
+---
+description: Mobile-first responsive workflow from narrow phones to large desktops
+alwaysApply: true
+---
+
+# Responsive mobile-first development
+
+## Workflow
+
+- Start layout decisions at **narrow widths** first, then scale up
+- Sections should remain **readable, tappable, and balanced** between standard breakpoints
+- Avoid layouts that only work at a single exact width
+
+## Widths to sanity-check
+
+| Width | Role |
+|-------|------|
+| 320–430px | Phones |
+| 768px | Tablet |
+| 1024px | Laptop |
+| 1280px+ | Desktop |
+
+## Expectations
+
+- No horizontal overflow from fixed widths; use `max-w-*`, fluid grids, and sensible image sizing
+- Touch targets for primary actions remain usable on small screens
+- Do not rely on **hover-only** affordances for essential content
+- Full-height sections (`min-h-[100dvh]`, etc.) should still allow scrolling and visibility of key CTAs on short viewports

@@ -1,0 +1,22 @@
+---
+description: Refine existing work — do not replace unless asked
+alwaysApply: true
+---
+
+# Preserve existing work
+
+The site already encodes layout, brand, and interaction choices.
+
+## Required behavior
+
+- Start from the **current implementation** and refine it
+- Do not introduce a totally new design system or unrelated visual language unless explicitly requested
+- Do not remove sections, motion, or styling “because another approach might be cleaner” without a concrete problem
+- Prefer **incremental** improvements that keep intent recognizable
+
+## Before large visual or structural changes
+
+- Summarize what would change and why the current approach is insufficient
+- Prefer refinement over replacement
+
+See also `safe-editing.mdc`.

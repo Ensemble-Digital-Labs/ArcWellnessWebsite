@@ -1,0 +1,74 @@
+---
+description: Detailed chronological session logs under documents/ by date
+alwaysApply: true
+---
+
+# Session logging
+
+After substantive work (multi-step tasks, refactors, new features, or anything the user will want to audit later), **write or append** a session log under `documents/` organized by date.
+
+## Where to save
+
+- **Folder**: `documents/` at the **workspace / repository root** (beside `.cursor` unless the team uses a different convention—then stay consistent)
+- **Date subfolder**: `YYYY-MM-DD` (authoritative clock: use the user’s current calendar date when known)
+- **Filename**: `session-YYYY-MM-DD.md`  
+  If several distinct sessions occur the same day: `session-YYYY-MM-DD-short-topic.md` or append clearly separated sections inside one file
+
+Create the date folder if it does not exist.
+
+## Required structure (so other sessions and projects stay consistent)
+
+Logs must be **detailed** and **chronological**, not only a one-line summary.
+
+1. **Title** — e.g. `# Session log – YYYY-MM-DD`
+
+2. **Chronological sections** — In the order the user made requests (or the order work was done), one block per **user ask** or **coherent turn**:
+   - **Ask:** What they wanted (short quote or paraphrase)
+   - **Done:** What you implemented, decided, or answered—enough that someone who wasn’t in chat can follow (key files, commands, approach changes, and *reverts* or *second attempts* if applicable)
+
+3. **When the same topic is revisited** (e.g. “try a different approach”), log it as a **new chronological entry** rather than folding everything into one blur.
+
+4. **Optional but encouraged**
+   - Short **paths table** or bullet list of important paths touched at the end
+   - **Follow-ups** — open decisions, debt, or next steps
+
+## Minimum bar
+
+Do **not** replace chronological detail with only:
+
+- A vague summary paragraph, or  
+- A flat bullet list of filenames with no narrative.
+
+Those can supplement the log; they should not be the whole log.
+
+## When to write
+
+- After completing a coherent task, milestone, or thread—or when the user explicitly asks for a note
+- Same day: **append** new chronological sections to `session-YYYY-MM-DD.md`, or start a new topic file if the thread is long enough to deserve separation
+
+## Example shape (adapt titles/content to the project)
+
+```markdown
+# Session log – YYYY-MM-DD
+
+### 1. [First request]
+
+**Ask:** …
+
+**Done:** …
+
+### 2. [Second request]
+
+**Ask:** …
+
+**Done:** …
+
+## Paths / artifacts (optional)
+
+| Path | Notes |
+|------|--------|
+| … | … |
+```
+
+Treat session logs as **handoff documents**: anyone opening the repo later—including another project that copies these rules—should understand **what happened, in order, and why**.
+

@@ -1,0 +1,22 @@
+---
+description: Small, safe edits — preserve structure, motion, and working behavior
+alwaysApply: true
+---
+
+# Safe editing behavior
+
+When working in this repository:
+
+- Do not rewrite large parts of the app unless explicitly requested
+- Make the **smallest effective change** that solves the problem
+- Preserve working animations, layout contracts, and styling unless the task requires changing them
+- Do not rename files, components, or routes unless necessary
+- Before editing, inspect related files and understand how sections connect
+- If a change may affect multiple sections, state the impact briefly first
+- Prefer targeted fixes over broad refactors
+- Do not replace existing sections with entirely new versions unless explicitly requested
+- Use the current implementation as the base and improve incrementally
+- Avoid introducing placeholder copy or **lorem ipsum** unless explicitly requested
+- When fixing or building a section, **do not validate at only one breakpoint**—check behavior across the responsive range before considering it done (see `responsive-mobile-first.mdc`)
+
+See also `preserve-existing-work.mdc`.

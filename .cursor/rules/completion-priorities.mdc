@@ -1,0 +1,29 @@
+---
+description: How to prioritize finishing the ARC Wellness site
+alwaysApply: true
+---
+
+# Completion priorities
+
+When asked to continue, polish, or “finish” the site:
+
+## First sources of truth
+
+- `README.md` or project notes in the repo (if present)
+- This workspace’s **homepage structure** in `src/app/page.tsx` and `src/components/arc/`
+- Image and copy sources in `src/content/site.ts` (replace placeholders with production assets)
+- Prior **`documents/`** session logs if they exist
+
+## Typical remaining work (verify in repo before assuming)
+
+- Replace stock **Unsplash** URLs with client photography and optimized **next/image** or local `/public` assets
+- Final **copy**, phone, address, hours, and legal links (Privacy / Terms)
+- Wire **booking** and forms to the real scheduler / CRM / email API
+- **SEO**: metadata, Open Graph, favicon, structured data as needed
+- **Accessibility** pass: headings, landmarks, focus states, color contrast on overlays
+- Cross-browser and **mobile** QA on real devices
+
+## How to work
+
+- Prefer completing **production-critical** gaps (correct info, working CTAs, accessibility) before purely cosmetic churn
+- Avoid duplicating work already reflected in the current branch

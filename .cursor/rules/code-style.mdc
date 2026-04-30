@@ -1,0 +1,19 @@
+---
+description: Next.js, React, and Tailwind conventions for ARC Wellness
+alwaysApply: true
+---
+
+# Code style
+
+When writing code in this project:
+
+- Prefer **functional** React components and explicit props/types
+- **App Router**: default to Server Components unless client APIs are needed (`useState`, scroll/wheel listeners, Framer Motion, GSAP in `useEffect`)
+- Use **Tailwind** utilities consistently; theme tokens live in `src/app/globals.css` (`@theme inline` / Arc variables)
+- Reuse existing components under `src/components/arc/` before adding parallel patterns
+- Keep files focused; colocate small helpers next to features when it aids clarity
+- **Icons**: `lucide-react` where possible; use inline SVGs for brand icons if lucide omits them
+- **`cn()`**: use `@/lib/utils` (`clsx` + `tailwind-merge`) for conditional classes
+- Prefer **next/link** and **next/image** (with configured `remotePatterns` in `next.config.ts`) over raw `<img>` where appropriate
+- Avoid new dependencies unless there is a clear need
+- Preserve **responsive** behavior (see `responsive-mobile-first.mdc`)

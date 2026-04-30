@@ -1,0 +1,34 @@
+---
+description: ARC Wellness — project identity, stack, and positioning
+alwaysApply: true
+---
+
+# ARC Wellness project context
+
+This workspace contains the **ARC Wellness** marketing website (homepage and related routes).
+
+## Project type
+
+- **Next.js** (App Router) + **React**
+- **Tailwind CSS** v4 for styling
+- **Framer Motion** for component / hero motion
+- **GSAP** (+ ScrollTrigger where used) for scroll-driven animation
+- Optional **next/image** for optimized imagery
+
+## Brand & tone
+
+- Premium **medical aesthetics + wellness + longevity** positioning
+- Visual language: **muted teal** (`~#76B3A8`), **cream / off-white** backgrounds, **charcoal** typography
+- **Serif** for headlines, **clean sans** for UI and body (see theme in `src/app/layout.tsx` and `globals.css`)
+- Calm, elevated, intentional—not generic spa templates or loud clinical stock UI
+
+## Primary homepage sections (baseline)
+
+- Hero with scroll-driven media expand (when enabled)
+- Who we are
+- Whole-body care / services
+- Patient journey (“Your path”)
+- Invest / lifestyle CTA band
+- Footer with contact and links
+
+When suggesting or implementing changes, preserve this positioning and quality bar. Do not strip brand colors or swap to unrelated palettes unless explicitly requested.

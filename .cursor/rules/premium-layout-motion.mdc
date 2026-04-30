@@ -1,0 +1,26 @@
+---
+description: Premium layout and intentional motion (hero, scroll, GSAP)
+alwaysApply: true
+---
+
+# Premium layout and motion
+
+## Layout
+
+- Clear hierarchy: headline → supporting copy → primary action
+- Controlled line lengths for readability; align grids and spacing rhythm across sections
+- Photography and overlays should preserve **contrast** for text and buttons
+
+## Motion (Framer Motion, GSAP)
+
+- Motion should **support** content—timing that feels calm and confident
+- Hero **scroll-expand** and similar patterns must honor **`prefers-reduced-motion`** with simpler behavior
+- GSAP usage should **clean up** (`gsap.context` revert / kill ScrollTriggers on unmount) to avoid leaks and duplicate triggers
+- Do not stack competing scroll hijacks without clear UX; prefer one primary interaction model per viewport region
+
+## Performance
+
+- Lazy-load heavy below-the-fold media where practical
+- Avoid unnecessary always-on animation loops
+
+See also `design-direction.mdc` and `preserve-existing-work.mdc`.

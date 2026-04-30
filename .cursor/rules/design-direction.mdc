@@ -1,0 +1,37 @@
+---
+description: ARC Wellness visual language — luxury wellness + clinical credibility
+alwaysApply: true
+---
+
+# Design direction
+
+UI work should support a **premium wellness / medical aesthetics** brand: calm, luxurious, and trustworthy.
+
+## Goals
+
+- Clean layouts with clear hierarchy
+- Confident typography (serif headlines, readable sans body)
+- Generous spacing and balanced composition
+- Motion that feels **smooth and intentional**, not gimmicky
+- Refined hover and focus states; accessible contrast on cream backgrounds
+
+## Brand palette
+
+- Primary accent: **ARC teal** (see CSS variables in `src/app/globals.css`)
+- Surfaces: **cream / white** with subtle separation (borders, soft shadows) where helpful
+- Text: **charcoal** on light backgrounds; ensure legibility on photography overlays
+
+## Sections
+
+- Keep card grids and CTAs **consistent** with existing patterns unless asymmetry is deliberate
+- Photography should feel **elevated and relevant** (wellness, care, environment)—swap placeholders when production assets exist
+- Avoid clutter, heavy outlines, or random accent colors
+
+## Motion
+
+- Respect **`prefers-reduced-motion`**: simpler or static fallbacks where motion is decorative
+- Hero scroll interactions must not trap keyboard-only users; preserve accessible focus order
+
+## Responsive quality
+
+Responsive behavior is part of design quality. Follow `responsive-mobile-first.mdc`.

@@ -1,0 +1,17 @@
+---
+description: Read existing docs and code before large changes
+alwaysApply: true
+---
+
+# Documentation-first workflow
+
+## Before major decisions or rewrites
+
+- Skim **README** (if present) and any notes in the repo root
+- Check **`documents/`** session logs when continuing prior work
+- Inspect the relevant **components** and **`src/content/`** files rather than guessing structure
+
+## Rules
+
+- Do not assume unfinished work without looking at the current tree
+- Prefer existing patterns in `src/components/arc/` over inventing new architecture ad hoc
