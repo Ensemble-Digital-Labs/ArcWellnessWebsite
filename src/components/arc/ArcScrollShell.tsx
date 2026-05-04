@@ -50,10 +50,7 @@ export function ArcScrollShell({ children }: ArcScrollShellProps) {
       id="main"
       className="relative h-[100dvh] w-full overflow-hidden bg-arc-cream"
     >
-      <div
-        data-scroll-content
-        className="relative min-h-full bg-arc-cream pt-[7.25rem]"
-      >
+      <div data-scroll-content className="relative min-h-full bg-arc-cream">
         <ScrollRevealInit />
         {children}
       </div>

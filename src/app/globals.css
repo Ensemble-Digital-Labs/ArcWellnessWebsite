@@ -63,6 +63,32 @@ html.arc-scroll-lock::-webkit-scrollbar {
   font-family: var(--font-serif);
 }
 
+/**
+ * Header wordmark over photography — layered drop shadows + faint light bloom so teal
+ * stays legible on bright clouds / warm highlights without a heavy box behind the logo.
+ */
+.arc-header-logo {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.65))
+    drop-shadow(0 4px 18px rgba(0, 0, 0, 0.42))
+    drop-shadow(0 14px 44px rgba(0, 0, 0, 0.28))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.14));
+}
+
+/* Fullscreen nav ambient shapes — hidden until GSAP hover on matching menu row */
+.arc-bg-shape .arc-shape-el {
+  opacity: 0;
+  transform-origin: center center;
+}
+
+/**
+ * Birthstone stack only — font-size comes from Tailwind on `TitleEmphasis` so utilities (e.g. hero) can override.
+ */
+.font-title-emphasis {
+  font-family: var(--font-birthstone), "Segoe Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @keyframes arc-marquee {
   from {
     transform: translateX(0);

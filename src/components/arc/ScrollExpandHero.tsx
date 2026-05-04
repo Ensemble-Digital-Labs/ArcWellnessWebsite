@@ -3,22 +3,69 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const DEFAULT_HERO_TITLE_KEYWORDS = ["Aesthetics", "Wellness", "Longevity"] as const;
+
+/** Larger serif line: parent uses flex + items-baseline so script scales with the white words. */
+const HERO_TITLE_KEYWORD_EMPHASIS_CLASS =
+  "shrink-0 text-[1.55em] text-arc-teal sm:text-[1.68em] md:text-[1.86em] lg:text-[2.05em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(118,179,168,0.38)]";
+
+function escapeRegExp(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Whole-word matches only; longer keywords first for alternation safety. */
+function emphasizeTitleWords(
+  text: string,
+  keywords: readonly string[],
+  emphasisClassName?: string,
+): ReactNode {
+  if (!keywords.length) return text;
+  const alternation = [...keywords]
+    .sort((a, b) => b.length - a.length)
+    .map(escapeRegExp)
+    .join("|");
+  const re = new RegExp(`\\b(?:${alternation})\\b`, "g");
+  const parts: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) {
+      const chunk = text.slice(last, m.index);
+      if (chunk) parts.push(chunk);
+    }
+    parts.push(
+      <TitleEmphasis key={`hero-kw-${key++}`} className={emphasisClassName}>
+        {m[0]}
+      </TitleEmphasis>,
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) {
+    const tail = text.slice(last);
+    if (tail) parts.push(tail);
+  }
+  return parts.length ? parts : text;
+}
 
 type ScrollExpandHeroProps = {
   bgImageSrc: string;
   mediaSrc: string;
   title: string;
   intro: string;
-  scrollHint?: string;
   textBlend?: boolean;
+  /** Words in the title (after the first line) to render in signature script. Omit to use ARC defaults. */
+  titleKeywords?: readonly string[];
 };
 
 /**
@@ -29,8 +76,8 @@ export function ScrollExpandHero({
   mediaSrc,
   title,
   intro,
-  scrollHint = "Scroll to explore",
   textBlend,
+  titleKeywords = DEFAULT_HERO_TITLE_KEYWORDS,
 }: ScrollExpandHeroProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileState, setIsMobileState] = useState(false);
@@ -123,6 +170,13 @@ export function ScrollExpandHero({
 
   const firstWord = title.split(" ")[0] ?? "";
   const restOfTitle = title.split(" ").slice(1).join(" ");
+  const restWithEmphasis = emphasizeTitleWords(
+    restOfTitle,
+    titleKeywords,
+    textBlend
+      ? "shrink-0 text-[1.48em] text-[#f2efe9] sm:text-[1.6em] md:text-[1.76em] lg:text-[1.94em] [text-shadow:0_2px_20px_rgba(0,0,0,0.65)]"
+      : HERO_TITLE_KEYWORD_EMPHASIS_CLASS,
+  );
 
   return (
     <div className="overflow-x-hidden transition-colors duration-700 ease-in-out">
@@ -150,7 +204,7 @@ export function ScrollExpandHero({
             <div className="absolute inset-0 bg-black/35" />
           </motion.div>
 
-          <div className="pointer-events-none absolute left-0 top-8 z-20 max-w-xl px-6 md:top-12 md:px-12 lg:max-w-xl">
+          <div className="pointer-events-none absolute left-0 top-40 z-20 max-w-xl px-6 sm:top-44 md:top-48 md:px-12 lg:top-52 lg:max-w-xl">
             <p className="pointer-events-auto mb-8 font-sans text-sm leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base">
               {intro}
             </p>
@@ -163,7 +217,7 @@ export function ScrollExpandHero({
           </div>
 
           <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-start">
-            <div className="relative flex min-h-[calc(100dvh-7.25rem)] w-full flex-col items-center justify-center pt-12 md:pt-8">
+            <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center pt-12 md:pt-8">
               <div
                 className="absolute left-1/2 top-[52%] z-0 -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-none md:top-1/2"
                 style={{
@@ -189,15 +243,6 @@ export function ScrollExpandHero({
                     transition={{ duration: 0.2 }}
                   />
                 </div>
-
-                <div className="relative z-10 mt-4 flex flex-col items-center text-center transition-none">
-                  <p
-                    className="font-sans text-sm font-medium text-[#e8f5f2] md:text-base"
-                    style={{ transform: `translateX(-${textTranslateX}px)` }}
-                  >
-                    {scrollHint}
-                  </p>
-                </div>
               </div>
 
               <div
@@ -213,16 +258,16 @@ export function ScrollExpandHero({
                   {firstWord}
                 </motion.span>
                 <motion.span
-                  className="text-center font-serif text-3xl font-semibold leading-tight text-[#f7f4ef] md:text-4xl lg:text-5xl"
+                  className="flex w-full max-w-[min(100%,44rem)] flex-wrap items-baseline justify-center gap-x-0 gap-y-1 text-center font-serif text-3xl font-semibold leading-snug text-[#f7f4ef] md:max-w-[min(100%,52rem)] md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug"
                   style={{ transform: `translateX(${textTranslateX}px)` }}
                 >
-                  {restOfTitle}
+                  {restWithEmphasis}
                 </motion.span>
               </div>
 
               <button
                 type="button"
-                className="absolute bottom-10 right-6 z-20 flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-[#f7f4ef] transition-opacity hover:opacity-90 md:bottom-14 md:right-12 md:text-sm"
+                className="absolute bottom-16 right-6 z-20 flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-[#f7f4ef] transition-opacity hover:opacity-90 md:bottom-20 md:right-12 md:text-sm"
               >
                 <Play className="size-5 fill-current" aria-hidden />
                 Watch our story

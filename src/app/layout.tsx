@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Birthstone, DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -10,6 +10,14 @@ const playfair = Playfair_Display({
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/** Signature script for emphasized words inside headings (pair with Playfair body). */
+const birthstone = Birthstone({
+  weight: "400",
+  variable: "--font-birthstone",
   subsets: ["latin"],
   display: "swap",
 });
@@ -28,7 +36,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${playfair.variable} ${dmSans.variable} ${birthstone.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-arc-cream text-arc-charcoal">{children}</body>
     </html>

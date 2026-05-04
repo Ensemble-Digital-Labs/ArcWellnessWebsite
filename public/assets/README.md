@@ -1,4 +1,4 @@
-# Site assets (images & static files)
+# Site assets (images, video & static files)
 
 Files here are served by Next.js from the **site root URL** `/assets/...`.
 
@@ -13,6 +13,16 @@ Files here are served by Next.js from the **site root URL** `/assets/...`.
 | `sections/invest-cta/` | Full-bleed CTA band image |
 | `branding/` | Logos, marks, icons you export as PNG/SVG |
 | `misc/` | Anything that doesn’t fit above |
+| `videos/hero/` | Full-bleed or ambient hero video loops |
+| `videos/environment/` | Space / room / facility b-roll |
+| `videos/treatments/` | Service- and care-focused footage |
+| `videos/lifestyle/` | Editorial, composition, or brand-mood clips |
+
+## Video (`.mov`)
+
+Current clips live under `videos/…` with short kebab-case filenames. **`src/content/site.ts`** exports a `videos` map for use in components (`<video src={videos.heroBackground} … />`).
+
+For broad browser support or smaller payloads, consider transcoding to **MP4 (H.264)** and/or **WebM** and serving multiple `<source>` elements; Safari handles `.mov` well on Apple platforms.
 
 ## Using images in code
 
@@ -29,6 +39,16 @@ With `next/image`:
 ```
 
 Then point `src/content/site.ts` (or your component props) at those paths instead of remote URLs.
+
+### Video paths
+
+After adding e.g. `public/assets/videos/hero/spa-background-oriental-therapy.mov`, reference:
+
+```text
+/assets/videos/hero/spa-background-oriental-therapy.mov
+```
+
+Prefer importing URLs from `videos` in `src/content/site.ts` so filenames stay centralized.
 
 ## When you add photos
 

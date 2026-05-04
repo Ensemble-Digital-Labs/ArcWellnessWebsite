@@ -20,6 +20,9 @@
 # stray local copy (only build artifacts; real app lives at repo root)
 /arc-wellness/
 
+# Source video files — often >100MB; GitHub rejects. Keep locally, use Git LFS, or host on CDN.
+/public/assets/videos/**/*.mov
+
 # production
 /build
 

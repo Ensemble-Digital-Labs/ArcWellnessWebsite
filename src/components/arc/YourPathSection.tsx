@@ -43,7 +43,7 @@ const steps = [
 
 export function YourPathSection() {
   return (
-    <PinnedSection className="min-h-[100dvh] bg-arc-teal-muted/80 py-20 md:py-24">
+    <PinnedSection id="path" className="min-h-[100dvh] bg-arc-teal-muted/80 py-20 md:py-24">
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-6 lg:flex-row lg:items-center lg:gap-20 lg:px-8">
         <div data-scroll-section className="max-w-xl shrink-0 lg:w-[38%]">
           <h2 className="mb-8 font-serif text-3xl font-semibold leading-tight text-arc-charcoal md:text-4xl">

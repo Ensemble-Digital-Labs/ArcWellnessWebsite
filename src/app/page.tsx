@@ -1,7 +1,7 @@
 import { ArcFooter } from "@/components/arc/ArcFooter";
 import { ArcScrollShell } from "@/components/arc/ArcScrollShell";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { PinnedSection } from "@/components/arc/PinnedSection";
+import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { ScrollExpandHero } from "@/components/arc/ScrollExpandHero";
 import { SiteHeader } from "@/components/arc/SiteHeader";
 import { WhoWeAreSection } from "@/components/arc/WhoWeAreSection";
@@ -19,17 +19,14 @@ export default function Home() {
           mediaSrc={images.heroMedia}
           title="Where Aesthetics, Wellness, and Longevity Converge."
           intro="ARC Wellness pairs thoughtful aesthetics with whole-body wellness—so you can age intentionally and live with confidence."
-          scrollHint="Scroll to explore"
         />
 
-        <PinnedSection className="flex min-h-[100dvh] flex-col justify-center border-t border-white/10 bg-arc-cream px-6 py-16 md:px-16">
-          <div data-scroll-section className="mx-auto max-w-2xl">
-            <p className="text-center font-sans text-sm leading-relaxed text-arc-charcoal/85 md:text-base">
-              Scroll through each chapter of care—from philosophy and services to your ongoing path and
-              next step with our team.
-            </p>
-          </div>
-        </PinnedSection>
+        <ScrollChapterIntroSection
+          id="chapters"
+          headline="Care, chapter by chapter"
+          body="Scroll through each chapter of care—from philosophy and services to your ongoing path and next step with our team."
+          imageSrc={images.whoWeAre}
+        />
 
         <WhoWeAreSection imageSrc={images.whoWeAre} />
         <WholeBodySection imageUrls={images.services} />
