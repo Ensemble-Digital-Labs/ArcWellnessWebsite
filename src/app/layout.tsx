@@ -37,8 +37,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${playfair.variable} ${dmSans.variable} ${birthstone.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full bg-arc-cream text-arc-charcoal">{children}</body>
+      <body
+        className="min-h-full bg-arc-cream text-arc-charcoal"
+        suppressHydrationWarning
+      >
+        {children}
+      </body>
     </html>
   );
 }

@@ -10,6 +10,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -197,26 +198,30 @@ export function ScrollExpandHero({
               alt=""
               width={1920}
               height={1080}
-              className="h-screen w-screen max-w-none"
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              className="h-full min-h-[100dvh] w-full max-w-none object-cover object-center"
               priority
             />
             <div className="absolute inset-0 bg-black/35" />
           </motion.div>
 
-          <div className="pointer-events-none absolute left-0 top-40 z-20 max-w-xl px-6 sm:top-44 md:top-48 md:px-12 lg:top-52 lg:max-w-xl">
-            <p className="pointer-events-auto mb-8 font-sans text-sm leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base">
-              {intro}
-            </p>
-            <Link
-              href="#book"
-              className="pointer-events-auto inline-block bg-arc-teal px-8 py-3 font-sans text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-arc-teal-hover"
-            >
-              Book Now
-            </Link>
-          </div>
+          <div
+            className={cn(
+              "relative z-10 mx-auto flex w-full flex-col items-center justify-start",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="pointer-events-none absolute left-0 top-40 z-20 max-w-xl px-6 sm:top-44 md:top-48 md:px-12 lg:top-52 lg:max-w-xl">
+              <p className="pointer-events-auto mb-8 font-sans text-sm leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base">
+                {intro}
+              </p>
+              <Link
+                href="#book"
+                className="pointer-events-auto inline-block bg-arc-teal px-8 py-3 font-sans text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-arc-teal-hover"
+              >
+                Book Now
+              </Link>
+            </div>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-start">
             <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center pt-12 md:pt-8">
               <div
                 className="absolute left-1/2 top-[52%] z-0 -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-none md:top-1/2"

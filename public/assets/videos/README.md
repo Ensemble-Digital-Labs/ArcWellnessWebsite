@@ -1,7 +1,17 @@
 # Video clips
 
-`.mov` files in **`hero/`**, **`environment/`**, **`treatments/`**, and **`lifestyle/`** are **not committed** to Git (GitHub’s per-file size limit). Paths are still defined in **`src/content/site.ts`** as `/assets/videos/...`.
+`.mov` files in **`hero/`**, **`environment/`**, **`treatments/`**, and **`lifestyle/`** may be **gitignored** when large (GitHub file limits). Paths stay defined in **`src/content/site.ts`** as `/assets/videos/...`.
 
-**Local dev:** add the `.mov` files in the folders named in `site.ts` (or swap to hosted URLs / compressed MP4 in code later).
+## Inventory (treatments)
 
-**Deploy:** upload assets with your host, use **Git LFS** for large binaries, or serve from a CDN.
+| File | `videos.treatments` key |
+|------|-------------------------|
+| `face-care-cosmetologist.mov` | `faceCareCosmetologist` |
+| `face-massage-relaxing.mov` | `faceMassageRelaxing` |
+| `face-head-massage.mov` | `faceHeadMassage` |
+| `body-massage-spa-wellness.mov` | `bodyMassageSpa` |
+| `facial-mask-skincare-spa.mov` | `facialMaskSkincare` |
+
+**Local dev:** drop `.mov` files in the folders above to match `site.ts` (or swap to hosted URLs / MP4 in code).
+
+**Deploy:** upload assets with your host, **Git LFS**, or a CDN.

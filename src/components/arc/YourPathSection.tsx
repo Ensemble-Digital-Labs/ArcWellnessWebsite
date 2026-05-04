@@ -1,42 +1,25 @@
 import Link from "next/link";
-import {
-  MessageCircle,
-  Syringe,
-  LineChart,
-  SlidersHorizontal,
-  HeartHandshake,
-} from "lucide-react";
+import { MessageCircle, Syringe, HeartHandshake } from "lucide-react";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 
+/** Three concentrated beats (consult → active care → sustain). */
 const steps = [
   {
     n: 1,
-    title: "Consultation",
-    body: "We listen to your goals and map a clear, personalized plan.",
+    title: "Consult & plan",
+    body: "We listen to your goals and map a clear, personalized plan you can follow with confidence.",
     icon: MessageCircle,
   },
   {
     n: 2,
-    title: "Treatment",
-    body: "Thoughtful procedures and therapies aligned to your timeline.",
+    title: "Treat & refine",
+    body: "Thoughtful procedures and therapies aligned to your timeline—with room to adjust as you respond.",
     icon: Syringe,
   },
   {
     n: 3,
-    title: "Monitoring",
-    body: "Objective tracking so progress stays visible and meaningful.",
-    icon: LineChart,
-  },
-  {
-    n: 4,
-    title: "Adjustment",
-    body: "Fine-tuning based on how you feel, respond, and evolve.",
-    icon: SlidersHorizontal,
-  },
-  {
-    n: 5,
-    title: "Ongoing Support",
-    body: "Long-term partnership for wellness that lasts beyond a single visit.",
+    title: "Sustain & support",
+    body: "Monitoring, touchpoints, and long-term partnership so wellness lasts beyond a single visit.",
     icon: HeartHandshake,
   },
 ];
@@ -58,13 +41,13 @@ export function YourPathSection() {
         </div>
 
         <div data-scroll-section className="min-w-0 flex-1 overflow-x-auto pb-2">
-          <div className="flex min-w-[640px] gap-4 md:min-w-0 md:flex-wrap lg:flex-nowrap lg:justify-between">
+          <div className="flex min-w-[min(100%,520px)] justify-center gap-4 md:min-w-0 md:flex-wrap lg:max-w-3xl lg:flex-nowrap lg:justify-center">
             {steps.map((step) => {
               const Icon = step.icon;
               return (
                 <div
                   key={step.n}
-                  className="flex w-[120px] shrink-0 flex-col border border-arc-teal/25 bg-white/90 px-3 py-5 text-center shadow-sm md:w-[calc(50%-8px)] lg:w-[18%] lg:min-w-[100px]"
+                  className="flex w-[min(100%,200px)] shrink-0 flex-col border border-arc-teal/25 bg-white/90 px-3 py-5 text-center shadow-sm sm:min-w-[140px] md:w-[calc(50%-8px)] md:max-w-none lg:flex-1 lg:basis-0 lg:min-w-[160px] lg:max-w-[300px]"
                 >
                   <Icon
                     className="mx-auto mb-3 size-8 text-arc-teal"

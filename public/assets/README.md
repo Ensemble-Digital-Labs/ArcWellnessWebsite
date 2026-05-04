@@ -7,10 +7,9 @@ Files here are served by Next.js from the **site root URL** `/assets/...`.
 | Folder | Use for |
 |--------|---------|
 | `hero/` | Hero background, center media, anything above the fold |
-| `sections/who-we-are/` | Who we are / team / consultation photography |
-| `sections/whole-body/` | Service card thumbnails |
-| `sections/your-path/` | Journey / steps imagery (if needed) |
-| `sections/invest-cta/` | Full-bleed CTA band image |
+| `sections/` | **Homepage + section art** — see [`sections/README.md`](./sections/README.md); includes **`medical-spa-services/`**, **`patient-experience/`**, **`editorial-spa/`**, etc. |
+| `location/st-louis/` | STL mood imagery — **`labeled/`** vs **`unlabeled/`** — see [`location/st-louis/README.md`](./location/st-louis/README.md); **`stlouisDecoration.ts`** exports both arrays + combined list |
+| `decoration/background/` | **Non–St. Louis** ambient / abstract background decoration—see [`decoration/background/README.md`](./decoration/background/README.md); paths in **`src/content/backgroundDecoration.ts`** |
 | `branding/` | Logos, marks, icons you export as PNG/SVG |
 | `misc/` | Anything that doesn’t fit above |
 | `videos/hero/` | Full-bleed or ambient hero video loops |

@@ -7,6 +7,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
+import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
 
 /** Top inset for scroll content when a solid header bar pushes the page down. */
@@ -353,42 +354,49 @@ export function ArcSiteHeader() {
           isMenuOpen ? "z-[110]" : "z-[60]",
         )}
       >
-        <Link
-          href="/"
-          className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
-          aria-label="ARC Wellness home"
+        <div
+          className={cn(
+            "pointer-events-none relative mx-auto flex w-full justify-center",
+            ARC_PAGE_RAIL_MAX,
+          )}
         >
-          <Image
-            src={images.logo}
-            alt="ARC Wellness"
-            width={720}
-            height={240}
-            priority
-            placeholder="empty"
-            unoptimized
-            className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
-          />
-        </Link>
-
-        <button
-          type="button"
-          onClick={toggleMenu}
-          aria-expanded={isMenuOpen}
-          aria-controls="arc-nav-overlay"
-          className="pointer-events-auto absolute right-4 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center gap-3.5 rounded-full border border-white/40 bg-black/25 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:right-6 sm:gap-4 sm:px-6 sm:py-3.5 sm:text-base md:right-10"
-        >
-          {isMenuOpen ? "Close" : "Menu"}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="none"
-            className={`size-5 shrink-0 transition-transform duration-300 sm:size-6 ${isMenuOpen ? "rotate-[135deg]" : "rotate-0"}`}
-            aria-hidden
+          <Link
+            href="/"
+            className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
+            aria-label="ARC Wellness home"
           >
-            <path d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16Z" fill="currentColor" />
-            <path d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333Z" fill="currentColor" />
-          </svg>
-        </button>
+            <Image
+              src={images.logo}
+              alt="ARC Wellness"
+              width={720}
+              height={240}
+              priority
+              placeholder="empty"
+              unoptimized
+              className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+            />
+          </Link>
+
+          <button
+            type="button"
+            onClick={toggleMenu}
+            aria-expanded={isMenuOpen}
+            aria-controls="arc-nav-overlay"
+            className="pointer-events-auto absolute right-4 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center gap-3.5 rounded-full border border-white/40 bg-black/25 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:right-6 sm:gap-4 sm:px-6 sm:py-3.5 sm:text-base md:right-10"
+          >
+            {isMenuOpen ? "Close" : "Menu"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="none"
+              className={`size-5 shrink-0 transition-transform duration-300 sm:size-6 ${isMenuOpen ? "rotate-[135deg]" : "rotate-0"}`}
+              aria-hidden
+            >
+              <path d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16Z" fill="currentColor" />
+              <path d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333Z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       <div

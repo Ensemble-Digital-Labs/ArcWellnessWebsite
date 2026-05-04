@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { MapPin, Phone } from "lucide-react";
+import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { useArcFullscreenPin } from "@/lib/arcSectionPins";
@@ -61,7 +62,8 @@ export function ArcFooter() {
       ref={rootRef}
       id="contact"
       className={cn(
-        "relative flex min-h-[100dvh] flex-col overflow-hidden border-t border-arc-cream-deep bg-arc-cream text-arc-charcoal",
+        ARC_SECTION_SEAM_TOP,
+        "relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream text-arc-charcoal",
       )}
     >
       <div className="border-b border-arc-teal/15 bg-arc-white/60 py-3 overflow-hidden">

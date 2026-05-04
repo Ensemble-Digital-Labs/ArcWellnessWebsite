@@ -1,14 +1,33 @@
 /** Local assets under /public/assets — see public/assets/README.md */
-/** Stock footage reorganized under `/assets/videos/…` — use `<video>` / multiple `<source>` for production. */
+/**
+ * Stock footage under `/public/assets/videos/` — use `<video>` (+ optional MP4 sources for broad browser support).
+ *
+ * Available keys you can point **`microStatement`** (or any prop) at:
+ * - **`heroBackground`** — ambient oriental spa (often smallest file)
+ * - **`spaRoom`** — wide spa room / massage bed
+ * - **`treatments.*`** — face care, massage, body wellness, facial mask
+ * - **`bodyCareComposition`** — editorial lifestyle
+ */
+const HERO_SPA_ORIENTAL = "/assets/videos/hero/spa-background-oriental-therapy.mov";
+
 export const videos = {
   /** Ambient / hero-friendly loop (smallest file of the set). */
-  heroBackground: "/assets/videos/hero/spa-background-oriental-therapy.mov",
+  heroBackground: HERO_SPA_ORIENTAL,
   /** Spacious spa room, massage bed centered. */
   spaRoom: "/assets/videos/environment/spa-room-massage-bed.mov",
+  /**
+   * First pinned micro strip on the homepage (“Intentional care…”). Reassign to any file in
+   * this object (e.g. **spaRoom**, **treatments.bodyMassageSpa**, **bodyCareComposition**).
+   */
+  microStatement: HERO_SPA_ORIENTAL,
   treatments: {
     faceCareCosmetologist: "/assets/videos/treatments/face-care-cosmetologist.mov",
     faceMassageRelaxing: "/assets/videos/treatments/face-massage-relaxing.mov",
     faceHeadMassage: "/assets/videos/treatments/face-head-massage.mov",
+    /** Body massage / spa wellness mood — shorter clip. */
+    bodyMassageSpa: "/assets/videos/treatments/body-massage-spa-wellness.mov",
+    /** Facial mask, skincare, zen spa setting. */
+    facialMaskSkincare: "/assets/videos/treatments/facial-mask-skincare-spa.mov",
   },
   /** Editorial composition — products / spa styling. */
   bodyCareComposition: "/assets/videos/lifestyle/body-care-composition.mov",
@@ -20,6 +39,11 @@ export const images = {
   heroBg: "/assets/hero/arc-wellness-exterior-sunset.png",
   heroMedia: "/assets/hero/arc-wellness-reception-entrance.png",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.png",
+  /**
+   * Founder — Dr. Danish Jabbar. Default: **professional** (formal) lead; use smiling variant for warmer campaigns
+   * (`PHYSICIAN_SMILING_PORTRAITS` in `founderPortraits.ts`).
+   */
+  founderPortrait: "/assets/sections/founder/physician-professional-01.png",
   investBanner: "/assets/hero/arc-wellness-lobby-lounge.png",
   services: [
     "/assets/sections/whole-body/facial-aesthetic-treatment.png",

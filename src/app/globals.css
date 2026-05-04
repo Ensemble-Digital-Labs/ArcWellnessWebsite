@@ -103,3 +103,115 @@ html.arc-scroll-lock::-webkit-scrollbar {
   width: max-content;
   animation: arc-marquee 32s linear infinite;
 }
+
+/**
+ * Services showcase slider — bottom nav (reference: slide-progress-line + fill + slide-nav-title).
+ */
+.arc-slide-nav-item.slide-nav-item {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0.12rem 0.65rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.arc-slide-nav-item:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--arc-teal) 92%, transparent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/*
+ * Slide timer: **track** = neutral baseline (subtle).
+ * **Fill** = warm gold / ivory — contrasts teal labels + reads as “time until next slide”.
+ */
+.slide-progress-line {
+  position: relative;
+  height: 2px;
+  width: 100%;
+  max-width: 10rem;
+  overflow: hidden;
+  border-radius: 1px;
+  background-color: rgba(255, 255, 255, 0.22);
+  transition: background-color 0.35s ease;
+}
+
+.arc-slide-nav-item[data-active="true"] .slide-progress-line,
+.arc-slide-nav-item.active .slide-progress-line {
+  background-color: rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.slide-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #fffefb 0%,
+    #f4e4c8 38%,
+    #e2b77a 72%,
+    #c9964e 100%
+  );
+  box-shadow:
+    0 0 14px rgba(232, 190, 130, 0.65),
+    0 0 6px rgba(255, 252, 245, 0.45);
+  transition:
+    width 0.1s linear,
+    opacity 0.35s ease;
+}
+
+.slide-nav-title.arc-slide-nav-label {
+  display: -webkit-box;
+  width: 100%;
+  max-width: 10rem;
+  min-height: 2.25em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: 0.5rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--arc-teal) 22%, rgba(255, 255, 255, 0.92));
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+  transition:
+    color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+@media (min-width: 640px) {
+  .slide-nav-title.arc-slide-nav-label {
+    font-size: 0.59375rem;
+    letter-spacing: 0.2em;
+  }
+}
+
+@media (min-width: 768px) {
+  .slide-nav-title.arc-slide-nav-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+  }
+}
+
+.arc-slide-nav-item[data-active="true"] .slide-nav-title,
+.arc-slide-nav-item.active .slide-nav-title {
+  color: #f6fffc;
+  font-weight: 600;
+  text-shadow:
+    0 0 22px color-mix(in srgb, var(--arc-teal) 75%, transparent),
+    0 1px 10px rgba(0, 0, 0, 0.45);
+}
