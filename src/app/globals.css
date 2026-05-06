@@ -18,6 +18,17 @@
   /** Muted champagne / warm gold — text CTAs, underline links (pairs with teal wordmark). */
   --arc-champagne: #c5a878;
   --arc-champagne-hover: #d8c49a;
+  /**
+   * Hero headline keyword accent (Aesthetics / Wellness / Longevity) — rose gold on dark photography.
+   * Slightly warm peach-gold for legibility and glow vs. teal.
+   */
+  --arc-rose-gold: #e8c4af;
+  --arc-rose-gold-glow: rgba(232, 196, 175, 0.5);
+  /** Rose-gold on cream / light panels (replaces teal-ink for emphasized headline words). */
+  --arc-rose-gold-ink: #8f5346;
+  --arc-rose-gold-ink-hover: #a56456;
+  /** Slightly brighter rose-gold for hover on dark photography. */
+  --arc-rose-gold-hover: #f0d4c8;
   --background: var(--arc-cream);
   --foreground: var(--arc-charcoal);
 }
@@ -35,6 +46,10 @@
   --color-arc-charcoal: var(--arc-charcoal);
   --color-arc-champagne: var(--arc-champagne);
   --color-arc-champagne-hover: var(--arc-champagne-hover);
+  --color-arc-rose-gold: var(--arc-rose-gold);
+  --color-arc-rose-gold-ink: var(--arc-rose-gold-ink);
+  --color-arc-rose-gold-ink-hover: var(--arc-rose-gold-ink-hover);
+  --color-arc-rose-gold-hover: var(--arc-rose-gold-hover);
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
 }

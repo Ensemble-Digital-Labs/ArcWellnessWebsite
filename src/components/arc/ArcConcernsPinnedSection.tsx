@@ -166,12 +166,15 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
             <div className="shrink-0 text-center">
               <h2 className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]">
                 <span className="text-balance">
-                  Your concerns,{" "}
-                  <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
-                    thoughtfully mapped
+                  Crafted{" "}
+                  <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+                    By your Concern
                   </TitleEmphasis>
                 </span>
               </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty font-sans text-base leading-relaxed text-arc-charcoal/72 sm:mt-5 sm:text-lg md:mt-6">
+                Thoughtfully mapped to guide your journey to aesthetics, wellness and longevity
+              </p>
             </div>
 
             <div className="mt-6 flex min-h-0 w-full flex-1 gap-2 overflow-hidden sm:mt-8 md:mt-10 [@media(max-height:780px)]:mt-4 [@media(max-height:680px)]:mt-3">
@@ -185,7 +188,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
                     onFocus={() => setActiveIndex(idx)}
                     onClick={() => setActiveIndex(idx)}
                     className={cn(
-                      "group relative h-full min-h-0 min-w-0 overflow-hidden text-left transition-[flex] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal-ink/45",
+                      "group relative h-full min-h-0 min-w-0 overflow-hidden text-left transition-[flex] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-rose-gold-ink/45",
                       "flex-1 md:flex-[1]",
                       isActive ? "md:flex-[2.8]" : "md:flex-[1]",
                     )}

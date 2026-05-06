@@ -132,7 +132,11 @@ function YourPathIntroSection() {
             <YourPathHeadlineTitle />
           </h2>
           <div style={linkMotion}>
-            <ArcTextUnderlineCta href="#book" className="items-center">
+            <ArcTextUnderlineCta
+              href="#book"
+              accent="roseGoldInk"
+              className="items-center"
+            >
               Start Your Journey
             </ArcTextUnderlineCta>
           </div>
@@ -215,7 +219,7 @@ function YourPathStepSection({ step }: { step: PathStep }) {
         >
           <div className="w-full max-w-xl text-left">
             <p
-              className="mb-3 font-serif text-3xl leading-none text-arc-teal-ink sm:text-4xl"
+              className="mb-3 font-serif text-3xl leading-none text-arc-rose-gold-ink sm:text-4xl"
               style={titleMotion}
             >
               {step.numeral} {step.title}

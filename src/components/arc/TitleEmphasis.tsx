@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 
-/** Founder-style headline keywords: Birthstone scale, teal ink, light-surface shadow (cream / muted panels). */
+/** Headline keywords on cream / light panels — rose-gold ink + Birthstone scale. */
 export const ARC_HEADLINE_TITLE_EMPHASIS_CLASS =
-  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+  "text-[1.45em] leading-[1.01] text-arc-rose-gold-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 
 type TitleEmphasisProps = {
   children: React.ReactNode;

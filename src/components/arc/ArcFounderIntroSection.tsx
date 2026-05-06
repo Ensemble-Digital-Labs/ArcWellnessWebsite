@@ -260,10 +260,10 @@ export function ArcFounderIntroSection({
     <>
       {eyebrow?.trim() ? (
         <div className="mb-4 flex items-center gap-3 sm:mb-5">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-teal-ink">
+          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-rose-gold-ink">
             {eyebrow}
           </span>
-          <span className="h-px flex-1 max-w-[120px] bg-arc-teal/60" aria-hidden />
+          <span className="h-px flex-1 max-w-[120px] bg-arc-rose-gold-ink/45" aria-hidden />
         </div>
       ) : null}
 
@@ -304,7 +304,7 @@ export function ArcFounderIntroSection({
         {deliverables.map((line) => (
           <li key={line} className="flex min-w-0 gap-2.5 text-left sm:gap-3">
             <span
-              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-teal-ink/12 text-arc-teal-ink"
+              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-rose-gold-ink/12 text-arc-rose-gold-ink"
               aria-hidden
             >
               <Check className="size-3" strokeWidth={2.5} />

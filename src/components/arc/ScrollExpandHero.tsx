@@ -29,11 +29,11 @@ const HERO_KEYWORD_MARQUEE_ITEMS = [
 
 /** Playfair all-caps — stable metrics vs script swap on `translate3d(-50%)` marquee loop. */
 const HERO_MARQUEE_LABEL_CLASS =
-  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.2),0_2px_12px_rgba(0,0,0,0.28)]";
+  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-arc-cream sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.22),0_2px_14px_rgba(0,0,0,0.35)]";
 
 const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   /**
-   * Teal bar + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
+   * Rose-gold ink bar + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
    */
   const [marqueeOn, setMarqueeOn] = useState(false);
 
@@ -116,7 +116,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   return (
     <div
       className={cn(
-        "pointer-events-none isolate overflow-hidden border-t border-white/25 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-12px_40px_rgba(0,0,0,0.18)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-hidden border-t border-white/20 bg-arc-rose-gold-ink pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-12px_40px_rgba(0,0,0,0.22),0_-4px_28px_color-mix(in_srgb,var(--arc-rose-gold)_22%,transparent)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
         marqueeOn && "opacity-100",
       )}
       aria-hidden
@@ -133,7 +133,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
             {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
               <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
                 <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
-                <span className="select-none font-sans text-sm font-semibold text-white/80 sm:text-base">
+                <span className="select-none font-sans text-sm font-semibold text-arc-cream/85 sm:text-base">
                   ·
                 </span>
               </span>
@@ -147,7 +147,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
 
 /** Larger serif line: parent uses flex + items-baseline so script scales with the white words. */
 const HERO_TITLE_KEYWORD_EMPHASIS_CLASS =
-  "shrink-0 text-[1.72em] text-arc-teal sm:text-[1.88em] md:text-[2.08em] lg:text-[2.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.42),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]";
+  "shrink-0 text-[1.72em] text-arc-rose-gold sm:text-[1.88em] md:text-[2.08em] lg:text-[2.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_44px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]";
 
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

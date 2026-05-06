@@ -250,7 +250,7 @@ function WelcomeSplitStaticBody({
               <>
                 {before}
                 {before ? " " : null}
-                <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-teal-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+                <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-rose-gold-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
                   {headlineEmphasisWord}
                 </TitleEmphasis>
                 {after ? <> {after}</> : null}
@@ -271,6 +271,7 @@ function WelcomeSplitStaticBody({
 
           <ArcTextUnderlineCta
             href={ctaHref}
+            accent="roseGoldInk"
             className="mt-5 w-fit items-start sm:mt-6 md:mt-7"
           >
             {ctaLabel}
@@ -466,10 +467,10 @@ function WelcomeImmersiveScrollBody({
                         <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
                           Wellness.
                         </span>{" "}
-                        <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-teal sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.42),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                        <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-rose-gold sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                           Made personal
                         </TitleEmphasis>
-                        <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                        <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
                           .
                         </span>
                       </p>
@@ -520,19 +521,19 @@ function WelcomeImmersiveScrollBody({
                     {before}
                   </span>
                   {before ? " " : null}
-                  <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-teal [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                  <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-rose-gold [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                     {headlineEmphasisWord}
                   </TitleEmphasis>
                   {after ? (
                     after.trim() === "." ? (
-                      <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                      <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
                         .
                       </span>
                     ) : (
                       <> {after}</>
                     )
                   ) : (
-                    <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                    <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
                       .
                     </span>
                   )}
@@ -553,7 +554,7 @@ function WelcomeImmersiveScrollBody({
 
             <ArcTextUnderlineCta
               href={ctaHref}
-              accent="tealBright"
+              accent="roseGoldBright"
               className="mt-6 items-center sm:mt-8"
             >
               {ctaLabel}

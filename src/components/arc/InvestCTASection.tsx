@@ -3,10 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PinnedSection } from "@/components/arc/PinnedSection";
-import {
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
-  TitleEmphasis,
-} from "@/components/arc/TitleEmphasis";
+import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { arcGlassCtaClass } from "@/lib/arcGlassCta";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import { cn } from "@/lib/utils";
@@ -17,9 +14,11 @@ type InvestCTASectionProps = {
   supportingLine?: string;
 };
 
+/** Luminous rose-gold on dark photography (does not use cream-surface ink). */
 const investHeadlineEmphasisClass = cn(
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+  "font-title-emphasis tracking-tight not-italic text-arc-rose-gold",
   "text-[1.62em] sm:text-[1.7em] md:text-[1.78em] lg:text-[1.86em] xl:text-[1.92em]",
+  "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]",
 );
 
 /** Glass pill — sentence case + sans to match invest reference beside hero glass system */
