@@ -27,13 +27,13 @@ const HERO_KEYWORD_MARQUEE_ITEMS = [
   "Brain Fog & Focus Issues",
 ] as const;
 
-/** Playfair all-caps — stable metrics vs script swap on `translate3d(-50%)` marquee loop. */
+/** Playfair all-caps — on `bg-arc-rose-gold` (same token as hero keyword emphasis). */
 const HERO_MARQUEE_LABEL_CLASS =
-  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-arc-cream sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.22),0_2px_14px_rgba(0,0,0,0.35)]";
+  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-arc-charcoal sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.42),0_1px_12px_rgba(0,0,0,0.06)]";
 
 const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   /**
-   * Rose-gold ink bar + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
+   * Luminous rose-gold bar (`--arc-rose-gold`, matches hero title keywords) + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
    */
   const [marqueeOn, setMarqueeOn] = useState(false);
 
@@ -116,7 +116,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   return (
     <div
       className={cn(
-        "pointer-events-none isolate overflow-hidden border-t border-white/20 bg-arc-rose-gold-ink pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-12px_40px_rgba(0,0,0,0.22),0_-4px_28px_color-mix(in_srgb,var(--arc-rose-gold)_22%,transparent)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-hidden border-t border-arc-charcoal/10 bg-arc-rose-gold pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-rose-gold-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
         marqueeOn && "opacity-100",
       )}
       aria-hidden
@@ -133,7 +133,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
             {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
               <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
                 <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
-                <span className="select-none font-sans text-sm font-semibold text-arc-cream/85 sm:text-base">
+                <span className="select-none font-sans text-sm font-semibold text-arc-charcoal/50 sm:text-base">
                   ·
                 </span>
               </span>

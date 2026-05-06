@@ -167,7 +167,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
               <h2 className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]">
                 <span className="text-balance">
                   Crafted{" "}
-                  <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+                  <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-rose-gold sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_3px_rgba(44,44,44,0.12),0_0_36px_var(--arc-rose-gold-glow),0.015em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                     By your Concern
                   </TitleEmphasis>
                 </span>
