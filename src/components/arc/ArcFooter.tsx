@@ -102,8 +102,11 @@ function SocialRow({ className }: { className?: string }) {
 
 function StarRatingBlock() {
   return (
-    <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-baseline sm:gap-3 md:items-start md:text-left">
+    <div className="flex flex-col items-start gap-1 text-left">
       <p className="sr-only">Rated 5.0 out of 5 based on patient feedback.</p>
+      <span className="font-sans text-xs font-medium uppercase tracking-[0.2em] text-white/55">
+        Patient experience
+      </span>
       <div className="flex items-baseline gap-2" aria-hidden>
         <span className="font-serif text-[2.85rem] font-light leading-none tracking-tight text-arc-champagne sm:text-[3.35rem] md:text-[3.65rem]">
           5.0
@@ -114,9 +117,6 @@ function StarRatingBlock() {
           ))}
         </div>
       </div>
-      <span className="font-sans text-xs font-medium uppercase tracking-[0.2em] text-white/55">
-        Patient experience
-      </span>
     </div>
   );
 }
@@ -201,7 +201,7 @@ export function ArcFooter() {
             </div>
           </div>
 
-          <div className="my-14 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-16" aria-hidden />
+          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-8" aria-hidden />
 
           {/* Sitemap-style columns */}
           <nav className="grid grid-cols-2 gap-x-8 gap-y-9 sm:grid-cols-4" aria-label="Footer sitemap">
@@ -223,13 +223,13 @@ export function ArcFooter() {
             ))}
           </nav>
 
-          <div className="my-14 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-16" aria-hidden />
+          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-8" aria-hidden />
         </div>
 
         {/* Tier 2 — full-width rail: rating flush left, social/legal centered, CTA flush right */}
         <div className="relative z-[1] w-full px-5 pb-14 pt-2 sm:px-8 md:px-12 md:pb-16 lg:px-16 xl:px-20">
           <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center md:gap-6 lg:gap-10">
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-start">
               <StarRatingBlock />
             </div>
 

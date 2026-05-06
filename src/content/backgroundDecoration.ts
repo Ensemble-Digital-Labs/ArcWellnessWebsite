@@ -21,4 +21,13 @@ export const FOUNDER_SECTION_AMBIENT_SRC =
 export const PATH_SECTION_INTRO_BACKGROUND_SRC =
   "/assets/sections/your-path/path-intro-background.png" as const;
 
+/** Photography for each journey step panel in `#path` (after intro). See `public/assets/sections/your-path/steps/`. */
+export const PATH_STEP_IMAGE_SRC = {
+  listen: "/assets/sections/your-path/steps/listen.png",
+  measure: "/assets/sections/your-path/steps/measure.png",
+  author: "/assets/sections/your-path/steps/author.png",
+  practice: "/assets/sections/your-path/steps/practice.png",
+  revise: "/assets/sections/your-path/steps/revise.png",
+} as const;
+
 export type BackgroundDecorationSrc = (typeof BACKGROUND_DECORATION_IMAGES)[number];

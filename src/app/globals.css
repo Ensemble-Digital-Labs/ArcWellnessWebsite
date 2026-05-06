@@ -123,8 +123,27 @@ html.arc-scroll-lock::-webkit-scrollbar {
   will-change: transform;
 }
 
+@keyframes arc-indicator-arrow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(0, 5px, 0);
+    opacity: 1;
+  }
+}
+
+.animate-arc-indicator-arrow {
+  animation: arc-indicator-arrow 1.15s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-arc-marquee {
+    animation: none;
+  }
+  .animate-arc-indicator-arrow {
     animation: none;
   }
 }

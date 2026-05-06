@@ -1,8 +1,9 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import SphereImageGrid, {
@@ -12,7 +13,11 @@ import {
   TESTIMONIAL_SPHERE_TILE_COUNT,
   testimonialSphereBaseImages,
 } from "@/content/testimonialSphereBaseImages";
+import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import { cn } from "@/lib/utils";
+
+const TESTIMONIALS_BACKGROUND_SRC =
+  "/assets/sections/testimonials/testimonials-background.png" as const;
 
 export type ArcTestimonialItem = {
   id: string;
@@ -40,9 +45,16 @@ export function ArcTestimonialsSection({
 }: ArcTestimonialsSectionProps) {
   const sphereHintId = useId();
   const reduceMotion = useReducedMotion();
+  const interactionResumeTimeoutRef = useRef<number | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(
     () => items[0]?.id ?? null,
   );
+  const [isSphereInteracting, setIsSphereInteracting] = useState(false);
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  const sphereMotion = pathPinFadeUp(p, 0.08, 2.35);
+  const hintMotion = pathPinFadeUp(p, 0.16, 2.05);
+  const titleMotion = pathPinFadeUp(p, 0.08, 2.35);
+  const cardMotion = pathPinFadeUp(p, 0.26, 2.2);
 
   const sphereInteractionHint =
     reduceMotion === true
@@ -72,49 +84,107 @@ export function ArcTestimonialsSection({
     () => items.find((t) => t.id === selectedId) ?? items[0] ?? null,
     [items, selectedId],
   );
+  const selectedIndex = useMemo(
+    () => (selected ? items.findIndex((t) => t.id === selected.id) : -1),
+    [items, selected],
+  );
+
+  const holdAutoplayForMs = (ms: number) => {
+    setIsSphereInteracting(true);
+    if (interactionResumeTimeoutRef.current !== null) {
+      window.clearTimeout(interactionResumeTimeoutRef.current);
+    }
+    interactionResumeTimeoutRef.current = window.setTimeout(() => {
+      setIsSphereInteracting(false);
+      interactionResumeTimeoutRef.current = null;
+    }, ms);
+  };
+
+  useEffect(() => {
+    if (items.length < 2 || isSphereInteracting) return;
+    const timer = window.setInterval(() => {
+      setSelectedId((prev) => {
+        if (!prev) return items[0]?.id ?? null;
+        const idx = items.findIndex((t) => t.id === prev);
+        if (idx < 0) return items[0]?.id ?? null;
+        return items[(idx + 1) % items.length]?.id ?? prev;
+      });
+    }, 4200);
+    return () => window.clearInterval(timer);
+  }, [items, isSphereInteracting]);
+
+  useEffect(() => {
+    return () => {
+      if (interactionResumeTimeoutRef.current !== null) {
+        window.clearTimeout(interactionResumeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <PinnedSection
       id={id}
+      pinDistanceMultiplier={0.5}
+      onProgress={setPinProgress}
       className={cn(
         "min-h-[100dvh] scroll-mt-28 border-t border-arc-teal/20 p-0",
         className,
       )}
     >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <Image
+          src={TESTIMONIALS_BACKGROUND_SRC}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </div>
+
       <div className="flex min-h-[100dvh] flex-col lg:flex-row lg:items-stretch">
         <div
           data-scroll-section
-          className="flex min-h-[52vh] flex-1 items-center justify-center bg-arc-cream px-2 py-12 sm:min-h-[56vh] lg:min-h-[100dvh] lg:w-1/2 lg:justify-end lg:py-8 lg:pl-8 lg:pr-3 xl:pl-12 xl:pr-5"
+          className="relative z-[1] flex min-h-[52vh] flex-1 items-center justify-center px-2 py-12 sm:min-h-[56vh] lg:min-h-[100dvh] lg:w-1/2 lg:justify-end lg:py-8 lg:pl-8 lg:pr-3 xl:pl-12 xl:pr-5"
         >
           <div
             role="region"
             aria-labelledby={sphereHintId}
             className="flex w-full max-w-[min(100%,640px)] flex-col items-center"
+            onMouseEnter={() => holdAutoplayForMs(1800)}
+            onMouseMove={() => holdAutoplayForMs(1800)}
+            onMouseDown={() => holdAutoplayForMs(1800)}
+            onMouseLeave={() => holdAutoplayForMs(600)}
+            onTouchStart={() => holdAutoplayForMs(1800)}
+            onTouchEnd={() => holdAutoplayForMs(900)}
           >
-            <SphereImageGrid
-              images={sphereImages}
-              className="w-full"
-              containerSize={600}
-              sphereRadius={285}
-              dragSensitivity={0.8}
-              momentumDecay={0.96}
-              maxRotationSpeed={6}
-              baseImageScale={0.182}
-              hoverScale={1.35}
-              perspective={1580}
-              autoRotate
-              autoRotateSpeed={0.08}
-              theme="light"
-              fitContainer
-              selectedId={selectedId}
-              showModal={false}
-              onImageSelect={(img) => {
-                if (img.testimonialId) setSelectedId(img.testimonialId);
-              }}
-            />
+            <div className="w-full" style={sphereMotion}>
+              <SphereImageGrid
+                images={sphereImages}
+                className="w-full"
+                containerSize={600}
+                sphereRadius={285}
+                dragSensitivity={0.8}
+                momentumDecay={0.96}
+                maxRotationSpeed={6}
+                baseImageScale={0.182}
+                hoverScale={1.35}
+                perspective={1580}
+                autoRotate
+                autoRotateSpeed={0.08}
+                theme="light"
+                fitContainer
+                selectedId={selectedId}
+                showModal={false}
+                onImageSelect={(img) => {
+                  holdAutoplayForMs(2200);
+                  if (img.testimonialId) setSelectedId(img.testimonialId);
+                }}
+              />
+            </div>
             <p
               id={sphereHintId}
-              className="mt-4 max-w-[min(100%,20rem)] text-balance text-center font-sans text-xs leading-relaxed text-arc-charcoal/72 sm:mt-5 sm:max-w-sm sm:text-[0.8125rem]"
+              className="mt-4 max-w-[min(100%,20rem)] text-balance text-center font-sans text-xs leading-relaxed text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] sm:mt-5 sm:max-w-sm sm:text-[0.8125rem]"
+              style={hintMotion}
             >
               {sphereInteractionHint}
             </p>
@@ -123,59 +193,81 @@ export function ArcTestimonialsSection({
 
         <div
           data-scroll-section
-          className="flex flex-1 flex-col items-center justify-center bg-arc-cream px-5 py-12 sm:px-8 lg:w-1/2 lg:py-10 lg:px-6 xl:px-10 2xl:px-14"
+          className="relative z-[1] flex flex-1 flex-col items-center justify-center px-5 py-12 sm:px-8 lg:w-1/2 lg:py-10 lg:px-6 xl:px-10 2xl:px-14"
         >
           <div className="mx-auto w-full max-w-lg text-center sm:max-w-xl lg:max-w-[min(100%,34rem)] xl:max-w-[min(100%,36rem)]">
-            <h2 className="mb-6 font-serif text-[1.75rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:mb-7 sm:text-3xl md:text-[2rem] lg:mb-8">
-              Testimonials
-            </h2>
+            <div style={titleMotion}>
+              <h2 className="-translate-y-2 mb-6 font-serif text-[2.1rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.45)] sm:-translate-y-3 sm:mb-7 sm:text-4xl md:text-[2.45rem] lg:mb-8 lg:text-[2.65rem]">
+                Testimonials
+              </h2>
+            </div>
             {selected ? (
-              <figure
-                className={cn(
-                  "relative overflow-hidden rounded-2xl border border-arc-teal/20 bg-white",
-                  "p-8 shadow-[0_24px_70px_rgba(0,0,0,0.09)] sm:p-10 md:p-11 lg:p-12",
-                  "ring-1 ring-arc-charcoal/[0.04]",
-                )}
-              >
-                <div
-                  className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-arc-teal via-arc-teal/70 to-arc-teal/25"
-                  aria-hidden
-                />
-                <div className="flex flex-col gap-8 text-center sm:gap-9">
-                  <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-6 md:gap-7">
-                    <div className="relative size-20 shrink-0 overflow-hidden rounded-full border-2 border-arc-teal/40 shadow-[0_8px_24px_rgba(0,0,0,0.12)] sm:size-28 md:size-[7.25rem]">
+              <div className="mx-auto w-full max-w-[30rem]" style={cardMotion}>
+                <figure className="relative mx-auto h-[31rem] w-full max-w-[25rem]">
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 z-0 translate-x-16 translate-y-3 rotate-[14deg] rounded-2xl border border-gray-200/80 bg-white shadow-[0_0_10px_rgba(0,0,0,0.02)]"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 z-[1] -translate-x-16 translate-y-3 -rotate-[14deg] rounded-2xl border border-gray-200/80 bg-white shadow-[0_0_10px_rgba(0,0,0,0.02)]"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 z-[2] translate-x-10 translate-y-2 rotate-[9deg] rounded-2xl border border-gray-200/80 bg-white shadow-[0_0_10px_rgba(0,0,0,0.02)]"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 z-[3] -translate-x-10 translate-y-2 -rotate-[9deg] rounded-2xl border border-gray-200/80 bg-white shadow-[0_0_10px_rgba(0,0,0,0.02)]"
+                  />
+                  <motion.div
+                    key={selected.id}
+                    className={cn(
+                      "absolute inset-0 z-[4] h-full overflow-hidden rounded-2xl border border-gray-200/80 bg-white",
+                      "shadow-[0_0_10px_rgba(0,0,0,0.02)]",
+                    )}
+                    initial={
+                      reduceMotion
+                        ? false
+                        : {
+                            x: selectedIndex % 2 === 0 ? -28 : 28,
+                            y: 6,
+                            rotate: selectedIndex % 2 === 0 ? -5 : 5,
+                            scale: 0.985,
+                          }
+                    }
+                    animate={{ x: 0, y: 0, rotate: 0, scale: 1 }}
+                    transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <div className="relative mx-2 mt-2 h-76 w-[calc(100%-1rem)] overflow-hidden rounded-xl shadow-lg">
                       <Image
                         src={selected.imageSrc}
                         alt={selected.imageAlt}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 80px, (max-width: 1024px) 112px, 116px"
+                        sizes="(max-width: 640px) 320px, 350px"
                       />
                     </div>
-                    <figcaption className="min-w-0 self-center pt-0.5">
-                      <cite className="not-italic">
-                        <span className="block font-sans text-lg font-semibold leading-snug text-arc-charcoal sm:text-xl md:text-[1.35rem]">
-                          {selected.attribution}
-                        </span>
-                        <span className="mt-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-arc-teal-ink sm:text-xs">
-                          {selected.context}
-                        </span>
-                      </cite>
-                    </figcaption>
-                  </div>
-                  <blockquote className="border-t border-arc-teal/15 pt-8 sm:pt-9">
-                    <p className="text-balance font-serif text-[1.125rem] leading-[1.65] text-arc-charcoal sm:text-[1.2rem] sm:leading-[1.62] md:text-[1.35rem] md:leading-[1.58]">
-                      <span className="text-arc-teal-ink/90" aria-hidden>
-                        “
-                      </span>
-                      {selected.quote}
-                      <span className="text-arc-teal-ink/90" aria-hidden>
-                        ”
-                      </span>
-                    </p>
-                  </blockquote>
-                </div>
-              </figure>
+                    <div className="flex min-h-[11.5rem] flex-col gap-y-3 px-5 py-4 text-left">
+                      <figcaption className="min-w-0">
+                        <cite className="not-italic">
+                          <span className="block font-sans text-lg font-semibold leading-snug text-arc-charcoal">
+                            {selected.attribution}
+                          </span>
+                          <span className="mt-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-arc-teal-ink">
+                            {selected.context}
+                          </span>
+                        </cite>
+                      </figcaption>
+                      <blockquote>
+                        <p className="font-sans text-[1.05rem] leading-relaxed text-arc-charcoal/80">
+                          {selected.quote}
+                        </p>
+                      </blockquote>
+                    </div>
+                  </motion.div>
+                </figure>
+              </div>
             ) : null}
           </div>
         </div>

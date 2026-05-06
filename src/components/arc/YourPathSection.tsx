@@ -1,31 +1,81 @@
 "use client";
 
-import {
-  Activity,
-  HeartHandshake,
-  MessageCircle,
-  PenLine,
-  RefreshCw,
-  type LucideIcon,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { ArcStickyTabs } from "@/components/arc/ArcStickyTabs";
+import Image from "next/image";
+import { useRef } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
   ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
-import { PATH_SECTION_INTRO_BACKGROUND_SRC } from "@/content/backgroundDecoration";
-import { PATH_JOURNEY_STEPS } from "@/content/pathSteps";
+import {
+  PATH_SECTION_INTRO_BACKGROUND_SRC,
+  PATH_STEP_IMAGE_SRC,
+} from "@/content/backgroundDecoration";
+import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
+import { useArcFullscreenPin } from "@/lib/arcSectionPins";
 
-/** Icons for the five journey steps (visual only; copy lives in `pathSteps.ts`). */
-const STEP_ICONS: readonly LucideIcon[] = [
-  MessageCircle,
-  Activity,
-  PenLine,
-  HeartHandshake,
-  RefreshCw,
+type PathStep = {
+  numeral: string;
+  title: string;
+  stepMeta: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+  contentOnLeft: boolean;
+};
+
+const PATH_STEPS: PathStep[] = [
+  {
+    numeral: "I.",
+    title: "Listen",
+    stepMeta: "STEP 01 · 90 MINUTES",
+    description:
+      "A conversation, not an intake. We ask about your sleep, your work, your weeks. Patterns surface before any test does.",
+    imageSrc: PATH_STEP_IMAGE_SRC.listen,
+    imageAlt: "Listen — first step of the ARC wellness journey",
+    contentOnLeft: false,
+  },
+  {
+    numeral: "II.",
+    title: "Measure",
+    stepMeta: "STEP 02 · TWO VISITS",
+    description:
+      "Comprehensive panels, body composition, cognitive assessments. We capture the numbers that matter — and the ones most clinics miss.",
+    imageSrc: PATH_STEP_IMAGE_SRC.measure,
+    imageAlt: "Measure — assessments and diagnostics",
+    contentOnLeft: true,
+  },
+  {
+    numeral: "III.",
+    title: "Author",
+    stepMeta: "STEP 03 · ONE WEEK",
+    description:
+      "Your team meets — without you in the room — and writes a plan in five chapters: surface, shape, foundation, mind, and the long view.",
+    imageSrc: PATH_STEP_IMAGE_SRC.author,
+    imageAlt: "Author — your personalized care plan",
+    contentOnLeft: false,
+  },
+  {
+    numeral: "IV.",
+    title: "Practice",
+    stepMeta: "STEP 04 · ONGOING",
+    description:
+      "We meet monthly. Treatments, coaching, refinements — kept small enough to actually do, long enough to actually work.",
+    imageSrc: PATH_STEP_IMAGE_SRC.practice,
+    imageAlt: "Practice — ongoing care and coaching",
+    contentOnLeft: true,
+  },
+  {
+    numeral: "V.",
+    title: "Revise",
+    stepMeta: "STEP 05 · EACH SEASON",
+    description:
+      "Every quarter we re-measure and rewrite. The plan ages with you, in pencil, never in stone.",
+    imageSrc: PATH_STEP_IMAGE_SRC.revise,
+    imageAlt: "Revise — seasonal plan updates",
+    contentOnLeft: false,
+  },
 ];
 
 function YourPathHeadlineTitle() {
@@ -47,132 +97,155 @@ function YourPathHeadlineTitle() {
   );
 }
 
-function YourPathImmersive() {
+function YourPathIntroSection() {
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  const headlineMotion = pathPinFadeUp(p, 0.08, 2.35);
+  const linkMotion = pathPinFadeUp(p, 0.26, 2.2);
+  const scrollHintMotion = pathPinFadeUp(p, 0.34, 2.05);
+
   return (
-    <section id="path" className="relative scroll-mt-28">
-      <ArcStickyTabs
-        leadSticky
-        leadStickyBackgroundSrc={PATH_SECTION_INTRO_BACKGROUND_SRC}
-        leadStickyBarClassName="shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-[2px] supports-[backdrop-filter]:bg-arc-teal-muted/10"
-        sectionClassName="relative overflow-clip bg-arc-teal-muted"
-        lead={
-          <div
-            data-scroll-section
-            className="mx-auto flex w-full max-w-2xl flex-col items-center px-5 text-center sm:px-8 lg:max-w-3xl"
+    <PinnedSection
+      id="path"
+      pinDistanceMultiplier={0.35}
+      onProgress={setPinProgress}
+      className="relative min-h-[100dvh] overflow-clip bg-arc-teal-muted"
+    >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <Image
+          src={PATH_SECTION_INTRO_BACKGROUND_SRC}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </div>
+
+      <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pt-36 lg:pt-40">
+        <div
+          data-scroll-section
+          className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center lg:max-w-3xl"
+        >
+          <h2
+            className="mb-5 max-w-[min(100%,20rem)] font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
+            style={headlineMotion}
           >
-            <h2 className="mb-5 max-w-[min(100%,20rem)] font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]">
-              <YourPathHeadlineTitle />
-            </h2>
+            <YourPathHeadlineTitle />
+          </h2>
+          <div style={linkMotion}>
             <ArcTextUnderlineCta href="#book" className="items-center">
               Start Your Journey
             </ArcTextUnderlineCta>
           </div>
-        }
-      >
-        {PATH_JOURNEY_STEPS.map((step, index) => {
-          const Icon = STEP_ICONS[index] ?? MessageCircle;
-          return (
-            <ArcStickyTabs.Item
-              key={step.id}
-              id={step.id}
-              title={
-                <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="font-serif text-base font-semibold text-arc-teal-ink tabular-nums sm:text-lg">
-                    {step.id}
-                  </span>
-                  <span className="text-[1.05em]">{step.title}</span>
-                </span>
-              }
-            >
-              <div className="relative z-0 flex min-h-[min(56dvh,520px)] flex-col items-center justify-start pt-3 sm:min-h-[min(60dvh,580px)] sm:pt-5 lg:min-h-[min(64dvh,620px)] lg:pt-6">
-                <div className="relative z-0 w-full max-w-lg rounded-2xl border border-arc-teal/30 bg-white px-6 py-8 shadow-[0_24px_60px_rgba(0,0,0,0.08)] sm:px-8 sm:py-9">
-                  <Icon
-                    className="mb-4 size-9 text-arc-teal-ink sm:size-10"
-                    strokeWidth={1.25}
-                    aria-hidden
-                  />
-                  <p className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/80">
-                    {step.meta}
-                  </p>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-[0.95rem]">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            </ArcStickyTabs.Item>
-          );
-        })}
-      </ArcStickyTabs>
-    </section>
-  );
-}
-
-function YourPathReduced() {
-  return (
-    <PinnedSection
-      id="path"
-      className="min-h-[100dvh] bg-arc-teal-muted/80 py-20 md:py-24"
-    >
-      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-6 lg:flex-row lg:items-center lg:gap-20 lg:px-8">
-        <div data-scroll-section className="max-w-xl shrink-0 lg:w-[38%]">
-          <h2 className="mb-8 font-serif text-3xl font-semibold leading-tight text-arc-charcoal md:text-4xl">
-            <YourPathHeadlineTitle />
-          </h2>
-          <ArcTextUnderlineCta href="#book" className="items-start">
-            Start Your Journey
-          </ArcTextUnderlineCta>
         </div>
+      </div>
 
-        <div data-scroll-section className="min-w-0 flex-1 overflow-x-auto pb-2">
-          <div className="flex min-w-[min(100%,520px)] justify-center gap-4 md:min-w-0 md:flex-wrap lg:max-w-5xl lg:flex-nowrap lg:justify-center">
-            {PATH_JOURNEY_STEPS.map((step, index) => {
-              const Icon = STEP_ICONS[index] ?? MessageCircle;
-              return (
-                <div
-                  key={step.id}
-                  className="flex w-[min(100%,200px)] shrink-0 flex-col border border-arc-teal/25 bg-white/90 px-3 py-5 text-center shadow-sm sm:min-w-[140px] md:w-[calc(33.333%-11px)] md:max-w-none lg:flex-1 lg:basis-0 lg:min-w-[140px] lg:max-w-[220px]"
-                >
-                  <Icon
-                    className="mx-auto mb-3 size-8 text-arc-teal-ink"
-                    strokeWidth={1.25}
-                    aria-hidden
-                  />
-                  <span className="font-serif text-lg font-semibold text-arc-charcoal">
-                    {step.id}
-                  </span>
-                  <p className="mt-1 font-sans text-[11px] font-semibold uppercase tracking-wide text-arc-charcoal">
-                    {step.title}
-                  </p>
-                  <p className="mt-1 font-sans text-[9px] font-medium uppercase leading-snug tracking-wide text-arc-charcoal/65">
-                    {step.meta}
-                  </p>
-                  <p className="mt-3 font-sans text-[11px] leading-snug text-arc-charcoal/75">
-                    {step.body}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+      <div
+        className="absolute inset-x-0 bottom-0 z-[2] flex min-h-[5.75rem] w-full flex-col items-center justify-center gap-2 bg-gradient-to-b from-arc-teal-muted/45 to-arc-teal-muted/70 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] pt-5 sm:min-h-[6.5rem] sm:gap-2.5 sm:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] sm:pt-6"
+        role="note"
+        style={scrollHintMotion}
+      >
+        <div className="flex max-w-md flex-col items-center gap-2 text-center">
+          <p className="font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.22em] text-arc-charcoal/65 sm:text-[11px] sm:tracking-[0.28em]">
+            <span
+              aria-hidden
+              className="mr-1 inline-block motion-safe:animate-arc-indicator-arrow"
+            >
+              ↓
+            </span>
+            Keep scrolling to follow your path{" "}
+            <span
+              aria-hidden
+              className="ml-1 inline-block motion-safe:animate-arc-indicator-arrow"
+            >
+              ↓
+            </span>
+          </p>
+          <p className="font-sans text-[11px] font-normal leading-relaxed text-arc-charcoal/58 sm:text-xs">
+            Your wellness journey unfolds in the steps below.
+          </p>
         </div>
       </div>
     </PinnedSection>
   );
 }
 
+function YourPathStepSection({ step }: { step: PathStep }) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  useArcFullscreenPin(sectionRef, {
+    pinDistanceMultiplier: 0.35,
+    onProgress: setPinProgress,
+  });
+
+  const leftPanelYPercent = (1 - p) * 1;
+  const rightPanelYPercent = (p - 1) * 1;
+  const titleMotion = pathPinFadeUp(p, 0.08, 2.35);
+  const metaMotion = pathPinFadeUp(p, 0.16, 2.05);
+  const bodyMotion = pathPinFadeUp(p, 0.24, 2.0);
+
+  return (
+    <section ref={sectionRef} className="relative min-h-[100dvh] overflow-clip bg-arc-cream">
+      <div className="grid min-h-[100dvh] grid-cols-1 md:grid-cols-2">
+        <div
+          className={[
+            "relative min-h-[42dvh] will-change-transform md:min-h-[100dvh]",
+            step.contentOnLeft ? "md:order-2" : "md:order-1",
+          ].join(" ")}
+          style={{
+            transform: `translate3d(0, ${leftPanelYPercent}%, 0)`,
+          }}
+        >
+          <Image
+            src={step.imageSrc}
+            alt={step.imageAlt}
+            fill
+            className="object-cover object-center"
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+        </div>
+
+        <div
+          className={[
+            "relative flex min-h-[58dvh] items-center justify-center bg-arc-cream/95 px-6 py-14 will-change-transform sm:px-10 sm:py-16 md:min-h-[100dvh] md:px-12 lg:px-16",
+            step.contentOnLeft ? "md:order-1" : "md:order-2",
+          ].join(" ")}
+          style={{
+            transform: `translate3d(0, ${rightPanelYPercent}%, 0)`,
+          }}
+        >
+          <div className="w-full max-w-xl text-left">
+            <p
+              className="mb-3 font-serif text-3xl leading-none text-arc-teal-ink sm:text-4xl"
+              style={titleMotion}
+            >
+              {step.numeral} {step.title}
+            </p>
+            <p
+              className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/60 sm:text-[0.8rem]"
+              style={metaMotion}
+            >
+              {step.stepMeta}
+            </p>
+            <p
+              className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg sm:leading-relaxed"
+              style={bodyMotion}
+            >
+              {step.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function YourPathSection() {
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  if (reduceMotion) {
-    return <YourPathReduced />;
-  }
-
-  return <YourPathImmersive />;
+  return (
+    <>
+      <YourPathIntroSection />
+      {PATH_STEPS.map((step) => (
+        <YourPathStepSection key={step.stepMeta} step={step} />
+      ))}
+    </>
+  );
 }

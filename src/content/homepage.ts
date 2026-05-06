@@ -76,6 +76,61 @@ export const homeMicro2 = {
 export const homeInvestSupport =
   "Reserve a private consult to map aesthetics, vitality, and longevity goals in one cohesive plan.";
 
+/** FAQ category labels for `#faq` tabs — keys must match `homeFaqByCategory`. */
+export const homeFaqCategories = {
+  general: "Getting started",
+  booking: "Scheduling & results",
+  membership: "Memberships",
+} as const;
+
+export type HomeFaqCategory = keyof typeof homeFaqCategories;
+
+export type HomeFaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+/** FAQ entries grouped by tab — edit copy with final legal/clinical approval. */
+export const homeFaqByCategory: Record<HomeFaqCategory, readonly HomeFaqItem[]> = {
+  general: [
+    {
+      id: "first-visit",
+      question: "What happens at the first visit?",
+      answer:
+        "We begin with a conversation about your goals, history, and day-to-day life. When it helps, we map next steps—labs, imaging, or treatment options—so you leave with clarity, not a generic checklist.",
+    },
+    {
+      id: "combine-care",
+      question: "Can aesthetics and functional medicine be one plan?",
+      answer:
+        "Yes—that is how ARC is structured. Skin, vitality, and longevity are reviewed together so recommendations stay coherent and proportional to what you want.",
+    },
+  ],
+  booking: [
+    {
+      id: "booking",
+      question: "How do I book or reserve a call?",
+      answer:
+        "Use the booking links on this site or call the studio directly. We confirm timing, any forms, and what to expect before you arrive.",
+    },
+    {
+      id: "timeline",
+      question: "How soon might I notice results?",
+      answer:
+        "It depends on the pathway. Some visits offer visible change quickly; others are measured over weeks or months. We set expectations up front so timelines feel honest.",
+    },
+  ],
+  membership: [
+    {
+      id: "memberships",
+      question: "Do you offer memberships or packages?",
+      answer:
+        "We offer continuity options for patients who want rhythm and priority access. Details are shared in consult so you can choose what fits your cadence.",
+    },
+  ],
+};
+
 /** Portrait pool for the 3D sphere — swap for approved photography. */
 const testimonialPortraitPool = [
   images.services[0],

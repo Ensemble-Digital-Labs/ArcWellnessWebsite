@@ -7,8 +7,8 @@ type ArcTextUnderlineCtaProps = {
   href: string;
   children: ReactNode;
   className?: string;
-  /** `sm` for dense UI; default matches hero / section links */
-  size?: "sm" | "md";
+  /** `xs`/`sm` for dense UI; default matches hero / section links */
+  size?: "xs" | "sm" | "md";
   /**
    * - **`teal`** — darker ink teal for cream / light grey backgrounds (default).
    * - **`tealBright`** — signature vivid teal for dark photography or heavy overlays (e.g. hero).
@@ -29,7 +29,9 @@ export function ArcTextUnderlineCta({
   accent = "teal",
 }: ArcTextUnderlineCtaProps) {
   const rowType =
-    size === "sm"
+    size === "xs"
+      ? "font-serif text-xs font-black uppercase tracking-[0.1em] sm:text-sm"
+      : size === "sm"
       ? "font-serif text-sm font-black uppercase tracking-[0.11em] sm:text-base"
       : "font-serif text-base font-black uppercase tracking-[0.11em] sm:text-lg";
 

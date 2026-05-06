@@ -3,7 +3,6 @@
 | File | Use |
 |------|-----|
 | **`path-intro-background.png`** | Full-bleed background for the **sticky intro** (headline + CTA + scroll hint) only. |
+| **`steps/listen.png`** … **`steps/revise.png`** | Split-panel imagery for journey steps I–V (`PATH_STEP_IMAGE_SRC` in `backgroundDecoration.ts`). |
 
-Per-step backgrounds for items 1–3 can be added here later (e.g. `path-step-01.png`) and wired in `YourPathSection` / `ArcStickyTabs` when ready.
-
-Source URL in code: **`PATH_SECTION_INTRO_BACKGROUND_SRC`** in `src/content/backgroundDecoration.ts`.
+Source URLs in code: **`PATH_SECTION_INTRO_BACKGROUND_SRC`**, **`PATH_STEP_IMAGE_SRC`** in `src/content/backgroundDecoration.ts`.

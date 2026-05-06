@@ -11,6 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 export type ArcFullscreenPinOptions = {
   /** 0 at pin start, 1 at pin end — for scrubbed section animations (Locomotive `#main` scroller). */
   onProgress?: (progress: number) => void;
+  /** Scroll distance multiplier for pin duration (1 = one viewport, lower = shorter lock). */
+  pinDistanceMultiplier?: number;
 };
 
 /**
@@ -23,6 +25,7 @@ export function useArcFullscreenPin(
 ) {
   const onProgressRef = useRef<ArcFullscreenPinOptions["onProgress"]>(undefined);
   onProgressRef.current = options?.onProgress;
+  const pinDistanceMultiplier = options?.pinDistanceMultiplier ?? 1;
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -37,7 +40,8 @@ export function useArcFullscreenPin(
       if (!trigger || !main) return;
 
       const endDist = () =>
-        main.clientHeight || Math.round(window.innerHeight || 720);
+        (main.clientHeight || Math.round(window.innerHeight || 720)) *
+        Math.max(0.2, pinDistanceMultiplier);
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
@@ -82,5 +86,5 @@ export function useArcFullscreenPin(
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [sectionRef]);
+  }, [sectionRef, pinDistanceMultiplier]);
 }

@@ -1,20 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { memo, useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { arcGlassCtaClass } from "@/lib/arcGlassCta";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_HERO_TITLE_KEYWORDS = ["Aesthetics", "Wellness", "Longevity"] as const;
+const HERO_AMBIENT_BG = "/assets/decoration/background/ambient-03.png" as const;
 
 /** Bottom-of-hero sliding ticker — brand phrases (reference: bullet-separated marquee bar). */
 const HERO_KEYWORD_MARQUEE_ITEMS = [
@@ -29,7 +31,7 @@ const HERO_KEYWORD_MARQUEE_ITEMS = [
 const HERO_MARQUEE_LABEL_CLASS =
   "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.2),0_2px_12px_rgba(0,0,0,0.28)]";
 
-function HeroKeywordMarquee() {
+const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   /**
    * Teal bar + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
    */
@@ -113,7 +115,10 @@ function HeroKeywordMarquee() {
 
   return (
     <div
-      className="pointer-events-none isolate overflow-hidden border-t border-white/25 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.18)] [transform:translateZ(0)]"
+      className={cn(
+        "pointer-events-none isolate overflow-hidden border-t border-white/25 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-12px_40px_rgba(0,0,0,0.18)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        marqueeOn && "opacity-100",
+      )}
       aria-hidden
     >
       <div
@@ -138,7 +143,7 @@ function HeroKeywordMarquee() {
       </div>
     </div>
   );
-}
+});
 
 /** Larger serif line: parent uses flex + items-baseline so script scales with the white words. */
 const HERO_TITLE_KEYWORD_EMPHASIS_CLASS =
@@ -419,8 +424,20 @@ export function ScrollExpandHero({
         className="relative flex min-h-[100dvh] flex-col items-center justify-start"
       >
         <div className="relative flex min-h-[100dvh] w-full flex-col items-center">
+          <div className="absolute inset-0 z-0 h-full">
+            <Image
+              src={HERO_AMBIENT_BG}
+              alt=""
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/30" />
+          </div>
+
           <motion.div
-            className="absolute inset-0 z-0 h-full"
+            className="absolute inset-0 z-[1] h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 - progress }}
             transition={{ duration: 0.1 }}
@@ -460,23 +477,13 @@ export function ScrollExpandHero({
                   <span className={titleLine2and3ClassTop}>{restClosing}</span>
                 ) : null}
               </motion.h1>
-              <div className="pointer-events-auto mt-1 flex w-full max-w-[min(100%,46rem)] flex-col items-start gap-3 sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-2">
-                <ArcTextUnderlineCta
-                  href="#book"
-                  accent="tealBright"
-                  size="sm"
-                  className="items-start"
-                >
+              <div className="pointer-events-auto mt-1 flex w-full max-w-[min(100%,46rem)] flex-col items-start gap-3 sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
+                <Link href="#book" className={arcGlassCtaClass}>
                   Begin your Journey
-                </ArcTextUnderlineCta>
-                <ArcTextUnderlineCta
-                  href="#path"
-                  accent="tealBright"
-                  size="sm"
-                  className="items-start"
-                >
+                </Link>
+                <Link href="#path" className={arcGlassCtaClass}>
                   See How it Works
-                </ArcTextUnderlineCta>
+                </Link>
               </div>
             </div>
 

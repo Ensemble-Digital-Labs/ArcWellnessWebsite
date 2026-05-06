@@ -6,6 +6,7 @@ export function WholeBodySection() {
   return (
     <PinnedSection
       id="services"
+      pinDistanceMultiplier={0.72}
       className="w-full overflow-hidden bg-arc-charcoal py-0"
     >
       <ArcServicesShowcaseSlider
