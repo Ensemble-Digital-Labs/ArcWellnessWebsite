@@ -7,10 +7,13 @@ Next.js marketing site (App Router, Tailwind CSS v4, Framer Motion, GSAP).
 | Path | Purpose |
 |------|---------|
 | `src/app/` | App Router layout, pages, global styles |
-| `src/components/arc/` | ARC homepage sections and UI |
+| `src/app/client-showcase/` | **Client preview route** (`/client-showcase`) — simplified showcase, separate from production homepage |
+| `src/client-showcase/` | Components and notes for the simplified client-only build (see `README.md` inside) |
+| `src/components/arc/` | ARC homepage sections and UI (full experience at `/`; primary development target) |
 | `src/content/` | Placeholder image URLs and shared copy hooks |
 | `public/` | Static assets served from `/` |
 | `design/reference/` | Design reference imagery (e.g. homepage mockup) |
+| `design/client-showcase/` | Design assets for the **simplified client preview** (`/client-showcase`) only |
 | `documents/` | Session / change logs (optional; see `.cursor/rules/session-logging.mdc`) |
 | `.cursor/rules/` | Cursor project rules |
 
@@ -23,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) for the full homepage, or [http://localhost:3000/client-showcase](http://localhost:3000/client-showcase) for the simplified client preview.
 
 ```bash
 npm run build

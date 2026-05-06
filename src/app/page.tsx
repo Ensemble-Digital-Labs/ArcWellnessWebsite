@@ -1,5 +1,5 @@
 import { ArcFooter } from "@/components/arc/ArcFooter";
-import { ArcMicroStatementSection } from "@/components/arc/ArcMicroStatementSection";
+// import { ArcMicroStatementSection } from "@/components/arc/ArcMicroStatementSection";
 import { ArcScrollShell } from "@/components/arc/ArcScrollShell";
 import { ArcFounderIntroSection } from "@/components/arc/ArcFounderIntroSection";
 import { ArcConcernsPinnedSection } from "@/components/arc/ArcConcernsPinnedSection";
@@ -13,11 +13,11 @@ import { ArcTestimonialsSection } from "@/components/arc/ArcTestimonialsSection"
 import {
   homeInvestSupport,
   homeFounder,
-  homeMicro1,
+  // homeMicro1,
   homeTestimonials,
   homeWelcome,
 } from "@/content/homepage";
-import { images, videos } from "@/content/site";
+import { images } from "@/content/site";
 
 export default function Home() {
   return (
@@ -37,7 +37,8 @@ export default function Home() {
           }
         />
 
-        <ArcMicroStatementSection
+        {/* Micro statement — commented out while presenting alternate design; restore import + homeMicro1 + videos when needed. */}
+        {/* <ArcMicroStatementSection
           pinnedScrollMotion
           pinnedBackgroundVideoSrc={videos.microStatement}
           pinnedBackgroundPosterSrc={images.heroMedia}
@@ -47,7 +48,7 @@ export default function Home() {
           uspLine={homeMicro1.uspLine}
           linkHref={homeMicro1.linkHref}
           linkLabel={homeMicro1.linkLabel}
-        />
+        /> */}
 
         <ArcConcernsPinnedSection />
 
