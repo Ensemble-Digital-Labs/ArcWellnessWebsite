@@ -22,6 +22,8 @@
 
 # Source video files — often >100MB; GitHub rejects. Keep locally, use Git LFS, or host on CDN.
 /public/assets/videos/**/*.mov
+# Tracked: hero + pinned micro-statement loop (~40MB; under GitHub’s 100MB file cap).
+!/public/assets/videos/hero/spa-background-oriental-therapy.mov
 
 # production
 /build

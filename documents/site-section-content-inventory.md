@@ -94,15 +94,15 @@ Tagline: *“Stay sharp for what matters most.”*
 |--------|---------|
 | **H2** | “Your Path to Feeling and Living at Your Best” |
 | **CTA** | Link → `#book` — **“Start Your Journey”** |
-| **Steps** (5 cards, icons) | |
+| **Steps** (5) | Copy from `src/content/pathSteps.ts`; **UI**: prior mint section + cream sticky bars + white icon cards (`YourPathSection` immersive); reduced-motion horizontal card row. |
 
-1. **Consultation** — “We listen to your goals and map a clear, personalized plan.”  
-2. **Treatment** — “Thoughtful procedures and therapies aligned to your timeline.”  
-3. **Monitoring** — “Objective tracking so progress stays visible and meaningful.”  
-4. **Adjustment** — “Fine-tuning based on how you feel, respond, and evolve.”  
-5. **Ongoing Support** — “Long-term partnership for wellness that lasts beyond a single visit.”
+1. **Listen** — `STEP 01 · 90 MINUTES` — conversation-first intake.  
+2. **Measure** — `STEP 02 · TWO VISITS` — labs, body composition, cognitive assessments.  
+3. **Author** — `STEP 03 · ONE WEEK` — five-chapter plan.  
+4. **Practice** — `STEP 04 · ONGOING` — monthly rhythm.  
+5. **Revise** — `STEP 05 · EACH SEASON` — quarterly updates.
 
-**Depth gaps:** No timelines (e.g. weeks between visits), no tools named (labs, imaging), no what *you* bring vs what *we* deliver; horizontal scroll on small screens only—no deep link to patient resources.
+**Depth gaps:** Optional link-out to what to bring / portal; disclaimers if copy reads as clinical promises.
 
 ---
 

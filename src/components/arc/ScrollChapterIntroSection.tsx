@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight } from "lucide-react";
+import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
@@ -207,17 +206,16 @@ export function ScrollChapterIntroSection({
             {body}
           </p>
 
-          <Link
+          <ArcStandardCta
             href="/#about"
-            className="group mt-8 inline-flex w-fit items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal transition-colors hover:text-arc-teal-hover sm:mt-10 sm:text-sm"
+            className="mt-8 w-fit sm:mt-10"
             style={{
               opacity: ctaReveal,
               transform: `translateY(${6 + (0.35 - p) * 20}px)`,
             }}
           >
             Continue to who we are
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5 sm:size-5" strokeWidth={2} />
-          </Link>
+          </ArcStandardCta>
         </div>
 
         {/* Spacer: photo reads on the right; on md+ this flexes so copy doesn’t max out full rail */}

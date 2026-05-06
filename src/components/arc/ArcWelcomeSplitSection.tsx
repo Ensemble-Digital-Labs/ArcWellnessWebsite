@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
+import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import {
@@ -14,6 +14,7 @@ import {
   WELCOME_GALLERY_FOCAL_INDEX,
 } from "@/content/welcomeGallery";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
+import { IMMERSIVE_COLLAGE_FRAME_CLASSES } from "@/lib/immersiveCollageFrames";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { cn } from "@/lib/utils";
 
@@ -24,12 +25,20 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const GALLERY_PROGRESS_END = 0.52;
 
+/**
+ * Share of section scroll (0–1) where the sticky collage stays static — parallax / zoom scrub starts after.
+ * (Feels like a short “lock” on the opening frame before motion kicks in.)
+ */
+const WELCOME_PARALLAX_HOLD = 0.14;
+
 /** Copy block fade (Framer) — keep in sync with `copyStageBgOpacity` below. */
 const COPY_FADE_IN_START = 0.34;
 const COPY_FADE_IN_END = 0.56;
 
 /** Full-bleed art behind the about copy phase (after collage fades). */
-const WELCOME_COPY_STAGE_BG = "/assets/decoration/background/about-copy-stage.png";
+/** Full-bleed art behind welcome / about copy phase (collage handoff). */
+const WELCOME_COPY_STAGE_BG =
+  "/assets/decoration/background/welcome-copy-stage-cream.png";
 
 /** Same right-anchored crop as phones for every width below 1440px; center only on wide desktops. */
 const COPY_STAGE_BG_OBJECT =
@@ -43,19 +52,6 @@ function copyStageBgOpacity(sectionProgress: number): number {
   if (sectionProgress >= end) return 1;
   return (sectionProgress - start) / (end - start);
 }
-
-/**
- * Staggered vw/vh frames — scaled ~1.2× vs CodePen reference so the collage reads closer to **full-bleed**.
- */
-const IMAGE_STYLES: readonly string[] = [
-  "w-[30vw] h-[30vh]",
-  "w-[42vw] h-[36vh] -top-[36vh] left-[6vw]",
-  "w-[24vw] h-[62vh] -top-[18vh] -left-[28vw]",
-  "w-[19vw] h-[26vh] left-[28vw] -top-[1vh] sm:w-[20vw] sm:h-[30vh] sm:left-[30vw] sm:-top-[2vh] md:w-[20vw] md:h-[46vh] md:left-[28vw] md:-top-[5vh]",
-  "w-[24vw] h-[34vh] top-[34vh] left-[6vw]",
-  "w-[38vw] h-[30vh] top-[32vh] -left-[27vw]",
-  "w-[15vw] h-[16vh] top-[34vh] left-[28vw] sm:w-[16vw] sm:h-[17vh] sm:top-[36vh] sm:left-[30vw] md:w-[18vw] md:h-[18vh] md:top-[34vh] md:left-[32vw]",
-];
 
 function defaultGallerySrcs(): string[] {
   return getWelcomeGallerySlots();
@@ -244,40 +240,42 @@ function WelcomeSplitStaticBody({
           "pt-0.5 md:pt-1 md:pb-2 md:pl-2 lg:pl-4",
         )}
       >
-        <h2 className="mb-3 max-w-[22ch] font-serif text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-arc-charcoal sm:text-3xl md:mb-4 md:max-w-none md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
-          {hasEmphasis ? (
-            <>
-              {before}
-              {before ? " " : null}
-              <TitleEmphasis className="text-[1.38em] leading-[1.05] sm:text-[1.44em] md:text-[1.52em] lg:text-[1.58em] text-arc-teal">
-                {headlineEmphasisWord}
-              </TitleEmphasis>
-              {after ? <> {after}</> : null}
-            </>
-          ) : (
-            headline
-          )}
-        </h2>
-
-        <div className="max-w-xl space-y-2.5 font-sans text-[13px] leading-[1.55] text-arc-charcoal/88 sm:space-y-3 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:text-base">
-          <p>{paragraph1}</p>
-          <p>{paragraph2}</p>
-          <p className="text-arc-charcoal">
-            <strong className="font-semibold text-arc-charcoal">{proofLead}</strong>{" "}
-            {proofRest}
-          </p>
-        </div>
-
-        <Link
-          href={ctaHref}
-          className="group mt-5 inline-flex w-fit items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-teal transition-colors hover:text-arc-teal-hover sm:mt-6 sm:text-xs md:mt-7 md:text-sm"
+        <ArcTibbixelCopyFrame
+          className="w-full"
+          innerClassName="items-start text-left"
+          ornamentClassName="w-[min(92vw,52rem)]"
         >
-          {ctaLabel}
-          <ArrowRight
-            className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4"
-            strokeWidth={2}
-          />
-        </Link>
+          <h2 className="mb-3 max-w-[22ch] font-serif text-[1.65rem] font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-3xl md:mb-4 md:max-w-none md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
+            {hasEmphasis ? (
+              <>
+                {before}
+                {before ? " " : null}
+                <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-teal-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+                  {headlineEmphasisWord}
+                </TitleEmphasis>
+                {after ? <> {after}</> : null}
+              </>
+            ) : (
+              headline
+            )}
+          </h2>
+
+          <div className="max-w-xl space-y-2.5 font-sans text-[13px] leading-[1.55] text-arc-charcoal/88 sm:space-y-3 sm:text-[0.92rem] md:max-w-2xl md:text-[0.95rem] md:leading-relaxed lg:max-w-[44rem] lg:text-base">
+            <p>{paragraph1}</p>
+            <p>{paragraph2}</p>
+            <p className="text-arc-charcoal">
+              <strong className="font-semibold text-arc-charcoal">{proofLead}</strong>{" "}
+              {proofRest}
+            </p>
+          </div>
+
+          <ArcTextUnderlineCta
+            href={ctaHref}
+            className="mt-5 w-fit items-start sm:mt-6 md:mt-7"
+          >
+            {ctaLabel}
+          </ArcTextUnderlineCta>
+        </ArcTibbixelCopyFrame>
       </div>
     </div>
   );
@@ -317,10 +315,30 @@ function WelcomeImmersiveScrollBody({
   /** Center / focal tile — reference layout slot + **`WELCOME_GALLERY_FOCAL_SRC`** (strong zoom). */
   const focalIndex = WELCOME_GALLERY_FOCAL_INDEX;
 
-  const scaleFocal = useTransform(progress, [0, GALLERY_PROGRESS_END, 1], [1, 4.25, 4.25]);
-  const scalePeripheral = useTransform(progress, [0, GALLERY_PROGRESS_END, 1], [1, 1.08, 1.08]);
+  /** Parallax scrub only — frozen while raw scroll progress < `WELCOME_PARALLAX_HOLD`. */
+  const parallaxProgress = useTransform(
+    progress,
+    [0, WELCOME_PARALLAX_HOLD, 1],
+    [0, 0, 1],
+  );
 
-  const opacityImage = useTransform(progress, [0, GALLERY_PROGRESS_END, 1], [1, 0, 0]);
+  const scaleFocal = useTransform(
+    parallaxProgress,
+    [0, GALLERY_PROGRESS_END, 1],
+    [1, 4.25, 4.25],
+  );
+  const scalePeripheral = useTransform(
+    parallaxProgress,
+    [0, GALLERY_PROGRESS_END, 1],
+    [1, 1.08, 1.08],
+  );
+
+  const opacityImage = useTransform(
+    parallaxProgress,
+    [0, GALLERY_PROGRESS_END, 1],
+    [1, 0, 0],
+  );
+
   const opacityCopy = useTransform(
     progress,
     [COPY_FADE_IN_START, COPY_FADE_IN_END, 1],
@@ -337,7 +355,7 @@ function WelcomeImmersiveScrollBody({
   const pictures = Array.from({ length: 7 }, (_, index) => ({
     src: gallerySrcs[index % gallerySrcs.length] ?? gallerySrcs[0],
     scale: index === focalIndex ? scaleFocal : scalePeripheral,
-    frameClass: IMAGE_STYLES[index]!,
+    frameClass: IMMERSIVE_COLLAGE_FRAME_CLASSES[index]!,
     isFocal: index === focalIndex,
   }));
 
@@ -416,7 +434,7 @@ function WelcomeImmersiveScrollBody({
       ref={sectionRef}
       id={id}
       className={cn(
-        "relative h-[240vh] scroll-mt-28 bg-arc-cream pt-0",
+        "relative h-[230vh] scroll-mt-28 bg-arc-cream pt-0",
         className,
       )}
     >
@@ -442,6 +460,21 @@ function WelcomeImmersiveScrollBody({
                     sizes="(max-width: 768px) 45vw, 30vw"
                     priority={isFocal}
                   />
+                  {isFocal ? (
+                    <div className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center bg-gradient-to-t from-black/50 via-black/20 to-black/25 px-3 sm:px-5">
+                      <p className="max-w-[min(92vw,20rem)] text-balance text-center font-serif text-3xl font-bold leading-[1.08] tracking-tight drop-shadow-[0_2px_24px_rgba(0,0,0,0.7)] sm:max-w-[24rem] sm:text-4xl md:max-w-[28rem] md:text-5xl md:leading-[1.06] lg:max-w-[32rem] lg:text-[3.25rem] xl:text-[3.5rem]">
+                        <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
+                          Wellness.
+                        </span>{" "}
+                        <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-teal sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.42),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                          Made personal
+                        </TitleEmphasis>
+                        <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                          .
+                        </span>
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </motion.div>
             ))}
@@ -466,7 +499,7 @@ function WelcomeImmersiveScrollBody({
             decoding="async"
             fetchPriority="high"
           />
-          <div className="pointer-events-none absolute inset-0 bg-arc-cream/10" />
+          <div className="pointer-events-none absolute inset-0 bg-black/[0.12]" />
         </div>
 
         <motion.div
@@ -476,42 +509,56 @@ function WelcomeImmersiveScrollBody({
             "relative z-20 mx-auto flex h-full w-full max-w-3xl flex-1 flex-col items-center justify-center px-5 pb-8 sm:px-7 md:max-w-4xl md:px-10 lg:px-12",
           )}
         >
-          <div className="pointer-events-auto max-w-2xl text-center md:max-w-3xl">
-            <h2 className="mb-4 font-serif text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-arc-charcoal sm:mb-5 sm:text-3xl md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
+          <ArcTibbixelCopyFrame
+            className="pointer-events-auto max-w-2xl text-center md:max-w-4xl lg:max-w-5xl"
+            ornamentClassName="w-[min(98vw,68rem)]"
+          >
+            <h2 className="mb-4 font-serif text-[1.65rem] font-bold leading-[1.12] tracking-tight sm:mb-5 sm:text-3xl md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
               {hasEmphasis ? (
                 <>
-                  {before}
+                  <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.75),0_0_32px_rgba(0,0,0,0.35)]">
+                    {before}
+                  </span>
                   {before ? " " : null}
-                  <TitleEmphasis className="text-[1.38em] leading-[1.05] sm:text-[1.44em] md:text-[1.52em] lg:text-[1.58em] text-arc-teal">
+                  <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-teal [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                     {headlineEmphasisWord}
                   </TitleEmphasis>
-                  {after ? <> {after}</> : null}
+                  {after ? (
+                    after.trim() === "." ? (
+                      <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                        .
+                      </span>
+                    ) : (
+                      <> {after}</>
+                    )
+                  ) : (
+                    <span className="font-serif text-arc-teal [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_rgba(78,196,176,0.4)]">
+                      .
+                    </span>
+                  )}
                 </>
               ) : (
-                headline
+                <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.75)]">{headline}</span>
               )}
             </h2>
 
-            <div className="space-y-3 font-sans text-[13px] leading-relaxed text-arc-charcoal/88 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:text-base">
+            <div className="space-y-3 font-sans text-[13px] leading-relaxed text-[#f7f4ef]/90 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:max-w-[54rem] lg:text-base">
               <p>{paragraph1}</p>
               <p>{paragraph2}</p>
-              <p className="text-arc-charcoal">
-                <strong className="font-semibold text-arc-charcoal">{proofLead}</strong>{" "}
+              <p className="text-[#f7f4ef]/95">
+                <strong className="font-semibold text-white">{proofLead}</strong>{" "}
                 {proofRest}
               </p>
             </div>
 
-            <Link
+            <ArcTextUnderlineCta
               href={ctaHref}
-              className="group mt-6 inline-flex items-center justify-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-teal transition-colors hover:text-arc-teal-hover sm:mt-8 sm:text-xs md:text-sm"
+              accent="tealBright"
+              className="mt-6 items-center sm:mt-8"
             >
               {ctaLabel}
-              <ArrowRight
-                className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4"
-                strokeWidth={2}
-              />
-            </Link>
-          </div>
+            </ArcTextUnderlineCta>
+          </ArcTibbixelCopyFrame>
         </motion.div>
       </div>
     </section>

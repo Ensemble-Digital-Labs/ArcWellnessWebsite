@@ -1,26 +1,192 @@
+"use client";
+
 import Image from "next/image";
 import { Check } from "lucide-react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  FounderEditorialHeroLayer,
+  FounderEditorialHeroStatic,
+  FOUNDER_COPY_FADE_IN_END,
+  FOUNDER_COPY_FADE_IN_START,
+} from "@/components/arc/FounderEditorialHero";
+import { FounderGalleryMosaic } from "@/components/arc/FounderGalleryMosaic";
 import { PinnedSection } from "@/components/arc/PinnedSection";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import {
+  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+  TitleEmphasis,
+} from "@/components/arc/TitleEmphasis";
+import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
+import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
+import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export type FounderAccordionPanel = {
+  title: string;
+  imageSrc: string;
+};
 
 type ArcFounderIntroSectionProps = {
   id?: string;
   className?: string;
   imageSrc: string;
   imageAlt: string;
-  eyebrow: string;
+  eyebrow?: string;
   headline: string;
   headlineEmphasisWord: string;
+  headlineEmphasisWord2?: string;
+  /** First line above the large italic name (e.g. “Meet Dr.”). */
+  heroMeetLead?: string;
+  /** Large italic name line (e.g. “Danish Jabbar”). */
+  heroNameItalic?: string;
   roleTitle: string;
   intro: string;
   deliverablesHeading: string;
   deliverables: readonly string[];
+  accordionPanels?: readonly FounderAccordionPanel[];
 };
 
+function FounderImmersiveScrollBody({
+  id,
+  className,
+  children,
+  imageSrc,
+  imageAlt,
+  heroCopy,
+}: {
+  id?: string;
+  className?: string;
+  children: ReactNode;
+  imageSrc: string;
+  imageAlt: string;
+  heroCopy: { meetLead: string; nameItalic: string; credential: string };
+}) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const progress = useMotionValue(0);
+
+  const opacityCopy = useTransform(
+    progress,
+    [FOUNDER_COPY_FADE_IN_START, FOUNDER_COPY_FADE_IN_END, 1],
+    [0, 1, 1],
+  );
+  const copyScale = useTransform(
+    progress,
+    [FOUNDER_COPY_FADE_IN_START, FOUNDER_COPY_FADE_IN_END, 1],
+    [0.94, 1, 1],
+  );
+
+  useEffect(() => {
+    let revert: (() => void) | null = null;
+    let cancelled = false;
+
+    const setup = () => {
+      if (cancelled) return;
+      const section = sectionRef.current;
+      const main = document.querySelector<HTMLElement>("#main");
+      if (!section || !main) return;
+
+      const ctx = gsap.context(() => {
+        ScrollTrigger.create({
+          trigger: section,
+          scroller: main,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.85,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            progress.set(self.progress);
+          },
+        });
+      }, section);
+
+      revert = () => ctx.revert();
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+
+    const onReady = () => queueMicrotask(setup);
+    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
+      onReady();
+    }
+    const fallback = window.setTimeout(() => {
+      if (!cancelled && revert === null) setup();
+    }, 1800);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      window.clearTimeout(fallback);
+      revert?.();
+    };
+  }, [progress]);
+
+  return (
+    <section
+      ref={sectionRef}
+      id={id}
+      className={cn("relative h-[340vh] scroll-mt-28 bg-arc-cream pt-0", className)}
+    >
+      <div className="sticky top-0 relative flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-arc-cream">
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <Image
+            src={FOUNDER_SECTION_AMBIENT_SRC}
+            alt=""
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+            priority
+          />
+        </div>
+        <FounderEditorialHeroLayer
+          progress={progress}
+          mainSrc={imageSrc}
+          mainAlt={imageAlt}
+          meetLead={heroCopy.meetLead}
+          nameItalic={heroCopy.nameItalic}
+          credential={heroCopy.credential}
+        />
+
+        <motion.div
+          style={{ opacity: opacityCopy }}
+          className={cn(
+            ARC_PINNED_CLEAR_BELOW_LOGO,
+            "relative z-20 mx-auto flex h-full min-h-0 w-full max-w-3xl flex-1 flex-col justify-start px-5 pb-6 sm:px-7 md:max-w-4xl md:px-10 lg:max-w-5xl lg:px-12 xl:max-w-6xl 2xl:max-w-7xl",
+            "[@media(max-height:760px)]:pb-4",
+          )}
+        >
+          <div className="pointer-events-auto flex min-h-0 min-w-0 flex-1 flex-col justify-center">
+            <motion.div
+              style={{ scale: copyScale }}
+              className="flex min-h-0 min-w-0 max-w-full flex-1 flex-col justify-center origin-top"
+            >
+              <div
+                className={cn(
+                  "min-h-0 min-w-0 w-full max-w-full flex-1 overflow-y-auto overscroll-y-contain break-words text-pretty text-left",
+                  "pl-0 sm:pl-1 md:pl-28 lg:pl-44 xl:pl-72 2xl:pl-[22rem]",
+                  "[scrollbar-gutter:stable]",
+                  "pb-[max(0.75rem,env(safe-area-inset-bottom))]",
+                  "[@media(max-height:820px)]:[&_h2]:mb-1 [@media(max-height:820px)]:[&_h2]:text-[clamp(1.65rem,4.2svh,2.15rem)] [@media(max-height:820px)]:[&_h2]:leading-[1.08]",
+                  "[@media(max-height:820px)]:[&_p]:mb-3 [@media(max-height:820px)]:[&_ul]:space-y-1.5 [@media(max-height:820px)]:[&_li]:gap-2",
+                )}
+              >
+                {children}
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 /**
- * Physician-founder introduction — portrait + role line + intro + “what he delivers” checklist.
- * Matches welcome split rhythm; cream panel so it alternates with white welcome band.
+ * Physician-founder — editorial full-bleed hero (reference-style) + scroll handoff to detail copy; reduced-motion uses static hero + mosaic.
  */
 export function ArcFounderIntroSection({
   id,
@@ -30,92 +196,176 @@ export function ArcFounderIntroSection({
   eyebrow,
   headline,
   headlineEmphasisWord,
+  headlineEmphasisWord2,
+  heroMeetLead: heroMeetLeadProp,
+  heroNameItalic: heroNameItalicProp,
   roleTitle,
   intro,
   deliverablesHeading,
   deliverables,
+  accordionPanels: accordionPanelsProp,
 }: ArcFounderIntroSectionProps) {
-  const emphasisIdx = headline.indexOf(headlineEmphasisWord);
-  const hasEmphasis =
-    headlineEmphasisWord.length > 0 && emphasisIdx !== -1;
-  const before = hasEmphasis
-    ? headline.slice(0, emphasisIdx).trimEnd()
-    : headline.trimEnd();
-  const after = hasEmphasis
-    ? headline.slice(emphasisIdx + headlineEmphasisWord.length).trimStart()
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const mosaicPanels =
+    accordionPanelsProp?.length && accordionPanelsProp.length > 0
+      ? accordionPanelsProp
+      : [
+          { title: "Portrait", imageSrc },
+          { title: "Practice", imageSrc },
+          { title: "Care", imageSrc },
+          { title: "Continuity", imageSrc },
+        ];
+
+  const heroMeetLead =
+    heroMeetLeadProp?.trim() || "Meet Dr.";
+  const heroNameItalic =
+    heroNameItalicProp?.trim() ||
+    headline.replace(/^Dr\.\s*/i, "").trim() ||
+    headline;
+  const heroCredential = roleTitle;
+
+  const e1 = headlineEmphasisWord.trim();
+  const e2 = headlineEmphasisWord2?.trim() ?? "";
+  const i1 = e1.length ? headline.indexOf(e1) : -1;
+  const i2 =
+    e2.length && i1 !== -1
+      ? headline.indexOf(e2, i1 + e1.length)
+      : -1;
+  const hasDoubleEmphasis = i1 !== -1 && i2 !== -1;
+  const hasSingleEmphasis =
+    !hasDoubleEmphasis && e1.length > 0 && i1 !== -1;
+  const beforeSingle = hasSingleEmphasis
+    ? headline.slice(0, i1).trimEnd()
+    : "";
+  const afterSingle = hasSingleEmphasis
+    ? headline.slice(i1 + e1.length).trimStart()
+    : "";
+  const beforeDouble = hasDoubleEmphasis ? headline.slice(0, i1).trimEnd() : "";
+  const gapDouble =
+    hasDoubleEmphasis ? headline.slice(i1 + e1.length, i2) : "";
+  const afterDouble = hasDoubleEmphasis
+    ? headline.slice(i2 + e2.length).trimStart()
     : "";
 
-  return (
-    <PinnedSection
-      id={id}
-      className={cn(
-        "flex min-h-[100dvh] flex-col justify-center bg-arc-cream px-6 py-20 md:flex-row md:items-center md:gap-14 md:px-12 lg:mx-auto lg:max-w-7xl lg:gap-20 lg:px-8",
-        className,
-      )}
-    >
-      <div
-        data-scroll-section
-        className="relative order-2 mb-12 aspect-[4/5] w-full overflow-hidden md:order-1 md:mb-0 md:max-w-md md:flex-1 lg:max-w-lg"
-      >
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          className="object-cover object-top"
-          sizes="(min-width: 768px) 40vw, 100vw"
-        />
-      </div>
-
-      <div data-scroll-section className="order-1 flex-1 md:order-2 md:max-w-xl lg:max-w-lg">
-        <div className="mb-5 flex items-center gap-3 md:mb-6">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-teal">
+  const copyInner = (
+    <>
+      {eyebrow?.trim() ? (
+        <div className="mb-4 flex items-center gap-3 sm:mb-5">
+          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-teal-ink">
             {eyebrow}
           </span>
           <span className="h-px flex-1 max-w-[120px] bg-arc-teal/60" aria-hidden />
         </div>
+      ) : null}
 
-        <h2 className="mb-2 font-serif text-3xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-4xl lg:text-[2.5rem]">
-          {hasEmphasis ? (
-            <>
-              {before}
-              {before ? " " : null}
-              <TitleEmphasis className="text-[1.06em] text-arc-teal md:text-[1.04em]">
-                {headlineEmphasisWord}
-              </TitleEmphasis>
-              {after ? <> {after}</> : null}
-            </>
-          ) : (
-            headline
-          )}
-        </h2>
+      <h2 className="mb-2 max-w-full break-words font-serif text-[2.15rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.45rem] sm:leading-[1.06] md:text-[2.9rem] md:leading-[1.05] lg:text-[3.25rem] lg:leading-[1.04] xl:text-[3.55rem]">
+        {hasDoubleEmphasis ? (
+          <>
+            {beforeDouble}
+            {beforeDouble ? " " : null}
+            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
+            {gapDouble || " "}
+            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e2}</TitleEmphasis>
+            {afterDouble ? <> {afterDouble}</> : null}
+          </>
+        ) : hasSingleEmphasis ? (
+          <>
+            {beforeSingle}
+            {beforeSingle ? " " : null}
+            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
+            {afterSingle ? <> {afterSingle}</> : null}
+          </>
+        ) : (
+          headline
+        )}
+      </h2>
 
-        <p className="mb-6 font-sans text-sm font-medium uppercase tracking-[0.18em] text-arc-charcoal/70 md:mb-8 md:text-xs">
-          {roleTitle}
-        </p>
+      <p className="mb-4 font-sans text-xs font-medium uppercase tracking-[0.18em] text-arc-charcoal/70 sm:mb-5 sm:text-[0.7rem]">
+        {roleTitle}
+      </p>
 
-        <p className="mb-8 font-sans text-sm leading-relaxed text-arc-charcoal/90 md:mb-10 md:text-base">
-          {intro}
-        </p>
+      <p className="mb-6 font-sans text-sm leading-relaxed text-arc-charcoal/90 sm:mb-8 sm:text-[0.95rem] md:text-base">
+        {intro}
+      </p>
 
-        <p className="mb-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/80">
-          {deliverablesHeading}
-        </p>
-        <ul className="space-y-3.5">
-          {deliverables.map((line) => (
-            <li key={line} className="flex gap-3 text-left">
-              <span
-                className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-teal/15 text-arc-teal"
-                aria-hidden
-              >
-                <Check className="size-3" strokeWidth={2.5} />
-              </span>
-              <span className="font-sans text-sm leading-snug text-arc-charcoal/90 md:text-[0.95rem]">
-                {line}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </PinnedSection>
+      <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/80">
+        {deliverablesHeading}
+      </p>
+      <ul className="space-y-2.5 sm:space-y-3">
+        {deliverables.map((line) => (
+          <li key={line} className="flex min-w-0 gap-2.5 text-left sm:gap-3">
+            <span
+              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-teal-ink/12 text-arc-teal-ink"
+              aria-hidden
+            >
+              <Check className="size-3" strokeWidth={2.5} />
+            </span>
+            <span className="min-w-0 flex-1 break-words font-sans text-[0.8125rem] leading-snug text-arc-charcoal/90 sm:text-sm">
+              {line}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+
+  if (reduceMotion) {
+    return (
+      <PinnedSection
+        id={id}
+        className={cn(
+          "flex min-h-[100dvh] flex-col justify-start gap-8 bg-arc-cream px-5 py-12 sm:px-6 sm:py-16 md:px-8 lg:flex-row lg:items-start lg:gap-10 lg:px-10 xl:mx-auto xl:max-w-7xl xl:gap-14 xl:px-8",
+          className,
+        )}
+      >
+        <div data-scroll-section className="w-full shrink-0 lg:col-span-full">
+          <FounderEditorialHeroStatic
+            mainSrc={imageSrc}
+            mainAlt={imageAlt}
+            meetLead={heroMeetLead}
+            nameItalic={heroNameItalic}
+            credential={heroCredential}
+          />
+        </div>
+
+        <div
+          data-scroll-section
+          className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-10 lg:flex-row lg:gap-10"
+        >
+          <div className="flex min-h-0 w-full min-w-0 max-w-full flex-col pl-0 sm:pl-2 md:pl-24 lg:max-w-md lg:shrink-0 lg:pl-32 xl:max-w-xl xl:pl-48 2xl:pl-60">
+            {copyInner}
+          </div>
+
+          <div className="w-full min-w-0 flex-1 lg:max-w-xl">
+            <FounderGalleryMosaic panels={mosaicPanels} portraitAlt={imageAlt} />
+          </div>
+        </div>
+      </PinnedSection>
+    );
+  }
+
+  return (
+    <FounderImmersiveScrollBody
+      id={id}
+      className={className}
+      imageSrc={imageSrc}
+      imageAlt={imageAlt}
+      heroCopy={{
+        meetLead: heroMeetLead,
+        nameItalic: heroNameItalic,
+        credential: heroCredential,
+      }}
+    >
+      {copyInner}
+    </FounderImmersiveScrollBody>
   );
 }

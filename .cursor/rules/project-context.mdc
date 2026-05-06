@@ -18,7 +18,7 @@ This workspace contains the **ARC Wellness** marketing website (homepage and rel
 ## Brand & tone
 
 - Premium **medical aesthetics + wellness + longevity** positioning
-- Visual language: **muted teal** (`~#76B3A8`), **cream / off-white** backgrounds, **charcoal** typography
+- Visual language: **brighter signature teal** (`~#4EC4B0`, see `globals.css` `--arc-teal`), **cream / off-white** backgrounds, **charcoal** typography
 - **Serif** for headlines, **clean sans** for UI and body (see theme in `src/app/layout.tsx` and `globals.css`)
 - Calm, elevated, intentional—not generic spa templates or loud clinical stock UI
 

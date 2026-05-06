@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { cn } from "@/lib/utils";
 
@@ -38,12 +38,13 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
             {supportingLine}
           </p>
         ) : null}
-        <Link
+        <ArcTextUnderlineCta
           href="#book"
-          className="inline-block bg-arc-teal px-10 py-3.5 font-sans text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-arc-teal-hover"
+          className="mx-auto items-center"
+          accent="tealBright"
         >
           Book Now
-        </Link>
+        </ArcTextUnderlineCta>
       </div>
     </PinnedSection>
   );

@@ -1,13 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --arc-teal: #76b3a8;
-  --arc-teal-hover: #629789;
-  --arc-teal-muted: #e8f2ef;
+  /* Brighter signature teal — still calm, not neon */
+  --arc-teal: #4ec4b0;
+  --arc-teal-hover: #369d88;
+  /**
+   * Darker teal for small text / links on cream, white, or light grey (better contrast than `--arc-teal`).
+   * Keeps brand hue; use for CTAs on light surfaces. Vivid `--arc-teal` stays for fills + dark/photo UI.
+   */
+  --arc-teal-ink: #287a6d;
+  --arc-teal-ink-hover: #1f6056;
+  --arc-teal-muted: #e2f6f2;
   --arc-cream: #f7f4ef;
   --arc-cream-deep: #ebe6dc;
   --arc-charcoal: #2c2c2c;
   --arc-white: #ffffff;
+  /** Muted champagne / warm gold — text CTAs, underline links (pairs with teal wordmark). */
+  --arc-champagne: #c5a878;
+  --arc-champagne-hover: #d8c49a;
   --background: var(--arc-cream);
   --foreground: var(--arc-charcoal);
 }
@@ -17,10 +27,14 @@
   --color-foreground: var(--foreground);
   --color-arc-teal: var(--arc-teal);
   --color-arc-teal-hover: var(--arc-teal-hover);
+  --color-arc-teal-ink: var(--arc-teal-ink);
+  --color-arc-teal-ink-hover: var(--arc-teal-ink-hover);
   --color-arc-teal-muted: var(--arc-teal-muted);
   --color-arc-cream: var(--arc-cream);
   --color-arc-cream-deep: var(--arc-cream-deep);
   --color-arc-charcoal: var(--arc-charcoal);
+  --color-arc-champagne: var(--arc-champagne);
+  --color-arc-champagne-hover: var(--arc-champagne-hover);
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
 }
@@ -87,14 +101,17 @@ html.arc-scroll-lock::-webkit-scrollbar {
   font-family: var(--font-birthstone), "Segoe Script", cursive;
   font-weight: 400;
   font-style: normal;
+  /* Birthstone is single-weight; hairline stroke reads bolder/larger without swapping the face. */
+  -webkit-text-stroke: 0.022em color-mix(in srgb, currentColor 28%, transparent);
+  paint-order: stroke fill;
 }
 
 @keyframes arc-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -102,6 +119,14 @@ html.arc-scroll-lock::-webkit-scrollbar {
   display: flex;
   width: max-content;
   animation: arc-marquee 32s linear infinite;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-arc-marquee {
+    animation: none;
+  }
 }
 
 /**
@@ -113,8 +138,8 @@ html.arc-scroll-lock::-webkit-scrollbar {
   flex: 1 1 0%;
   flex-direction: column;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.85rem 0.12rem 0.65rem;
+  gap: 0.95rem;
+  padding: 1.35rem 0.15rem 1.15rem;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -134,9 +159,9 @@ html.arc-scroll-lock::-webkit-scrollbar {
  */
 .slide-progress-line {
   position: relative;
-  height: 2px;
+  height: 3px;
   width: 100%;
-  max-width: 10rem;
+  max-width: 12rem;
   overflow: hidden;
   border-radius: 1px;
   background-color: rgba(255, 255, 255, 0.22);
@@ -175,16 +200,16 @@ html.arc-scroll-lock::-webkit-scrollbar {
 .slide-nav-title.arc-slide-nav-label {
   display: -webkit-box;
   width: 100%;
-  max-width: 10rem;
-  min-height: 2.25em;
+  max-width: 12rem;
+  min-height: 3.15em;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
   font-family: var(--font-serif);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: 0.18em;
+  line-height: 1.3;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--arc-teal) 22%, rgba(255, 255, 255, 0.92));
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
@@ -195,15 +220,22 @@ html.arc-scroll-lock::-webkit-scrollbar {
 
 @media (min-width: 640px) {
   .slide-nav-title.arc-slide-nav-label {
-    font-size: 0.59375rem;
-    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
   }
 }
 
 @media (min-width: 768px) {
   .slide-nav-title.arc-slide-nav-label {
-    font-size: 0.6875rem;
-    letter-spacing: 0.22em;
+    font-size: 0.8125rem;
+    letter-spacing: 0.19em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .slide-nav-title.arc-slide-nav-label {
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
   }
 }
 
@@ -214,4 +246,53 @@ html.arc-scroll-lock::-webkit-scrollbar {
   text-shadow:
     0 0 22px color-mix(in srgb, var(--arc-teal) 75%, transparent),
     0 1px 10px rgba(0, 0, 0, 0.45);
+}
+
+/**
+ * Your Path — immersive steps: shared soft-teal ambient art with distinct gradient + focal shift per step.
+ * Asset: `public/assets/decoration/background/path-step-ambient.png`
+ */
+.path-step-bg-1 {
+  background-color: var(--arc-teal-muted);
+  background-image:
+    linear-gradient(
+      165deg,
+      rgba(255, 252, 247, 0.82) 0%,
+      rgba(236, 248, 244, 0.38) 48%,
+      rgba(198, 232, 223, 0.36) 100%
+    ),
+    url("/assets/decoration/background/path-step-ambient.png");
+  background-size: cover;
+  background-position: 18% 8%;
+  background-repeat: no-repeat;
+}
+
+.path-step-bg-2 {
+  background-color: var(--arc-teal-muted);
+  background-image:
+    linear-gradient(
+      185deg,
+      rgba(255, 254, 251, 0.42) 0%,
+      rgba(214, 238, 230, 0.36) 52%,
+      rgba(150, 210, 195, 0.34) 100%
+    ),
+    url("/assets/decoration/background/path-step-ambient.png");
+  background-size: cover;
+  background-position: 50% 42%;
+  background-repeat: no-repeat;
+}
+
+.path-step-bg-3 {
+  background-color: color-mix(in srgb, var(--arc-teal-muted) 55%, var(--arc-teal) 12%);
+  background-image:
+    linear-gradient(
+      205deg,
+      rgba(230, 244, 240, 0.32) 0%,
+      rgba(140, 205, 190, 0.48) 48%,
+      rgba(72, 160, 142, 0.4) 100%
+    ),
+    url("/assets/decoration/background/path-step-ambient.png");
+  background-size: cover;
+  background-position: 82% 72%;
+  background-repeat: no-repeat;
 }

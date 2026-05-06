@@ -6,12 +6,16 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+  /** Include heavy weights so `font-extrabold` / `font-black` on CTAs actually differ from `font-bold`. */
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
+  /** Ensure bold CTAs / buttons use real 700, not synthesized fallback. */
+  weight: ["400", "500", "600", "700"],
 });
 
 /** Signature script for emphasized words inside headings (pair with Playfair body). */

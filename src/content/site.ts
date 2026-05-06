@@ -38,12 +38,24 @@ export const images = {
   logo: "/assets/branding/arc-wellness-logo.png",
   heroBg: "/assets/hero/arc-wellness-exterior-sunset.png",
   heroMedia: "/assets/hero/arc-wellness-reception-entrance.png",
+  heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.png",
   /**
    * Founder — Dr. Danish Jabbar. Default: **professional** (formal) lead; use smiling variant for warmer campaigns
    * (`PHYSICIAN_SMILING_PORTRAITS` in `founderPortraits.ts`).
    */
   founderPortrait: "/assets/sections/founder/physician-professional-01.png",
+  /**
+   * Extra portraits for **`#founder`** mosaic only — all under **`/public/assets/sections/founder/`**.
+   * (Avoids clinic / service stock used elsewhere.)
+   */
+  founderGallery: [
+    "/assets/sections/founder/physician-professional-02.png",
+    "/assets/sections/founder/physician-professional-03.png",
+    "/assets/sections/founder/physician-professional-04.png",
+    "/assets/sections/founder/physician-smiling-01.png",
+    "/assets/sections/founder/physician-smiling-02.png",
+  ] as const,
   investBanner: "/assets/hero/arc-wellness-lobby-lounge.png",
   services: [
     "/assets/sections/whole-body/facial-aesthetic-treatment.png",

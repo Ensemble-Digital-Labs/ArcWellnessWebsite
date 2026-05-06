@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
@@ -8,11 +8,22 @@ import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 
 gsap.registerPlugin(ScrollTrigger);
 
+export type ArcFullscreenPinOptions = {
+  /** 0 at pin start, 1 at pin end — for scrubbed section animations (Locomotive `#main` scroller). */
+  onProgress?: (progress: number) => void;
+};
+
 /**
  * One viewport-height of scroll distance while this section stays pinned (ensemble stack model).
  * Must run **after** Locomotive `scrollerProxy` exists — listens for `arc-locomotive-ready`.
  */
-export function useArcFullscreenPin(sectionRef: RefObject<HTMLElement | null>) {
+export function useArcFullscreenPin(
+  sectionRef: RefObject<HTMLElement | null>,
+  options?: ArcFullscreenPinOptions,
+) {
+  const onProgressRef = useRef<ArcFullscreenPinOptions["onProgress"]>(undefined);
+  onProgressRef.current = options?.onProgress;
+
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
@@ -38,6 +49,9 @@ export function useArcFullscreenPin(sectionRef: RefObject<HTMLElement | null>) {
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            onProgressRef.current?.(self.progress);
+          },
         });
       }, trigger);
 

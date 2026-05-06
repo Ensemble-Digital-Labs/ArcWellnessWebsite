@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { SeamlessLoopVideo, type SeamlessLoopVideoHandle } from "@/components/arc/SeamlessLoopVideo";
+import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { cn } from "@/lib/utils";
@@ -184,7 +184,7 @@ export function ArcMicroStatementSection({
     <>
       {eyebrow ? (
         <p
-          className="mb-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-arc-teal sm:text-xs"
+          className="mb-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-arc-teal-ink sm:text-xs"
           style={pinnedScrollMotion ? eyebrowMotion : undefined}
         >
           {eyebrow}
@@ -192,12 +192,12 @@ export function ArcMicroStatementSection({
       ) : null}
 
       <h2
-        className="font-serif text-3xl font-semibold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]"
+        className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]"
         style={pinnedScrollMotion ? headlineMotion : undefined}
       >
         <span className="text-balance">
           {headlineBefore}{" "}
-          <TitleEmphasis className="text-[1.38em] leading-[1.05] text-arc-teal sm:text-[1.44em] md:text-[1.52em] lg:text-[1.58em]">
+          <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
             {headlineEmphasis}
           </TitleEmphasis>
           {headlineAfterNode(headlineAfter)}
@@ -212,14 +212,14 @@ export function ArcMicroStatementSection({
       </p>
 
       {linkHref && linkLabel ? (
-        <Link
-          href={linkHref}
-          className="group mt-8 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal transition-colors hover:text-arc-teal-hover sm:mt-10 sm:text-sm"
-          style={pinnedScrollMotion ? linkMotion : undefined}
-        >
-          {linkLabel}
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
-        </Link>
+        <div style={pinnedScrollMotion ? linkMotion : undefined}>
+          <ArcTextUnderlineCta
+            href={linkHref}
+            className="mt-8 items-start sm:mt-10"
+          >
+            {linkLabel}
+          </ArcTextUnderlineCta>
+        </div>
       ) : null}
     </>
   );
@@ -270,20 +270,20 @@ export function ArcMicroStatementSection({
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_65%_at_50%_42%,rgba(118,179,168,0.18),transparent_62%)] transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_65%_at_50%_42%,rgba(78,196,176,0.2),transparent_62%)] transition-opacity duration-300"
             style={{ opacity: 0.28 + bgBreath * 0.4 }}
             aria-hidden
           />
-          <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center md:max-w-4xl">
-            {inner}
+          <div className="relative z-10 mx-auto w-full max-w-3xl md:max-w-4xl">
+            <ArcTibbixelCopyFrame>{inner}</ArcTibbixelCopyFrame>
           </div>
         </>
       ) : (
         <div
           data-scroll-section
-          className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center md:max-w-4xl md:px-10"
+          className="mx-auto w-full max-w-3xl px-6 md:max-w-4xl md:px-10"
         >
-          {inner}
+          <ArcTibbixelCopyFrame>{inner}</ArcTibbixelCopyFrame>
         </div>
       )}
     </section>

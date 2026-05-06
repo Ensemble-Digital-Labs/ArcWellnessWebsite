@@ -5,7 +5,21 @@ export type ServicesShowcaseSlide = {
   title: string;
   description: string;
   imageSrc: string;
+  /** Uppercase label above the slide title (`mb-2` line); defaults to whole-body care. */
+  eyebrow?: string;
+  /** Bottom nav chip text (often shorter); defaults to `title`. */
+  navLabel?: string;
 };
+
+export const SERVICES_SHOWCASE_DEFAULT_EYEBROW = "Whole-body care";
+
+export function servicesShowcaseEyebrow(slide: ServicesShowcaseSlide): string {
+  return slide.eyebrow ?? SERVICES_SHOWCASE_DEFAULT_EYEBROW;
+}
+
+export function servicesShowcaseNavLabel(slide: ServicesShowcaseSlide): string {
+  return slide.navLabel ?? slide.title;
+}
 
 /**
  * Six-slide editorial strip for the Whole-Body Care showcase WebGL slider.
@@ -13,21 +27,24 @@ export type ServicesShowcaseSlide = {
  */
 export const SERVICES_SHOWCASE_SLIDES: readonly ServicesShowcaseSlide[] = [
   {
-    title: "Quiet luxury",
-    description:
-      "Spaces and rituals designed to feel intentional—not rushed—so care can breathe.",
+    title: "Aesthetic Optimization",
+    description: "Skin, face, body",
+    eyebrow: "Aesthetic care",
+    navLabel: "Aesthetic optimization",
     imageSrc: EDITORIAL_SPA_IMAGES[0],
   },
   {
-    title: "Whole-body focus",
-    description:
-      "Care that connects how you look, feel, and move—guided with clarity and restraint.",
+    title: "Internal Health",
+    description: "Hormones, energy, metabolism",
+    eyebrow: "Internal care",
+    navLabel: "Internal health",
     imageSrc: EDITORIAL_SPA_IMAGES[1],
   },
   {
-    title: "Precision, calmly delivered",
-    description:
-      "Medical aesthetics and longevity thinking—aligned to your goals with honest guidance.",
+    title: "Functional Performance",
+    description: "Core, pelvic, posture",
+    eyebrow: "Functional care",
+    navLabel: "Functional performance",
     imageSrc: EDITORIAL_SPA_IMAGES[2],
   },
   {

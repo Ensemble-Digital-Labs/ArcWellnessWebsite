@@ -2,6 +2,11 @@ import { EDITORIAL_SPA_IMAGES } from "@/content/editorialSpaImages";
 import { PATIENT_EXPERIENCE_IMAGES } from "@/content/patientExperienceImages";
 import { images } from "@/content/site";
 
+/** Immersive collage — tile-specific ambient mood art (`public/assets/decoration/background/`). */
+const AMBIENT_COLL_TILE_0 = "/assets/decoration/background/ambient-05.png";
+const AMBIENT_COLL_TILE_3 = "/assets/decoration/background/ambient-07.png";
+const AMBIENT_COLL_TILE_6 = "/assets/decoration/background/ambient-08.png";
+
 /**
  * Deduplicate while preserving first-seen order (lobby/reception may appear in multiple buckets).
  */
@@ -37,19 +42,19 @@ export const WELCOME_GALLERY_IMAGE_SRCS: readonly string[] = dedupePaths([
 /** Which tile (0–6) matches the reference “middle” slot — strong scroll zoom targets this frame. */
 export const WELCOME_GALLERY_FOCAL_INDEX = 0;
 
-/** Primary brand / interior shot for the center zoom — swap to another path from the pool if you prefer. */
-export const WELCOME_GALLERY_FOCAL_SRC = images.heroMedia;
+/** Focal tile (index **0**) for scroll zoom — `ambient-05`. */
+export const WELCOME_GALLERY_FOCAL_SRC = AMBIENT_COLL_TILE_0;
 
-/** Collage tile **3** — `public/assets/sections/patient-experience/`. */
-export const WELCOME_GALLERY_SLOT_3_SRC = PATIENT_EXPERIENCE_IMAGES[0]!;
+/** Collage tile **3** — `ambient-07`. */
+export const WELCOME_GALLERY_SLOT_3_SRC = AMBIENT_COLL_TILE_3;
 
-/** Collage tile **6** — same folder, second asset (change indices to pick other files). */
-export const WELCOME_GALLERY_SLOT_6_SRC = PATIENT_EXPERIENCE_IMAGES[1]!;
+/** Collage tile **6** — `ambient-08`. */
+export const WELCOME_GALLERY_SLOT_6_SRC = AMBIENT_COLL_TILE_6;
 
 /**
  * Seven slots for the immersive collage: **`focal`** is pinned at **`WELCOME_GALLERY_FOCAL_INDEX`**; other
- * slots pull from the deduped pool without repeating the focal when possible. Slots **3** and **6** use
- * **`WELCOME_GALLERY_SLOT_3_SRC`** / **`WELCOME_GALLERY_SLOT_6_SRC`** (`patient-experience` photography).
+ * slots pull from the deduped pool without repeating the focal when possible. Slots **0** / **3** / **6**
+ * use **`ambient-05`**, **`ambient-07`**, **`ambient-08`** respectively (`AMBIENT_COLL_TILE_*`).
  */
 export function getWelcomeGallerySlots(): string[] {
   const focal = WELCOME_GALLERY_FOCAL_SRC;

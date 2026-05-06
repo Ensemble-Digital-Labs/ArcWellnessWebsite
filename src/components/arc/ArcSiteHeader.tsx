@@ -6,12 +6,49 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
+import type Lenis from "lenis";
 import { cn } from "@/lib/utils";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
 
+/**
+ * Logo fades out while the page is moving (past a small top offset). It fades back in with a fixed
+ * eased duration when you’re near the top **or** scroll has settled — no translate bobbing, opacity-only.
+ */
+const LOGO_SHOW_BELOW_SCROLL_Y = 48;
+/** Treat Lenis as “stopped” when |velocity| is below this (logo can show while moving if above threshold). */
+const LOGO_VELOCITY_STOP_EPS = 0.022;
+/**
+ * Fade-in to full opacity uses fixed wall-clock duration so returns to the hero feel consistent.
+ * (Per-frame lerp toward 1 near y≈0 used to read as an instant snap.)
+ */
+const LOGO_FADE_IN_DURATION_MS = 540;
+/** Fade-out while scrolling — eased over time so it doesn’t “pop” off. */
+const LOGO_FADE_OUT_DURATION_MS = 480;
+
+function easeOutCubic(t: number): number {
+  const u = Math.min(1, Math.max(0, t));
+  return 1 - (1 - u) ** 3;
+}
+
+function easeInOutQuad(t: number): number {
+  const u = Math.min(1, Math.max(0, t));
+  return u < 0.5 ? 2 * u * u : 1 - (-2 * u + 2) ** 2 / 2;
+}
+
+function getLocomotiveLenis(): Lenis | null {
+  const ls = (window as unknown as { locomotiveScroll?: { lenisInstance?: Lenis | null } })
+    .locomotiveScroll;
+  return ls?.lenisInstance ?? null;
+}
+
 /** Top inset for scroll content when a solid header bar pushes the page down. */
 export const SITE_HEADER_OFFSET = "0";
+
+/** Overlay / drawer / chrome — high enough to sit above pinned sections and modals below full-screen lightboxes. */
+const NAV_STACK_OVERLAY = "z-[1000]";
+const NAV_STACK_DRAWER = "z-[1001]";
+const NAV_STACK_CHROME = "z-[1002]";
 
 const NAV_LINKS = [
   { label: "About", href: "/#about", shape: "1", previewSrc: images.whoWeAre },
@@ -194,8 +231,131 @@ export function ArcSiteHeader() {
   const backdropRef = useRef<HTMLDivElement>(null);
   const menuLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const wasMenuOpened = useRef(false);
+  const isMenuOpenRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  const logoOpacity = useMotionValue(1);
+  /** Fixed-duration fade-in after stop (`null` = not running). */
+  const logoFadeInSessionRef = useRef<{ start: number; from: number } | null>(null);
+  /** Eased fade-out while scrolling (`null` = idle / fully hidden). */
+  const logoFadeOutSessionRef = useRef<{ start: number; from: number } | null>(null);
+
+  isMenuOpenRef.current = isMenuOpen;
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      logoFadeInSessionRef.current = null;
+      logoFadeOutSessionRef.current = null;
+      logoOpacity.set(1);
+    }
+  }, [isMenuOpen, logoOpacity]);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    let cancelled = false;
+    let raf = 0;
+
+    const tick = () => {
+      if (cancelled) return;
+
+      const o = logoOpacity.get();
+
+      if (isMenuOpenRef.current) {
+        logoFadeInSessionRef.current = null;
+        logoFadeOutSessionRef.current = null;
+        logoOpacity.set(1);
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
+      const lenis = getLocomotiveLenis();
+      if (!lenis) {
+        logoFadeOutSessionRef.current = null;
+        if (o >= 0.999) {
+          logoFadeInSessionRef.current = null;
+          logoOpacity.set(1);
+        } else {
+          if (logoFadeInSessionRef.current === null) {
+            logoFadeInSessionRef.current = {
+              start: performance.now(),
+              from: o,
+            };
+          }
+          const sess = logoFadeInSessionRef.current;
+          const t = Math.min(
+            1,
+            (performance.now() - sess.start) / LOGO_FADE_IN_DURATION_MS,
+          );
+          const eased = easeOutCubic(t);
+          logoOpacity.set(sess.from + (1 - sess.from) * eased);
+          if (t >= 1) logoFadeInSessionRef.current = null;
+        }
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
+      const scroll = lenis.animatedScroll;
+      const pastTop = scroll >= LOGO_SHOW_BELOW_SCROLL_Y;
+      const isStopped = Math.abs(lenis.velocity) < LOGO_VELOCITY_STOP_EPS;
+      const wantHidden = pastTop && !isStopped;
+
+      if (wantHidden) {
+        logoFadeInSessionRef.current = null;
+        if (o <= 0.008) {
+          logoFadeOutSessionRef.current = null;
+          logoOpacity.set(0);
+        } else {
+          if (logoFadeOutSessionRef.current === null) {
+            logoFadeOutSessionRef.current = {
+              start: performance.now(),
+              from: o,
+            };
+          }
+          const sess = logoFadeOutSessionRef.current;
+          const t = Math.min(
+            1,
+            (performance.now() - sess.start) / LOGO_FADE_OUT_DURATION_MS,
+          );
+          const eased = easeInOutQuad(t);
+          logoOpacity.set(sess.from * (1 - eased));
+          if (t >= 1) logoFadeOutSessionRef.current = null;
+        }
+      } else {
+        /* Near top or scroll idle — same eased fade-in (avoids snap when crossing y < threshold). */
+        logoFadeOutSessionRef.current = null;
+        if (o >= 0.999) {
+          logoFadeInSessionRef.current = null;
+          logoOpacity.set(1);
+        } else {
+          if (logoFadeInSessionRef.current === null) {
+            logoFadeInSessionRef.current = {
+              start: performance.now(),
+              from: o,
+            };
+          }
+          const sess = logoFadeInSessionRef.current;
+          const t = Math.min(
+            1,
+            (performance.now() - sess.start) / LOGO_FADE_IN_DURATION_MS,
+          );
+          const eased = easeOutCubic(t);
+          logoOpacity.set(sess.from + (1 - sess.from) * eased);
+          if (t >= 1) logoFadeInSessionRef.current = null;
+        }
+      }
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [reducedMotion, logoOpacity]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -348,61 +508,10 @@ export function ArcSiteHeader() {
 
   return (
     <div ref={containerRef}>
-      <header
-        className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 flex w-full justify-center bg-transparent",
-          isMenuOpen ? "z-[110]" : "z-[60]",
-        )}
-      >
-        <div
-          className={cn(
-            "pointer-events-none relative mx-auto flex w-full justify-center",
-            ARC_PAGE_RAIL_MAX,
-          )}
-        >
-          <Link
-            href="/"
-            className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
-            aria-label="ARC Wellness home"
-          >
-            <Image
-              src={images.logo}
-              alt="ARC Wellness"
-              width={720}
-              height={240}
-              priority
-              placeholder="empty"
-              unoptimized
-              className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
-            />
-          </Link>
-
-          <button
-            type="button"
-            onClick={toggleMenu}
-            aria-expanded={isMenuOpen}
-            aria-controls="arc-nav-overlay"
-            className="pointer-events-auto absolute right-4 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center gap-3.5 rounded-full border border-white/40 bg-black/25 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:right-6 sm:gap-4 sm:px-6 sm:py-3.5 sm:text-base md:right-10"
-          >
-            {isMenuOpen ? "Close" : "Menu"}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="none"
-              className={`size-5 shrink-0 transition-transform duration-300 sm:size-6 ${isMenuOpen ? "rotate-[135deg]" : "rotate-0"}`}
-              aria-hidden
-            >
-              <path d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16Z" fill="currentColor" />
-              <path d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333Z" fill="currentColor" />
-            </svg>
-          </button>
-        </div>
-      </header>
-
       <div
         ref={overlayRef}
         id="arc-nav-overlay"
-        className="fixed inset-0 z-[100] bg-black/55"
+        className={cn("fixed inset-0 bg-black/55", NAV_STACK_OVERLAY)}
         aria-hidden={!isMenuOpen}
         onClick={closeMenu}
       />
@@ -410,7 +519,10 @@ export function ArcSiteHeader() {
       <nav
         ref={menuRef}
         inert={!isMenuOpen}
-        className="fixed inset-y-0 right-0 z-[101] flex max-h-[100dvh] w-full max-w-[min(100vw,28rem)] flex-col bg-arc-cream text-arc-charcoal shadow-[-12px_0_40px_rgba(0,0,0,0.12)] sm:max-w-[min(100vw,32rem)]"
+        className={cn(
+          "fixed inset-y-0 right-0 flex max-h-[100dvh] w-full max-w-[min(100vw,28rem)] flex-col bg-arc-cream text-arc-charcoal shadow-[-12px_0_40px_rgba(0,0,0,0.12)] sm:max-w-[min(100vw,32rem)]",
+          NAV_STACK_DRAWER,
+        )}
         aria-label="Site navigation"
       >
         <div ref={backdropRef} className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -492,6 +604,75 @@ export function ArcSiteHeader() {
           </ul>
         </div>
       </nav>
+
+      <header
+        className={cn(
+          "pointer-events-none fixed inset-x-0 top-0 flex w-full justify-center bg-transparent",
+          NAV_STACK_CHROME,
+        )}
+      >
+        <div
+          className={cn(
+            "pointer-events-none relative mx-auto flex w-full justify-center",
+            ARC_PAGE_RAIL_MAX,
+          )}
+        >
+          <Link
+            href="/"
+            className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
+            aria-label="ARC Wellness home"
+          >
+            {reducedMotion ? (
+              <Image
+                src={images.logo}
+                alt="ARC Wellness"
+                width={720}
+                height={240}
+                priority
+                placeholder="empty"
+                unoptimized
+                className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+              />
+            ) : (
+              <motion.div
+                className="inline-flex h-full w-auto max-w-[min(88vw,380px)] sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+                style={{ opacity: logoOpacity }}
+              >
+                <Image
+                  src={images.logo}
+                  alt="ARC Wellness"
+                  width={720}
+                  height={240}
+                  priority
+                  placeholder="empty"
+                  unoptimized
+                  className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+                />
+              </motion.div>
+            )}
+          </Link>
+
+          <button
+            type="button"
+            onClick={toggleMenu}
+            aria-expanded={isMenuOpen}
+            aria-controls="arc-nav-overlay"
+            className="pointer-events-auto absolute right-4 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center gap-3.5 rounded-full border border-white/40 bg-black/25 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:right-6 sm:gap-4 sm:px-6 sm:py-3.5 sm:text-base md:right-10"
+          >
+            {isMenuOpen ? "Close" : "Menu"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="none"
+              className={`size-5 shrink-0 transition-transform duration-300 sm:size-6 ${isMenuOpen ? "rotate-[135deg]" : "rotate-0"}`}
+              aria-hidden
+            >
+              <path d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16Z" fill="currentColor" />
+              <path d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333Z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+      </header>
     </div>
   );
 }

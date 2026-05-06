@@ -6,6 +6,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
+import {
+  servicesShowcaseEyebrow,
+  servicesShowcaseNavLabel,
+} from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
 import {
   servicesShowcaseFragmentShader,
@@ -132,7 +136,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"
         aria-hidden
       />
-      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[8.5rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-36 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
+      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
         <h2
           data-scroll-section
           className="shrink-0 text-center font-serif text-2xl font-semibold leading-tight text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] md:text-3xl lg:text-[2.5rem]"
@@ -141,7 +145,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         </h2>
         <div className="pointer-events-auto mt-auto flex max-w-full shrink-0 flex-col">
           <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
-            Whole-body care
+            {servicesShowcaseEyebrow(current)}
           </p>
           <h3 className="mb-3 max-w-xl font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
             {current.title}
@@ -190,7 +194,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 
       <nav
         id="slidesNav"
-        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-2.5 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 md:px-6 md:py-3.5 lg:px-8 [&::-webkit-scrollbar]:hidden"
+        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-4 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden"
         aria-label="Slide navigation"
       >
         {slides.map((s, i) => (
@@ -207,7 +211,9 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
             )}
           >
             <div className="slide-progress-line" aria-hidden />
-            <div className="slide-nav-title arc-slide-nav-label">{s.title}</div>
+            <div className="slide-nav-title arc-slide-nav-label">
+              {servicesShowcaseNavLabel(s)}
+            </div>
           </button>
         ))}
       </nav>
@@ -218,6 +224,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 function WebGLShowcase({ slides, className }: ShowcaseProps) {
   const rootRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -232,10 +239,11 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
   useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
+    const eyebrowEl = eyebrowRef.current;
     const titleEl = titleRef.current;
     const descEl = descRef.current;
     const navEl = navRef.current;
-    if (!root || !canvas || !titleEl || !descEl || !navEl) return;
+    if (!root || !canvas || !eyebrowEl || !titleEl || !descEl || !navEl) return;
 
     const slideList = slidesRef.current;
     if (slideList.length < 2) return;
@@ -403,6 +411,8 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
       window.setTimeout(() => {
         if (disposed) return;
+        const eb = eyebrowRef.current;
+        if (eb) eb.textContent = servicesShowcaseEyebrow(slideList[idx]);
         titleEl.innerHTML = splitTextForTitle(slideList[idx].title);
         descEl.textContent = slideList[idx].description;
         gsap.set(titleEl.children, { opacity: 0 });
@@ -650,7 +660,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           item.setAttribute("aria-current", "true");
           item.classList.add("active");
         }
-        const titleSafe = escapeHtml(slide.title);
+        const titleSafe = escapeHtml(servicesShowcaseNavLabel(slide));
         item.innerHTML = `<div class="slide-progress-line"><div class="slide-progress-fill" data-progress-fill="" style="width:0%;opacity:0"></div></div><div class="slide-nav-title arc-slide-nav-label">${titleSafe}</div>`;
         item.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -667,6 +677,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     createSlidesNavigation();
     updateCounter(0);
 
+    eyebrowEl.textContent = servicesShowcaseEyebrow(slideList[0]);
     titleEl.innerHTML = splitTextForTitle(slideList[0].title);
     descEl.textContent = slideList[0].description;
     gsap.fromTo(
@@ -916,7 +927,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         </span>
       </div>
 
-      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[8.5rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-36 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
+      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
         <h2
           data-scroll-section
           className="shrink-0 text-center font-serif text-2xl font-semibold leading-tight text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] md:text-3xl lg:text-[2.5rem]"
@@ -924,8 +935,11 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           Whole-Body Care. Inside and Out.
         </h2>
         <div className="pointer-events-auto mt-auto flex max-w-full shrink-0 flex-col">
-          <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
-            Whole-body care
+          <p
+            ref={eyebrowRef}
+            className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70"
+          >
+            {servicesShowcaseEyebrow(slides[0]!)}
           </p>
           <h3
             ref={titleRef}
@@ -943,7 +957,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       <nav
         id="slidesNav"
         ref={navRef}
-        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-2.5 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 md:px-6 md:py-3.5 lg:px-8 [&::-webkit-scrollbar]:hidden"
+        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-4 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden"
         aria-label="Slide navigation"
       />
     </section>

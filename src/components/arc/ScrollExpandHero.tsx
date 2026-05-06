@@ -1,24 +1,148 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_HERO_TITLE_KEYWORDS = ["Aesthetics", "Wellness", "Longevity"] as const;
 
+/** Bottom-of-hero sliding ticker — brand phrases (reference: bullet-separated marquee bar). */
+const HERO_KEYWORD_MARQUEE_ITEMS = [
+  "Low Energy & Burnout",
+  "Hormonal Imbalance & Weight Gain",
+  "Poor Sleep & Recovery",
+  "Aging Skin & Body Changes",
+  "Brain Fog & Focus Issues",
+] as const;
+
+/** Playfair all-caps — stable metrics vs script swap on `translate3d(-50%)` marquee loop. */
+const HERO_MARQUEE_LABEL_CLASS =
+  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.2),0_2px_12px_rgba(0,0,0,0.28)]";
+
+function HeroKeywordMarquee() {
+  /**
+   * Teal bar + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
+   */
+  const [marqueeOn, setMarqueeOn] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let stableTimer: number | undefined;
+
+    const enableMotion = () => {
+      if (cancelled) return;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!cancelled) setMarqueeOn(true);
+        });
+      });
+    };
+
+    /** Past locomotive’s deferred `ScrollTrigger.refresh` / resize bursts (~400–1600ms after init). */
+    const scheduleAfterScrollStable = () => {
+      window.clearTimeout(stableTimer);
+      stableTimer = window.setTimeout(enableMotion, 1400);
+    };
+
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) {
+      setMarqueeOn(true);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    let fontsReady = false;
+    let scrollReady = false;
+
+    const tryScheduleMarquee = () => {
+      if (cancelled || !fontsReady || !scrollReady) return;
+      scheduleAfterScrollStable();
+    };
+
+    let locoHandled = false;
+    const onLocomotiveReady = () => {
+      if (locoHandled) return;
+      locoHandled = true;
+      scrollReady = true;
+      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
+      tryScheduleMarquee();
+    };
+
+    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
+    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
+      queueMicrotask(onLocomotiveReady);
+    }
+
+    void document.fonts.ready.then(() => {
+      if (cancelled) return;
+      fontsReady = true;
+      tryScheduleMarquee();
+    });
+
+    /** Locomotive mounts ~450ms in; if the ready event is missed, assume scroll proxy is up after this window. */
+    const locoFallback = window.setTimeout(() => {
+      if (!cancelled && !locoHandled) onLocomotiveReady();
+    }, 3200);
+
+    const absoluteFallback = window.setTimeout(() => {
+      if (cancelled) return;
+      if (!fontsReady) fontsReady = true;
+      if (!scrollReady) scrollReady = true;
+      tryScheduleMarquee();
+    }, 7200);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
+      window.clearTimeout(stableTimer);
+      window.clearTimeout(locoFallback);
+      window.clearTimeout(absoluteFallback);
+    };
+  }, []);
+
+  return (
+    <div
+      className="pointer-events-none isolate overflow-hidden border-t border-white/25 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.18)] [transform:translateZ(0)]"
+      aria-hidden
+    >
+      <div
+        className={cn(
+          "flex items-center gap-8 whitespace-nowrap py-2.5 sm:gap-11 sm:py-3",
+          marqueeOn && "animate-arc-marquee",
+        )}
+        style={{ width: "max-content" }}
+      >
+        {[0, 1].map((dup) => (
+          <span key={dup} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
+            {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
+              <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
+                <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
+                <span className="select-none font-sans text-sm font-semibold text-white/80 sm:text-base">
+                  ·
+                </span>
+              </span>
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** Larger serif line: parent uses flex + items-baseline so script scales with the white words. */
 const HERO_TITLE_KEYWORD_EMPHASIS_CLASS =
-  "shrink-0 text-[1.55em] text-arc-teal sm:text-[1.68em] md:text-[1.86em] lg:text-[2.05em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(118,179,168,0.38)]";
+  "shrink-0 text-[1.72em] text-arc-teal sm:text-[1.88em] md:text-[2.08em] lg:text-[2.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_rgba(78,196,176,0.42),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]";
 
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -59,11 +183,99 @@ function emphasizeTitleWords(
   return parts.length ? parts : text;
 }
 
+/**
+ * If the title tail ends with a final `Word.`, return that word for its own line (hero stack).
+ */
+function splitTitleRestForClosingLine(rest: string): { lead: string; closing: string | null } {
+  const trimmed = rest.trim();
+  const words = trimmed.split(/\s+/).filter(Boolean);
+  if (words.length < 2) return { lead: trimmed, closing: null };
+  const last = words[words.length - 1] ?? "";
+  if (!last.endsWith(".")) return { lead: trimmed, closing: null };
+  return {
+    lead: words.slice(0, -1).join(" "),
+    closing: last,
+  };
+}
+
+/**
+ * Ornate frame corner (clip-art / certificate style): double-line L with scroll finials.
+ * Vertex at top-left of SVG; mirror for other corners.
+ */
+function HeroIntroCornerOrnament() {
+  return (
+    <svg
+      viewBox="0 0 96 96"
+      className="h-[3.5rem] w-[3.5rem] drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] sm:h-[3.85rem] sm:w-[3.85rem] md:h-[4.25rem] md:w-[4.25rem]"
+      fill="none"
+      aria-hidden
+    >
+      <g className="stroke-[#f7f4ef]" strokeLinecap="round" strokeLinejoin="round">
+        {/* Outer L */}
+        <path
+          d="M 14 14 H 62 C 72 14 78 18 80 26 C 82 32 78 38 72 36"
+          strokeWidth={1.45}
+          opacity={0.92}
+        />
+        <path
+          d="M 14 14 V 62 C 14 72 18 78 26 80 C 32 82 38 78 36 72"
+          strokeWidth={1.45}
+          opacity={0.92}
+        />
+        {/* Inner L */}
+        <path d="M 22 22 H 54 C 62 22 66 26 67 32" strokeWidth={1.05} opacity={0.5} />
+        <path d="M 22 22 V 54 C 22 62 26 66 32 67" strokeWidth={1.05} opacity={0.5} />
+        {/* Horizontal finial (scroll nub) */}
+        <path
+          d="M 62 14 C 74 12 82 20 78 30 C 74 38 64 34 60 26"
+          strokeWidth={1.2}
+          opacity={0.78}
+        />
+        {/* Vertical finial */}
+        <path
+          d="M 14 62 C 12 74 20 82 30 78 C 38 74 34 64 26 60"
+          strokeWidth={1.2}
+          opacity={0.78}
+        />
+        {/* Tiny quatrefoil knot at the vertex */}
+        <path
+          d="M 14 11 v 6 M 11 14 h 6 M 12.5 12.5 l 3 3 M 12.5 15.5 l 3 -3"
+          strokeWidth={0.9}
+          opacity={0.55}
+        />
+      </g>
+    </svg>
+  );
+}
+
+function HeroIntroOrnamentFrame({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className={cn(
+        "pointer-events-auto relative isolate max-w-[20rem] sm:max-w-[22rem] md:max-w-[24rem]",
+      )}
+    >
+      {/* Two corners only — top-right & bottom-left (mirror of the other pair). */}
+      <span className="pointer-events-none absolute right-0 top-0 scale-x-[-1]">
+        <HeroIntroCornerOrnament />
+      </span>
+      <span className="pointer-events-none absolute bottom-0 left-0 scale-y-[-1]">
+        <HeroIntroCornerOrnament />
+      </span>
+      {/* Generous inset so flourishes sit clearly away from the copy */}
+      <div className="relative z-10 px-7 pb-9 pt-7 sm:px-9 sm:pb-11 sm:pt-9 md:px-10 md:pb-12 md:pt-10">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 type ScrollExpandHeroProps = {
   bgImageSrc: string;
   mediaSrc: string;
   title: string;
-  intro: string;
+  /** Plain string or rich nodes (e.g. `<strong>` for emphasis). */
+  intro: ReactNode;
   textBlend?: boolean;
   /** Words in the title (after the first line) to render in signature script. Omit to use ARC defaults. */
   titleKeywords?: readonly string[];
@@ -165,19 +377,40 @@ export function ScrollExpandHero({
   }, []);
 
   const progress = reduceMotion ? 1 : scrollProgress;
-  const mediaWidth = 300 + progress * (isMobileState ? 650 : 1250);
-  const mediaHeight = 400 + progress * (isMobileState ? 200 : 400);
+  const mediaBaseW = 300;
+  const mediaBaseH = 400;
+  const mediaWidth = mediaBaseW + progress * (isMobileState ? 650 : 1250);
+  const mediaHeight = mediaBaseH + progress * (isMobileState ? 200 : 400);
   const textTranslateX = progress * (isMobileState ? 180 : 150);
+  /** Upper headline moves as one unit — avoids “Where” peeling away from the rest with opposite motion. */
+  const headlineParallaxX = textTranslateX * 0.22;
+  /**
+   * Media is center-anchored and grows with scroll; intro (top absolute) + title (large mt) were
+   * anchored independently, so one looked like it drifted up and the other down. One shared Y shift
+   * keeps copy + CTAs moving together as the clip expands.
+   */
+  const sharedContentShiftY = (mediaHeight - mediaBaseH) * 0.18;
 
   const firstWord = title.split(" ")[0] ?? "";
   const restOfTitle = title.split(" ").slice(1).join(" ");
+  const { lead: restLead, closing: restClosing } =
+    splitTitleRestForClosingLine(restOfTitle);
+  const restForEmphasis = restClosing ? restLead : restOfTitle;
   const restWithEmphasis = emphasizeTitleWords(
-    restOfTitle,
+    restForEmphasis,
     titleKeywords,
     textBlend
-      ? "shrink-0 text-[1.48em] text-[#f2efe9] sm:text-[1.6em] md:text-[1.76em] lg:text-[1.94em] [text-shadow:0_2px_20px_rgba(0,0,0,0.65)]"
+      ? "shrink-0 text-[1.64em] text-[#f2efe9] sm:text-[1.78em] md:text-[1.96em] lg:text-[2.16em] [text-shadow:0_2px_20px_rgba(0,0,0,0.65),0.02em_0_0_rgba(242,239,233,0.35),-0.02em_0_0_rgba(242,239,233,0.35)]"
       : HERO_TITLE_KEYWORD_EMPHASIS_CLASS,
   );
+
+  /** Headline sits in the upper band beside CTAs — left-aligned, slightly tighter scale than centered hero. */
+  const titleLine2and3ClassTop =
+    "flex w-full max-w-[min(100%,38rem)] flex-wrap items-baseline justify-start gap-x-0 gap-y-1 text-left font-serif text-2xl font-bold leading-snug text-[#f7f4ef] sm:max-w-[min(100%,40rem)] sm:text-3xl md:text-[1.85rem] md:leading-snug lg:max-w-[44rem] lg:text-4xl lg:leading-snug";
+
+  /** Lead word — softer against the photo so it reads “in” the parallax field, not pasted on top. */
+  const heroLeadWordClass =
+    "block font-serif text-2xl font-bold leading-[1.08] text-[#f7f4ef]/82 sm:text-3xl md:text-3xl lg:text-4xl [text-shadow:0_2px_28px_rgba(0,0,0,0.55),0_0_52px_rgba(0,0,0,0.35)]";
 
   return (
     <div className="overflow-x-hidden transition-colors duration-700 ease-in-out">
@@ -185,7 +418,6 @@ export function ScrollExpandHero({
         ref={heroRef}
         className="relative flex min-h-[100dvh] flex-col items-center justify-start"
       >
-        <h1 className="sr-only">{title}</h1>
         <div className="relative flex min-h-[100dvh] w-full flex-col items-center">
           <motion.div
             className="absolute inset-0 z-0 h-full"
@@ -210,16 +442,42 @@ export function ScrollExpandHero({
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="pointer-events-none absolute left-0 top-40 z-20 max-w-xl px-6 sm:top-44 md:top-48 md:px-12 lg:top-52 lg:max-w-xl">
-              <p className="pointer-events-auto mb-8 font-sans text-sm leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base">
-                {intro}
-              </p>
-              <Link
-                href="#book"
-                className="pointer-events-auto inline-block bg-arc-teal px-8 py-3 font-sans text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-arc-teal-hover"
+            <div
+              className="pointer-events-none absolute inset-x-0 top-60 z-20 flex flex-col gap-5 px-6 sm:top-64 sm:gap-6 md:top-72 md:gap-7 md:px-12 lg:top-[18.25rem]"
+              style={{
+                transform: `translate3d(0, ${sharedContentShiftY}px, 0)`,
+              }}
+            >
+              <motion.h1
+                className="pointer-events-auto m-0 flex w-full min-w-0 flex-col gap-1.5 text-left sm:max-w-[min(100%,46rem)] sm:gap-2 md:gap-2"
+                style={{
+                  transform: `translate3d(${headlineParallaxX}px, 0, 0)`,
+                }}
               >
-                Book Now
-              </Link>
+                <span className={heroLeadWordClass}>{firstWord}</span>
+                <span className={titleLine2and3ClassTop}>{restWithEmphasis}</span>
+                {restClosing ? (
+                  <span className={titleLine2and3ClassTop}>{restClosing}</span>
+                ) : null}
+              </motion.h1>
+              <div className="pointer-events-auto mt-1 flex w-full max-w-[min(100%,46rem)] flex-col items-start gap-3 sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-2">
+                <ArcTextUnderlineCta
+                  href="#book"
+                  accent="tealBright"
+                  size="sm"
+                  className="items-start"
+                >
+                  Begin your Journey
+                </ArcTextUnderlineCta>
+                <ArcTextUnderlineCta
+                  href="#path"
+                  accent="tealBright"
+                  size="sm"
+                  className="items-start"
+                >
+                  See How it Works
+                </ArcTextUnderlineCta>
+              </div>
             </div>
 
             <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center pt-12 md:pt-8">
@@ -252,32 +510,25 @@ export function ScrollExpandHero({
 
               <div
                 className={cn(
-                  "relative z-10 mt-[min(42vh,320px)] flex w-full flex-col items-center justify-center gap-2 px-4 text-center md:mt-[min(38vh,280px)] md:gap-4",
+                  "relative z-10 mt-[min(28vh,200px)] flex w-full flex-col items-end px-4 sm:px-8 md:mt-[min(24vh,180px)] md:px-12 lg:px-14",
                   textBlend ? "mix-blend-difference" : "mix-blend-normal",
                 )}
+                style={{
+                  transform: `translate3d(0, ${sharedContentShiftY}px, 0)`,
+                }}
               >
-                <motion.span
-                  className="font-serif text-3xl font-semibold leading-tight text-[#f7f4ef] md:text-4xl lg:text-5xl"
-                  style={{ transform: `translateX(-${textTranslateX}px)` }}
-                >
-                  {firstWord}
-                </motion.span>
-                <motion.span
-                  className="flex w-full max-w-[min(100%,44rem)] flex-wrap items-baseline justify-center gap-x-0 gap-y-1 text-center font-serif text-3xl font-semibold leading-snug text-[#f7f4ef] md:max-w-[min(100%,52rem)] md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug"
-                  style={{ transform: `translateX(${textTranslateX}px)` }}
-                >
-                  {restWithEmphasis}
-                </motion.span>
+                <HeroIntroOrnamentFrame>
+                  <p className="text-left font-sans text-sm font-semibold leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base [&_strong]:font-bold [&_strong]:text-[#f7f4ef] [&_strong]:drop-shadow">
+                    {intro}
+                  </p>
+                </HeroIntroOrnamentFrame>
               </div>
 
-              <button
-                type="button"
-                className="absolute bottom-16 right-6 z-20 flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-[#f7f4ef] transition-opacity hover:opacity-90 md:bottom-20 md:right-12 md:text-sm"
-              >
-                <Play className="size-5 fill-current" aria-hidden />
-                Watch our story
-              </button>
             </div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-[30] w-full max-w-none">
+            <HeroKeywordMarquee />
           </div>
         </div>
       </section>
