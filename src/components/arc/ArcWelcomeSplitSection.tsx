@@ -467,10 +467,11 @@ function WelcomeImmersiveScrollBody({
                         <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
                           Wellness.
                         </span>{" "}
-                        <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-rose-gold sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                        {/* Collage opening — match “Wellness.” (white); rose-gold reserved for copy phase below */}
+                        <TitleEmphasis className="text-[1.2em] leading-[1.04] text-white sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
                           Made personal
                         </TitleEmphasis>
-                        <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
+                        <span className="font-serif text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
                           .
                         </span>
                       </p>

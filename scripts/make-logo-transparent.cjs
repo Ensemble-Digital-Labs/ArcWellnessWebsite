@@ -1,5 +1,5 @@
 /**
- * Adds a real alpha channel to `arc-wellness-logo.png` by treating pixels near
+ * Adds a real alpha channel to `arc-wellness-logo-v3.png` by treating pixels near
  * the average corner color as background (cream / off-white plate).
  *
  * Run: node scripts/make-logo-transparent.cjs
@@ -7,7 +7,7 @@
 const path = require("path");
 const sharp = require("sharp");
 
-const INPUT = path.join(__dirname, "../public/assets/branding/arc-wellness-logo.png");
+const INPUT = path.join(__dirname, "../public/assets/branding/arc-wellness-logo-v3.png");
 
 function dist(r, g, b, r0, g0, b0) {
   return Math.hypot(r - r0, g - g0, b - b0);

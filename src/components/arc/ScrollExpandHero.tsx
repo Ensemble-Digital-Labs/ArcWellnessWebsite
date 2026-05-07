@@ -145,9 +145,15 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   );
 });
 
-/** Larger serif line: parent uses flex + items-baseline so script scales with the white words. */
-const HERO_TITLE_KEYWORD_EMPHASIS_CLASS =
-  "shrink-0 text-[1.72em] text-arc-rose-gold sm:text-[1.88em] md:text-[2.08em] lg:text-[2.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_44px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]";
+/** Keywords: cream line body; connectors: rose-gold (swapped vs legacy hero). */
+const HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS =
+  "shrink-0 text-[1.72em] text-[#f7f4ef] sm:text-[1.88em] md:text-[2.08em] lg:text-[2.32em] [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_52px_rgba(0,0,0,0.35)]";
+
+const HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS =
+  "shrink-0 text-[1.64em] text-[#f7f4ef] sm:text-[1.78em] md:text-[1.96em] lg:text-[2.16em] [text-shadow:0_2px_20px_rgba(0,0,0,0.65),0.02em_0_0_rgba(247,244,239,0.35),-0.02em_0_0_rgba(247,244,239,0.35)]";
+
+const HERO_TITLE_CONNECTOR_ROSE_CLASS =
+  "text-arc-rose-gold [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_44px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]";
 
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -157,7 +163,8 @@ function escapeRegExp(s: string) {
 function emphasizeTitleWords(
   text: string,
   keywords: readonly string[],
-  emphasisClassName?: string,
+  keywordClassName?: string,
+  betweenClassName?: string,
 ): ReactNode {
   if (!keywords.length) return text;
   const alternation = [...keywords]
@@ -167,15 +174,26 @@ function emphasizeTitleWords(
   const re = new RegExp(`\\b(?:${alternation})\\b`, "g");
   const parts: ReactNode[] = [];
   let last = 0;
-  let key = 0;
+  let kwKey = 0;
+  let plainKey = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) {
       const chunk = text.slice(last, m.index);
-      if (chunk) parts.push(chunk);
+      if (chunk) {
+        parts.push(
+          betweenClassName ? (
+            <span key={`hero-plain-${plainKey++}`} className={betweenClassName}>
+              {chunk}
+            </span>
+          ) : (
+            chunk
+          ),
+        );
+      }
     }
     parts.push(
-      <TitleEmphasis key={`hero-kw-${key++}`} className={emphasisClassName}>
+      <TitleEmphasis key={`hero-kw-${kwKey++}`} className={keywordClassName}>
         {m[0]}
       </TitleEmphasis>,
     );
@@ -183,7 +201,17 @@ function emphasizeTitleWords(
   }
   if (last < text.length) {
     const tail = text.slice(last);
-    if (tail) parts.push(tail);
+    if (tail) {
+      parts.push(
+        betweenClassName ? (
+          <span key={`hero-plain-${plainKey++}`} className={betweenClassName}>
+            {tail}
+          </span>
+        ) : (
+          tail
+        ),
+      );
+    }
   }
   return parts.length ? parts : text;
 }
@@ -215,7 +243,7 @@ function HeroIntroCornerOrnament() {
       fill="none"
       aria-hidden
     >
-      <g className="stroke-[#f7f4ef]" strokeLinecap="round" strokeLinejoin="round">
+      <g className="stroke-arc-rose-gold" strokeLinecap="round" strokeLinejoin="round">
         {/* Outer L */}
         <path
           d="M 14 14 H 62 C 72 14 78 18 80 26 C 82 32 78 38 72 36"
@@ -404,18 +432,24 @@ export function ScrollExpandHero({
   const restWithEmphasis = emphasizeTitleWords(
     restForEmphasis,
     titleKeywords,
-    textBlend
-      ? "shrink-0 text-[1.64em] text-[#f2efe9] sm:text-[1.78em] md:text-[1.96em] lg:text-[2.16em] [text-shadow:0_2px_20px_rgba(0,0,0,0.65),0.02em_0_0_rgba(242,239,233,0.35),-0.02em_0_0_rgba(242,239,233,0.35)]"
-      : HERO_TITLE_KEYWORD_EMPHASIS_CLASS,
+    textBlend ? HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS : HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS,
+    HERO_TITLE_CONNECTOR_ROSE_CLASS,
   );
 
-  /** Headline sits in the upper band beside CTAs — left-aligned, slightly tighter scale than centered hero. */
-  const titleLine2and3ClassTop =
-    "flex w-full max-w-[min(100%,38rem)] flex-wrap items-baseline justify-start gap-x-0 gap-y-1 text-left font-serif text-2xl font-bold leading-snug text-[#f7f4ef] sm:max-w-[min(100%,40rem)] sm:text-3xl md:text-[1.85rem] md:leading-snug lg:max-w-[44rem] lg:text-4xl lg:leading-snug";
+  /** Headline stack layout (middle line keeps cream default for inherited baseline; keywords/connectors override). */
+  const heroTitleLineLayoutClass =
+    "flex w-full max-w-[min(100%,38rem)] flex-wrap items-baseline justify-start gap-x-0 gap-y-1 text-left font-serif text-2xl font-bold leading-snug sm:max-w-[min(100%,40rem)] sm:text-3xl md:text-[1.85rem] md:leading-snug lg:max-w-[44rem] lg:text-4xl lg:leading-snug";
 
-  /** Lead word — softer against the photo so it reads “in” the parallax field, not pasted on top. */
-  const heroLeadWordClass =
-    "block font-serif text-2xl font-bold leading-[1.08] text-[#f7f4ef]/82 sm:text-3xl md:text-3xl lg:text-4xl [text-shadow:0_2px_28px_rgba(0,0,0,0.55),0_0_52px_rgba(0,0,0,0.35)]";
+  const titleLine2and3ClassTop = cn(heroTitleLineLayoutClass, "text-[#f7f4ef]");
+
+  /** Closing line (“Converge.”) — rose-gold stack to match connectors + framed intro. */
+  const heroTitleClosingLineClass = cn(heroTitleLineLayoutClass, HERO_TITLE_CONNECTOR_ROSE_CLASS);
+
+  /** Lead word — rose-gold to match hero connectors + ornament intro. */
+  const heroLeadWordClass = cn(
+    "block font-serif text-2xl font-bold leading-[1.08] sm:text-3xl md:text-3xl lg:text-4xl",
+    HERO_TITLE_CONNECTOR_ROSE_CLASS,
+  );
 
   return (
     <div className="overflow-x-hidden transition-colors duration-700 ease-in-out">
@@ -474,7 +508,7 @@ export function ScrollExpandHero({
                 <span className={heroLeadWordClass}>{firstWord}</span>
                 <span className={titleLine2and3ClassTop}>{restWithEmphasis}</span>
                 {restClosing ? (
-                  <span className={titleLine2and3ClassTop}>{restClosing}</span>
+                  <span className={heroTitleClosingLineClass}>{restClosing}</span>
                 ) : null}
               </motion.h1>
               <div className="pointer-events-auto mt-1 flex w-full max-w-[min(100%,46rem)] flex-col items-start gap-3 sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
@@ -525,7 +559,13 @@ export function ScrollExpandHero({
                 }}
               >
                 <HeroIntroOrnamentFrame>
-                  <p className="text-left font-sans text-sm font-semibold leading-relaxed text-[#f7f4ef]/95 drop-shadow md:text-base [&_strong]:font-bold [&_strong]:text-[#f7f4ef] [&_strong]:drop-shadow">
+                  <p
+                    className={cn(
+                      "text-left font-sans text-sm font-semibold leading-relaxed md:text-base [&_strong]:font-bold",
+                      HERO_TITLE_CONNECTOR_ROSE_CLASS,
+                      "[&_strong]:text-arc-rose-gold",
+                    )}
+                  >
                     {intro}
                   </p>
                 </HeroIntroOrnamentFrame>

@@ -13,6 +13,9 @@ const AMBIENT_ONLY_END = 0.005;
 /** Phase 2 — portrait + grade + type ramp in (longer = less rush into phase 3). */
 const HERO_REVEAL_BLEND = 0.26;
 
+/** End of opening hero reveal — used for top frosted blend strip in `ArcFounderIntroSection`. */
+export const FOUNDER_HERO_REVEAL_END = AMBIENT_ONLY_END + HERO_REVEAL_BLEND;
+
 /** Phase 2b — zoom / parallax completes; hero layer stays **fully opaque** until `HERO_LAYER_FADE_START`. */
 const HERO_SCALE_END = 0.5;
 

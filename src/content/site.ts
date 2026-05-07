@@ -35,7 +35,7 @@ export const videos = {
 
 export const images = {
   /** Header wordmark — RGBA PNG (`scripts/make-logo-transparent.cjs` removes cream plate from source art). */
-  logo: "/assets/branding/arc-wellness-logo.png",
+  logo: "/assets/branding/arc-wellness-logo-v3.png",
   heroBg: "/assets/hero/arc-wellness-exterior-sunset.png",
   heroMedia: "/assets/hero/arc-wellness-reception-entrance.png",
   heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",

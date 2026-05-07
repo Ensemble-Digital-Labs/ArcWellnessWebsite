@@ -50,13 +50,26 @@ const NAV_STACK_OVERLAY = "z-[1000]";
 const NAV_STACK_DRAWER = "z-[1001]";
 const NAV_STACK_CHROME = "z-[1002]";
 
-const NAV_LINKS = [
-  { label: "About", href: "/#about", shape: "1", previewSrc: images.whoWeAre },
-  { label: "Services", href: "/#services", shape: "2", previewSrc: images.services[0] },
-  { label: "Your path", href: "/#path", shape: "3", previewSrc: images.services[2] },
-  { label: "Invest in you", href: "/#book", shape: "4", previewSrc: images.investBanner },
-  { label: "Contact", href: "/#contact", shape: "5", previewSrc: images.heroMedia },
+const NAV_LINK_DEFS = [
+  { label: "About", anchor: "about", shape: "1", previewSrc: images.whoWeAre },
+  { label: "Services", anchor: "services", shape: "2", previewSrc: images.services[0] },
+  { label: "Your path", anchor: "path", shape: "3", previewSrc: images.services[2] },
+  { label: "Invest in you", anchor: "book", shape: "4", previewSrc: images.investBanner },
+  { label: "Contact", anchor: "contact", shape: "5", previewSrc: images.heroMedia },
 ] as const;
+
+function buildArcNavLinks(sectionBasePath?: string) {
+  const base =
+    sectionBasePath && sectionBasePath !== "/" ? sectionBasePath.replace(/\/$/, "") : "";
+  return NAV_LINK_DEFS.map((def) => ({
+    label: def.label,
+    shape: def.shape,
+    previewSrc: def.previewSrc,
+    href: base ? `${base}#${def.anchor}` : `/#${def.anchor}`,
+  }));
+}
+
+type NavLinkItem = ReturnType<typeof buildArcNavLinks>[number];
 
 const navRowRootVariants = {
   initial: {},
@@ -97,8 +110,6 @@ const navLinkPreviewVariants = {
     transition: { type: "spring" as const, stiffness: 320, damping: 26 },
   },
 };
-
-type NavLinkItem = (typeof NAV_LINKS)[number];
 
 function ArcNavMenuLinkRow({
   item,
@@ -224,7 +235,22 @@ function ArcNavMenuLinkRow({
  * Centered logo + fullscreen slide-in menu (GSAP), ARC palette and section anchors.
  * Inspired by a Webflow-style overlay; uses standard GSAP easing (no CustomEase).
  */
-export function ArcSiteHeader() {
+export type ArcSiteHeaderProps = {
+  /** Defaults to main site wordmark from `site.ts`. */
+  logoSrc?: string;
+  logoAlt?: string;
+  homeHref?: string;
+  /** e.g. `/logodemov1`, `/logodemov2`, `/logodemov3` — scope fullscreen menu links to this route’s section IDs. */
+  sectionBasePath?: string;
+};
+
+export function ArcSiteHeader({
+  logoSrc = images.logo,
+  logoAlt = "ARC Wellness",
+  homeHref = "/",
+  sectionBasePath,
+}: ArcSiteHeaderProps = {}) {
+  const navLinks = buildArcNavLinks(sectionBasePath);
   const containerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -590,7 +616,7 @@ export function ArcSiteHeader() {
 
         <div className="relative z-10 flex min-h-0 flex-1 flex-col px-8 pb-12 pt-28 sm:px-10 sm:pt-32">
           <ul className="flex flex-col gap-2">
-            {NAV_LINKS.map((item, i) => (
+            {navLinks.map((item, i) => (
               <ArcNavMenuLinkRow
                 key={item.href}
                 item={item}
@@ -618,14 +644,14 @@ export function ArcSiteHeader() {
           )}
         >
           <Link
-            href="/"
+            href={homeHref}
             className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
             aria-label="ARC Wellness home"
           >
             {reducedMotion ? (
               <Image
-                src={images.logo}
-                alt="ARC Wellness"
+                src={logoSrc}
+                alt={logoAlt}
                 width={720}
                 height={240}
                 priority
@@ -639,8 +665,8 @@ export function ArcSiteHeader() {
                 style={{ opacity: logoOpacity }}
               >
                 <Image
-                  src={images.logo}
-                  alt="ARC Wellness"
+                  src={logoSrc}
+                  alt={logoAlt}
                   width={720}
                   height={240}
                   priority

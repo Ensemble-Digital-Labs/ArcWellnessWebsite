@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { arcGlassCtaClass } from "@/lib/arcGlassCta";
@@ -28,6 +29,21 @@ const investReserveGlassClass = cn(
 );
 
 /** Solid terracotta accent pill — pairs with glass CTA in reference */
+/**
+ * Pin scrub — fade frosted top strip by this fraction of `p` (matches founder “opening phase” length).
+ */
+const INVEST_PIN_TOP_BLEND_END = 0.3;
+
+/** Same gradient / blur / mask as `ArcFounderIntroSection` top blend (dark photo + charcoal grade). */
+const investPinnedTopBlendLayerClass = cn(
+  "pointer-events-none absolute inset-x-0 top-0 z-[8] h-[min(28vh,11rem)]",
+  /* Neutral charcoal frost — matches founder strip; no teal/green */
+  "bg-gradient-to-b from-arc-charcoal/[0.48] via-arc-charcoal/[0.2] to-transparent",
+  "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
+  "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
+  "mask-image-[linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
+);
+
 const investMemberSolidClass = cn(
   "inline-flex items-center justify-center gap-2 rounded-full",
   "border border-white/20 bg-[#bc6c5c] px-6 py-3",
@@ -45,6 +61,8 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
   const supportingMotion = pathPinFadeUp(p, 0.16, 2.05);
   const ctaMotion = pathPinFadeUp(p, 0.26, 2.2);
 
+  const investTopBarOpacity = Math.max(0, 1 - Math.min(1, p / INVEST_PIN_TOP_BLEND_END));
+
   return (
     <PinnedSection
       id="book"
@@ -61,6 +79,11 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
         priority={false}
       />
       <div className="absolute inset-0 bg-arc-charcoal/45" />
+      <motion.div
+        aria-hidden
+        style={{ opacity: investTopBarOpacity }}
+        className={investPinnedTopBlendLayerClass}
+      />
       <div data-scroll-section className="relative z-10 mx-auto max-w-4xl px-6 text-center">
         <h2
           className={cn(

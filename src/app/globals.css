@@ -93,14 +93,25 @@ html.arc-scroll-lock::-webkit-scrollbar {
 }
 
 /**
- * Header wordmark over photography — layered drop shadows + faint light bloom so teal
- * stays legible on bright clouds / warm highlights without a heavy box behind the logo.
+ * Header wordmark over photography — color lift + layered shadows + teal bloom so the
+ * transparent PNG reads vivid on both dark and bright hero areas without a solid plate.
  */
 .arc-header-logo {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.65))
-    drop-shadow(0 4px 18px rgba(0, 0, 0, 0.42))
-    drop-shadow(0 14px 44px rgba(0, 0, 0, 0.28))
-    drop-shadow(0 0 22px rgba(255, 255, 255, 0.14));
+  filter: brightness(1.08) contrast(1.12) saturate(1.22)
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.78))
+    drop-shadow(0 4px 16px rgba(0, 0, 0, 0.52))
+    drop-shadow(0 12px 40px rgba(0, 0, 0, 0.34))
+    drop-shadow(0 0 20px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 0 32px color-mix(in srgb, var(--arc-teal) 58%, transparent));
+}
+
+@media (prefers-contrast: more) {
+  .arc-header-logo {
+    filter: brightness(1.12) contrast(1.18) saturate(1.12)
+      drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85))
+      drop-shadow(0 0 28px rgba(255, 255, 255, 0.35))
+      drop-shadow(0 0 40px color-mix(in srgb, var(--arc-teal) 72%, transparent));
+  }
 }
 
 /* Fullscreen nav ambient shapes — hidden until GSAP hover on matching menu row */

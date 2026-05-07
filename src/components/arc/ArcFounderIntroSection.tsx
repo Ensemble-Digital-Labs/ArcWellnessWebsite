@@ -11,6 +11,7 @@ import {
   FounderEditorialHeroStatic,
   FOUNDER_COPY_FADE_IN_END,
   FOUNDER_COPY_FADE_IN_START,
+  FOUNDER_HERO_REVEAL_END,
 } from "@/components/arc/FounderEditorialHero";
 import { FounderGalleryMosaic } from "@/components/arc/FounderGalleryMosaic";
 import { PinnedSection } from "@/components/arc/PinnedSection";
@@ -77,6 +78,13 @@ function FounderImmersiveScrollBody({
     progress,
     [FOUNDER_COPY_FADE_IN_START, FOUNDER_COPY_FADE_IN_END, 1],
     [0.94, 1, 1],
+  );
+
+  /** Frosted top strip — strongest at section entry, fades as the editorial hero establishes. */
+  const topBlendOpacity = useTransform(
+    progress,
+    [0, FOUNDER_HERO_REVEAL_END * 0.35, FOUNDER_HERO_REVEAL_END],
+    [1, 0.55, 0],
   );
 
   useEffect(() => {
@@ -150,6 +158,19 @@ function FounderImmersiveScrollBody({
           meetLead={heroCopy.meetLead}
           nameItalic={heroCopy.nameItalic}
           credential={heroCopy.credential}
+        />
+
+        <motion.div
+          aria-hidden
+          style={{ opacity: topBlendOpacity }}
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 z-[12] h-[min(28vh,11rem)]",
+            /* Neutral charcoal frost — no teal/green tint; blur picks up scene beneath */
+            "bg-gradient-to-b from-arc-charcoal/[0.48] via-arc-charcoal/[0.2] to-transparent",
+            "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
+            "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
+            "mask-image-[linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
+          )}
         />
 
         <motion.div
