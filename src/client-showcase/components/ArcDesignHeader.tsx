@@ -7,7 +7,8 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { images } from "@/content/site";
 import { CLIENT_SHOWCASE_BASE } from "@/client-showcase/content";
-import { showcaseDesign } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 
 function TikTokIcon({ className }: { className?: string }) {
@@ -25,10 +26,9 @@ function hrefFor(hash: string) {
 const MAIN_LINKS = [
   { label: "About", hash: "#about" },
   { label: "Services", hash: "#services" },
-  /** Same destination as services grid in this one-page mock. */
-  { label: "Conditions / Concerns", hash: "#services" },
-  { label: "Patients", hash: "#patients" },
-  { label: "Shop", hash: "#shop" },
+  { label: "Your path", hash: "#path" },
+  { label: "Testimonials", hash: "#testimonials" },
+  { label: "FAQ", hash: "#faq" },
   { label: "Contact", hash: "#contact" },
 ] as const;
 
@@ -55,24 +55,23 @@ export function ArcDesignHeader() {
             </a>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-charcoal/75 sm:gap-8 sm:text-[11px]">
-            <Link href={hrefFor("#services")} className="hover:text-arc-charcoal">
+            <Link href={hrefFor("#services")} className="transition-colors hover:text-arc-rose-gold-ink">
               Specials &amp; events
             </Link>
-            <Link href={hrefFor("#book")} className="hover:text-arc-charcoal">
+            <Link href={hrefFor("#book")} className="transition-colors hover:text-arc-rose-gold-ink">
               ARC Society membership
             </Link>
           </div>
           <div className="flex items-center justify-center gap-3 sm:justify-end">
             <a
               href="tel:+19495555279"
-              className="whitespace-nowrap font-sans text-xs font-medium text-arc-charcoal sm:text-sm"
+              className="whitespace-nowrap font-sans text-xs font-medium text-arc-rose-gold-ink sm:text-sm"
             >
               (949) 555-ARCW
             </a>
             <Link
               href={hrefFor("#book")}
-              className="rounded-md px-4 py-2 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal shadow-sm transition-colors hover:opacity-95 sm:text-[11px]"
-              style={{ backgroundColor: showcaseDesign.sage }}
+              className={showcaseBookCtaClass("light", "px-4 py-2 sm:px-6 sm:py-3")}
             >
               Book here
             </Link>
@@ -81,10 +80,31 @@ export function ArcDesignHeader() {
       </div>
 
       {/* Main nav */}
-      <div className="border-b border-arc-charcoal/10 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8 lg:py-4">
-          <Link href={CLIENT_SHOWCASE_BASE} className="relative block h-9 w-[8rem] shrink-0 sm:h-10 sm:w-[9rem]" onClick={() => setOpen(false)}>
-            <Image src={images.logo} alt="ARC Wellness" fill className="object-contain object-left" sizes="150px" priority />
+      <div
+        className="border-b border-arc-charcoal/10"
+        style={{
+          backgroundImage: "url('/assets/decoration/background/ambient-02.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-6 sm:py-[1.375rem] lg:px-8 lg:py-7">
+          <Link
+            href={CLIENT_SHOWCASE_BASE}
+            className="relative block h-9 w-[8rem] shrink-0 overflow-visible sm:h-10 sm:w-[9rem]"
+            onClick={() => setOpen(false)}
+          >
+            {/* Keep clickable area as the original nav slot; render a larger transparent logo that can overflow visually. */}
+            <span className="pointer-events-none absolute left-0 top-1/2 block h-24 w-[20rem] -translate-y-1/2 sm:h-28 sm:w-[24rem] lg:h-32 lg:w-[28rem]">
+              <Image
+                src={images.logo}
+                alt="ARC Wellness"
+                fill
+                className="object-contain object-left"
+                sizes="(min-width: 1024px) 448px, (min-width: 640px) 384px, 320px"
+                priority
+              />
+            </span>
           </Link>
 
           <nav className="hidden flex-1 justify-center gap-5 lg:flex xl:gap-7" aria-label="Primary">
@@ -92,27 +112,23 @@ export function ArcDesignHeader() {
               <Link
                 key={item.label}
                 href={hrefFor(item.hash)}
-                className="inline-flex items-center gap-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-arc-charcoal/85 transition-colors hover:text-arc-charcoal xl:text-xs"
+                className="inline-flex items-center gap-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-white/92 drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)] transition-colors hover:text-arc-rose-gold xl:text-xs"
               >
                 {item.label}
-                <ChevronDown className="size-3.5 opacity-50" strokeWidth={2} aria-hidden />
+                <ChevronDown className="size-3.5 opacity-80" strokeWidth={2} aria-hidden />
               </Link>
             ))}
           </nav>
 
           <div className="hidden items-center lg:flex">
-            <Link
-              href={hrefFor("#book")}
-              className="rounded-md border-2 bg-transparent px-5 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors hover:bg-arc-charcoal/[0.04]"
-              style={{ borderColor: showcaseDesign.sageOutline, color: showcaseDesign.sageOutline }}
-            >
+            <Link href={hrefFor("#book")} className={showcaseBookCtaClass("dark", "px-5 py-2")}>
               Book now
             </Link>
           </div>
 
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-md border border-arc-charcoal/15 text-arc-charcoal lg:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-md border border-white/65 bg-black/10 text-white shadow-[0_1px_6px_rgba(0,0,0,0.35)] lg:hidden"
             aria-expanded={open}
             aria-controls="arc-design-mobile-nav"
             onClick={() => setOpen((v) => !v)}
@@ -132,7 +148,7 @@ export function ArcDesignHeader() {
             <li key={item.label}>
               <Link
                 href={hrefFor(item.hash)}
-                className="block rounded-md px-3 py-3 font-sans text-sm font-medium text-arc-charcoal hover:bg-arc-charcoal/[0.04]"
+                className="block rounded-md px-3 py-3 font-sans text-sm font-medium text-arc-charcoal transition-colors hover:bg-arc-rose-gold/12 hover:text-arc-rose-gold-ink"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
@@ -142,8 +158,9 @@ export function ArcDesignHeader() {
           <li className="pt-2">
             <Link
               href={hrefFor("#book")}
-              className="block rounded-md border-2 py-3 text-center font-sans text-sm font-semibold uppercase tracking-wide"
-              style={{ borderColor: showcaseDesign.sageOutline, color: showcaseDesign.sageOutline }}
+              className={cn(
+                showcaseBookCtaClass("light", "w-full max-w-none justify-center py-3 text-sm tracking-[0.14em]"),
+              )}
               onClick={() => setOpen(false)}
             >
               Book now

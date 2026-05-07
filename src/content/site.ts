@@ -57,6 +57,8 @@ export const images = {
     "/assets/sections/founder/physician-smiling-02.png",
   ] as const,
   investBanner: "/assets/hero/arc-wellness-lobby-lounge.png",
+  /** Full-bleed membership / cohort band (`SplitPrefooterCTA` on client-showcase). */
+  membershipCohortHero: "/assets/sections/who-we-are/biometric-consultation-room.png",
   services: [
     "/assets/sections/whole-body/facial-aesthetic-treatment.png",
     "/assets/sections/whole-body/body-contouring-session.png",
