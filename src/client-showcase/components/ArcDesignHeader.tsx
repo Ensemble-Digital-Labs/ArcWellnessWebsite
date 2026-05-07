@@ -70,10 +70,10 @@ export function ArcDesignHeader() {
               (949) 555-ARCW
             </a>
             <Link
-              href={hrefFor("#book")}
+              href={hrefFor("#contact")}
               className={showcaseBookCtaClass("light", "px-4 py-2 sm:px-6 sm:py-3")}
             >
-              Book here
+              Patient portal
             </Link>
           </div>
         </div>

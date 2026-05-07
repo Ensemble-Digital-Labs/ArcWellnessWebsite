@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import type { CSSProperties } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
@@ -13,7 +13,6 @@ import {
   PATH_STEP_IMAGE_SRC,
 } from "@/content/backgroundDecoration";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
-import { useArcFullscreenPin } from "@/lib/arcSectionPins";
 
 type PathStep = {
   numeral: string;
@@ -173,31 +172,30 @@ function YourPathIntroSection() {
   );
 }
 
-function YourPathStepSection({ step }: { step: PathStep }) {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const { p, setPinProgress } = usePathPinScrubProgress();
-  useArcFullscreenPin(sectionRef, {
-    pinDistanceMultiplier: 0.35,
-    onProgress: setPinProgress,
-  });
-
-  const leftPanelYPercent = (1 - p) * 1;
-  const rightPanelYPercent = (p - 1) * 1;
-  const titleMotion = pathPinFadeUp(p, 0.08, 2.35);
-  const metaMotion = pathPinFadeUp(p, 0.16, 2.05);
-  const bodyMotion = pathPinFadeUp(p, 0.24, 2.0);
-
+function YourPathStepPanel({
+  step,
+  panelStyle,
+  imageStyle,
+  textStyle,
+}: {
+  step: PathStep;
+  panelStyle: CSSProperties;
+  imageStyle?: CSSProperties;
+  textStyle?: CSSProperties;
+}) {
   return (
-    <section ref={sectionRef} className="relative min-h-[100dvh] overflow-clip bg-arc-cream">
+    <article
+      className="absolute inset-0"
+      style={panelStyle}
+      aria-hidden={panelStyle.opacity === 0}
+    >
       <div className="grid min-h-[100dvh] grid-cols-1 md:grid-cols-2">
         <div
           className={[
-            "relative min-h-[42dvh] will-change-transform md:min-h-[100dvh]",
+            "relative min-h-[42dvh] md:min-h-[100dvh]",
             step.contentOnLeft ? "md:order-2" : "md:order-1",
           ].join(" ")}
-          style={{
-            transform: `translate3d(0, ${leftPanelYPercent}%, 0)`,
-          }}
+          style={imageStyle}
         >
           <Image
             src={step.imageSrc}
@@ -210,36 +208,161 @@ function YourPathStepSection({ step }: { step: PathStep }) {
 
         <div
           className={[
-            "relative flex min-h-[58dvh] items-center justify-center bg-arc-cream/95 px-6 py-14 will-change-transform sm:px-10 sm:py-16 md:min-h-[100dvh] md:px-12 lg:px-16",
+            "relative flex min-h-[58dvh] items-center justify-center bg-arc-cream/95 px-6 py-14 sm:px-10 sm:py-16 md:min-h-[100dvh] md:px-12 lg:px-16",
             step.contentOnLeft ? "md:order-1" : "md:order-2",
           ].join(" ")}
-          style={{
-            transform: `translate3d(0, ${rightPanelYPercent}%, 0)`,
-          }}
         >
-          <div className="w-full max-w-xl text-left">
-            <p
-              className="mb-3 font-serif text-3xl leading-none text-arc-rose-gold-ink sm:text-4xl"
-              style={titleMotion}
-            >
+          <div className="w-full max-w-xl text-left" style={textStyle}>
+            <p className="mb-3 font-serif text-3xl leading-none text-arc-rose-gold-ink sm:text-4xl">
               {step.numeral} {step.title}
             </p>
-            <p
-              className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/60 sm:text-[0.8rem]"
-              style={metaMotion}
-            >
+            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/60 sm:text-[0.8rem]">
               {step.stepMeta}
             </p>
-            <p
-              className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg sm:leading-relaxed"
-              style={bodyMotion}
-            >
+            <p className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg sm:leading-relaxed">
               {step.description}
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </article>
+  );
+}
+
+function YourPathStepsCrossfadeSection() {
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  const stepCount = PATH_STEPS.length;
+  const stepSequencePinDistance = 4.2;
+  const introRevealPortion = 0.08;
+  const revealProgress = Math.min(1, Math.max(0, p / introRevealPortion));
+  const transitionProgress = Math.min(1, Math.max(0, (p - introRevealPortion) / (1 - introRevealPortion)));
+  const holdUnitsPerStep = 1.4;
+  const crossfadeUnitsBetweenSteps = 1.4;
+  const imageFadeInUnits = 0.45;
+  const textFadeInUnits = 0.45;
+  const totalTimelineUnits =
+    stepCount * holdUnitsPerStep + Math.max(0, stepCount - 1) * crossfadeUnitsBetweenSteps;
+  const timeline = transitionProgress * totalTimelineUnits;
+
+  return (
+    <PinnedSection
+      pinDistanceMultiplier={stepSequencePinDistance}
+      onProgress={setPinProgress}
+      className="relative min-h-[100dvh] overflow-clip bg-arc-cream"
+    >
+      <div className="relative min-h-[100dvh]">
+        {PATH_STEPS.map((step, index) => {
+          const isLastStep = index === stepCount - 1;
+          const segmentStart = index * (holdUnitsPerStep + crossfadeUnitsBetweenSteps);
+          const holdEnd = segmentStart + holdUnitsPerStep;
+          const segmentEnd = holdEnd + crossfadeUnitsBetweenSteps;
+          const local = timeline - segmentStart;
+          const textFadeInStart = imageFadeInUnits;
+
+          const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
+          let panelOpacity = 0;
+          let imageOpacity = 0;
+          let textOpacity = 0;
+
+          if (index === 0) {
+            if (timeline >= segmentStart && timeline <= holdEnd) {
+              panelOpacity = 1;
+              imageOpacity = 1;
+              textOpacity = revealProgress;
+            } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
+              const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
+              panelOpacity = fadeOut;
+              imageOpacity = fadeOut;
+              textOpacity = Math.min(1, revealProgress) * fadeOut;
+            } else if (isLastStep && timeline > segmentStart) {
+              panelOpacity = 1;
+              imageOpacity = 1;
+              textOpacity = 1;
+            }
+          } else {
+            if (local >= 0 && local <= holdUnitsPerStep) {
+              panelOpacity = 1;
+              imageOpacity = clamp01(local / imageFadeInUnits);
+              textOpacity =
+                local < textFadeInStart ? 0 : clamp01((local - textFadeInStart) / textFadeInUnits);
+            } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
+              const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
+              panelOpacity = fadeOut;
+              imageOpacity = fadeOut;
+              textOpacity = fadeOut;
+            } else if (isLastStep && local > 0) {
+              panelOpacity = 1;
+              imageOpacity = 1;
+              textOpacity = 1;
+            }
+          }
+
+          const translateY = (1 - panelOpacity) * 8;
+          const scale = 0.985 + panelOpacity * 0.015;
+
+          return (
+            <YourPathStepPanel
+              key={step.stepMeta}
+              step={step}
+              imageStyle={{ opacity: imageOpacity }}
+              textStyle={{
+                opacity: textOpacity,
+                transform: `translate3d(0, ${(1 - textOpacity) * 12}px, 0)`,
+              }}
+              panelStyle={{
+                opacity: panelOpacity,
+                transform: `translate3d(0, ${translateY}px, 0) scale(${scale})`,
+                zIndex: index + 1,
+                pointerEvents: panelOpacity > 0.5 ? "auto" : "none",
+              }}
+            />
+          );
+        })}
+      </div>
+    </PinnedSection>
+  );
+}
+
+/**
+ * Legacy variant kept for reference only.
+ * Not used by `YourPathSection`; current production variant is `YourPathStepsCrossfadeSection`.
+ */
+export function YourPathStepsLegacyCrossfadeSection() {
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  const stepCount = PATH_STEPS.length;
+  const scaled = p * Math.max(1, stepCount - 1);
+
+  return (
+    <PinnedSection
+      pinDistanceMultiplier={1.8}
+      onProgress={setPinProgress}
+      className="relative min-h-[100dvh] overflow-clip bg-arc-cream"
+    >
+      <div className="relative min-h-[100dvh]">
+        {PATH_STEPS.map((step, index) => {
+          const blend = Math.max(0, 1 - Math.abs(scaled - index));
+
+          return (
+            <YourPathStepPanel
+              key={`legacy-${step.stepMeta}`}
+              step={step}
+              imageStyle={{ opacity: blend }}
+              textStyle={{
+                opacity: blend,
+                transform: `translate3d(0, ${(1 - blend) * 12}px, 0)`,
+              }}
+              panelStyle={{
+                opacity: blend,
+                transform: `translate3d(0, ${(1 - blend) * 8}px, 0) scale(${0.985 + blend * 0.015})`,
+                zIndex: index + 1,
+                pointerEvents: blend > 0.5 ? "auto" : "none",
+              }}
+            />
+          );
+        })}
+      </div>
+    </PinnedSection>
   );
 }
 
@@ -247,9 +370,7 @@ export function YourPathSection() {
   return (
     <>
       <YourPathIntroSection />
-      {PATH_STEPS.map((step) => (
-        <YourPathStepSection key={step.stepMeta} step={step} />
-      ))}
+      <YourPathStepsCrossfadeSection />
     </>
   );
 }
