@@ -143,14 +143,14 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         >
           Whole-Body Care. Inside and Out.
         </h2>
-        <div className="pointer-events-auto mt-auto flex max-w-full shrink-0 flex-col">
+        <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
           <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
             {servicesShowcaseEyebrow(current)}
           </p>
-          <h3 className="mb-3 max-w-xl font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
+          <h3 className="mb-3 max-w-full font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
             {current.title}
           </h3>
-          <p className="max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base">
+          <p className="mx-auto max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base">
             {current.description}
           </p>
         </div>
@@ -934,7 +934,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         >
           Whole-Body Care. Inside and Out.
         </h2>
-        <div className="pointer-events-auto mt-auto flex max-w-full shrink-0 flex-col">
+        <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
           <p
             ref={eyebrowRef}
             className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70"
@@ -944,12 +944,12 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           <h3
             ref={titleRef}
             id="arc-showcase-title"
-            className="slide-title mb-3 max-w-xl font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl [&_span]:will-change-transform"
+            className="slide-title mb-3 max-w-full font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl [&_span]:will-change-transform"
           />
           <p
             ref={descRef}
             id="arc-showcase-desc"
-            className="slide-description max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base"
+            className="slide-description mx-auto max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base"
           />
         </div>
       </div>
