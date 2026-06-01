@@ -3,6 +3,11 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  arcScrollTriggerScrollerProps,
+  getArcScrollTriggerScroller,
+  getArcScrollViewportHeight,
+} from "@/lib/arcScrollMode";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 
@@ -36,17 +41,16 @@ export function useArcFullscreenPin(
     const setup = () => {
       if (cancelled) return;
       const trigger = sectionRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!trigger || !main) return;
+      if (!trigger) return;
 
+      const scroller = getArcScrollTriggerScroller();
       const endDist = () =>
-        (main.clientHeight || Math.round(window.innerHeight || 720)) *
-        Math.max(0.2, pinDistanceMultiplier);
+        getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           trigger,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,

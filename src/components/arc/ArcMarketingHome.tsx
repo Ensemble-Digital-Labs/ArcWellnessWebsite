@@ -49,9 +49,10 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
           title="Where Aesthetics, Wellness, and Longevity Converge."
           intro={
             <>
-              ARC Wellness is a clinical sanctuary in the Presidio—pairing functional medicine,
-              advanced aesthetics, and lifestyle coaching into a single, decade-by-decade plan written
-              for one patient: you.
+              Rooted in vitality, ARC Wellness combines medical expertise with personalized wellness
+              in St. Louis—from non-invasive treatments for energy, pelvic health, and cognitive
+              performance to restorative therapies and lifestyle guidance, designed for strength,
+              clarity, and confidence.
             </>
           }
         />

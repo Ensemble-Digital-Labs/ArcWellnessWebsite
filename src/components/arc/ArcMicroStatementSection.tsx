@@ -8,6 +8,11 @@ import { SeamlessLoopVideo, type SeamlessLoopVideoHandle } from "@/components/ar
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import {
+  arcScrollTriggerScrollerProps,
+  getArcScrollTriggerScroller,
+  getArcScrollViewportHeight,
+} from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -102,17 +107,16 @@ export function ArcMicroStatementSection({
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!section || !main) return;
+      if (!section) return;
 
-      const endDist = () =>
-        main.clientHeight || Math.round(window.innerHeight || 720);
+      const scroller = getArcScrollTriggerScroller();
+      const endDist = () => getArcScrollViewportHeight(scroller);
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           id: "arc-micro-statement-pin",
           trigger: section,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,

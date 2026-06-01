@@ -1,1 +1,5 @@
-export { ArcSiteHeader as SiteHeader, SITE_HEADER_OFFSET } from "@/components/arc/ArcSiteHeader";
+export {
+  ArcSiteHeader as SiteHeader,
+  SITE_HEADER_OFFSET,
+  type ArcSiteHeaderProps,
+} from "@/components/arc/ArcSiteHeader";

@@ -15,5 +15,6 @@ Drop **production** photography and graphics here, then point `src/content/site.
 | `editorial-spa/` | **Editorial / aesthetic** — mood imagery to highlight services | **`editorialSpaImages.ts`** (`editorial-spa-01`…`05`) |
 | `your-path/` | **`#path`** sticky intro + journey steps | **`path-intro-background.png`** — full-bleed intro plate; add per-step art (e.g. `path-step-01.png`) when ready. |
 | `invest-cta/` | **Invest** full-bleed band | Prefer a dedicated asset vs reusing hero lobby when ready. |
+| `clinic-interiors/` | **Real clinic** — reception, lounge, hallway, IV, retail | **`clinicInteriorImages.ts`**; client photo drops renamed at repo root |
 
 Files are served from the site root: **`/assets/sections/<folder>/<file>`**.

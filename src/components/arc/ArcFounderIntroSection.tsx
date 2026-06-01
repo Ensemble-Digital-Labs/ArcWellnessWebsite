@@ -22,6 +22,7 @@ import {
 import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -94,13 +95,12 @@ function FounderImmersiveScrollBody({
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!section || !main) return;
+      if (!section) return;
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           trigger: section,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: "bottom bottom",
           scrub: 0.85,

@@ -111,10 +111,10 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
           className="mx-auto flex w-full max-w-lg flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4"
           style={ctaMotion}
         >
-          <Link href="#book" className={cn(investReserveGlassClass, "w-full sm:w-auto")}>
+          <Link href="/book" className={cn(investReserveGlassClass, "w-full sm:w-auto")}>
             Reserve a call
           </Link>
-          <Link href="#book" className={cn(investMemberSolidClass, "w-full sm:w-auto")}>
+          <Link href="/book" className={cn(investMemberSolidClass, "w-full sm:w-auto")}>
             <span>Become a member</span>
             <span aria-hidden className="text-base leading-none">
               →

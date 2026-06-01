@@ -16,6 +16,11 @@ import {
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { IMMERSIVE_COLLAGE_FRAME_CLASSES } from "@/lib/immersiveCollageFrames";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import {
+  arcScrollTriggerScrollerProps,
+  getArcScrollTriggerScroller,
+  getArcScrollViewportHeight,
+} from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -367,8 +372,7 @@ function WelcomeImmersiveScrollBody({
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!section || !main) return;
+      if (!section) return;
 
       const ctx = gsap.context(() => {
         const syncCopyStageBg = (sectionProgress: number) => {
@@ -379,7 +383,7 @@ function WelcomeImmersiveScrollBody({
 
         const st = ScrollTrigger.create({
           trigger: section,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: "bottom bottom",
           scrub: 0.65,

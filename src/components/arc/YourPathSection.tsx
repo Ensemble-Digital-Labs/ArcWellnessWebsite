@@ -132,7 +132,7 @@ function YourPathIntroSection() {
           </h2>
           <div style={linkMotion}>
             <ArcTextUnderlineCta
-              href="#book"
+              href="/book"
               accent="roseGoldInk"
               className="items-center"
             >

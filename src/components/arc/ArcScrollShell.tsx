@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useLocomotiveScroll } from "@/lib/locomotive";
+import { prefersNativeScroll } from "@/lib/arcScrollMode";
+import { ARC_LOCOMOTIVE_READY_EVENT, useLocomotiveScroll } from "@/lib/locomotive";
 import { ScrollRevealInit } from "@/components/arc/ScrollRevealInit";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 
@@ -10,24 +11,34 @@ type ArcScrollShellProps = {
 };
 
 /**
- * Ensemble v2 pattern: Lenis-driven scroll inside `#main`, not the document — pairs with GSAP ScrollTrigger `scroller: #main`.
+ * Desktop: Lenis-driven scroll inside `#main` — pairs with GSAP ScrollTrigger `scroller: #main`.
+ * Mobile / touch: native document scroll (Locomotive breaks iOS Safari + mobile previews).
  */
 export function ArcScrollShell({ children }: ArcScrollShellProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [nativeScroll, setNativeScroll] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(mq.matches);
+    const sync = () => {
+      setReducedMotion(mq.matches);
+      setNativeScroll(prefersNativeScroll());
+    };
     sync();
     mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      mq.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
+    };
   }, []);
 
-  useLocomotiveScroll(scrollContainerRef, reducedMotion);
+  const locomotiveDisabled = reducedMotion || nativeScroll;
+  useLocomotiveScroll(scrollContainerRef, locomotiveDisabled);
 
   useEffect(() => {
-    if (reducedMotion) {
+    if (locomotiveDisabled) {
       document.documentElement.classList.remove("arc-scroll-lock");
       document.body.classList.remove("arc-scroll-lock");
       return;
@@ -38,10 +49,29 @@ export function ArcScrollShell({ children }: ArcScrollShellProps) {
       document.documentElement.classList.remove("arc-scroll-lock");
       document.body.classList.remove("arc-scroll-lock");
     };
-  }, [reducedMotion]);
+  }, [locomotiveDisabled]);
+
+  useEffect(() => {
+    if (reducedMotion || !nativeScroll) return;
+    const timer = window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent(ARC_LOCOMOTIVE_READY_EVENT, { detail: { scrollEl: null } }),
+      );
+    }, 50);
+    return () => window.clearTimeout(timer);
+  }, [reducedMotion, nativeScroll]);
 
   if (reducedMotion) {
     return <div className="relative w-full bg-arc-cream">{children}</div>;
+  }
+
+  if (nativeScroll) {
+    return (
+      <div id="main" className="relative w-full touch-pan-y bg-arc-cream">
+        <ScrollRevealInit />
+        {children}
+      </div>
+    );
   }
 
   return (

@@ -10,6 +10,8 @@ import type Lenis from "lenis";
 import { cn } from "@/lib/utils";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
+import { ARC_PRIMARY_NAV_LINKS } from "@/lib/arcMarketingNav";
+import { prefersNativeScroll } from "@/lib/arcScrollMode";
 
 /**
  * Logo fades out while the page is moving (past a small top offset). It fades back in with a fixed
@@ -50,6 +52,7 @@ const NAV_STACK_OVERLAY = "z-[1000]";
 const NAV_STACK_DRAWER = "z-[1001]";
 const NAV_STACK_CHROME = "z-[1002]";
 
+/** Hash anchors for logo-demo routes only (`sectionBasePath` set). */
 const NAV_LINK_DEFS = [
   { label: "About", anchor: "about", shape: "1", previewSrc: images.whoWeAre },
   { label: "Services", anchor: "services", shape: "2", previewSrc: images.services[0] },
@@ -250,7 +253,15 @@ export function ArcSiteHeader({
   homeHref = "/",
   sectionBasePath,
 }: ArcSiteHeaderProps = {}) {
-  const navLinks = buildArcNavLinks(sectionBasePath);
+  const navLinks =
+    sectionBasePath && sectionBasePath !== "/"
+      ? buildArcNavLinks(sectionBasePath)
+      : ARC_PRIMARY_NAV_LINKS.map((item) => ({
+          label: item.label,
+          shape: item.shape,
+          previewSrc: item.previewSrc,
+          href: item.href,
+        }));
   const containerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -406,15 +417,25 @@ export function ArcSiteHeader({
   }, [reducedMotion]);
 
   useEffect(() => {
-    const main = document.getElementById("main");
-    if (!main) return;
     if (isMenuOpen) {
-      main.style.overflow = "hidden";
+      if (prefersNativeScroll()) {
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      } else {
+        const main = document.getElementById("main");
+        if (main) main.style.overflow = "hidden";
+      }
     } else {
-      main.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      const main = document.getElementById("main");
+      if (main) main.style.overflow = "";
     }
     return () => {
-      main.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      const main = document.getElementById("main");
+      if (main) main.style.overflow = "";
     };
   }, [isMenuOpen]);
 

@@ -20,6 +20,9 @@
 # stray local copy (only build artifacts; real app lives at repo root)
 /arc-wellness/
 
+# local design reference tool — extract DESIGN.md from sites you like; not part of ARC
+/extraction tool/
+
 # Source video files — often >100MB; GitHub rejects. Keep locally, use Git LFS, or host on CDN.
 /public/assets/videos/**/*.mov
 # Tracked: hero + pinned micro-statement loop (~40MB; under GitHub’s 100MB file cap).

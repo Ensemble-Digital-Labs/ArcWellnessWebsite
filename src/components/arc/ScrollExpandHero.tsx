@@ -8,6 +8,11 @@ import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import {
+  arcScrollTriggerScrollerProps,
+  getArcScrollTriggerScroller,
+  getArcScrollViewportHeight,
+} from "@/lib/arcScrollMode";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
@@ -354,16 +359,15 @@ export function ScrollExpandHero({
     const setup = () => {
       if (cancelled) return;
       const hero = heroRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!hero || !main) return;
+      if (!hero) return;
 
-      const endDist = () =>
-        main.clientHeight || Math.round(window.innerHeight || 720);
+      const scroller = getArcScrollTriggerScroller();
+      const endDist = () => getArcScrollViewportHeight(scroller);
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           trigger: hero,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -512,7 +516,7 @@ export function ScrollExpandHero({
                 ) : null}
               </motion.h1>
               <div className="pointer-events-auto mt-1 flex w-full max-w-[min(100%,46rem)] flex-col items-start gap-3 sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
-                <Link href="#book" className={arcGlassCtaClass}>
+                <Link href="/book" className={arcGlassCtaClass}>
                   Begin your Journey
                 </Link>
                 <Link href="#path" className={arcGlassCtaClass}>

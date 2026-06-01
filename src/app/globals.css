@@ -31,6 +31,9 @@
   --arc-rose-gold-hover: #f0d4c8;
   --background: var(--arc-cream);
   --foreground: var(--arc-charcoal);
+  /** Vooban-extracted easing (see documents/design-references/vooban/DESIGN.md) */
+  --arc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --arc-ease-custom: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -73,6 +76,12 @@ html.arc-scroll-lock {
 
 html.arc-scroll-lock::-webkit-scrollbar {
   display: none;
+}
+
+/* Native mobile scroll path — allow vertical touch gestures on the page wrapper. */
+#main.touch-pan-y {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Scroll reveal targets (ensemble: not snap — GSAP drives enter animation). Initial hide until GSAP runs. */

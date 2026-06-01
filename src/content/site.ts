@@ -1,4 +1,6 @@
 /** Local assets under /public/assets — see public/assets/README.md */
+import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
+import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 /**
  * Stock footage under `/public/assets/videos/` — use `<video>` (+ optional MP4 sources for broad browser support).
  *
@@ -66,4 +68,8 @@ export const images = {
     "/assets/hero/arc-wellness-lobby-lounge.png",
     "/assets/hero/arc-wellness-reception-entrance.png",
   ],
+  /** Production St. Louis clinic interiors — `public/assets/sections/clinic-interiors/` */
+  clinicInteriors: CLINIC_INTERIOR_IMAGES,
+  /** Named modality / treatment-room stills — `public/assets/sections/medical-spa-services/` */
+  treatmentRooms: MEDICAL_SPA_NAMED_IMAGES,
 } as const;

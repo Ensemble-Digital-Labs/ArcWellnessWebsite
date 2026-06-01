@@ -5,6 +5,7 @@ Photography for **service lines** (treatments, modalities, care environments). U
 | File | Notes |
 |------|--------|
 | `service-01.png` … `service-06.png` | Renamed from uploads in sort order; **rename by modality** when confirmed (e.g. `injectables-consultation.png`, `laser-rejuvenation.png`). |
+| `emsella-btl-chair-treatment-room.png` | BTL Emsella chair + console in treatment room — `MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom` |
 
 **URL pattern:** `/assets/sections/medical-spa-services/service-NN.png`
 

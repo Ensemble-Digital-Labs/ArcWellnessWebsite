@@ -1,0 +1,53 @@
+{
+  "startTime": "2026-05-27T16:53:34.040Z",
+  "endTime": "2026-05-27T16:54:53.547Z",
+  "totalDuration": 79507,
+  "sourceUrls": [
+    "https://vooban.com/"
+  ],
+  "pagesDiscovered": 5,
+  "pagesCrawled": 5,
+  "failedPages": [],
+  "totalElements": 4819,
+  "framework": {
+    "tailwind": null,
+    "uiFramework": null,
+    "designSystemUrl": null
+  },
+  "darkModeSupported": true,
+  "screenshotCount": 30,
+  "designBoundary": {
+    "groups": [
+      {
+        "label": "vooban.com",
+        "urls": [
+          "https://vooban.com/",
+          "https://vooban.com/",
+          "https://vooban.com/expertises/services/intelligence-artificielle",
+          "https://vooban.com/expertises/services/cybersecurite",
+          "https://vooban.com/approche"
+        ],
+        "tokenCount": {
+          "colors": 8,
+          "typography": 15,
+          "components": 8
+        }
+      }
+    ],
+    "relationship": "unified",
+    "overallSimilarity": 100,
+    "dimensionScores": {
+      "font": 100,
+      "color": 100,
+      "spacing": 100,
+      "radius": 100,
+      "component": 100,
+      "shadow": 100
+    },
+    "sharedTokenSummary": null,
+    "anomalies": []
+  },
+  "warnings": [
+    "Low color token count consider adding more pages"
+  ]
+}

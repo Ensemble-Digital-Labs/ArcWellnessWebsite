@@ -1,0 +1,49 @@
+{
+  "pages": [
+    {
+      "url": "https://vooban.com/",
+      "elementCount": 1122,
+      "cssVariableCount": 121,
+      "gradientCount": 0,
+      "svgCount": 71,
+      "cssRuleCount": 1838,
+      "interactionCount": 0
+    },
+    {
+      "url": "https://vooban.com/",
+      "elementCount": 1122,
+      "cssVariableCount": 121,
+      "gradientCount": 0,
+      "svgCount": 71,
+      "cssRuleCount": 1838,
+      "interactionCount": 0
+    },
+    {
+      "url": "https://vooban.com/expertises/services/intelligence-artificielle",
+      "elementCount": 1073,
+      "cssVariableCount": 121,
+      "gradientCount": 0,
+      "svgCount": 60,
+      "cssRuleCount": 1838,
+      "interactionCount": 0
+    },
+    {
+      "url": "https://vooban.com/expertises/services/cybersecurite",
+      "elementCount": 716,
+      "cssVariableCount": 121,
+      "gradientCount": 0,
+      "svgCount": 44,
+      "cssRuleCount": 1838,
+      "interactionCount": 0
+    },
+    {
+      "url": "https://vooban.com/approche",
+      "elementCount": 786,
+      "cssVariableCount": 121,
+      "gradientCount": 0,
+      "svgCount": 41,
+      "cssRuleCount": 1838,
+      "interactionCount": 0
+    }
+  ]
+}

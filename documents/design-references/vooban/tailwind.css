@@ -1,0 +1,69 @@
+/* Tailwind v4 @theme  vooban (https://vooban.com/)
+ *
+ * Generated: 2026-05-27
+ * Brand ramp seed: #1458e4 (algorithm: oklch-lightness-curve)
+ *
+ * Paste this into your project. If you already have an @import "tailwindcss";
+ * line, drop the @theme block alongside it; otherwise paste the whole file.
+ */
+@theme {
+  /* Brand ramp  regenerated 12-stop OKLCH, anchored on #1458e4. */
+  --color-brand-25: #f3fcff;
+  --color-brand-50: #e9f6ff;
+  --color-brand-100: #daecff;
+  --color-brand-200: #c6dfff;
+  --color-brand-300: #a2c8ff;
+  --color-brand-400: #74a8ff;
+  --color-brand-500: #3c7fff;
+  --color-brand-600: #235ed8;
+  --color-brand-700: #0c41ae;
+  --color-brand-800: #002485;
+  --color-brand-900: #00035e;
+  --color-brand-950: #000033;
+
+  /* Neutral ramp  tinted with brand hue 262° at chroma 0.005. */
+  --color-neutral-25: #fafcff;
+  --color-neutral-50: #f3f5f9;
+  --color-neutral-100: #e9ebef;
+  --color-neutral-200: #dcdee1;
+  --color-neutral-300: #c5c7cb;
+  --color-neutral-400: #a9abae;
+  --color-neutral-500: #87898c;
+  --color-neutral-600: #67696c;
+  --color-neutral-700: #4c4d50;
+  --color-neutral-800: #313335;
+  --color-neutral-900: #191b1d;
+  --color-neutral-950: #060709;
+
+  /* Type families */
+  --font-sans: "NB International";
+  --font-mono: "NB International Mono";
+
+  /* Type scale (role-named  e.g. `text-display-xxl`, `text-body-md`). */
+  --text-display-xxl: 58px;
+  --text-display-xxl--line-height: 1.000;
+  --text-display-xxl--letter-spacing: -1.74px;
+  --text-display-xl: 44px;
+  --text-display-xl--line-height: 1.091;
+  --text-display-xl--letter-spacing: -1.32px;
+  --text-heading-lg: 26px;
+  --text-heading-lg--line-height: 1.308;
+  --text-heading-lg--letter-spacing: -0.78px;
+  --text-heading-md: 20px;
+  --text-heading-md--line-height: 1.400;
+  --text-heading-md--letter-spacing: -0.2px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.375;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.429;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.417;
+  --text-overline: 11px;
+  --text-overline--line-height: 1.364;
+
+  /* Spacing base unit  Tailwind derives the whole numeric scale from this. */
+  --spacing: 2px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+}

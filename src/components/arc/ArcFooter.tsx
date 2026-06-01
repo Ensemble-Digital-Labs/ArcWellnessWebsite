@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { Accessibility, MessageCircle, Phone, Star } from "lucide-react";
+import { siteMeta } from "@/content/siteMeta";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
@@ -35,10 +36,23 @@ function TikTokIcon({ className }: { className?: string }) {
 }
 
 const footerLinks = {
-  About: ["Our Story", "Providers", "Care Philosophy"],
-  Services: ["Aesthetics", "Wellness", "Longevity", "Membership"],
-  Patients: ["New Patients", "Forms", "FAQs"],
-  Shop: ["Gift Cards", "Skincare", "Supplements"],
+  About: [
+    { label: "Our story", href: "/about" },
+    { label: "Insights", href: "/case-studies" },
+    { label: "Contact", href: "/contact" },
+  ],
+  Services: [
+    { label: "Treatments", href: "/treatments" },
+    { label: "Aesthetics", href: "/aesthetics" },
+    { label: "Programs", href: "/programs" },
+  ],
+  Patients: [
+    { label: "Financing", href: "/financing" },
+    { label: "Book online", href: "/book" },
+  ],
+  Visit: [
+    { label: "St. Louis clinic", href: "/contact" },
+  ],
 };
 
 const marqueeItems = [
@@ -48,10 +62,9 @@ const marqueeItems = [
   "ARC Wellness",
 ];
 
-/** Placeholder — replace with production address. */
 const FOOTER_ADDRESS = {
-  line1: "Your Street Address, Suite 100",
-  line2: "Your City, ST 00000",
+  line1: siteMeta.address.line1,
+  line2: siteMeta.address.line2,
 } as const;
 
 const FOOTER_HOURS = [
@@ -186,11 +199,11 @@ export function ArcFooter() {
                   Contact
                 </span>
                 <a
-                  href="tel:+15555551234"
+                  href={`tel:${siteMeta.phoneTel}`}
                   className="mt-2 flex min-h-[48px] items-center justify-center gap-2.5 font-sans text-base font-medium text-white/92 transition-colors [text-shadow:0_1px_3px_rgba(0,0,0,0.75)] hover:text-arc-teal md:justify-end md:text-lg"
                 >
                   <Phone className="size-5 shrink-0 text-arc-champagne md:size-[1.35rem]" aria-hidden />
-                  (555) 555-1234
+                  {siteMeta.phone}
                 </a>
                 <ul className="mt-2 space-y-1.5 font-sans text-sm leading-relaxed text-white/78 [text-shadow:0_1px_2px_rgba(0,0,0,0.7)] md:text-base">
                   {FOOTER_HOURS.map((line) => (
@@ -212,9 +225,9 @@ export function ArcFooter() {
                 </p>
                 <ul className="space-y-2.5 font-sans text-sm leading-snug md:text-base">
                   {items.map((item) => (
-                    <li key={item}>
-                      <Link href="#" className={footerLinkClass}>
-                        {item}
+                    <li key={item.href}>
+                      <Link href={item.href} className={footerLinkClass}>
+                        {item.label}
                       </Link>
                     </li>
                   ))}
@@ -250,13 +263,13 @@ export function ArcFooter() {
                 <span className="mx-1.5 text-white/30" aria-hidden>
                   |
                 </span>
-                <Link href="#" className={legalLinkClass}>
+                <Link href="/privacy" className={legalLinkClass}>
                   Privacy
                 </Link>
                 <span className="mx-1.5 text-white/30" aria-hidden>
                   |
                 </span>
-                <Link href="#" className={legalLinkClass}>
+                <Link href="/terms" className={legalLinkClass}>
                   Terms
                 </Link>
                 <span className="mx-1.5 text-white/30" aria-hidden>
@@ -279,7 +292,7 @@ export function ArcFooter() {
                 New patients
               </p>
               <Link
-                href="#book"
+                href="/book"
                 className="mt-4 inline-block font-serif text-xl italic text-arc-champagne [text-shadow:0_2px_14px_rgba(0,0,0,0.75)] transition-colors hover:text-arc-champagne-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-champagne/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 sm:text-2xl md:text-[1.75rem]"
               >
                 Schedule your consultation
@@ -305,7 +318,7 @@ export function ArcFooter() {
             </p>
 
             <Link
-              href="#book"
+              href="/book"
               className="order-3 flex size-11 shrink-0 items-center justify-center self-center rounded-full bg-arc-champagne text-arc-charcoal shadow-[0_2px_12px_rgba(0,0,0,0.25)] transition-colors hover:bg-arc-champagne-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal sm:self-auto"
               aria-label="Book an appointment"
             >

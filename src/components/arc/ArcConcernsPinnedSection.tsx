@@ -5,6 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import {
+  arcScrollTriggerScrollerProps,
+  getArcScrollTriggerScroller,
+  getArcScrollViewportHeight,
+} from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
@@ -82,17 +87,17 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
-      const main = document.querySelector<HTMLElement>("#main");
-      if (!section || !main) return;
+      if (!section) return;
 
+      const scroller = getArcScrollTriggerScroller();
       const endDist = () =>
-        Math.round((main.clientHeight || Math.round(window.innerHeight || 720)) * 0.92);
+        Math.round(getArcScrollViewportHeight(scroller) * 0.92);
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           id: "arc-concerns-pin",
           trigger: section,
-          scroller: main,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
