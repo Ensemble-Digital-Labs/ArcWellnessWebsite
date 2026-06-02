@@ -72,7 +72,12 @@ function buildArcNavLinks(sectionBasePath?: string) {
   }));
 }
 
-type NavLinkItem = ReturnType<typeof buildArcNavLinks>[number];
+type NavLinkItem = {
+  label: string;
+  href: string;
+  shape: "1" | "2" | "3" | "4" | "5";
+  previewSrc: string;
+};
 
 const navRowRootVariants = {
   initial: {},
