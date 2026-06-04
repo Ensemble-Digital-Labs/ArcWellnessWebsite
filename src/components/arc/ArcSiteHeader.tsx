@@ -468,9 +468,9 @@ const LOGO_HOME_LINK_SCROLL_MAX = 120;
 function readSiteScrollY(): number {
   const lenis = getLocomotiveLenis();
   if (lenis) {
-    const s = lenis.scroll;
+    const s = lenis.scroll as number | { y?: number };
     if (typeof s === "number") return s;
-    if (s && typeof s === "object" && typeof s.y === "number") return s.y;
+    if (typeof s?.y === "number") return s.y;
   }
   if (prefersNativeScroll()) return window.scrollY;
   const main = document.getElementById("main");
