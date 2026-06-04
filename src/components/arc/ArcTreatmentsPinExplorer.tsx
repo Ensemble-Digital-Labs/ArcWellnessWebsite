@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ChevronDown } from "lucide-react";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
@@ -16,6 +17,9 @@ import type { TreatmentPage } from "@/content/pages/treatments";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Featured image tabs in the pin row; remaining modalities live under “See more”. */
+const FEATURED_TAB_COUNT = 5;
 
 type ArcTreatmentsPinExplorerProps = {
   id?: string;
@@ -33,9 +37,11 @@ export function ArcTreatmentsPinExplorer({
   const sectionRef = useRef<HTMLElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [seeMoreOpen, setSeeMoreOpen] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
-  const panels = treatments.filter((t) => t.slug !== "overview").slice(0, 6);
+  const allModalities = treatments.filter((t) => t.slug !== "overview");
+  const featuredPanels = allModalities.slice(0, FEATURED_TAB_COUNT);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -96,16 +102,21 @@ export function ArcTreatmentsPinExplorer({
 
   const p = reduceMotion ? 1 : progress;
 
+  const toggleSeeMore = () => setSeeMoreOpen((open) => !open);
+
   return (
     <section
       ref={sectionRef}
       id={id}
       className="relative flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-arc-charcoal"
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-charcoal/40 via-arc-charcoal/20 to-arc-charcoal/55" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-charcoal/40 via-arc-charcoal/20 to-arc-charcoal/55"
+        aria-hidden
+      />
 
       <div
-        className="relative z-10 flex min-h-0 flex-1 flex-col px-6 pb-4 pt-28 sm:pt-32 md:px-10 md:pt-36"
+        className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-4 pt-28 sm:px-6 sm:pt-32 md:px-10 md:pt-36"
         style={{
           opacity: Math.min(1, p * 1.5),
           transform: `translate3d(0, ${Math.max(0, 24 - p * 24)}px, 0)`,
@@ -118,42 +129,144 @@ export function ArcTreatmentsPinExplorer({
               {title}
             </TitleEmphasis>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl font-sans text-sm text-[#f7f4ef]/78 sm:text-base">{subtitle}</p>
+          <p className="mx-auto mt-4 max-w-2xl font-sans text-sm text-[#f7f4ef]/78 sm:text-base">
+            {subtitle}
+          </p>
         </div>
 
-        <div className="mx-auto mt-8 flex min-h-0 w-full max-w-7xl flex-1 gap-2 overflow-hidden md:mt-10">
-          {panels.map((panel, idx) => {
-            const isActive = idx === activeIndex;
-            return (
-              <Link
-                key={panel.slug}
-                href={`/treatments/${panel.slug}`}
-                onMouseEnter={() => setActiveIndex(idx)}
-                onFocus={() => setActiveIndex(idx)}
+        <div className="mx-auto mt-6 flex min-h-0 w-full max-w-7xl flex-1 flex-col gap-2 md:mt-8">
+          <div
+            className={cn(
+              "flex min-h-0 gap-2",
+              seeMoreOpen ? "flex-[0.55] md:flex-[0.62]" : "min-h-0 flex-1",
+              "max-md:-mx-1 max-md:overflow-x-auto max-md:px-1 max-md:pb-1 max-md:snap-x max-md:snap-mandatory",
+            )}
+          >
+            {featuredPanels.map((panel, idx) => {
+              const isActive = !seeMoreOpen && idx === activeIndex;
+              return (
+                <Link
+                  key={panel.slug}
+                  href={`/treatments/${panel.slug}`}
+                  onMouseEnter={() => {
+                    setSeeMoreOpen(false);
+                    setActiveIndex(idx);
+                  }}
+                  onFocus={() => {
+                    setSeeMoreOpen(false);
+                    setActiveIndex(idx);
+                  }}
+                  className={cn(
+                    "group relative min-h-[9.5rem] min-w-0 overflow-hidden transition-[flex,opacity] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/60",
+                    "max-md:min-h-[10.5rem] max-md:snap-start max-md:flex-none max-md:basis-[44%]",
+                    isActive ? "md:flex-[2.6]" : "md:flex-[1]",
+                  )}
+                >
+                  <Image
+                    src={panel.imageSrc}
+                    alt={panel.imageAlt}
+                    fill
+                    sizes="(max-width: 768px) 44vw, 20vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
+                  <div className="absolute bottom-0 left-0 z-10 p-3 sm:p-4 md:p-5">
+                    <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-teal tabular-nums">
+                      <span>{String(idx + 1).padStart(2, "0")}</span>
+                      <span className="mx-1.5 text-white/35">/</span>
+                      <span>{panel.categoryLabel}</span>
+                    </p>
+                    <p className="mt-1 font-serif text-base font-semibold text-white sm:text-lg md:text-xl">
+                      {panel.title}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={toggleSeeMore}
+              aria-expanded={seeMoreOpen}
+              aria-controls="treatments-see-more-list"
+              className={cn(
+                "relative flex min-h-[9.5rem] min-w-0 flex-col items-center justify-center gap-2 border border-white/14 bg-white/[0.06] px-3 text-center transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50",
+                "max-md:min-h-[10.5rem] max-md:snap-start max-md:flex-none max-md:basis-[32%]",
+                seeMoreOpen
+                  ? "border-arc-teal/35 bg-arc-teal/10 md:flex-[0.85]"
+                  : "hover:border-white/22 hover:bg-white/[0.09] md:flex-[0.75]",
+              )}
+            >
+              <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f7f4ef]/65">
+                See more
+              </span>
+              <span className="font-serif text-sm font-medium leading-snug text-[#f7f4ef]/88 sm:text-base">
+                All treatments
+              </span>
+              <ChevronDown
                 className={cn(
-                  "group relative min-h-0 min-w-0 flex-1 overflow-hidden transition-[flex] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/60",
-                  isActive ? "md:flex-[2.6]" : "md:flex-[1]",
+                  "size-4 text-arc-teal/80 transition-transform duration-200",
+                  seeMoreOpen && "rotate-180",
                 )}
-              >
-                <Image
-                  src={panel.imageSrc}
-                  alt={panel.imageAlt}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 20vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
-                <div className="absolute bottom-0 left-0 z-10 p-4 md:p-5">
-                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-teal tabular-nums">
-                    <span>{String(idx + 1).padStart(2, "0")}</span>
-                    <span className="mx-1.5 text-white/35">/</span>
-                    <span>{panel.categoryLabel}</span>
-                  </p>
-                  <p className="mt-1 font-serif text-lg font-semibold text-white sm:text-xl">{panel.title}</p>
-                </div>
-              </Link>
-            );
-          })}
+                strokeWidth={1.75}
+                aria-hidden
+              />
+            </button>
+          </div>
+
+          <div
+            id="treatments-see-more-list"
+            className={cn(
+              "overflow-hidden rounded-lg border border-white/10 bg-black/35 backdrop-blur-sm",
+              seeMoreOpen ? "visible max-h-[min(42vh,22rem)] flex-1 opacity-100" : "pointer-events-none invisible max-h-0 opacity-0",
+              reduceMotion ? "" : "transition-[max-height,opacity] duration-300 ease-out",
+            )}
+            aria-hidden={!seeMoreOpen}
+          >
+            <ul
+              className={cn(
+                "arc-scroll-subtle arc-scroll-subtle-dark grid max-h-[min(42vh,22rem)] grid-cols-1 gap-0 overflow-y-auto overscroll-contain sm:grid-cols-2",
+                seeMoreOpen ? "p-1 pr-2" : "p-0",
+              )}
+            >
+              {allModalities.map((t) => (
+                <li key={t.slug}>
+                  <Link
+                    href={`/treatments/${t.slug}`}
+                    className={cn(
+                      "group flex min-h-[48px] items-center gap-3 rounded-md px-2 py-2 font-sans text-sm text-[#f7f4ef]/92 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 sm:px-3",
+                      "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/10",
+                    )}
+                    onClick={() => setSeeMoreOpen(false)}
+                  >
+                    <span
+                      className={cn(
+                        "relative size-9 shrink-0 overflow-hidden rounded-full ring-1 ring-white/20 sm:size-10",
+                        "[@media(hover:hover)_and_(pointer:fine)]:group-hover:ring-arc-teal/45",
+                      )}
+                    >
+                      <Image
+                        src={t.imageSrc}
+                        alt=""
+                        fill
+                        sizes="40px"
+                        className={cn(
+                          "object-cover transition-transform duration-300",
+                          "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105",
+                        )}
+                      />
+                    </span>
+                    <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
+                      <span className="font-medium leading-snug">{t.title}</span>
+                      <span className="hidden shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#f7f4ef]/45 sm:inline">
+                        {t.categoryLabel}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

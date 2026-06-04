@@ -8,6 +8,7 @@ import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
 import { ArcVoobanHeadline } from "@/components/arc/ArcVoobanHeadline";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import {
   arcScrollTriggerScrollerProps,
   getArcScrollTriggerScroller,
@@ -39,6 +40,8 @@ type ScrollChapterIntroSectionProps = {
    * `scroll-reveal` — fades in from zero as user scrolls (can feel empty on first paint).
    */
   introMode?: "visible-on-load" | "scroll-reveal";
+  /** `pin-scrub` locks the viewport while scroll drives motion; `enter-once` plays in on arrival. */
+  motion?: "pin-scrub" | "enter-once";
 };
 
 /**
@@ -57,6 +60,7 @@ export function ScrollChapterIntroSection({
   ctaHref,
   ctaLabel,
   introMode = "visible-on-load",
+  motion = "enter-once",
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -84,11 +88,22 @@ export function ScrollChapterIntroSection({
       const section = sectionRef.current;
       if (!section) return;
 
-      const scroller = getArcScrollTriggerScroller();
-      const endDist = () =>
-        Math.round(getArcScrollViewportHeight(scroller) * 1.12);
+      let disposeEnterOnce: (() => void) | null = null;
 
       const ctx = gsap.context(() => {
+        if (motion === "enter-once") {
+          disposeEnterOnce = bindArcEnterOnceProgress({
+            trigger: section,
+            onProgress: setProgress,
+            playIfVisibleOnLoad: true,
+          });
+          return;
+        }
+
+        const scroller = getArcScrollTriggerScroller();
+        const endDist = () =>
+          Math.round(getArcScrollViewportHeight(scroller) * 1.12);
+
         ScrollTrigger.create({
           trigger: section,
           ...arcScrollTriggerScrollerProps(),
@@ -105,7 +120,10 @@ export function ScrollChapterIntroSection({
         });
       }, section);
 
-      revert = () => ctx.revert();
+      revert = () => {
+        disposeEnterOnce?.();
+        ctx.revert();
+      };
       requestAnimationFrame(() => ScrollTrigger.refresh());
       window.setTimeout(() => ScrollTrigger.refresh(), 120);
     };
@@ -128,7 +146,7 @@ export function ScrollChapterIntroSection({
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, motion]);
 
   const p = reduceMotion ? 1 : progress;
   const visibleOnLoad = introMode === "visible-on-load";
@@ -157,16 +175,19 @@ export function ScrollChapterIntroSection({
   };
   const imageRotate = visibleOnLoad ? (0.35 - p) * 1.2 : (0.5 - p) * 2;
 
+  const pinScrub = motion === "pin-scrub";
+
   return (
     <section
       ref={sectionRef}
       id={id}
       className={cn(
-        "relative isolate flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream",
+        "relative isolate flex flex-col overflow-hidden bg-arc-cream",
+        pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
         className,
       )}
     >
-      <ArcPinProgressRail progress={p} />
+      {pinScrub ? <ArcPinProgressRail progress={p} /> : null}
 
       {/* Full-bleed photography (locked section — pans while pinned) */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -211,7 +232,8 @@ export function ScrollChapterIntroSection({
 
       <div
         className={cn(
-          "relative z-10 mx-auto flex min-h-[100dvh] w-full flex-col md:flex-row md:items-stretch",
+          "relative z-10 mx-auto flex w-full flex-col md:flex-row md:items-stretch",
+          pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
           ARC_PAGE_RAIL_MAX,
         )}
       >
@@ -269,7 +291,7 @@ export function ScrollChapterIntroSection({
             </ArcStandardCta>
           ) : null}
 
-          {visibleOnLoad ? (
+          {visibleOnLoad && pinScrub ? (
             <p
               className="mt-8 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-arc-charcoal/45 motion-reduce:hidden"
               style={{ opacity: Math.max(0.35, 0.75 - p * 0.45) }}

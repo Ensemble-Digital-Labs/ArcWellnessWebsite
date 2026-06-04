@@ -1,34 +1,34 @@
 export const contactPage = {
   seo: {
-    title: "Contact Arc Wellness | St. Louis",
+    title: "Contact | Get Wellness Guidance Now | Arc Wellness",
     description:
-      "Call, email, or visit our St. Louis clinic. We respond with care—every message is read by our team.",
+      "Contact Arc Wellness for personalized health solutions, consultations, and innovative therapies in St. Louis. Get in touch today to start your wellness journey.",
   },
   hero: {
     eyebrow: "Contact",
-    title: "We’re here when",
-    titleEmphasis: "you’re ready",
-    body: "Finding support shouldn’t feel like another hurdle. However you begin—a message, a call, or a visit—we listen with care, respect, and understanding.",
+    title: "We're Here When",
+    titleEmphasis: "You're Ready",
+    body: "Finding support shouldn't feel like another hurdle. At Arc Wellness, we believe the first step toward healing begins with connection—a message, a call, a quiet moment of reaching out. However you choose to begin, we're here to listen with care, respect, and understanding.",
   },
   channels: [
     {
       id: "phone",
       title: "Phone",
-      body: "If we’re with a client, please leave a message. We return every call within one business day.",
+      body: "Contact us in the way that feels most comfortable. Our team responds with care so that every interaction feels human and grounded.",
     },
     {
       id: "email",
       title: "Email",
-      body: "A few words about what you’re looking for is enough. You don’t have to have it all figured out—we’ll take it from there.",
+      body: "You can reach us by email with a few words about what you're looking for—you don't have to have it all figured out. We'll take it from there.",
     },
     {
       id: "visit",
       title: "Visit us",
-      body: "Our clinic in St. Louis is designed for calm, privacy, and unhurried conversation.",
+      body: "Visit our space in person at our St. Louis clinic—designed for calm, privacy, and unhurried conversation.",
     },
   ],
   closing: {
     quote: "Every journey finds its curve.",
-    line: "We’re honored to walk alongside yours.",
+    line: "We're honored to walk alongside yours.",
   },
 } as const;

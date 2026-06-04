@@ -1,10 +1,8 @@
 "use client";
 
 import { ArcAboutNarrativePinSection } from "@/components/arc/ArcAboutNarrativePinSection";
-import { ArcClinicCarouselSection } from "@/components/arc/ArcClinicCarouselSection";
-import { ArcFounderIntroSection } from "@/components/arc/ArcFounderIntroSection";
+import { ArcClinicSpaceTeaserSection } from "@/components/arc/ArcClinicSpaceTeaserSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
-import { ArcStatsBandSection } from "@/components/arc/ArcStatsBandSection";
 import { ArcValuesRevealSection } from "@/components/arc/ArcValuesRevealSection";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
@@ -13,7 +11,7 @@ import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 
 export function AboutPageContent() {
-  const { hero, clinicTour, mission, vision, values, stats, founder, differentiators } = aboutPage;
+  const { hero, clinicTour, mission, vision, values, founder, differentiators } = aboutPage;
 
   const storyLines = hero.paragraphs;
 
@@ -21,6 +19,7 @@ export function AboutPageContent() {
     <>
       <ScrollChapterIntroSection
         id="about-hero"
+        motion="enter-once"
         eyebrow={hero.eyebrow}
         headline={`${hero.title} ${hero.titleEmphasis}`}
         body={hero.paragraphs[0] ?? hero.paragraphs.join(" ")}
@@ -36,6 +35,7 @@ export function AboutPageContent() {
 
       <ArcAboutNarrativePinSection
         id="about-story"
+        motion="enter-once"
         eyebrow={hero.eyebrow}
         title={hero.title}
         titleEmphasis={hero.titleEmphasis}
@@ -44,7 +44,7 @@ export function AboutPageContent() {
         ctaLabel="Meet our team"
       />
 
-      <ArcClinicCarouselSection
+      <ArcClinicSpaceTeaserSection
         id="about-clinic"
         eyebrow={clinicTour.eyebrow}
         title={clinicTour.title}
@@ -85,14 +85,6 @@ export function AboutPageContent() {
         items={values.items}
       />
 
-      <ArcStatsBandSection
-        id="about-stats"
-        eyebrow={stats.eyebrow}
-        title={stats.title}
-        titleEmphasis={stats.titleEmphasis}
-        items={stats.items}
-      />
-
       <ArcScrollEditorialSection
         id="differentiators"
         eyebrow="How we care"
@@ -104,25 +96,21 @@ export function AboutPageContent() {
         cta={{ href: "/treatments", label: "Explore treatments" }}
       />
 
-      <ArcFounderIntroSection
+      <ArcScrollEditorialSection
         id="founder"
+        variant="muted"
+        eyebrow={founder.title}
+        title="A note from"
+        titleEmphasis="our founder"
+        paragraphs={[
+          ...founder.paragraphs,
+          `— ${founder.signoff}`,
+          founder.role,
+        ]}
         imageSrc={images.founderPortrait}
         imageAlt="Dr. Danish Jabbar, Founder & Medical Director"
-        headline={founder.signoff}
-        headlineEmphasisWord="Dr. Danish"
-        headlineEmphasisWord2="Jabbar"
-        heroMeetLead="Meet Dr."
-        heroNameItalic="Danish Jabbar"
-        roleTitle={founder.role}
-        intro={founder.paragraphs[0] ?? ""}
-        deliverablesHeading="Philosophy"
-        deliverables={founder.paragraphs.slice(1, 4)}
-        accordionPanels={[
-          { title: "Physician-led", imageSrc: images.founderPortrait },
-          { title: "In practice", imageSrc: images.founderGallery[0] },
-          { title: "With patients", imageSrc: images.founderGallery[1] },
-          { title: "Partnership", imageSrc: images.founderGallery[2] },
-        ]}
+        imagePosition="left"
+        revealLines
       />
 
       <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />

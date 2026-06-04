@@ -4,12 +4,17 @@
  *
  * Distinct from **`patientExperienceImages`** (model lifestyle) and **`medicalSpaServiceImages`** (modality shots).
  */
+export const EDITORIAL_SPA_NAMED_IMAGES = {
+  anxietySpotlightCrowd: "/assets/sections/editorial-spa/editorial-anxiety-spotlight-crowd.png",
+} as const;
+
 export const EDITORIAL_SPA_IMAGES = [
   "/assets/sections/editorial-spa/editorial-spa-01.png",
   "/assets/sections/editorial-spa/editorial-spa-02.png",
   "/assets/sections/editorial-spa/editorial-spa-03.png",
   "/assets/sections/editorial-spa/editorial-spa-04.png",
   "/assets/sections/editorial-spa/editorial-spa-05.png",
+  EDITORIAL_SPA_NAMED_IMAGES.anxietySpotlightCrowd,
 ] as const;
 
 export type EditorialSpaImageSrc = (typeof EDITORIAL_SPA_IMAGES)[number];

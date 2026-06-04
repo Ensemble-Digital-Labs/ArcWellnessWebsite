@@ -160,7 +160,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
       </div>
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col">
-        <div className="flex min-h-0 flex-1 flex-col px-6 pb-4 pt-28 sm:pb-6 sm:pt-32 md:px-10 md:pt-36 lg:pt-40 [@media(max-height:780px)]:pb-3 [@media(max-height:780px)]:pt-20 [@media(max-height:680px)]:pt-16">
+        <div className="flex min-h-0 flex-1 flex-col px-6 pb-4 pt-28 sm:pb-6 sm:pt-32 md:px-10 md:pt-36 lg:pt-40 [@media(max-height:900px)]:pt-32 [@media(max-height:820px)]:pb-3 [@media(max-height:820px)]:pt-[8.75rem] [@media(max-height:740px)]:pt-[8rem] [@media(max-height:680px)]:pt-[7.25rem]">
           <div
             className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col"
             style={{
@@ -169,7 +169,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
             }}
           >
             <div className="shrink-0 text-center">
-              <h2 className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]">
+              <h2 className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08] [@media(max-height:820px)]:text-[1.85rem] [@media(max-height:820px)]:sm:text-[2.05rem] [@media(max-height:820px)]:md:text-[2.35rem]">
                 <span className="text-balance">
                   Crafted{" "}
                   <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
@@ -177,7 +177,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
                   </TitleEmphasis>
                 </span>
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty font-sans text-base leading-relaxed text-arc-charcoal/72 sm:mt-5 sm:text-lg md:mt-6">
+              <p className="mx-auto mt-4 max-w-2xl text-pretty font-sans text-base leading-relaxed text-arc-charcoal/72 sm:mt-5 sm:text-lg md:mt-6 [@media(max-height:820px)]:mt-3 [@media(max-height:820px)]:text-sm [@media(max-height:820px)]:sm:text-base">
                 Thoughtfully mapped to guide your journey to aesthetics, wellness and longevity
               </p>
             </div>

@@ -1,14 +1,14 @@
 export const financingPage = {
   seo: {
-    title: "Financing | Arc Wellness",
+    title: "Financing | Discover Financing Options Today | Arc Wellness",
     description:
-      "PatientFi, Cherry, and in-house payment options—begin your wellness journey now and pay over time.",
+      "Explore flexible financing options for wellness treatments at Arc Wellness. Contact us for support with your payment plan and treatment investments.",
   },
   hero: {
     eyebrow: "Financing",
-    title: "Invest in wellness",
-    titleEmphasis: "on your timeline",
-    body: "Care shouldn’t wait because of upfront cost. We offer flexible options so you can begin your plan now and pay over time—with full transparency during your free consultation.",
+    title: "Flexible options for",
+    titleEmphasis: "your wellness plan",
+    body: "Explore flexible financing options for wellness treatments at Arc Wellness. We offer PatientFi, Cherry, and in-house payment plans—discussed transparently during your free consultation so you can begin care on your timeline.",
   },
   options: [
     {

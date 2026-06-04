@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import type Lenis from "lenis";
 import { cn } from "@/lib/utils";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
-import { ARC_PRIMARY_NAV_LINKS } from "@/lib/arcMarketingNav";
-import { prefersNativeScroll } from "@/lib/arcScrollMode";
+import { ARC_PRIMARY_NAV_LINKS, ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
+import { forwardWheelEventToLenis, prefersNativeScroll } from "@/lib/arcScrollMode";
 
 /**
  * Logo fades out while the page is moving (past a small top offset). It fades back in with a fixed
@@ -75,7 +75,7 @@ function buildArcNavLinks(sectionBasePath?: string) {
 type NavLinkItem = {
   label: string;
   href: string;
-  shape: "1" | "2" | "3" | "4" | "5";
+  shape: "1" | "2" | "3" | "4" | "5" | "6" | "7";
   previewSrc: string;
 };
 
@@ -119,16 +119,136 @@ const navLinkPreviewVariants = {
   },
 };
 
+/** Circular preview for treatment sub-links — pops in beside the label on hover. */
+const navTreatmentPreviewVariants = {
+  initial: { scale: 0.72, rotate: "-8deg", opacity: 0 },
+  hover: {
+    scale: 1,
+    rotate: "6deg",
+    opacity: 1,
+    transition: { type: "spring" as const, stiffness: 340, damping: 22 },
+  },
+};
+
+type TreatmentNavLink = (typeof ARC_TREATMENT_NAV_LINKS)[number];
+
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setCanHover(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return canHover;
+}
+
+function ArcNavTreatmentLinkRow({
+  item,
+  closeMenu,
+  reducedMotion,
+  canHover,
+}: {
+  item: TreatmentNavLink;
+  closeMenu: () => void;
+  reducedMotion: boolean;
+  canHover: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const springX = useSpring(px, { stiffness: 300, damping: 30, mass: 0.5 });
+  const springY = useSpring(py, { stiffness: 300, damping: 30, mass: 0.5 });
+  const previewRotate = useTransform(springX, [-0.5, 0.5], [-5, 5]);
+
+  const showFloatingPreview = canHover && !reducedMotion;
+  const showInlineThumb = !showFloatingPreview;
+
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!showFloatingPreview) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    if (!w || !h) return;
+    px.set((e.clientX - rect.left) / w - 0.5);
+    py.set((e.clientY - rect.top) / h - 0.5);
+  };
+
+  const handleLeave = () => {
+    px.set(0);
+    py.set(0);
+    setHovered(false);
+  };
+
+  return (
+    <Link
+      href={item.href}
+      onClick={closeMenu}
+      onMouseEnter={() => showFloatingPreview && setHovered(true)}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className={cn(
+        "group relative flex min-h-[56px] items-center overflow-visible rounded-lg py-2 pl-2 pr-2 font-sans text-[0.9375rem] text-arc-charcoal/72 transition-[color,padding] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 sm:min-h-[64px]",
+        showInlineThumb && "pl-1",
+        showFloatingPreview &&
+          "hover:bg-arc-teal-muted/45 hover:pr-[10.75rem] hover:text-arc-teal sm:hover:pr-[12.5rem]",
+      )}
+    >
+      <span className="relative z-10 min-w-0 flex-1 font-medium leading-snug">{item.label}</span>
+
+      {showFloatingPreview ? (
+        <motion.div
+          className="pointer-events-none absolute right-1 top-1/2 z-30 size-[10.5rem] -translate-y-1/2 sm:right-2 sm:size-[12rem]"
+          style={{ rotate: previewRotate }}
+          initial="initial"
+          animate={hovered ? "hover" : "initial"}
+          variants={navTreatmentPreviewVariants}
+        >
+          <div className="relative h-full w-full overflow-hidden rounded-full shadow-[0_20px_48px_rgba(0,0,0,0.32)] ring-[3px] ring-white/70">
+            <Image
+              src={item.thumbSrc}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 168px, 192px"
+              unoptimized
+            />
+          </div>
+        </motion.div>
+      ) : null}
+
+      {showInlineThumb ? (
+        <span className="relative size-14 shrink-0 overflow-hidden rounded-full bg-arc-cream-deep ring-2 ring-arc-charcoal/10 sm:size-16">
+          <Image
+            src={item.thumbSrc}
+            alt=""
+            fill
+            sizes="64px"
+            className="object-cover"
+            unoptimized
+          />
+        </span>
+      ) : null}
+    </Link>
+  );
+}
+
 function ArcNavMenuLinkRow({
   item,
   reducedMotion,
   closeMenu,
   assignRef,
+  nested = false,
 }: {
   item: NavLinkItem;
   reducedMotion: boolean;
   closeMenu: () => void;
   assignRef: (el: HTMLAnchorElement | null) => void;
+  /** When true, omit outer `<li>` — parent list item wraps this row (e.g. Treatments + sub-list). */
+  nested?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const px = useMotionValue(0);
@@ -154,17 +274,19 @@ function ArcNavMenuLinkRow({
     setHovered(false);
   };
 
-  return (
-    <li className="arc-nav-menu-item" data-shape={item.shape}>
-      <Link
-        ref={assignRef}
-        href={item.href}
-        onClick={closeMenu}
-        onMouseEnter={() => setHovered(true)}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        className="group relative flex items-center justify-between gap-4 overflow-visible border-b border-arc-charcoal/10 py-3 font-serif text-3xl font-semibold tracking-tight text-arc-charcoal transition-colors duration-300 last:border-b-0 hover:border-arc-teal/40 hover:text-arc-teal sm:py-4 sm:text-4xl"
-      >
+  const linkRow = (
+    <Link
+      ref={assignRef}
+      href={item.href}
+      onClick={closeMenu}
+      onMouseEnter={() => setHovered(true)}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className={cn(
+        "group relative flex items-center justify-between gap-4 overflow-visible border-b border-arc-charcoal/10 py-3 font-serif text-3xl font-semibold tracking-tight text-arc-charcoal transition-colors duration-300 hover:border-arc-teal/40 hover:text-arc-teal sm:py-4 sm:text-4xl",
+        nested ? "border-b-0" : "last:border-b-0",
+      )}
+    >
         {!reducedMotion ? (
           <motion.div
             className="pointer-events-none absolute left-0 top-1/2 z-[1] h-[5.5rem] w-[7.25rem] sm:h-[7rem] sm:w-[9.25rem]"
@@ -235,7 +357,77 @@ function ArcNavMenuLinkRow({
           </motion.div>
         )}
       </Link>
+  );
+
+  if (nested) {
+    return linkRow;
+  }
+
+  return (
+    <li className="arc-nav-menu-item" data-shape={item.shape}>
+      {linkRow}
     </li>
+  );
+}
+
+function ArcNavTreatmentsSeeMore({
+  reducedMotion,
+  closeMenu,
+  menuOpen,
+  canHover,
+}: {
+  reducedMotion: boolean;
+  closeMenu: () => void;
+  menuOpen: boolean;
+  canHover: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) setOpen(false);
+  }, [menuOpen]);
+
+  return (
+    <div className="border-b border-arc-charcoal/10 pb-3 last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="arc-nav-treatments-list"
+        className="flex w-full min-h-[44px] items-center justify-between gap-3 py-1 pl-1 font-sans text-sm font-medium tracking-wide text-arc-charcoal/58 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 [@media(hover:hover)_and_(pointer:fine)]:hover:text-arc-teal"
+      >
+        <span>See all treatments</span>
+        <ChevronDown
+          className={cn(
+            "size-4 shrink-0 text-arc-teal/70 transition-transform duration-200",
+            open && "rotate-180",
+          )}
+          strokeWidth={1.75}
+          aria-hidden
+        />
+      </button>
+      <div
+        id="arc-nav-treatments-list"
+        className={cn(
+          open ? "visible overflow-visible opacity-100" : "invisible max-h-0 overflow-hidden opacity-0",
+          reducedMotion ? "" : "transition-[max-height,opacity] duration-300 ease-out",
+        )}
+        aria-hidden={!open}
+      >
+        <ul className="mt-1 space-y-1 py-1 pr-1 sm:pr-2">
+          {ARC_TREATMENT_NAV_LINKS.map((t) => (
+            <li key={t.href}>
+              <ArcNavTreatmentLinkRow
+                item={t}
+                closeMenu={closeMenu}
+                reducedMotion={reducedMotion}
+                canHover={canHover}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -268,6 +460,7 @@ export function ArcSiteHeader({
           href: item.href,
         }));
   const containerRef = useRef<HTMLDivElement>(null);
+  const headerChromeRef = useRef<HTMLElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -276,6 +469,7 @@ export function ArcSiteHeader({
   const isMenuOpenRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const canHover = useCanHover();
 
   const logoOpacity = useMotionValue(1);
   /** Fixed-duration fade-in after stop (`null` = not running). */
@@ -419,6 +613,20 @@ export function ArcSiteHeader({
     gsap.set(menu, { xPercent: 100 });
     gsap.set(strips, { xPercent: 101 });
     if (links.length) gsap.set(links, { yPercent: 110, opacity: 0, rotate: 6 });
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (reducedMotion || prefersNativeScroll()) return;
+    const header = headerChromeRef.current;
+    if (!header) return;
+
+    const onWheel = (event: WheelEvent) => {
+      if (isMenuOpenRef.current) return;
+      forwardWheelEventToLenis(event);
+    };
+
+    header.addEventListener("wheel", onWheel, { capture: true, passive: true });
+    return () => header.removeEventListener("wheel", onWheel, { capture: true });
   }, [reducedMotion]);
 
   useEffect(() => {
@@ -640,24 +848,56 @@ export function ArcSiteHeader({
           </div>
         </div>
 
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col px-8 pb-12 pt-28 sm:px-10 sm:pt-32">
+        <div className="arc-scroll-subtle relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-8 pb-12 pt-28 sm:px-10 sm:pt-32">
           <ul className="flex flex-col gap-2">
-            {navLinks.map((item, i) => (
-              <ArcNavMenuLinkRow
-                key={item.href}
-                item={item}
-                reducedMotion={reducedMotion}
-                closeMenu={closeMenu}
-                assignRef={(el) => {
-                  menuLinksRef.current[i] = el;
-                }}
-              />
-            ))}
+            {navLinks.map((item, i) => {
+              const isTreatmentsHub =
+                !sectionBasePath && item.href === "/treatments";
+
+              if (isTreatmentsHub) {
+                return (
+                  <li
+                    key={item.href}
+                    className="arc-nav-menu-item flex flex-col"
+                    data-shape={item.shape}
+                  >
+                    <ArcNavMenuLinkRow
+                      item={item}
+                      reducedMotion={reducedMotion}
+                      closeMenu={closeMenu}
+                      nested
+                      assignRef={(el) => {
+                        menuLinksRef.current[i] = el;
+                      }}
+                    />
+                    <ArcNavTreatmentsSeeMore
+                      reducedMotion={reducedMotion}
+                      closeMenu={closeMenu}
+                      menuOpen={isMenuOpen}
+                      canHover={canHover}
+                    />
+                  </li>
+                );
+              }
+
+              return (
+                <ArcNavMenuLinkRow
+                  key={item.href}
+                  item={item}
+                  reducedMotion={reducedMotion}
+                  closeMenu={closeMenu}
+                  assignRef={(el) => {
+                    menuLinksRef.current[i] = el;
+                  }}
+                />
+              );
+            })}
           </ul>
         </div>
       </nav>
 
       <header
+        ref={headerChromeRef}
         className={cn(
           "pointer-events-none fixed inset-x-0 top-0 flex w-full justify-center bg-transparent",
           NAV_STACK_CHROME,

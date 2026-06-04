@@ -1,5 +1,6 @@
 import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
-import { images } from "@/content/site";
+import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
+import { RETAIL_IMAGES } from "@/content/retailImages";
 
 export const aboutPage = {
   seo: {
@@ -23,40 +24,112 @@ export const aboutPage = {
     titleEmphasis: "before care begins",
     slides: [
       {
+        src: CLINIC_INTERIOR_IMAGES.heroExteriorSunset,
+        alt: CLINIC_INTERIOR_ALT.heroExteriorSunset,
+        label: "01 / Arrival",
+        caption: "A calm entry point before you ever step inside.",
+      },
+      {
         src: CLINIC_INTERIOR_IMAGES.receptionBacklitLogoWall,
         alt: CLINIC_INTERIOR_ALT.receptionBacklitLogoWall,
-        label: "01 / Reception",
+        label: "02 / Reception",
         caption: "Your team greets you by name—not by appointment number.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.receptionFacadeWideSeating,
+        alt: CLINIC_INTERIOR_ALT.receptionFacadeWideSeating,
+        label: "03 / Welcome lounge",
+        caption: "Gold accents, soft seating, and space to settle in.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
+        alt: CLINIC_INTERIOR_ALT.lobbyReceptionDeskProducts,
+        label: "04 / Front desk",
+        caption: "Check-in, questions, and curated products within reach.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.receptionGreenWallSaltLampDoorway,
+        alt: CLINIC_INTERIOR_ALT.receptionGreenWallSaltLampDoorway,
+        label: "05 / Welcome console",
+        caption: "Brochures, plants, and a doorway into quieter rooms.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
+        alt: CLINIC_INTERIOR_ALT.waitingRoomArmchairGoldArt,
+        label: "06 / Waiting nook",
+        caption: "A private moment before your consultation begins.",
       },
       {
         src: CLINIC_INTERIOR_IMAGES.consultationLounge,
         alt: CLINIC_INTERIOR_ALT.consultationLounge,
-        label: "02 / Consultation lounge",
+        label: "07 / Consultation lounge",
         caption: "Unhurried conversations in a quiet, residential setting.",
       },
       {
         src: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
         alt: CLINIC_INTERIOR_ALT.hallwayAccentSeating,
-        label: "03 / Welcome path",
+        label: "08 / Welcome path",
         caption: "Warm light and intentional details from the moment you arrive.",
       },
       {
         src: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
         alt: CLINIC_INTERIOR_ALT.hallwayDaxxifyBannerWaveArt,
-        label: "04 / Main hallway",
+        label: "09 / Main hallway",
         caption: "Calm corridors that connect every part of your visit.",
       },
       {
         src: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
         alt: CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom,
-        label: "05 / Therapy lounge",
-        caption: "IV and restorative therapies with natural light and privacy.",
+        label: "10 / IV therapy lounge",
+        caption: "Restorative infusions with natural light and privacy.",
+      },
+      {
+        src: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
+        alt: "ARC Wellness EmSella treatment room with BTL chair and forest-green walls",
+        label: "11 / Pelvic wellness suite",
+        caption: "FDA-cleared technology in a discreet, comfortable room.",
+      },
+      {
+        src: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoVanityRoomConsole,
+        alt: "ARC Wellness EmSculpt Neo treatment room with BTL console and vanity lighting",
+        label: "12 / Body sculpting room",
+        caption: "Performance devices in a polished, clinical environment.",
+      },
+      {
+        src: MEDICAL_SPA_NAMED_IMAGES.exomindPromotionalDisplayCounter,
+        alt: "ARC Wellness ExoMind promotional display and treatment counter",
+        label: "13 / Neuro wellness",
+        caption: "Brain-health technology with the same calm design language.",
+      },
+      {
+        src: RETAIL_IMAGES.injectionBarMenuDisplay,
+        alt: "ARC Wellness injection bar menu display with treatment pricing",
+        label: "14 / Injection bar",
+        caption: "Transparent menus and physician-led aesthetic care.",
       },
       {
         src: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay,
         alt: CLINIC_INTERIOR_ALT.retailKneskoSkinProductDisplay,
-        label: "06 / Curated skincare",
-        caption: "Physician-selected products to extend your results at home.",
+        label: "15 / Curated skincare",
+        caption: "Physician-selected KNESKO products to extend your results at home.",
+      },
+      {
+        src: RETAIL_IMAGES.arcSupplementShelvingUnits,
+        alt: "ARC Wellness supplement shelving with physician-curated wellness protocols",
+        label: "16 / Wellness retail",
+        caption: "Supplements and protocols chosen to support your plan.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+        alt: CLINIC_INTERIOR_ALT.plantBonsaiWindowSill,
+        label: "17 / Restorative details",
+        caption: "Small touches—plants, light, and calm—that add up to how you feel.",
+      },
+      {
+        src: CLINIC_INTERIOR_IMAGES.heroReceptionInterior,
+        alt: CLINIC_INTERIOR_ALT.heroReceptionInterior,
+        label: "18 / The Arc experience",
+        caption: "Every room designed so care feels intentional, not rushed.",
       },
     ],
   },
@@ -109,34 +182,6 @@ export const aboutPage = {
     ],
     signoff: "Dr. Danish A. Jabbar",
     role: "Founder & Medical Director, Arc Wellness",
-  },
-  stats: {
-    eyebrow: "By the numbers",
-    title: "Whole-person care",
-    titleEmphasis: "under one roof",
-    items: [
-      {
-        value: "12+",
-        label: "Modalities in one plan",
-        caption: "Devices, infusions, aesthetics, and supplements—woven together by your clinical team.",
-        imageSrc: images.services[1],
-        imageAlt: "Body contouring session at ARC Wellness",
-      },
-      {
-        value: "3",
-        label: "Care pillars",
-        caption: "Body & core, aesthetics & skin, and wellness therapies—each pathway physician-guided.",
-        imageSrc: images.membershipCohortHero,
-        imageAlt: "Biometric consultation room",
-      },
-      {
-        value: "1",
-        label: "Physician-led team",
-        caption: "Dr. Jabbar and our clinicians design, adjust, and evolve your plan with you.",
-        imageSrc: images.founderPortrait,
-        imageAlt: "Dr. Danish Jabbar, Founder & Medical Director",
-      },
-    ],
   },
   differentiators: [
     {

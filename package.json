@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "logo:transparent": "node scripts/make-logo-transparent.cjs"
+    "logo:transparent": "node scripts/make-logo-transparent.cjs",
+    "content:spreadsheet": "node scripts/generate-content-parity-spreadsheet.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -33,6 +34,7 @@
     "eslint-config-next": "16.2.4",
     "sharp": "^0.34.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "xlsx": "^0.18.5"
   }
 }

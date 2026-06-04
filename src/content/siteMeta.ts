@@ -24,8 +24,8 @@ export const primaryNav = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Treatments", href: "/treatments" },
-  { label: "Aesthetics", href: "/aesthetics" },
-  { label: "Programs", href: "/programs" },
+  { label: "Arc Aesthetics", href: "/aesthetics" },
+  { label: "Arc Programs", href: "/programs" },
   { label: "Financing", href: "/financing" },
   { label: "Contact", href: "/contact" },
 ] as const;

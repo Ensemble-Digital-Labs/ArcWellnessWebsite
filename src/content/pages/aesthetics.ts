@@ -1,20 +1,20 @@
 export const aestheticsPage = {
   seo: {
-    title: "Arc Aesthetics | Medical-Grade Skin & Facial Care",
+    title: "Arc Aesthetics | Arc Wellness",
     description:
-      "Injectables, skin technology, and treatment experiences—natural refinement with physician oversight.",
+      "Subtle enhancements and noticeable confidence—innovative solutions that enhance your features without compromising what makes you unique.",
   },
   hero: {
     eyebrow: "Arc Aesthetics",
-    title: "Refinement with",
-    titleEmphasis: "intention",
-    body: "Medical-grade skin and facial care—injectables, laser and device treatments, and elevated experiences that match the rest of your wellness plan.",
+    title: "Look Like You—",
+    titleEmphasis: "Only Better",
+    body: "Subtle Enhancements. Noticeable Confidence. Arc Aesthetics offers innovative solutions that enhance your features without compromising what makes you unique. Using advanced technologies and expert care, we focus on long-term skin health, subtle enhancements, and real, visible results.",
   },
   principles: [
-    "Natural movement is non-negotiable",
-    "Physician oversight on every plan",
-    "Honest timelines and proportional recommendations",
-    "Skin health integrated with whole-body wellness",
+    "Long-term skin health over quick fixes",
+    "Subtle enhancements that preserve what makes you unique",
+    "Advanced technologies with physician-led oversight",
+    "Real, visible results—from neuromodulators and RHA fillers to EmFace, Exion, and KNESKO rituals",
   ],
   linkedTreatments: [
     { slug: "daxxify", label: "Daxxify" },

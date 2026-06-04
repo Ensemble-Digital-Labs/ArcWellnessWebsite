@@ -4,7 +4,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { playArcEnterOnceWhenVisible } from "@/lib/arcEnterOnceScroll";
 import { ARC_VOOBAN_EASE, voobanLineRevealStyle } from "@/lib/arcVoobanMotion";
 import { cn } from "@/lib/utils";
 
@@ -46,27 +46,30 @@ export function ArcScrollSplitReveal({
       const targets = lineRefs.current.filter(Boolean) as HTMLParagraphElement[];
       if (!root || !targets.length) return;
 
+      let disposeEnterOnce: (() => void) | null = null;
+
       const ctx = gsap.context(() => {
         gsap.set(targets, { yPercent: 115, opacity: 0, filter: "blur(8px)" });
-        gsap.to(targets, {
-          yPercent: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 0.95,
-          ease: ARC_VOOBAN_EASE,
-          stagger: 0.11,
-          overwrite: "auto",
-          scrollTrigger: {
-            trigger: root,
-            ...arcScrollTriggerScrollerProps(),
-            start: "top 85%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        });
+
+        const runReveal = () => {
+          gsap.to(targets, {
+            yPercent: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 1.05,
+            ease: ARC_VOOBAN_EASE,
+            stagger: 0.12,
+            overwrite: "auto",
+          });
+        };
+
+        disposeEnterOnce = playArcEnterOnceWhenVisible(root, runReveal);
       }, root);
 
-      revert = () => ctx.revert();
+      revert = () => {
+        disposeEnterOnce?.();
+        ctx.revert();
+      };
       requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 

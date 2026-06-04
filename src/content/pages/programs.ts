@@ -1,27 +1,35 @@
 export const programsPage = {
   seo: {
-    title: "Arc Programs | Continuity & Packages",
+    title: "Arc Programs | Arc Wellness",
     description:
-      "Rhythm, accountability, and priority access—programs that bundle consult, treatment series, and follow-up.",
+      "Signature programs and memberships—more than treatments, a strategy for visible, lasting results.",
   },
   hero: {
-    eyebrow: "Arc Programs",
-    title: "Continuity built",
-    titleEmphasis: "around you",
-    body: "For patients who want rhythm and accountability—not a one-off visit. Programs bundle consultation, treatment series, and follow-up into a coherent arc of care.",
+    eyebrow: "Signature Programs & Membership",
+    title: "More Than Treatments—",
+    titleEmphasis: "A Strategy for Results",
+    body: "Why settle for one treatment when the right combination can do more? Our programs are designed to enhance results by targeting your concerns from multiple angles, helping you achieve visible, lasting improvements faster.",
   },
   pillars: [
     {
-      title: "Personalized cadence",
-      body: "Visit rhythm aligned with your goals—weekly check-ins when monitoring matters, maintenance when you’re stable.",
+      title: "THE ARC METHOD™",
+      body: "Where science meets structured transformation—a systematic approach to building strength, balance, and control with EmSculpt Neo. Foundation Protocol (12 sessions, $1,610), Acceleration Protocol (24 sessions, $3,520), and Optimization Protocol (36 sessions, $4,990) available.",
     },
     {
-      title: "Integrated modalities",
-      body: "Devices, infusions, peptides, and aesthetics combined under one physician-led plan.",
+      title: "ARC RESET PROTOCOL",
+      body: "When your system is overwhelmed, this is where recovery begins—nervous system recovery, cognitive resilience, and performance rebuild for medical professionals, first responders, veterans, and social workers. RESET ($1,950), REBUILD ($2,650), and RESILIENCE ($3,450) tiers.",
     },
     {
-      title: "Transparent value",
-      body: "Packages explained in plain language during your free consult—what’s included, what’s optional, and why.",
+      title: "MEDICAL WEIGHT OPTIMIZATION",
+      body: "Precision-guided weight loss, backed by medical expertise—physician-supervised, personalized dosing, and monthly monitoring.",
+    },
+    {
+      title: "ARC 360™ — Physician-Led Longevity Blueprint",
+      body: "Understand your body today. Optimize your health for tomorrow—MD-led, 5-domain risk scoring, 90-day optimization plan, and longevity modeling.",
+    },
+    {
+      title: "ARC MEMBERSHIPS",
+      body: "The easiest way to make results part of your routine—clinically selected supplements and protocols built around your goals.",
     },
   ],
 } as const;

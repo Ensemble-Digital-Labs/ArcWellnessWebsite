@@ -5,6 +5,9 @@ Model photography showing **clients / activities** in a med-spa environment (con
 | Files | Notes |
 |-------|--------|
 | `patient-experience-01.png` … `patient-experience-16.png` | Renamed in stable sort order; replace filenames with activity-specific labels when you catalog each shot (e.g. `consultation-lounge.png`). |
+| `consultation-lounge-sofa-conversation.png` | Two patients in consultation lounge |
+| `weight-loss-results-jeans-waist-gap.jpeg` | Weight-loss progress — oversized jeans |
+| `nutrition-meal-timing-clock.jpeg` | Nutrition / meal-timing concept (food clock) |
 
 **Code:** `src/content/patientExperienceImages.ts` → **`PATIENT_EXPERIENCE_IMAGES`**.
 

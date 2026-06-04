@@ -30,3 +30,25 @@ export function arcScrollTriggerScrollerProps():
   const scroller = getArcScrollTriggerScroller();
   return scroller ? { scroller } : {};
 }
+
+/**
+ * Fixed header chrome (logo, menu) sits above `#main`; wheel there does not reach Lenis.
+ * Re-dispatch on `#main` so speed/easing match normal page scroll.
+ */
+export function forwardWheelEventToLenis(event: WheelEvent): void {
+  if (prefersNativeScroll()) return;
+  const main = getArcScrollTriggerScroller();
+  if (!main) return;
+
+  main.dispatchEvent(
+    new WheelEvent("wheel", {
+      deltaX: event.deltaX,
+      deltaY: event.deltaY,
+      deltaMode: event.deltaMode,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      bubbles: false,
+      cancelable: true,
+    }),
+  );
+}

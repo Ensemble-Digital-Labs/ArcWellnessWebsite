@@ -43,8 +43,8 @@ const footerLinks = {
   ],
   Services: [
     { label: "Treatments", href: "/treatments" },
-    { label: "Aesthetics", href: "/aesthetics" },
-    { label: "Programs", href: "/programs" },
+    { label: "Arc Aesthetics", href: "/aesthetics" },
+    { label: "Arc Programs", href: "/programs" },
   ],
   Patients: [
     { label: "Financing", href: "/financing" },

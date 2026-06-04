@@ -27,6 +27,8 @@ type ArcAboutNarrativePinSectionProps = {
   storyLines: readonly string[];
   ctaHref?: string;
   ctaLabel?: string;
+  /** `pin-scrub` locks viewport; `enter-once` reveals lines automatically when scrolled into view. */
+  motion?: "pin-scrub" | "enter-once";
 };
 
 /**
@@ -40,6 +42,7 @@ export function ArcAboutNarrativePinSection({
   storyLines,
   ctaHref,
   ctaLabel,
+  motion = "enter-once",
 }: ArcAboutNarrativePinSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -66,6 +69,11 @@ export function ArcAboutNarrativePinSection({
       if (cancelled) return;
       const section = sectionRef.current;
       if (!section) return;
+
+      if (motion === "enter-once") {
+        setProgress(1);
+        return;
+      }
 
       const scroller = getArcScrollTriggerScroller();
       const lineCount = storyLines.length;
@@ -104,9 +112,10 @@ export function ArcAboutNarrativePinSection({
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, motion, storyLines.length]);
 
-  const p = reduceMotion ? 1 : progress;
+  const pinScrub = motion === "pin-scrub";
+  const p = reduceMotion || !pinScrub ? 1 : progress;
   const headerBase = pathPinFadeUp(p, 0, 2.4);
   const headerMotion = {
     ...headerBase,
@@ -122,16 +131,22 @@ export function ArcAboutNarrativePinSection({
     <section
       ref={sectionRef}
       id={id}
-      className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream"
+      className={cn(
+        "relative flex flex-col overflow-hidden bg-arc-cream",
+        pinScrub ? "min-h-[100dvh]" : "py-20 sm:py-24",
+      )}
     >
-      <ArcPinProgressRail
-        progress={p}
-        label={`${String(Math.min(storyLines.length, Math.ceil(p * storyLines.length) || 1)).padStart(2, "0")} / ${String(storyLines.length).padStart(2, "0")}`}
-      />
+      {pinScrub ? (
+        <ArcPinProgressRail
+          progress={p}
+          label={`${String(Math.min(storyLines.length, Math.ceil(p * storyLines.length) || 1)).padStart(2, "0")} / ${String(storyLines.length).padStart(2, "0")}`}
+        />
+      ) : null}
 
       <div
         className={cn(
-          "relative z-10 mx-auto flex min-h-[100dvh] w-full flex-col justify-center px-6 py-20 sm:px-10 md:px-12",
+          "relative z-10 mx-auto flex w-full flex-col justify-center px-6 sm:px-10 md:px-12",
+          pinScrub ? "min-h-[100dvh] py-20" : "py-0",
           ARC_PAGE_RAIL_MAX,
         )}
       >
@@ -148,7 +163,7 @@ export function ArcAboutNarrativePinSection({
         <ArcScrollSplitReveal
           className="mt-10 max-w-3xl sm:mt-12 md:mt-14"
           lines={storyLines}
-          scrubProgress={p}
+          scrubProgress={pinScrub ? p : undefined}
           lineClassName="font-serif text-[clamp(1.25rem,3.2vw,2rem)] font-medium leading-[1.35] tracking-tight text-arc-charcoal/92"
         />
 

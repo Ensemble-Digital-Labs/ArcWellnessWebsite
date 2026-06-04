@@ -1,6 +1,7 @@
 /** Local assets under /public/assets — see public/assets/README.md */
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
+import { RETAIL_IMAGES } from "@/content/retailImages";
 /**
  * Stock footage under `/public/assets/videos/` — use `<video>` (+ optional MP4 sources for broad browser support).
  *
@@ -39,7 +40,8 @@ export const images = {
   /** Header wordmark — RGBA PNG (`scripts/make-logo-transparent.cjs` removes cream plate from source art). */
   logo: "/assets/branding/arc-wellness-logo-v3.png",
   heroBg: "/assets/hero/arc-wellness-exterior-sunset.png",
-  heroMedia: "/assets/hero/arc-wellness-reception-entrance.png",
+  /** Scroll-expand hero center frame — see `ScrollExpandHero` `mediaSrc`. Replace PNG in `public/assets/hero/` to update. */
+  heroMedia: "/assets/hero/arc-wellness-reception-interior.png",
   heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.png",
   /**
@@ -66,10 +68,12 @@ export const images = {
     "/assets/sections/whole-body/body-contouring-session.png",
     "/assets/sections/who-we-are/biometric-consultation-room.png",
     "/assets/hero/arc-wellness-lobby-lounge.png",
-    "/assets/hero/arc-wellness-reception-entrance.png",
+    "/assets/hero/arc-wellness-reception-interior.png",
   ],
   /** Production St. Louis clinic interiors — `public/assets/sections/clinic-interiors/` */
   clinicInteriors: CLINIC_INTERIOR_IMAGES,
   /** Named modality / treatment-room stills — `public/assets/sections/medical-spa-services/` */
   treatmentRooms: MEDICAL_SPA_NAMED_IMAGES,
+  /** Retail, supplements, injection bar, financing displays — `public/assets/sections/retail/` */
+  retail: RETAIL_IMAGES,
 } as const;

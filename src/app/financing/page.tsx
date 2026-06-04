@@ -4,6 +4,7 @@ import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSe
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { financingPage } from "@/content/pages/financing";
+import { RETAIL_IMAGES } from "@/content/retailImages";
 import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 
@@ -20,7 +21,7 @@ export default function FinancingPage() {
       <ScrollChapterIntroSection
         headline={`${hero.title} ${hero.titleEmphasis}`}
         body={hero.body}
-        imageSrc={images.membershipCohortHero}
+        imageSrc={RETAIL_IMAGES.patientFiFinancingBrochure}
         ctaHref="/book"
         ctaLabel="Book consultation"
       />

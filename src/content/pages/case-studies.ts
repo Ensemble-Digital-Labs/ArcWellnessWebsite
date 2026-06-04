@@ -1,17 +1,11 @@
-export const caseStudiesPage = {
-  seo: {
-    title: "Blogs & Case Studies | Arc Wellness",
-    description:
-      "Patient stories, clinical insights, and wellness education from the ARC Wellness team in St. Louis.",
-  },
-  hero: {
-    eyebrow: "Insights",
-    title: "Stories &",
-    titleEmphasis: "case studies",
-    body: "Real outcomes, thoughtful education, and the science behind our approach—written for patients who want clarity, not jargon.",
-  },
-  comingSoon: {
-    title: "New articles on the way",
-    body: "We’re preparing case studies and blog posts from our clinical team. Check back soon—or book a consult to hear how we personalize care today.",
-  },
-} as const;
+/** Re-exports — canonical insights content lives in `insights.ts`. */
+export {
+  caseStudiesPage,
+  insightHref,
+  insightsPage,
+  type InsightEntry,
+  type InsightKind,
+} from "@/content/pages/insights";
+
+export { getAllInsightSlugs, getInsightBySlug, getInsightCounts } from "@/lib/insightsQueries";
+export { getInsightEntries } from "@/lib/insightsStore";

@@ -1,0 +1,82 @@
+{
+  "startTime": "2026-06-03T23:59:50.352Z",
+  "endTime": "2026-06-04T00:01:58.471Z",
+  "totalDuration": 128119,
+  "sourceUrls": [
+    "https://www.arcwellness.net/"
+  ],
+  "pagesDiscovered": 26,
+  "pagesCrawled": 23,
+  "failedPages": [
+    {
+      "url": "https://www.arcwellness.net/contact",
+      "reason": "CAPTCHA detected: https://www.arcwellness.net/contact"
+    },
+    {
+      "url": "https://www.arcwellness.net/contact",
+      "reason": "CAPTCHA detected: https://www.arcwellness.net/contact"
+    },
+    {
+      "url": "https://www.arcwellness.net/new-page",
+      "reason": "HTTP 404: https://www.arcwellness.net/new-page"
+    }
+  ],
+  "totalElements": 9320,
+  "framework": {
+    "tailwind": null,
+    "uiFramework": null,
+    "designSystemUrl": null
+  },
+  "darkModeSupported": false,
+  "screenshotCount": 115,
+  "designBoundary": {
+    "groups": [
+      {
+        "label": "www.arcwellness.net",
+        "urls": [
+          "https://www.arcwellness.net/",
+          "https://www.arcwellness.net/home",
+          "https://www.arcwellness.net/about",
+          "https://www.arcwellness.net/aesthetics",
+          "https://www.arcwellness.net/financing",
+          "https://www.arcwellness.net/plans",
+          "https://www.arcwellness.net/wellness-therapies",
+          "https://www.arcwellness.net/new-page-2",
+          "https://www.arcwellness.net/exomind",
+          "https://www.arcwellness.net/emsella",
+          "https://www.arcwellness.net/emsculpt-neo",
+          "https://www.arcwellness.net/emface",
+          "https://www.arcwellness.net/exion",
+          "https://www.arcwellness.net/daxxify",
+          "https://www.arcwellness.net/rha",
+          "https://www.arcwellness.net/knesko",
+          "https://www.arcwellness.net/vitamin-therapy",
+          "https://www.arcwellness.net/new-page-1",
+          "https://www.arcwellness.net/supplements",
+          "https://www.arcwellness.net/supplements-1",
+          "https://www.arcwellness.net/",
+          "https://www.arcwellness.net/our-services",
+          "https://www.arcwellness.net/cart"
+        ],
+        "tokenCount": {
+          "colors": 13,
+          "typography": 44,
+          "components": 6
+        }
+      }
+    ],
+    "relationship": "unified",
+    "overallSimilarity": 100,
+    "dimensionScores": {
+      "font": 100,
+      "color": 100,
+      "spacing": 100,
+      "radius": 100,
+      "component": 100,
+      "shadow": 100
+    },
+    "sharedTokenSummary": null,
+    "anomalies": []
+  },
+  "warnings": []
+}

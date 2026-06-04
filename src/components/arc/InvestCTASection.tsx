@@ -8,11 +8,14 @@ import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { arcGlassCtaClass } from "@/lib/arcGlassCta";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import { cn } from "@/lib/utils";
+import type { CSSProperties } from "react";
 
 type InvestCTASectionProps = {
   imageSrc: string;
   /** One supporting line under the headline (concentrated CTA band). */
   supportingLine?: string;
+  /** Full-screen pin scrub — off for short hub pages that reflow (insights filters). Height stays full viewport. */
+  pin?: boolean;
 };
 
 /** Luminous rose-gold on dark photography (does not use cream-surface ink). */
@@ -28,7 +31,6 @@ const investReserveGlassClass = cn(
   "font-sans text-sm font-medium normal-case tracking-normal sm:text-[0.9375rem]",
 );
 
-/** Solid terracotta accent pill — pairs with glass CTA in reference */
 /**
  * Pin scrub — fade frosted top strip by this fraction of `p` (matches founder “opening phase” length).
  */
@@ -37,7 +39,6 @@ const INVEST_PIN_TOP_BLEND_END = 0.3;
 /** Same gradient / blur / mask as `ArcFounderIntroSection` top blend (dark photo + charcoal grade). */
 const investPinnedTopBlendLayerClass = cn(
   "pointer-events-none absolute inset-x-0 top-0 z-[8] h-[min(28vh,11rem)]",
-  /* Neutral charcoal frost — matches founder strip; no teal/green */
   "bg-gradient-to-b from-arc-charcoal/[0.48] via-arc-charcoal/[0.2] to-transparent",
   "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
   "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
@@ -55,21 +56,28 @@ const investMemberSolidClass = cn(
   "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
 );
 
-export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionProps) {
-  const { p, setPinProgress } = usePathPinScrubProgress();
-  const headlineMotion = pathPinFadeUp(p, 0.08, 2.35);
-  const supportingMotion = pathPinFadeUp(p, 0.16, 2.05);
-  const ctaMotion = pathPinFadeUp(p, 0.26, 2.2);
+const investSectionShellClass =
+  "relative flex min-h-[100dvh] scroll-mt-28 items-center justify-center overflow-hidden";
 
-  const investTopBarOpacity = Math.max(0, 1 - Math.min(1, p / INVEST_PIN_TOP_BLEND_END));
-
+function InvestCTAContent({
+  imageSrc,
+  supportingLine,
+  pin,
+  headlineMotion,
+  supportingMotion,
+  ctaMotion,
+  investTopBarOpacity,
+}: {
+  imageSrc: string;
+  supportingLine?: string;
+  pin: boolean;
+  headlineMotion: CSSProperties;
+  supportingMotion: CSSProperties;
+  ctaMotion: CSSProperties;
+  investTopBarOpacity: number;
+}) {
   return (
-    <PinnedSection
-      id="book"
-      pinDistanceMultiplier={0.5}
-      onProgress={setPinProgress}
-      className="relative flex min-h-[100dvh] scroll-mt-28 items-center justify-center"
-    >
+    <>
       <Image
         src={imageSrc}
         alt=""
@@ -79,12 +87,17 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
         priority={false}
       />
       <div className="absolute inset-0 bg-arc-charcoal/45" />
-      <motion.div
-        aria-hidden
-        style={{ opacity: investTopBarOpacity }}
-        className={investPinnedTopBlendLayerClass}
-      />
-      <div data-scroll-section className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+      {pin ? (
+        <motion.div
+          aria-hidden
+          style={{ opacity: investTopBarOpacity }}
+          className={investPinnedTopBlendLayerClass}
+        />
+      ) : null}
+      <div
+        {...(pin ? { "data-scroll-section": true } : {})}
+        className="relative z-10 mx-auto max-w-4xl px-6 text-center"
+      >
         <h2
           className={cn(
             "font-serif text-3xl font-semibold leading-snug text-[#f7f4ef] drop-shadow md:text-4xl lg:text-5xl",
@@ -122,6 +135,50 @@ export function InvestCTASection({ imageSrc, supportingLine }: InvestCTASectionP
           </Link>
         </div>
       </div>
+    </>
+  );
+}
+
+export function InvestCTASection({
+  imageSrc,
+  supportingLine,
+  pin = true,
+}: InvestCTASectionProps) {
+  const { p, setPinProgress } = usePathPinScrubProgress();
+  const staticMotion = { opacity: 1, transform: "none" } satisfies CSSProperties;
+  const headlineMotion = pin ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
+  const supportingMotion = pin ? pathPinFadeUp(p, 0.16, 2.05) : staticMotion;
+  const ctaMotion = pin ? pathPinFadeUp(p, 0.26, 2.2) : staticMotion;
+  const investTopBarOpacity = Math.max(0, 1 - Math.min(1, p / INVEST_PIN_TOP_BLEND_END));
+
+  const content = (
+    <InvestCTAContent
+      imageSrc={imageSrc}
+      supportingLine={supportingLine}
+      pin={pin}
+      headlineMotion={headlineMotion}
+      supportingMotion={supportingMotion}
+      ctaMotion={ctaMotion}
+      investTopBarOpacity={investTopBarOpacity}
+    />
+  );
+
+  if (!pin) {
+    return (
+      <section id="book" className={investSectionShellClass}>
+        {content}
+      </section>
+    );
+  }
+
+  return (
+    <PinnedSection
+      id="book"
+      pinDistanceMultiplier={0.5}
+      onProgress={setPinProgress}
+      className={investSectionShellClass}
+    >
+      {content}
     </PinnedSection>
   );
 }

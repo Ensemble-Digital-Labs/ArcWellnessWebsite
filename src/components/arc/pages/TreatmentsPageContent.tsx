@@ -1,18 +1,15 @@
 "use client";
 
-import { ArcServicesShowcaseSlider } from "@/components/arc/ArcServicesShowcaseSlider";
 import { ArcTreatmentsRuledGrid } from "@/components/arc/ArcTreatmentsRuledGrid";
-import { PinnedSection } from "@/components/arc/PinnedSection";
 import { ArcTreatmentsPinExplorer } from "@/components/arc/ArcTreatmentsPinExplorer";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { homeInvestSupport } from "@/content/homepage";
 import { allTreatments, treatmentsHub } from "@/content/pages/treatments";
-import { SERVICES_SHOWCASE_SLIDES } from "@/content/servicesShowcaseSlides";
 import { images } from "@/content/site";
 
 export function TreatmentsPageContent() {
-  const { hero } = treatmentsHub;
+  const { hero, pinExplorer, ruledGrid } = treatmentsHub;
 
   return (
     <>
@@ -31,20 +28,16 @@ export function TreatmentsPageContent() {
 
       <ArcTreatmentsPinExplorer
         id="treatments-explore"
-        title="our modalities"
-        subtitle="Physician-led plans that combine devices, infusions, aesthetics, and supplements."
+        title={pinExplorer.title}
+        subtitle={pinExplorer.subtitle}
         treatments={allTreatments}
       />
 
-      <PinnedSection id="services-showcase" pinDistanceMultiplier={0.72} className="w-full overflow-hidden bg-arc-charcoal py-0">
-        <ArcServicesShowcaseSlider slides={SERVICES_SHOWCASE_SLIDES} className="w-full max-w-none" />
-      </PinnedSection>
-
       <ArcTreatmentsRuledGrid
         id="treatments-index"
-        title="Every"
-        titleEmphasis="pathway"
-        subtitle="Numbered index of physician-led modalities—select a row to read how each fits your plan."
+        title={ruledGrid.title}
+        titleEmphasis={ruledGrid.titleEmphasis}
+        subtitle={ruledGrid.subtitle}
         treatments={allTreatments}
       />
 

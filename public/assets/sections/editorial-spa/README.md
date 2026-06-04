@@ -5,6 +5,7 @@
 | Files | Notes |
 |-------|--------|
 | `editorial-spa-01.png` … `editorial-spa-05.png` | Stable sort order; rename by theme when catalogued (e.g. `serum-still-life.png`, `treatment-room-soft-light.png`). |
+| `editorial-anxiety-spotlight-crowd.png` | Emotional wellness metaphor — isolation in a crowd (`EDITORIAL_SPA_NAMED_IMAGES.anxietySpotlightCrowd`) |
 
 **Code:** `src/content/editorialSpaImages.ts` → **`EDITORIAL_SPA_IMAGES`**.
 

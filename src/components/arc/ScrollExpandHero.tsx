@@ -538,10 +538,12 @@ export function ScrollExpandHero({
               >
                 <div className="relative size-full">
                   <Image
+                    key={mediaSrc}
                     src={mediaSrc}
                     alt=""
                     width={1280}
                     height={720}
+                    unoptimized
                     className="size-full rounded-xl object-cover"
                   />
                   <motion.div
