@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import type Lenis from "lenis";
@@ -12,6 +12,13 @@ import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
 import { ARC_PRIMARY_NAV_LINKS, ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
 import { forwardWheelEventToLenis, prefersNativeScroll } from "@/lib/arcScrollMode";
+import {
+  ARC_INSIGHTS_HEADER_CHROME_EVENT,
+  insightsLogoShouldHide,
+  insightsLogoHomeLinkActive,
+  INSIGHTS_HEADER_CHROME_RESET,
+  type ArcInsightsHeaderChromeDetail,
+} from "@/lib/arcInsightsHeaderSync";
 
 /**
  * Logo fades out while the page is moving (past a small top offset). It fades back in with a fixed
@@ -27,6 +34,16 @@ const LOGO_VELOCITY_STOP_EPS = 0.022;
 const LOGO_FADE_IN_DURATION_MS = 540;
 /** Fade-out while scrolling — eased over time so it doesn’t “pop” off. */
 const LOGO_FADE_OUT_DURATION_MS = 480;
+/** Match Lenis: velocity is px per animation frame (`animatedScroll - lastScroll`). */
+const LOGO_NATIVE_VELOCITY_BLEND = 0.35;
+
+type LogoFadeSession = { start: number; from: number };
+
+function logoWantHidden(scrollY: number, velocity: number): boolean {
+  const pastTop = scrollY >= LOGO_SHOW_BELOW_SCROLL_Y;
+  const isStopped = Math.abs(velocity) < LOGO_VELOCITY_STOP_EPS;
+  return pastTop && !isStopped;
+}
 
 function easeOutCubic(t: number): number {
   const u = Math.min(1, Math.max(0, t));
@@ -442,13 +459,79 @@ export type ArcSiteHeaderProps = {
   homeHref?: string;
   /** e.g. `/logodemov1`, `/logodemov2`, `/logodemov3` — scope fullscreen menu links to this route’s section IDs. */
   sectionBasePath?: string;
+  /** Insights feed — logo home link only near page top so filter tabs stay tappable. */
+  logoClickOnlyAtTop?: boolean;
 };
+
+const LOGO_HOME_LINK_SCROLL_MAX = 120;
+
+function readSiteScrollY(): number {
+  const lenis = getLocomotiveLenis();
+  if (lenis) {
+    const s = lenis.scroll;
+    if (typeof s === "number") return s;
+    if (s && typeof s === "object" && typeof s.y === "number") return s.y;
+  }
+  if (prefersNativeScroll()) return window.scrollY;
+  const main = document.getElementById("main");
+  if (main) return main.scrollTop;
+  return window.scrollY;
+}
+
+function applyLogoScrollFade(
+  logoOpacity: MotionValue<number>,
+  wantHidden: boolean,
+  fadeInRef: { current: LogoFadeSession | null },
+  fadeOutRef: { current: LogoFadeSession | null },
+) {
+  const o = logoOpacity.get();
+
+  if (wantHidden) {
+    fadeInRef.current = null;
+    if (o <= 0.008) {
+      fadeOutRef.current = null;
+      logoOpacity.set(0);
+      return;
+    }
+    if (fadeOutRef.current === null) {
+      fadeOutRef.current = {
+        start: performance.now(),
+        from: o,
+      };
+    }
+    const sess = fadeOutRef.current;
+    const t = Math.min(1, (performance.now() - sess.start) / LOGO_FADE_OUT_DURATION_MS);
+    const eased = easeInOutQuad(t);
+    logoOpacity.set(sess.from * (1 - eased));
+    if (t >= 1) fadeOutRef.current = null;
+    return;
+  }
+
+  fadeOutRef.current = null;
+  if (o >= 0.999) {
+    fadeInRef.current = null;
+    logoOpacity.set(1);
+    return;
+  }
+  if (fadeInRef.current === null) {
+    fadeInRef.current = {
+      start: performance.now(),
+      from: o,
+    };
+  }
+  const sess = fadeInRef.current;
+  const t = Math.min(1, (performance.now() - sess.start) / LOGO_FADE_IN_DURATION_MS);
+  const eased = easeOutCubic(t);
+  logoOpacity.set(sess.from + (1 - sess.from) * eased);
+  if (t >= 1) fadeInRef.current = null;
+}
 
 export function ArcSiteHeader({
   logoSrc = images.logo,
   logoAlt = "ARC Wellness",
   homeHref = "/",
   sectionBasePath,
+  logoClickOnlyAtTop = false,
 }: ArcSiteHeaderProps = {}) {
   const navLinks =
     sectionBasePath && sectionBasePath !== "/"
@@ -469,6 +552,7 @@ export function ArcSiteHeader({
   const isMenuOpenRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [logoHomeLinkActive, setLogoHomeLinkActive] = useState(true);
   const canHover = useCanHover();
 
   const logoOpacity = useMotionValue(1);
@@ -476,6 +560,13 @@ export function ArcSiteHeader({
   const logoFadeInSessionRef = useRef<{ start: number; from: number } | null>(null);
   /** Eased fade-out while scrolling (`null` = idle / fully hidden). */
   const logoFadeOutSessionRef = useRef<{ start: number; from: number } | null>(null);
+  const insightsChromeRef = useRef<ArcInsightsHeaderChromeDetail>({
+    ...INSIGHTS_HEADER_CHROME_RESET,
+  });
+  const nativeScrollMotionRef = useRef({
+    y: 0,
+    velocity: 0,
+  });
 
   isMenuOpenRef.current = isMenuOpen;
 
@@ -488,6 +579,31 @@ export function ArcSiteHeader({
   }, [isMenuOpen, logoOpacity]);
 
   useEffect(() => {
+    if (!logoClickOnlyAtTop) {
+      insightsChromeRef.current = { ...INSIGHTS_HEADER_CHROME_RESET };
+      return;
+    }
+
+    const onInsightsChrome = (event: Event) => {
+      const detail = (event as CustomEvent<ArcInsightsHeaderChromeDetail>).detail;
+      insightsChromeRef.current = detail;
+      if (
+        insightsLogoShouldHide(detail.mastheadVisible, detail.ctaSectionVisible)
+      ) {
+        logoFadeInSessionRef.current = null;
+        logoFadeOutSessionRef.current = null;
+        logoOpacity.set(0);
+      }
+    };
+
+    window.addEventListener(ARC_INSIGHTS_HEADER_CHROME_EVENT, onInsightsChrome);
+    return () => {
+      window.removeEventListener(ARC_INSIGHTS_HEADER_CHROME_EVENT, onInsightsChrome);
+      insightsChromeRef.current = { ...INSIGHTS_HEADER_CHROME_RESET };
+    };
+  }, [logoClickOnlyAtTop, logoOpacity]);
+
+  useEffect(() => {
     if (reducedMotion) return;
 
     let cancelled = false;
@@ -495,8 +611,6 @@ export function ArcSiteHeader({
 
     const tick = () => {
       if (cancelled) return;
-
-      const o = logoOpacity.get();
 
       if (isMenuOpenRef.current) {
         logoFadeInSessionRef.current = null;
@@ -506,84 +620,47 @@ export function ArcSiteHeader({
         return;
       }
 
-      const lenis = getLocomotiveLenis();
-      if (!lenis) {
+      if (
+        logoClickOnlyAtTop &&
+        insightsLogoShouldHide(
+          insightsChromeRef.current.mastheadVisible,
+          insightsChromeRef.current.ctaSectionVisible,
+        )
+      ) {
+        logoFadeInSessionRef.current = null;
         logoFadeOutSessionRef.current = null;
-        if (o >= 0.999) {
-          logoFadeInSessionRef.current = null;
-          logoOpacity.set(1);
-        } else {
-          if (logoFadeInSessionRef.current === null) {
-            logoFadeInSessionRef.current = {
-              start: performance.now(),
-              from: o,
-            };
-          }
-          const sess = logoFadeInSessionRef.current;
-          const t = Math.min(
-            1,
-            (performance.now() - sess.start) / LOGO_FADE_IN_DURATION_MS,
-          );
-          const eased = easeOutCubic(t);
-          logoOpacity.set(sess.from + (1 - sess.from) * eased);
-          if (t >= 1) logoFadeInSessionRef.current = null;
-        }
+        logoOpacity.set(0);
         raf = requestAnimationFrame(tick);
         return;
       }
 
-      const scroll = lenis.animatedScroll;
-      const pastTop = scroll >= LOGO_SHOW_BELOW_SCROLL_Y;
-      const isStopped = Math.abs(lenis.velocity) < LOGO_VELOCITY_STOP_EPS;
-      const wantHidden = pastTop && !isStopped;
+      const lenis = getLocomotiveLenis();
+      let wantHidden = false;
 
-      if (wantHidden) {
-        logoFadeInSessionRef.current = null;
-        if (o <= 0.008) {
-          logoFadeOutSessionRef.current = null;
-          logoOpacity.set(0);
-        } else {
-          if (logoFadeOutSessionRef.current === null) {
-            logoFadeOutSessionRef.current = {
-              start: performance.now(),
-              from: o,
-            };
-          }
-          const sess = logoFadeOutSessionRef.current;
-          const t = Math.min(
-            1,
-            (performance.now() - sess.start) / LOGO_FADE_OUT_DURATION_MS,
-          );
-          const eased = easeInOutQuad(t);
-          logoOpacity.set(sess.from * (1 - eased));
-          if (t >= 1) logoFadeOutSessionRef.current = null;
-        }
+      if (lenis) {
+        wantHidden = logoWantHidden(lenis.animatedScroll, lenis.velocity);
       } else {
-        /* Near top or scroll idle — same eased fade-in (avoids snap when crossing y < threshold). */
-        logoFadeOutSessionRef.current = null;
-        if (o >= 0.999) {
-          logoFadeInSessionRef.current = null;
-          logoOpacity.set(1);
-        } else {
-          if (logoFadeInSessionRef.current === null) {
-            logoFadeInSessionRef.current = {
-              start: performance.now(),
-              from: o,
-            };
-          }
-          const sess = logoFadeInSessionRef.current;
-          const t = Math.min(
-            1,
-            (performance.now() - sess.start) / LOGO_FADE_IN_DURATION_MS,
-          );
-          const eased = easeOutCubic(t);
-          logoOpacity.set(sess.from + (1 - sess.from) * eased);
-          if (t >= 1) logoFadeInSessionRef.current = null;
-        }
+        const scroll = readSiteScrollY();
+        const frameDelta = scroll - nativeScrollMotionRef.current.y;
+        nativeScrollMotionRef.current.velocity =
+          nativeScrollMotionRef.current.velocity * (1 - LOGO_NATIVE_VELOCITY_BLEND) +
+          frameDelta * LOGO_NATIVE_VELOCITY_BLEND;
+        nativeScrollMotionRef.current.y = scroll;
+        wantHidden = logoWantHidden(scroll, nativeScrollMotionRef.current.velocity);
       }
+
+      applyLogoScrollFade(
+        logoOpacity,
+        wantHidden,
+        logoFadeInSessionRef,
+        logoFadeOutSessionRef,
+      );
 
       raf = requestAnimationFrame(tick);
     };
+
+    nativeScrollMotionRef.current.y = readSiteScrollY();
+    nativeScrollMotionRef.current.velocity = 0;
 
     raf = requestAnimationFrame(tick);
 
@@ -591,7 +668,7 @@ export function ArcSiteHeader({
       cancelled = true;
       cancelAnimationFrame(raf);
     };
-  }, [reducedMotion, logoOpacity]);
+  }, [reducedMotion, logoOpacity, logoClickOnlyAtTop]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -600,6 +677,25 @@ export function ArcSiteHeader({
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
+
+  useEffect(() => {
+    if (!logoClickOnlyAtTop) {
+      setLogoHomeLinkActive(true);
+      return;
+    }
+
+    let raf = 0;
+    const sync = () => {
+      const chrome = insightsChromeRef.current;
+      setLogoHomeLinkActive(
+        insightsLogoHomeLinkActive(readSiteScrollY(), chrome.ctaSectionVisible, LOGO_HOME_LINK_SCROLL_MAX),
+      );
+      raf = requestAnimationFrame(sync);
+    };
+
+    sync();
+    return () => cancelAnimationFrame(raf);
+  }, [logoClickOnlyAtTop]);
 
   useLayoutEffect(() => {
     if (reducedMotion) return;
@@ -905,14 +1001,21 @@ export function ArcSiteHeader({
       >
         <div
           className={cn(
-            "pointer-events-none relative mx-auto flex w-full justify-center",
+            "pointer-events-none relative mx-auto grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 px-3 sm:gap-x-3 sm:px-4 md:px-6 lg:px-10",
             ARC_PAGE_RAIL_MAX,
           )}
         >
+          <div className="pointer-events-none min-w-0" aria-hidden />
           <Link
             href={homeHref}
-            className="pointer-events-auto inline-flex h-32 w-fit shrink-0 items-center justify-center bg-transparent px-4 sm:h-40 sm:px-6 md:h-44 lg:h-48"
+            className={cn(
+              "relative z-10 col-start-2 row-start-1 inline-flex h-24 w-fit shrink-0 items-center justify-center bg-transparent px-1 sm:h-32 sm:px-2 md:h-40 lg:h-44 xl:h-48",
+              logoClickOnlyAtTop && !logoHomeLinkActive
+                ? "pointer-events-none"
+                : "pointer-events-auto",
+            )}
             aria-label="ARC Wellness home"
+            tabIndex={logoClickOnlyAtTop && !logoHomeLinkActive ? -1 : undefined}
           >
             {reducedMotion ? (
               <Image
@@ -923,11 +1026,11 @@ export function ArcSiteHeader({
                 priority
                 placeholder="empty"
                 unoptimized
-                className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+                className="arc-header-logo h-full w-auto max-w-[min(56vw,220px)] object-contain object-center sm:max-w-[min(64vw,300px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
               />
             ) : (
               <motion.div
-                className="inline-flex h-full w-auto max-w-[min(88vw,380px)] sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+                className="inline-flex h-full w-auto max-w-[min(56vw,220px)] sm:max-w-[min(64vw,300px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
                 style={{ opacity: logoOpacity }}
               >
                 <Image
@@ -938,7 +1041,7 @@ export function ArcSiteHeader({
                   priority
                   placeholder="empty"
                   unoptimized
-                  className="arc-header-logo h-full w-auto max-w-[min(88vw,380px)] object-contain object-center sm:max-w-[min(78vw,520px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
+                  className="arc-header-logo h-full w-auto max-w-[min(56vw,220px)] object-contain object-center sm:max-w-[min(64vw,300px)] md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]"
                 />
               </motion.div>
             )}
@@ -949,7 +1052,7 @@ export function ArcSiteHeader({
             onClick={toggleMenu}
             aria-expanded={isMenuOpen}
             aria-controls="arc-nav-overlay"
-            className="pointer-events-auto absolute right-4 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center gap-3.5 rounded-full border border-white/40 bg-black/25 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:right-6 sm:gap-4 sm:px-6 sm:py-3.5 sm:text-base md:right-10"
+            className="pointer-events-auto relative z-20 col-start-3 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/25 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:gap-3.5 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base"
           >
             {isMenuOpen ? "Close" : "Menu"}
             <svg

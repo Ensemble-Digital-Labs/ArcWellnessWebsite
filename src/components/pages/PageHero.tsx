@@ -4,7 +4,6 @@ import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { cn } from "@/lib/utils";
 
 type PageHeroProps = {
-  eyebrow?: string;
   title: string;
   titleEmphasis?: string;
   body?: string;
@@ -16,7 +15,6 @@ type PageHeroProps = {
 };
 
 export function PageHero({
-  eyebrow,
   title,
   titleEmphasis,
   body,
@@ -58,16 +56,6 @@ export function PageHero({
           centered && "items-center text-center",
         )}
       >
-        {eyebrow ? (
-          <p
-            className={cn(
-              "mb-4 font-sans text-xs font-semibold uppercase tracking-[0.28em] text-arc-teal",
-              centered && "mx-auto",
-            )}
-          >
-            {eyebrow}
-          </p>
-        ) : null}
         <h1
           className={cn(
             "max-w-3xl font-serif text-4xl font-semibold leading-[1.06] tracking-tight text-white sm:text-5xl md:text-[3.25rem] lg:text-[3.5rem]",

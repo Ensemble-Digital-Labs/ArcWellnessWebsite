@@ -21,7 +21,7 @@ type ArcTextUnderlineCtaProps = {
 
 /**
  * Minimal CTA: label + thin **→** + full-width hairline under both (no fill, no pill).
- * Default on-light teal uses **`arc-teal-ink`**; use **`tealBright`** on dark hero/photo bands.
+ * Default on-light uses charcoal + teal hover; use **`tealBright`** on dark hero/photo bands.
  */
 export function ArcTextUnderlineCta({
   href,
@@ -63,9 +63,9 @@ export function ArcTextUnderlineCta({
             "focus-visible:ring-arc-teal/50 focus-visible:ring-offset-black/35",
           ]
         : [
-            "text-arc-teal-ink hover:text-arc-teal-ink-hover",
+            "text-arc-charcoal hover:text-arc-teal",
             "[text-shadow:0_1px_0_rgba(255,255,255,0.55),0_1px_3px_rgba(44,44,44,0.14),0_0_18px_rgba(40,122,109,0.22)]",
-            "focus-visible:ring-arc-teal-ink/55 focus-visible:ring-offset-arc-cream/80",
+            "focus-visible:ring-arc-teal/55 focus-visible:ring-offset-arc-cream/80",
           ];
 
   return (

@@ -67,7 +67,7 @@ export const treatmentsHub = {
     title: "Every",
     titleEmphasis: "pathway",
     subtitle:
-      "From neurostimulation and pelvic health to IV nutrients, peptides, and physician-selected supplements.",
+      "From neurostimulation and pelvic health to IV nutrients, peptides, and physician-selected supplements. Each treatment works with your body to create measurable change you can see and feel.",
   },
 } as const;
 

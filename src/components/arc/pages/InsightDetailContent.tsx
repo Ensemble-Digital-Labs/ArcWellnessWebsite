@@ -28,7 +28,6 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
     <>
       <ScrollChapterIntroSection
         id="insight-hero"
-        eyebrow={`${kindLabel} · ${entry.publishedAt}`}
         headline={entry.title}
         body={entry.excerpt}
         imageSrc={entry.imageSrc}
@@ -52,7 +51,7 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
 
           <Link
             href={backHref(entry.kind)}
-            className="mt-10 inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-teal-ink hover:text-arc-teal"
+            className="mt-10 inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-teal hover:text-arc-teal-hover"
           >
             {backLabel(entry.kind)}
           </Link>

@@ -1,36 +1,29 @@
 "use client";
 
 import { ArcTreatmentsRuledGrid } from "@/components/arc/ArcTreatmentsRuledGrid";
-import { ArcTreatmentsPinExplorer } from "@/components/arc/ArcTreatmentsPinExplorer";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
+import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
 import { homeInvestSupport } from "@/content/homepage";
 import { allTreatments, treatmentsHub } from "@/content/pages/treatments";
+import { TREATMENTS_HERO_CANVAS_TILES } from "@/content/treatmentsHeroCanvas";
 import { images } from "@/content/site";
 
 export function TreatmentsPageContent() {
-  const { hero, pinExplorer, ruledGrid } = treatmentsHub;
+  const { hero, ruledGrid } = treatmentsHub;
 
   return (
     <>
       <ScrollChapterIntroSection
         id="treatments-hero"
-        headline={`${hero.title} ${hero.titleEmphasis}`}
-        body={hero.body}
-        imageSrc={images.investBanner}
-        floatingMedia={{
-          src: images.services[0],
-          alt: "Facial aesthetic treatment at ARC Wellness",
-        }}
-        ctaHref="/book"
-        ctaLabel="Book a free consultation"
-      />
-
-      <ArcTreatmentsPinExplorer
-        id="treatments-explore"
-        title={pinExplorer.title}
-        subtitle={pinExplorer.subtitle}
-        treatments={allTreatments}
+        layout="ambient-full"
+        motion="enter-once"
+        headline={hero.title}
+        headlineEmphasis={hero.titleEmphasis}
+        body=""
+        introMode="visible-on-load"
+        copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
+        heroCanvasTiles={TREATMENTS_HERO_CANVAS_TILES}
       />
 
       <ArcTreatmentsRuledGrid

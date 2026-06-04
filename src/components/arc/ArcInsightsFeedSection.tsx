@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { INSIGHTS_FEED_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import {
   insightHref,
   insightsPage,
@@ -11,6 +13,11 @@ import {
   type InsightKind,
 } from "@/content/pages/insights";
 import { refreshArcScrollLayout } from "@/lib/arcScrollLayoutRefresh";
+import {
+  updateInsightsHeaderChrome,
+  resetInsightsHeaderChrome,
+  INSIGHTS_HEADER_CHROME_RESET,
+} from "@/lib/arcInsightsHeaderSync";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +37,11 @@ const CANVAS_COLUMN_OFFSET = [
 ] as const;
 
 const CANVAS_COLUMN_GAP = "gap-y-14 sm:gap-y-16 lg:gap-y-[4.5rem] xl:gap-y-20";
+
+const INSIGHTS_FILTER_TRANSITION = {
+  duration: 0.34,
+  ease: [0.22, 1, 0.36, 1] as const,
+};
 
 function useCanvasColumnCount(): number {
   const [count, setCount] = useState(1);
@@ -104,7 +116,7 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
       <Link
         href={href}
         className={cn(
-          "relative block overflow-hidden bg-arc-charcoal/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal",
           aspectClass,
         )}
       >
@@ -130,17 +142,17 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
       </Link>
 
       <div className="mt-5 sm:mt-6">
-        <h3 className="font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-arc-charcoal sm:text-lg lg:text-xl">
+        <h3 className="font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.42)] sm:text-lg lg:text-xl">
           <Link
             href={href}
-            className="underline-offset-[5px] transition-[color,text-decoration] duration-200 hover:text-arc-teal-ink hover:underline focus-visible:outline-none focus-visible:underline"
+            className="underline-offset-[5px] transition-[color,text-decoration] duration-200 hover:text-arc-teal hover:underline focus-visible:outline-none focus-visible:underline"
           >
             {entry.title}
           </Link>
         </h3>
-        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-arc-charcoal/45 sm:text-[11px]">
+        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 sm:text-[11px]">
           {formatMetaDate(entry.publishedAt)}
-          <span className="mx-2 text-arc-charcoal/28" aria-hidden>
+          <span className="mx-2 text-white/30" aria-hidden>
             /
           </span>
           {kindLabelUpper(entry.kind)}
@@ -192,6 +204,70 @@ function InsightsCanvasGrid({ items }: { items: readonly InsightEntry[] }) {
   );
 }
 
+function InsightsFilterPanel({
+  filter,
+  items,
+  reduceMotion,
+  onSettled,
+}: {
+  filter: InsightFilter;
+  items: readonly InsightEntry[];
+  reduceMotion: boolean;
+  onSettled?: () => void;
+}) {
+  if (items.length === 0) {
+    return (
+      <motion.p
+        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+        transition={INSIGHTS_FILTER_TRANSITION}
+        onAnimationComplete={(latest) => {
+          if (
+            typeof latest === "object" &&
+            latest !== null &&
+            "opacity" in latest &&
+            latest.opacity === 1
+          ) {
+            onSettled?.();
+          }
+        }}
+        className="mt-14 text-center font-sans text-base text-white/70 sm:mt-16"
+      >
+        No posts in this category yet. Explore our{" "}
+        <Link
+          href="/treatments"
+          className="font-semibold text-white underline-offset-2 hover:text-arc-teal hover:underline"
+        >
+          treatments
+        </Link>
+        .
+      </motion.p>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={reduceMotion ? undefined : { opacity: 0, y: -12 }}
+      transition={INSIGHTS_FILTER_TRANSITION}
+      onAnimationComplete={(latest) => {
+        if (
+          typeof latest === "object" &&
+          latest !== null &&
+          "opacity" in latest &&
+          latest.opacity === 1
+        ) {
+          onSettled?.();
+        }
+      }}
+    >
+      <InsightsCanvasGrid items={items} />
+    </motion.div>
+  );
+}
+
 export function ArcInsightsFeedSection({
   id = "insights-feed",
   entries,
@@ -202,8 +278,10 @@ export function ArcInsightsFeedSection({
   const { feed } = insightsPage;
   const pathname = usePathname();
   const sectionRef = useRef<HTMLElement>(null);
-  const prevFilterRef = useRef<InsightFilter | null>(null);
+  const mastheadTitleRef = useRef<HTMLHeadingElement>(null);
   const counts = useMemo(() => getCounts(entries), [entries]);
+  const reduceMotion = useReducedMotion();
+  const scrollRefreshTimerRef = useRef<number | null>(null);
 
   const readFilterFromUrl = (): InsightFilter => {
     if (typeof window === "undefined") return "all";
@@ -218,27 +296,61 @@ export function ArcInsightsFeedSection({
     setFilter(readFilterFromUrl());
   }, []);
 
-  const selectFilter = (tab: InsightFilter) => {
-    setFilter(tab);
-    const query = tab === "all" ? "" : `?filter=${tab}`;
-    window.history.replaceState(null, "", `${pathname}${query}`);
-  };
+  useEffect(() => {
+    const mastheadTitle = mastheadTitleRef.current;
+    if (!mastheadTitle) return;
+
+    const mastheadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        updateInsightsHeaderChrome({
+          mastheadVisible: entry.isIntersecting,
+          ...(entry.isIntersecting ? { ctaSectionVisible: false } : {}),
+        });
+      },
+      { threshold: 0 },
+    );
+
+    mastheadObserver.observe(mastheadTitle);
+    updateInsightsHeaderChrome({ ...INSIGHTS_HEADER_CHROME_RESET });
+
+    return () => {
+      mastheadObserver.disconnect();
+      resetInsightsHeaderChrome();
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     if (filter === "all") return [...entries];
     return entries.filter((e) => e.kind === filter);
   }, [entries, filter]);
 
-  useEffect(() => {
-    if (prevFilterRef.current === null) {
-      prevFilterRef.current = filter;
-      return;
+  const scheduleScrollLayoutRefresh = () => {
+    if (scrollRefreshTimerRef.current !== null) {
+      window.clearTimeout(scrollRefreshTimerRef.current);
     }
-    if (prevFilterRef.current === filter) return;
-    prevFilterRef.current = filter;
+    scrollRefreshTimerRef.current = window.setTimeout(() => {
+      scrollRefreshTimerRef.current = null;
+      refreshArcScrollLayout();
+    }, reduceMotion ? 0 : 360);
+  };
 
-    refreshArcScrollLayout({ anchor: sectionRef.current });
-  }, [filter]);
+  useEffect(
+    () => () => {
+      if (scrollRefreshTimerRef.current !== null) {
+        window.clearTimeout(scrollRefreshTimerRef.current);
+      }
+    },
+    [],
+  );
+
+  const selectFilter = (tab: InsightFilter) => {
+    if (tab === filter) return;
+    setFilter(tab);
+    const query = tab === "all" ? "" : `?filter=${tab}`;
+    window.history.replaceState(null, "", `${pathname}${query}`);
+    if (reduceMotion) scheduleScrollLayoutRefresh();
+  };
 
   const tabs: InsightFilter[] = ["all", "blog", "case-study"];
 
@@ -246,67 +358,96 @@ export function ArcInsightsFeedSection({
     <section
       ref={sectionRef}
       id={id}
-      className={cn(
-        "scroll-mt-28 bg-white px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20",
-        ARC_PINNED_CLEAR_BELOW_LOGO,
-      )}
+      className="relative isolate scroll-mt-28 bg-black"
     >
-      <div className="mx-auto w-full max-w-[min(100%,1440px)]">
-        <header className="border-b border-arc-charcoal/10 pb-10 text-center sm:pb-12 md:pb-14">
-          <h1 className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-arc-charcoal">
-            {feed.masthead}
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/62 sm:text-base md:mt-6">
-            {feed.subtitle}
-          </p>
-        </header>
-
-        <div
-          className="mt-8 flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b border-arc-charcoal/12 sm:mt-10 sm:gap-x-10 md:gap-x-14"
-          role="tablist"
-          aria-label="Filter insights"
-        >
-          {tabs.map((tab) => {
-            const active = filter === tab;
-            const count = tabCount(tab, counts);
-            const showCount = tab !== "all";
-            return (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => selectFilter(tab)}
-                className={cn(
-                  "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-[13px]",
-                  active
-                    ? "text-arc-charcoal after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:bg-arc-charcoal"
-                    : "text-arc-charcoal/45 hover:text-arc-charcoal/80",
-                )}
-              >
-                {TAB_LABELS[tab]}
-                {showCount ? (
-                  <sup className="ml-0.5 text-[10px] font-bold tabular-nums">{count}</sup>
-                ) : null}
-              </button>
-            );
-          })}
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <Image
+            src={INSIGHTS_FEED_AMBIENT_SRC}
+            alt=""
+            fill
+            unoptimized
+            className="object-cover object-center"
+            sizes="100vw"
+            priority
+          />
         </div>
 
-        {filtered.length === 0 ? (
-          <p className="mt-14 text-center font-sans text-base text-arc-charcoal/60 sm:mt-16">
-            No posts in this category yet. Explore our{" "}
-            <Link
-              href="/treatments"
-              className="font-semibold text-arc-charcoal underline-offset-2 hover:underline"
-            >
-              treatments
-            </Link>
-            .
-          </p>
-        ) : (
-          <InsightsCanvasGrid items={filtered} />
-        )}
+        <div
+          className={cn(
+            "relative z-10 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20",
+            ARC_PINNED_CLEAR_BELOW_LOGO,
+          )}
+        >
+          <div className="mx-auto w-full max-w-[min(100%,1440px)]">
+            <header className="border-b border-white/15 pb-10 text-center sm:pb-12 md:pb-14">
+              <h1
+                ref={mastheadTitleRef}
+                id="insights-masthead-title"
+                className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45),0_1px_3px_rgba(0,0,0,0.35)]"
+              >
+                {feed.masthead}
+              </h1>
+              <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-white/90 sm:text-base md:mt-6 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)]">
+                {feed.subtitle}
+              </p>
+            </header>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 bg-black px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
+        <div className="mx-auto w-full max-w-[min(100%,1440px)]">
+          <div
+            id="insights-filter-bar"
+            className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b border-white/15 pt-8 sm:gap-x-10 sm:pt-10 md:gap-x-14"
+            role="tablist"
+            aria-label="Filter insights"
+          >
+            {tabs.map((tab) => {
+              const active = filter === tab;
+              const count = tabCount(tab, counts);
+              const showCount = tab !== "all";
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => selectFilter(tab)}
+                  className={cn(
+                    "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:text-[13px]",
+                    active ? "text-white" : "text-white/55 hover:text-white/90",
+                  )}
+                >
+                  {TAB_LABELS[tab]}
+                  {showCount ? (
+                    <sup className="ml-0.5 text-[10px] font-bold tabular-nums">{count}</sup>
+                  ) : null}
+                  {active ? (
+                    <motion.span
+                      layoutId="insights-filter-underline"
+                      className="absolute inset-x-0 bottom-0 h-[2px] bg-white"
+                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative mt-0">
+            <AnimatePresence mode="wait" initial={false}>
+              <InsightsFilterPanel
+                key={filter}
+                filter={filter}
+                items={filtered}
+                reduceMotion={reduceMotion ?? false}
+                onSettled={scheduleScrollLayoutRefresh}
+              />
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   );

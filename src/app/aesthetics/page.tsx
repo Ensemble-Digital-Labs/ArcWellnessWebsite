@@ -26,7 +26,6 @@ export default function AestheticsPage() {
         ctaLabel="Book aesthetics consult"
       />
       <ArcScrollEditorialSection
-        eyebrow="Arc Aesthetics"
         title="Our approach"
         paragraphs={principles}
         imageSrc={images.services[0]}

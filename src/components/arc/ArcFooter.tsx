@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
-import { Accessibility, MessageCircle, Phone, Star } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Phone, Star } from "lucide-react";
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
+import { prefersNativeScroll } from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { useArcFullscreenPin } from "@/lib/arcSectionPins";
@@ -136,7 +137,16 @@ function StarRatingBlock() {
 
 export function ArcFooter() {
   const rootRef = useRef<HTMLElement>(null);
-  useArcFullscreenPin(rootRef);
+  const [nativeScroll, setNativeScroll] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setNativeScroll(prefersNativeScroll());
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
+
+  useArcFullscreenPin(rootRef, { disabled: nativeScroll });
   const year = new Date().getFullYear();
 
   return (
@@ -298,32 +308,6 @@ export function ArcFooter() {
                 Schedule your consultation
               </Link>
             </div>
-          </div>
-        </div>
-
-        {/* Accessibility / compliance strip */}
-        <div className="relative z-[1] mt-auto border-t border-white/10 bg-arc-charcoal text-white">
-          <div className="relative mx-auto flex max-w-5xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6 md:px-10">
-            <a
-              href="#main"
-              className="order-2 flex size-11 shrink-0 items-center justify-center self-center rounded-full bg-zinc-600 text-white transition-colors hover:bg-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-champagne/60 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal sm:order-1 sm:self-auto"
-              aria-label="Skip to main content"
-            >
-              <Accessibility className="size-5" aria-hidden />
-            </a>
-
-            <p className="order-1 flex-1 text-center font-sans text-[10px] leading-relaxed text-white/78 sm:order-2 sm:text-[11px] md:px-4">
-              ARC Wellness is committed to digital accessibility and to providing an inclusive experience for every guest.
-              If you have difficulty using this site or need assistance, please contact us — we will be glad to help.
-            </p>
-
-            <Link
-              href="/book"
-              className="order-3 flex size-11 shrink-0 items-center justify-center self-center rounded-full bg-arc-champagne text-arc-charcoal shadow-[0_2px_12px_rgba(0,0,0,0.25)] transition-colors hover:bg-arc-champagne-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal sm:self-auto"
-              aria-label="Book an appointment"
-            >
-              <MessageCircle className="size-5" aria-hidden />
-            </Link>
           </div>
         </div>
       </div>

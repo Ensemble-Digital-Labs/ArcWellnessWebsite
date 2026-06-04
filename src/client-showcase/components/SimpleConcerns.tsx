@@ -50,7 +50,7 @@ export function SimpleConcerns() {
                 key={item.label}
                 className="rounded-xl border border-arc-charcoal/10 bg-white/70 px-3 py-4 text-center sm:px-4"
               >
-                <p className="font-serif text-2xl font-semibold text-arc-teal-ink sm:text-3xl">{item.value}</p>
+                <p className="font-serif text-2xl font-semibold text-arc-charcoal sm:text-3xl">{item.value}</p>
                 <p className="mt-1 font-sans text-[11px] font-medium uppercase leading-snug tracking-wide text-arc-charcoal/65 sm:text-xs">
                   {item.label}
                 </p>

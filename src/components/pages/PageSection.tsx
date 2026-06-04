@@ -56,7 +56,7 @@ export function SectionHeading({
         <p
           className={cn(
             "mb-2 font-sans text-xs font-semibold uppercase tracking-[0.24em]",
-            dark ? "text-arc-teal" : "text-arc-teal-ink",
+            "text-arc-teal",
           )}
         >
           {subtitle}

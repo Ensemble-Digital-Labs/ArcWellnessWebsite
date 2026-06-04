@@ -13,7 +13,7 @@ export default function CaseStudiesPage() {
   const entries = getInsightEntries();
 
   return (
-    <ArcMarketingShell>
+    <ArcMarketingShell headerProps={{ logoClickOnlyAtTop: true }}>
       <CaseStudiesPageContent entries={entries} />
     </ArcMarketingShell>
   );

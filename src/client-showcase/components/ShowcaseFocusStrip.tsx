@@ -27,7 +27,7 @@ export function ShowcaseFocusStrip() {
                 href={`${CLIENT_SHOWCASE_BASE}#concerns`}
                 className="group flex flex-col items-center gap-2 text-center sm:min-w-[5.5rem]"
               >
-                <span className="flex size-14 items-center justify-center rounded-full border border-arc-charcoal/10 bg-arc-cream/80 text-arc-teal-ink shadow-sm transition-colors group-hover:border-arc-teal/35 group-hover:bg-arc-teal-muted/50 sm:size-16">
+                <span className="flex size-14 items-center justify-center rounded-full border border-arc-charcoal/10 bg-arc-cream/80 text-arc-charcoal shadow-sm transition-colors group-hover:border-arc-teal/35 group-hover:bg-arc-teal-muted/50 sm:size-16">
                   <Icon className="size-6 opacity-90 sm:size-7" strokeWidth={1.5} aria-hidden />
                 </span>
                 <span className="max-w-[9rem] font-sans text-[11px] font-medium leading-snug text-arc-charcoal/80 sm:max-w-none sm:text-xs">

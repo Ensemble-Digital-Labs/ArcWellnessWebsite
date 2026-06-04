@@ -7,7 +7,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import {
+  ARC_EDITORIAL_BODY_CLASS,
+  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+  ARC_SPLIT_HEADLINE_SERIF_CLASS,
+  ARC_STACKED_HEADLINE_SERIF_CLASS,
+  TitleEmphasis,
+} from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
@@ -73,7 +79,6 @@ function useVoobanImageReveal(imageWrapRef: React.RefObject<HTMLDivElement | nul
 
 type ArcScrollEditorialSectionProps = {
   id?: string;
-  eyebrow?: string;
   title: string;
   titleEmphasis?: string;
   paragraphs: readonly string[];
@@ -88,54 +93,143 @@ type ArcScrollEditorialSectionProps = {
   revealLines?: boolean;
   /** Scale image on hover */
   imageHoverExpand?: boolean;
+  /** `stacked` — serif title on line 1, script emphasis on line 2 (e.g. Our Mission + subtitle). */
+  /** `split` — About-style inline serif + script on one line (treatment detail sections). */
+  headlineLayout?: "inline" | "stacked" | "split";
+  /** Larger serif body copy (mission / vision blocks). */
+  bodyTypography?: "default" | "editorial";
+  /** Optional sign-off block below body (founder note). */
+  signature?: { signoff: string; role: string };
 };
 
+const DEFAULT_BODY_LINE_CLASS =
+  "font-sans text-sm leading-relaxed text-arc-charcoal/88 sm:text-base";
+
 function EditorialBody({
-  eyebrow,
   title,
   titleEmphasis,
   paragraphs,
   cta,
   revealLines,
+  headlineLayout = "inline",
+  bodyTypography = "default",
+  signature,
+  hasAdjacentImage = false,
 }: Pick<
   ArcScrollEditorialSectionProps,
-  "eyebrow" | "title" | "titleEmphasis" | "paragraphs" | "cta" | "revealLines"
->) {
+  | "title"
+  | "titleEmphasis"
+  | "paragraphs"
+  | "cta"
+  | "revealLines"
+  | "headlineLayout"
+  | "bodyTypography"
+  | "signature"
+> & {
+  hasAdjacentImage?: boolean;
+}) {
+  const stackedHeadline = headlineLayout === "stacked" && titleEmphasis;
+  const splitHeadline = headlineLayout === "split";
+  const bodyLineClass =
+    bodyTypography === "editorial" ? ARC_EDITORIAL_BODY_CLASS : DEFAULT_BODY_LINE_CLASS;
+  const bodyWrapClass =
+    bodyTypography === "editorial" ? "md:max-w-2xl" : "md:max-w-xl";
+
   return (
     <div data-scroll-section className="flex min-w-0 flex-1 flex-col justify-center">
-      {eyebrow ? (
-        <div className="mb-6 flex items-center gap-3">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-teal-ink">
-            {eyebrow}
-          </span>
-          <span className="h-px max-w-[120px] flex-1 bg-arc-teal/50" aria-hidden />
-        </div>
-      ) : null}
-      <h2 className="max-w-[20ch] font-serif text-3xl font-semibold leading-[1.1] tracking-tight text-arc-charcoal sm:text-4xl lg:text-[2.65rem]">
-        {titleEmphasis ? (
-          <>
-            {title}{" "}
-            <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.28em]">
-              {titleEmphasis}
-            </TitleEmphasis>
-          </>
-        ) : (
-          title
+      <div
+        className={cn(
+          "overflow-y-visible pb-[0.12em]",
+          splitHeadline ? "overflow-x-visible" : "overflow-x-clip",
         )}
-      </h2>
+      >
+        <h2
+          className={cn(
+            "text-arc-charcoal",
+            splitHeadline
+              ? cn(
+                  "max-w-full",
+                  hasAdjacentImage
+                    ? "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap md:max-w-none"
+                    : "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap",
+                  ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                )
+              : stackedHeadline
+              ? cn("max-w-none", ARC_STACKED_HEADLINE_SERIF_CLASS)
+              : "max-w-[20ch] font-serif text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.65rem]",
+          )}
+        >
+          {splitHeadline ? (
+            <>
+              <span className="shrink-0">{title}</span>
+              {titleEmphasis ? (
+                <TitleEmphasis
+                  className={cn(
+                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    "inline shrink-0 align-baseline leading-none",
+                  )}
+                >
+                  {titleEmphasis}
+                </TitleEmphasis>
+              ) : null}
+            </>
+          ) : stackedHeadline ? (
+            <>
+              <span className="block max-w-full sm:w-max sm:whitespace-nowrap">{title}</span>
+              {titleEmphasis.split("\n").map((line, index) => (
+                <TitleEmphasis
+                  key={`${line}-${index}`}
+                  className={cn(
+                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    "block w-max max-w-full leading-none",
+                    index === 0 ? "mt-3 sm:mt-3.5" : "mt-1 sm:mt-1.5",
+                  )}
+                >
+                  {line.trim()}
+                </TitleEmphasis>
+              ))}
+            </>
+          ) : titleEmphasis ? (
+            <>
+              {title}{" "}
+              <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.28em]">
+                {titleEmphasis}
+              </TitleEmphasis>
+            </>
+          ) : (
+            title
+          )}
+        </h2>
+      </div>
       {revealLines ? (
         <ArcScrollSplitReveal
-          className="mt-6 sm:mt-8 md:max-w-xl"
+          className={cn("mt-8 sm:mt-10", bodyWrapClass)}
           lines={paragraphs}
-          lineClassName="font-sans text-sm leading-relaxed text-arc-charcoal/88 sm:text-base"
+          lineClassName={bodyLineClass}
         />
       ) : (
-        <div className="mt-6 space-y-4 font-sans text-sm leading-relaxed text-arc-charcoal/88 sm:mt-8 sm:text-base md:max-w-xl">
+        <div
+          className={cn(
+            "mt-6 space-y-4 sm:mt-8",
+            bodyLineClass,
+            bodyWrapClass,
+          )}
+        >
           {paragraphs.map((p) => (
             <p key={p.slice(0, 32)}>{p}</p>
           ))}
         </div>
       )}
+      {signature ? (
+        <footer className="mt-10 border-t border-arc-charcoal/10 pt-8 sm:mt-12 sm:pt-10">
+          <p className="font-serif text-[clamp(1.125rem,2.2vw,1.4rem)] font-semibold tracking-tight text-arc-charcoal">
+            — {signature.signoff}
+          </p>
+          <p className="mt-2 font-serif text-[clamp(1rem,1.9vw,1.125rem)] font-medium leading-[1.4] text-arc-charcoal/72">
+            {signature.role}
+          </p>
+        </footer>
+      ) : null}
       {cta ? (
         <div className="mt-8 sm:mt-10">
           <ArcTextUnderlineCta href={cta.href} accent="roseGoldInk">
@@ -149,7 +243,6 @@ function EditorialBody({
 
 export function ArcScrollEditorialSection({
   id,
-  eyebrow,
   title,
   titleEmphasis,
   paragraphs,
@@ -162,6 +255,9 @@ export function ArcScrollEditorialSection({
   pinned = false,
   revealLines = false,
   imageHoverExpand = true,
+  headlineLayout = "inline",
+  bodyTypography = "default",
+  signature,
 }: ArcScrollEditorialSectionProps) {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   useVoobanImageReveal(imageWrapRef, Boolean(imageSrc) && !pinned);
@@ -180,7 +276,7 @@ export function ArcScrollEditorialSection({
           ref={imageWrapRef}
           data-scroll-section
           className={cn(
-            "group relative aspect-[4/5] w-full shrink-0 overflow-hidden md:max-w-md lg:max-w-lg",
+            "group relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-sm shadow-[0_20px_48px_rgba(44,44,44,0.1)] md:max-w-md lg:max-w-lg",
             imageHoverExpand &&
               "transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_28px_64px_rgba(44,44,44,0.14)]",
           )}
@@ -190,20 +286,23 @@ export function ArcScrollEditorialSection({
             alt={imageAlt}
             fill
             className={cn(
-              "object-cover transition-transform duration-700 ease-out",
-              imageHoverExpand && "group-hover:scale-[1.08]",
+              "object-cover object-[42%_22%] transition-transform duration-700 ease-out",
+              imageHoverExpand && "group-hover:scale-[1.05]",
             )}
             sizes="(min-width: 768px) 40vw, 100vw"
           />
         </div>
       ) : null}
       <EditorialBody
-        eyebrow={eyebrow}
         title={title}
         titleEmphasis={titleEmphasis}
         paragraphs={paragraphs}
         cta={cta}
         revealLines={revealLines}
+        headlineLayout={headlineLayout}
+        bodyTypography={bodyTypography}
+        signature={signature}
+        hasAdjacentImage={Boolean(imageSrc)}
       />
     </div>
   );

@@ -26,7 +26,7 @@ export function SimpleTestimonials({ items }: SimpleTestimonialsProps) {
                 <Image src={item.imageSrc} alt={item.imageAlt} fill className="object-cover object-center" sizes="96px" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-sans text-sm font-medium text-arc-teal-ink">{item.attribution}</p>
+                <p className="font-sans text-sm font-medium text-arc-charcoal">{item.attribution}</p>
                 <p className="font-sans text-[11px] uppercase tracking-wide text-arc-charcoal/55">{item.context}</p>
                 <blockquote className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/85">
                   <span className="text-arc-charcoal/45" aria-hidden>

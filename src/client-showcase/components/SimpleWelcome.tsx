@@ -54,11 +54,11 @@ export function SimpleWelcome({
           <p className="mt-5 font-sans text-base leading-relaxed text-arc-charcoal/85">{paragraph1}</p>
           <p className="mt-4 font-sans text-base leading-relaxed text-arc-charcoal/85">{paragraph2}</p>
           <p className="mt-6 font-sans text-sm font-medium text-arc-charcoal">
-            <span className="text-arc-teal-ink">{proofLead}</span> {proofRest}
+            <span className="text-arc-charcoal">{proofLead}</span> {proofRest}
           </p>
           <Link
             href={ctaHref}
-            className="mt-8 inline-flex rounded-full border border-arc-charcoal/20 bg-white px-5 py-2.5 font-sans text-sm font-semibold text-arc-charcoal shadow-sm transition-colors hover:border-arc-teal/40 hover:text-arc-teal-ink"
+            className="mt-8 inline-flex rounded-full border border-arc-charcoal/20 bg-white px-5 py-2.5 font-sans text-sm font-semibold text-arc-charcoal shadow-sm transition-colors hover:border-arc-teal/40 hover:text-arc-teal"
           >
             {ctaLabel}
           </Link>

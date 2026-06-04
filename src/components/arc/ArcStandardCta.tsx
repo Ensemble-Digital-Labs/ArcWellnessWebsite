@@ -21,9 +21,9 @@ export function ArcStandardCta({ href, children, className, style }: ArcStandard
       href={href}
       className={cn(
         "group inline-flex items-center gap-2.5 font-sans text-sm font-bold uppercase tracking-[0.22em]",
-        "text-arc-teal-ink transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-arc-teal-ink-hover",
+        "text-arc-charcoal transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-arc-teal",
         "[text-shadow:0_1px_0_rgba(255,255,255,0.5),0_1px_3px_rgba(44,44,44,0.12),0_0_16px_rgba(40,122,109,0.2)]",
-        "outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-arc-teal-ink/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80",
+        "outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80",
         "motion-reduce:transition-none sm:text-base",
         className,
       )}

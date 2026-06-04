@@ -29,7 +29,7 @@ export function SimplePathCompact() {
         <ol className="mt-10 space-y-8 text-left">
           {STEPS.map((step, i) => (
             <li key={step.title} className="flex gap-4 sm:gap-5">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-arc-teal-muted font-serif text-sm font-semibold text-arc-teal-ink">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-arc-teal-muted font-serif text-sm font-semibold text-arc-charcoal">
                 {i + 1}
               </span>
               <div>

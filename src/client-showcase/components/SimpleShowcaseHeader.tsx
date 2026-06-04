@@ -37,26 +37,26 @@ export function SimpleShowcaseHeader() {
       <div className="border-b border-arc-charcoal/10 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-1 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans text-xs text-arc-charcoal/80 sm:text-[13px]">
-            <a href="tel:+15555551234" className="whitespace-nowrap hover:text-arc-teal-ink">
+            <a href="tel:+15555551234" className="whitespace-nowrap hover:text-arc-teal">
               (555) 555-1234
             </a>
             <span className="hidden text-arc-charcoal/25 sm:inline" aria-hidden>
               |
             </span>
-            <a href={`mailto:${SHOWCASE_EMAIL}`} className="whitespace-nowrap hover:text-arc-teal-ink">
+            <a href={`mailto:${SHOWCASE_EMAIL}`} className="whitespace-nowrap hover:text-arc-teal">
               {SHOWCASE_EMAIL}
             </a>
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <Link
               href={hrefFor("#book")}
-              className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-arc-charcoal hover:text-arc-teal-ink sm:text-[13px]"
+              className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-arc-charcoal hover:text-arc-teal sm:text-[13px]"
             >
               Book appointment
             </Link>
             <Link
               href={hrefFor("#contact")}
-              className="inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-arc-charcoal/75 hover:text-arc-teal-ink sm:text-[13px]"
+              className="inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-arc-charcoal/75 hover:text-arc-teal sm:text-[13px]"
             >
               Patient portal
               <ArrowRight className="size-3" strokeWidth={2} aria-hidden />
@@ -81,7 +81,7 @@ export function SimpleShowcaseHeader() {
               <Link
                 key={item.hash}
                 href={hrefFor(item.hash)}
-                className="font-sans text-[13px] font-medium text-arc-charcoal/88 transition-colors hover:text-arc-teal-ink xl:text-sm"
+                className="font-sans text-[13px] font-medium text-arc-charcoal/88 transition-colors hover:text-arc-teal xl:text-sm"
               >
                 {item.label}
               </Link>

@@ -13,12 +13,6 @@ export function WhoWeAreSection({ imageSrc }: WhoWeAreSectionProps) {
       className="flex min-h-[100dvh] flex-col justify-center bg-arc-cream px-6 py-20 md:flex-row md:items-center md:gap-16 md:px-12 lg:mx-auto lg:max-w-7xl lg:px-8"
     >
       <div data-scroll-section className="mb-12 flex-1 md:mb-0">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-teal-ink">
-            Who we are
-          </span>
-          <span className="h-px flex-1 max-w-[120px] bg-arc-teal/60" aria-hidden />
-        </div>
         <h2 className="mb-8 font-serif text-3xl font-semibold leading-tight text-arc-charcoal md:text-4xl lg:text-[2.75rem]">
           Care That&apos;s Intentional. Results That Last.
         </h2>

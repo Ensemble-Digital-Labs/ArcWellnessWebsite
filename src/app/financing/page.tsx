@@ -26,7 +26,6 @@ export default function FinancingPage() {
         ctaLabel="Book consultation"
       />
       <ArcScrollEditorialSection
-        eyebrow="Options"
         title="Flexible payment paths"
         paragraphs={options.map((o) => `${o.title}: ${o.body}`)}
         imageSrc={images.whoWeAre}

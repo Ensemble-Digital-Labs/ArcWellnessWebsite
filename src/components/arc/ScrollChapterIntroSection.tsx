@@ -4,8 +4,14 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ArcChapterHeroImageCanvas,
+  ArcChapterHeroImageCanvasMobile,
+  type ArcChapterHeroCanvasTile,
+} from "@/components/arc/ArcChapterHeroImageCanvas";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
+import { ARC_HEADLINE_TITLE_EMPHASIS_CLASS, TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ArcVoobanHeadline } from "@/components/arc/ArcVoobanHeadline";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
@@ -27,10 +33,14 @@ export type ScrollChapterFloatingMedia = {
 type ScrollChapterIntroSectionProps = {
   id?: string;
   className?: string;
-  eyebrow?: string;
   headline?: string;
+  /** Handwriting emphasis (Birthstone) — paired with `headline` for serif + script split. */
+  headlineEmphasis?: string;
   body: string;
-  imageSrc: string;
+  /** Photography plate for `split-photo` layout only. */
+  imageSrc?: string;
+  /** `ambient-full` — marble/ambient edge-to-edge; no rear photo or floating inset. */
+  layout?: "split-photo" | "ambient-full";
   /** Vooban-style overlapping still — offsets into the hero photo column */
   floatingMedia?: ScrollChapterFloatingMedia;
   ctaHref?: string;
@@ -42,6 +52,19 @@ type ScrollChapterIntroSectionProps = {
   introMode?: "visible-on-load" | "scroll-reveal";
   /** `pin-scrub` locks the viewport while scroll drives motion; `enter-once` plays in on arrival. */
   motion?: "pin-scrub" | "enter-once";
+  /**
+   * `wide` — more of the photo visible (less scale/inset); good for clinic interiors.
+   * `cinematic` — tighter crop + Ken Burns for pinned homepage-style chapters.
+   */
+  backgroundFrame?: "wide" | "cinematic";
+  /** Tailwind `object-*` position for the background still (e.g. `object-[40%_50%]`). */
+  imageObjectPosition?: string;
+  /** Ambient art behind the left copy card (crossfades on scroll when multiple). */
+  copyColumnAmbients?: readonly string[];
+  /** Floating clinic stills on the right for `ambient-full` heroes. */
+  heroCanvasTiles?: readonly ArcChapterHeroCanvasTile[];
+  /** `compact` — smaller script line for long taglines (treatment detail heroes). */
+  headlineEmphasisSize?: "default" | "compact";
 };
 
 /**
@@ -52,8 +75,8 @@ type ScrollChapterIntroSectionProps = {
 export function ScrollChapterIntroSection({
   id,
   className,
-  eyebrow,
   headline,
+  headlineEmphasis,
   body,
   imageSrc,
   floatingMedia,
@@ -61,6 +84,12 @@ export function ScrollChapterIntroSection({
   ctaLabel,
   introMode = "visible-on-load",
   motion = "enter-once",
+  backgroundFrame,
+  imageObjectPosition,
+  copyColumnAmbients,
+  heroCanvasTiles,
+  layout = "split-photo",
+  headlineEmphasisSize = "default",
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -95,7 +124,7 @@ export function ScrollChapterIntroSection({
           disposeEnterOnce = bindArcEnterOnceProgress({
             trigger: section,
             onProgress: setProgress,
-            playIfVisibleOnLoad: true,
+            scrollStart: layout === "ambient-full" ? "top 82%" : "top 88%",
           });
           return;
         }
@@ -146,7 +175,7 @@ export function ScrollChapterIntroSection({
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [reduceMotion, motion]);
+  }, [reduceMotion, motion, layout]);
 
   const p = reduceMotion ? 1 : progress;
   const visibleOnLoad = introMode === "visible-on-load";
@@ -158,8 +187,24 @@ export function ScrollChapterIntroSection({
     ? Math.min(1, 0.82 + p * 0.2)
     : Math.min(1, Math.max(0, (p - 0.22) * 2.5));
 
-  const imagePan = p * 10 - 5;
-  const imageScale = visibleOnLoad ? 1.06 + p * 0.05 : 1.1 + p * 0.06;
+  const wideBackground =
+    backgroundFrame === "wide" ||
+    (backgroundFrame !== "cinematic" && motion === "enter-once");
+
+  const imagePan = wideBackground ? p * 3 - 1.5 : p * 10 - 5;
+  const imageScale = wideBackground
+    ? visibleOnLoad
+      ? 1 + p * 0.02
+      : 1.02 + p * 0.03
+    : visibleOnLoad
+      ? 1.06 + p * 0.05
+      : 1.1 + p * 0.06;
+  const imageInset = wideBackground ? "inset-0" : "inset-[-8%]";
+  const bgObjectPosition =
+    imageObjectPosition ??
+    (wideBackground
+      ? "object-[36%_40%] md:object-[40%_42%]"
+      : "object-[55%_center] md:object-[58%_center]");
   const bodyDrift = visibleOnLoad ? (0.1 - p) * 10 : (0.4 - p) * 28;
   const gradientMid = visibleOnLoad ? 42 + p * 10 : 36 + p * 14;
   const ruleScale = visibleOnLoad ? Math.min(1, 0.85 + p * 0.2) : Math.min(1, p * 1.45);
@@ -169,114 +214,276 @@ export function ScrollChapterIntroSection({
     : Math.min(1, Math.max(0, (p - 0.18) * 2.4));
   const floatY = visibleOnLoad ? (0.35 - p) * 10 : (1 - p) * 18 - 8;
   const floatRotate = visibleOnLoad ? (0.25 - p) * 1.5 : (0.5 - p) * 2.5;
-  const eyebrowSlide = {
-    opacity: Math.min(1, visibleOnLoad ? 0.88 + p * 0.14 : p * 2),
-    transform: `translate3d(${visibleOnLoad ? -14 + p * 14 : -24 + p * 24}px, 0, 0)`,
-  };
   const imageRotate = visibleOnLoad ? (0.35 - p) * 1.2 : (0.5 - p) * 2;
 
   const pinScrub = motion === "pin-scrub";
+  const heroCanvasAnimation = motion === "enter-once" ? "enter-once" : "scroll-scrub";
+  const ambientFullBleed = layout === "ambient-full";
+  const compactEmphasis = headlineEmphasisSize === "compact";
+  const ambientEnterOnce = ambientFullBleed && motion === "enter-once" && !reduceMotion;
+  const heroCopyReveal = ambientEnterOnce
+    ? Math.min(1, Math.max(0, (p - 0.04) * 1.08))
+    : 1;
+  const heroCopyLift = ambientEnterOnce ? (1 - p) * 28 : 0;
+  const ambientCount = copyColumnAmbients?.length ?? 0;
+  const onDarkCopy = ambientFullBleed || ambientCount > 0;
+  const singleTileHero = Boolean(heroCanvasTiles?.length === 1);
+
+  const ambientLayerOpacity = (index: number) => {
+    if (ambientCount <= 1) return index === 0 ? 1 : 0;
+    const t = p * (ambientCount - 1);
+    const active = Math.min(ambientCount - 1, Math.floor(t));
+    const blend = t - active;
+    if (index === active) return 1 - blend;
+    if (index === active + 1) return blend;
+    return 0;
+  };
 
   return (
     <section
       ref={sectionRef}
       id={id}
       className={cn(
-        "relative isolate flex flex-col overflow-hidden bg-arc-cream",
+        "relative isolate flex flex-col",
+        ambientFullBleed ? "overflow-x-clip overflow-y-visible bg-arc-charcoal" : "overflow-hidden bg-arc-cream",
         pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
         className,
       )}
     >
       {pinScrub ? <ArcPinProgressRail progress={p} /> : null}
 
-      {/* Full-bleed photography (locked section — pans while pinned) */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div
-          className="absolute inset-[-8%] will-change-transform"
-          style={{
-            transform: `translateX(${imagePan}%) scale(${imageScale}) rotate(${imageRotate}deg)`,
-          }}
-        >
-          <Image
-            src={imageSrc}
-            alt=""
-            fill
-            className="object-cover object-[55%_center] md:object-[58%_center]"
-            sizes="100vw"
-          />
+      {ambientFullBleed && ambientCount > 0 ? (
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          {copyColumnAmbients!.map((src, index) => (
+            <Image
+              key={src}
+              src={src}
+              alt=""
+              fill
+              unoptimized
+              className="object-cover object-center"
+              sizes="100vw"
+              style={{ opacity: ambientLayerOpacity(index) }}
+            />
+          ))}
         </div>
-      </div>
+      ) : null}
 
-      {/* Progress-driven mist — wide screens: sweep L→R; narrow: top sheet so photo shows below */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] md:hidden"
-        style={{
-          background: `linear-gradient(180deg,
+      {!ambientFullBleed && imageSrc ? (
+        <>
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            <div
+              className={cn("absolute will-change-transform", imageInset)}
+              style={{
+                transform: `translateX(${imagePan}%) scale(${imageScale}) rotate(${imageRotate}deg)`,
+              }}
+            >
+              <Image
+                src={imageSrc}
+                alt=""
+                fill
+                className={cn("object-cover", bgObjectPosition)}
+                sizes="100vw"
+              />
+            </div>
+          </div>
+          <div
+            className="pointer-events-none absolute inset-0 z-[1] md:hidden"
+            style={{
+              background: `linear-gradient(180deg,
             rgba(247, 244, 239, ${0.97 - p * 0.08}) 0%,
             rgba(247, 244, 239, ${0.72 - p * 0.25}) 52%,
             rgba(247, 244, 239, 0) 100%)`,
-        }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] hidden md:block"
-        style={{
-          background: `linear-gradient(100deg,
+            }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 z-[1] hidden md:block"
+            style={{
+              background: `linear-gradient(100deg,
             rgba(247, 244, 239, ${0.94 - p * 0.12}) 0%,
             rgba(247, 244, 239, ${0.78 - p * 0.2}) ${gradientMid - 6}%,
             rgba(247, 244, 239, ${0.35 - p * 0.28}) ${gradientMid + 8}%,
             rgba(247, 244, 239, 0) ${Math.min(88, gradientMid + 38)}%)`,
-        }}
-        aria-hidden
-      />
-
-      <div
-        className={cn(
-          "relative z-10 mx-auto flex w-full flex-col md:flex-row md:items-stretch",
-          pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
-          ARC_PAGE_RAIL_MAX,
-        )}
-      >
-        {/* Copy column — uses width so center isn’t consumed by a logo */}
-        <div className="flex w-full flex-[1.02] flex-col justify-center bg-arc-cream/92 px-6 py-16 backdrop-blur-[2px] sm:px-10 sm:py-20 md:max-w-[min(100%,34rem)] md:flex-none md:bg-arc-cream/88 md:px-12 md:py-24 lg:px-14">
-          {eyebrow ? (
-            <p
-              className="mb-4 font-sans text-xs font-bold uppercase tracking-[0.28em] text-arc-teal-ink will-change-transform"
-              style={eyebrowSlide}
-            >
-              {eyebrow}
-            </p>
-          ) : null}
-
-          <div
-            className="mb-2 h-16 w-px origin-top bg-arc-charcoal/25 sm:h-20 md:h-24"
-            style={{
-              transform: `scaleY(${ruleScale})`,
-              opacity: ruleOpacity,
             }}
             aria-hidden
           />
+        </>
+      ) : null}
 
-          {headline ? (
-            <ArcVoobanHeadline
-              text={headline}
-              scrollProgress={p}
-              className="max-w-[22ch] font-serif text-3xl font-semibold leading-[1.12] tracking-tight text-arc-charcoal sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]"
+      <div
+        className={cn(
+          "relative z-10 mx-auto w-full",
+          ambientFullBleed
+            ? cn(
+                "flex min-h-[min(90dvh,840px)] flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 md:grid md:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] md:items-center md:gap-10 md:px-12 md:py-24 lg:gap-14 lg:px-16 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]",
+                ARC_PAGE_RAIL_MAX,
+              )
+            : cn(
+                "flex flex-col md:flex-row md:items-stretch",
+                pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
+                ARC_PAGE_RAIL_MAX,
+              ),
+        )}
+      >
+        {singleTileHero && heroCanvasTiles?.[0] ? (
+          <div className="order-1 mt-6 flex w-full justify-center sm:mt-8 md:hidden">
+            <div className="relative aspect-[4/5] w-[min(72vw,280px)] overflow-hidden rounded-sm border border-white/20 shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+              <Image
+                src={heroCanvasTiles[0].src}
+                alt={heroCanvasTiles[0].alt}
+                fill
+                className="object-cover"
+                sizes="72vw"
+                priority
+              />
+            </div>
+          </div>
+        ) : ambientFullBleed && heroCanvasTiles && heroCanvasTiles.length > 1 ? (
+          <ArcChapterHeroImageCanvasMobile
+            tiles={heroCanvasTiles}
+            scrollTriggerRootRef={sectionRef}
+            reduceMotion={reduceMotion}
+            animation={heroCanvasAnimation}
+            className="order-1 md:hidden"
+          />
+        ) : null}
+
+        <div
+          className={cn(
+            "flex flex-col justify-center",
+            ambientFullBleed
+              ? "order-2 w-full shrink-0 md:order-none md:max-w-[min(100%,48rem)] md:flex-none"
+              : "relative w-full flex-[1.02] overflow-hidden sm:py-20 md:max-w-[min(100%,34rem)] md:flex-none md:py-24",
+          )}
+        >
+          {!ambientFullBleed && ambientCount > 0 ? (
+            <div className="pointer-events-none absolute inset-0" aria-hidden>
+              {copyColumnAmbients!.map((src, index) => (
+                <Image
+                  key={src}
+                  src={src}
+                  alt=""
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 34rem"
+                  style={{ opacity: ambientLayerOpacity(index) }}
+                />
+              ))}
+            </div>
+          ) : null}
+          {!ambientFullBleed && ambientCount === 0 ? (
+            <div
+              className="pointer-events-none absolute inset-0 bg-arc-cream/92 backdrop-blur-[2px] md:bg-arc-cream/88"
+              aria-hidden
+            />
+          ) : null}
+          <div
+            className={cn(
+              "relative z-10 flex flex-col justify-center",
+              !ambientFullBleed && "px-6 py-16 sm:px-10 md:px-12 lg:px-14",
+            )}
+          >
+          {!ambientFullBleed ? (
+            <div
+              className={cn(
+                "mb-2 h-16 w-px origin-top sm:h-20 md:h-24",
+                onDarkCopy ? "bg-white/35" : "bg-arc-charcoal/25",
+              )}
+              style={{
+                transform: `scaleY(${ruleScale})`,
+                opacity: ruleOpacity,
+              }}
+              aria-hidden
             />
           ) : null}
 
-          <p
-            className={cn(
-              "max-w-xl font-sans leading-relaxed text-arc-charcoal/88 sm:text-[1.05rem] md:text-lg",
-              headline ? "mt-6 sm:mt-7 md:mt-8" : "mt-0",
-            )}
-            style={{
-              opacity: bodyReveal,
-              transform: `translateY(${10 + bodyDrift}px)`,
-            }}
-          >
-            {body}
-          </p>
+          {headline ? (
+            <h2
+              className={cn(
+                "font-serif font-semibold tracking-tight will-change-[transform,opacity]",
+                ambientFullBleed && headlineEmphasis
+                  ? compactEmphasis
+                    ? "mt-6 flex max-w-full flex-col items-start gap-0 text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]"
+                    : "mt-6 inline-flex max-w-none flex-wrap items-baseline gap-x-[0.18em] text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]"
+                  : headlineEmphasis
+                    ? "flex max-w-[min(100%,32rem)] flex-wrap items-baseline gap-x-[0.28em] text-3xl leading-[1.14] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]"
+                    : "max-w-[22ch] text-3xl leading-[1.22] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]",
+                onDarkCopy
+                  ? "text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45),0_1px_3px_rgba(0,0,0,0.35)]"
+                  : "text-arc-charcoal",
+                ambientEnterOnce && heroCopyReveal <= 0 && "opacity-0",
+              )}
+              style={
+                ambientEnterOnce
+                  ? {
+                      opacity: heroCopyReveal,
+                      transform: `translate3d(0, ${heroCopyLift}px, 0)`,
+                    }
+                  : undefined
+              }
+            >
+              {ambientFullBleed && headlineEmphasis ? (
+                <>
+                  <span className="font-serif font-semibold tracking-tight">{headline}</span>
+                  <TitleEmphasis
+                    className={cn(
+                      compactEmphasis
+                        ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
+                        : "inline align-baseline leading-none tracking-tight",
+                      onDarkCopy
+                        ? compactEmphasis
+                          ? "text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.38),0_0_24px_var(--arc-rose-gold-glow)]"
+                          : "text-[1.42em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)]"
+                        : !compactEmphasis && ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    )}
+                  >
+                    {headlineEmphasis}
+                  </TitleEmphasis>
+                </>
+              ) : (
+                <>
+                  <ArcVoobanHeadline
+                    text={headline}
+                    scrollProgress={p}
+                    as="span"
+                    variant={headlineEmphasis ? "inline" : "block"}
+                    className="inline font-serif font-semibold tracking-tight"
+                  />
+                  {headlineEmphasis ? (
+                    <TitleEmphasis
+                      className={cn(
+                        "inline align-baseline leading-none tracking-tight",
+                        onDarkCopy
+                          ? "text-[1.35em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)] sm:text-[1.42em] md:text-[1.5em]"
+                          : ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                      )}
+                    >
+                      {headlineEmphasis}
+                    </TitleEmphasis>
+                  ) : null}
+                </>
+              )}
+            </h2>
+          ) : null}
+
+          {body.trim() ? (
+            <p
+              className={cn(
+                "max-w-xl font-sans leading-relaxed sm:text-[1.05rem] md:text-lg",
+                onDarkCopy
+                  ? "text-white/88 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)]"
+                  : "text-arc-charcoal/88",
+                headline ? "mt-6 sm:mt-7 md:mt-8" : "mt-0",
+              )}
+              style={{
+                opacity: bodyReveal,
+                transform: `translateY(${10 + bodyDrift}px)`,
+              }}
+            >
+              {body}
+            </p>
+          ) : null}
 
           {ctaHref && ctaLabel ? (
             <ArcStandardCta
@@ -300,49 +507,63 @@ export function ScrollChapterIntroSection({
               Scroll to read our story
             </p>
           ) : null}
-        </div>
-
-        {/* Spacer: photo reads on the right; on md+ this flexes so copy doesn’t max out full rail */}
-        <div className="relative hidden min-h-[min(40dvh,320px)] flex-1 md:block">
-          {floatingMedia ? (
-            <div
-              className="pointer-events-none absolute right-6 top-[18%] z-20 w-[min(42vw,280px)] motion-reduce:transform-none lg:right-10 lg:top-[14%] lg:w-[min(36vw,320px)]"
-              style={{
-                opacity: floatReveal,
-                transform: `translate3d(0, ${floatY}px, 0) rotate(${floatRotate}deg)`,
-              }}
-            >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-arc-cream/40 shadow-[0_24px_60px_rgba(44,44,44,0.28)]">
-                <Image
-                  src={floatingMedia.src}
-                  alt={floatingMedia.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 768px) 320px, 42vw"
-                />
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        {floatingMedia ? (
-          <div
-            className="relative mx-auto mt-8 aspect-[4/5] w-full max-w-[220px] md:hidden"
-            style={{
-              opacity: floatReveal,
-              transform: `translate3d(0, ${floatY * 0.6}px, 0)`,
-            }}
-          >
-            <div className="relative h-full overflow-hidden rounded-sm border border-arc-charcoal/10 shadow-[0_16px_40px_rgba(44,44,44,0.12)]">
-              <Image
-                src={floatingMedia.src}
-                alt={floatingMedia.alt}
-                fill
-                className="object-cover"
-                sizes="220px"
-              />
-            </div>
           </div>
+        </div>
+
+        {ambientFullBleed && heroCanvasTiles && heroCanvasTiles.length > 0 ? (
+          <ArcChapterHeroImageCanvas
+            tiles={heroCanvasTiles}
+            scrollTriggerRootRef={sectionRef}
+            reduceMotion={reduceMotion}
+            animation={heroCanvasAnimation}
+            className="order-3 hidden md:flex"
+          />
+        ) : null}
+
+        {!ambientFullBleed ? (
+          <>
+            <div className="relative hidden min-h-[min(40dvh,320px)] flex-1 md:block">
+              {floatingMedia ? (
+                <div
+                  className="pointer-events-none absolute right-6 top-[18%] z-20 w-[min(42vw,280px)] motion-reduce:transform-none lg:right-10 lg:top-[14%] lg:w-[min(36vw,320px)]"
+                  style={{
+                    opacity: floatReveal,
+                    transform: `translate3d(0, ${floatY}px, 0) rotate(${floatRotate}deg)`,
+                  }}
+                >
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-arc-cream/40 shadow-[0_24px_60px_rgba(44,44,44,0.28)]">
+                    <Image
+                      src={floatingMedia.src}
+                      alt={floatingMedia.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 768px) 320px, 42vw"
+                    />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            {floatingMedia ? (
+              <div
+                className="relative mx-auto mt-8 aspect-[4/5] w-full max-w-[220px] md:hidden"
+                style={{
+                  opacity: floatReveal,
+                  transform: `translate3d(0, ${floatY * 0.6}px, 0)`,
+                }}
+              >
+                <div className="relative h-full overflow-hidden rounded-sm border border-arc-charcoal/10 shadow-[0_16px_40px_rgba(44,44,44,0.12)]">
+                  <Image
+                    src={floatingMedia.src}
+                    alt={floatingMedia.alt}
+                    fill
+                    className="object-cover"
+                    sizes="220px"
+                  />
+                </div>
+              </div>
+            ) : null}
+          </>
         ) : null}
       </div>
     </section>

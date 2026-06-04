@@ -1,17 +1,18 @@
 import type { ReactNode } from "react";
 import { ArcFooter } from "@/components/arc/ArcFooter";
 import { ArcScrollShell } from "@/components/arc/ArcScrollShell";
-import { SiteHeader } from "@/components/arc/SiteHeader";
+import { SiteHeader, type ArcSiteHeaderProps } from "@/components/arc/SiteHeader";
 
 type ArcMarketingShellProps = {
   children: ReactNode;
+  headerProps?: Omit<ArcSiteHeaderProps, "homeHref">;
 };
 
 /** Homepage chrome: overlay header, Lenis scroll shell, pinned footer. */
-export function ArcMarketingShell({ children }: ArcMarketingShellProps) {
+export function ArcMarketingShell({ children, headerProps }: ArcMarketingShellProps) {
   return (
     <>
-      <SiteHeader homeHref="/" />
+      <SiteHeader homeHref="/" {...headerProps} />
       <ArcScrollShell>
         {children}
         <ArcFooter />

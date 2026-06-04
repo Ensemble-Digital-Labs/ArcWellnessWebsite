@@ -156,7 +156,7 @@ function HeroType({
       <p className="mt-2 max-w-[95vw] font-serif text-[clamp(2.85rem,12vw,7.25rem)] font-normal italic leading-[0.98] tracking-[-0.02em] text-white sm:mt-3 sm:max-w-[22ch] [text-shadow:0_4px_36px_rgba(0,0,0,0.55),0_2px_12px_rgba(0,0,0,0.4)]">
         {nameItalic}
       </p>
-      <p className="mt-5 max-w-2xl translate-x-20 font-sans text-xs font-semibold uppercase leading-snug tracking-[0.28em] text-white/92 sm:mt-6 sm:translate-x-32 sm:text-sm md:mt-7 md:translate-x-44 md:text-[0.95rem] md:tracking-[0.32em] lg:translate-x-56 xl:translate-x-72 2xl:translate-x-80 [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
+      <p className="mt-5 max-w-2xl font-sans text-xs font-semibold uppercase leading-snug tracking-[0.28em] text-white/92 sm:mt-6 sm:translate-x-32 sm:text-sm md:mt-7 md:translate-x-44 md:text-[0.95rem] md:tracking-[0.32em] lg:translate-x-56 xl:translate-x-72 2xl:translate-x-80 [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
         {credential}
       </p>
     </>

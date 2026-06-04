@@ -69,7 +69,7 @@ export function ContactForm() {
         Send message
       </button>
       {submitted ? (
-        <p className="font-sans text-sm text-arc-teal-ink" role="status">
+        <p className="font-sans text-sm text-arc-charcoal" role="status">
           Opening your email app—if it didn’t open, write us at {siteMeta.email}.
         </p>
       ) : null}

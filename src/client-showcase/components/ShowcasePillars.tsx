@@ -64,7 +64,7 @@ export function ShowcasePillars() {
         <p className="mt-10 text-center">
           <Link
             href={showcaseInternalHref("/#about")}
-            className="font-sans text-sm font-semibold text-arc-teal-ink underline-offset-4 hover:underline"
+            className="font-sans text-sm font-semibold text-arc-charcoal underline-offset-4 hover:underline"
           >
             About the practice
           </Link>

@@ -25,7 +25,6 @@ export default function ProgramsPage() {
         ctaLabel="Ask about programs"
       />
       <ArcScrollEditorialSection
-        eyebrow="Arc Programs"
         title="Built for continuity"
         paragraphs={pillars.map((p) => `${p.title}: ${p.body}`)}
         imageSrc={images.heroMedia}

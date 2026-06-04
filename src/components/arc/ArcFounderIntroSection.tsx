@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Check } from "lucide-react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useMotionValueEvent, useTransform } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -22,7 +22,7 @@ import {
 import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { arcScrollTriggerScrollerProps, prefersNativeScroll } from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,7 +37,6 @@ type ArcFounderIntroSectionProps = {
   className?: string;
   imageSrc: string;
   imageAlt: string;
-  eyebrow?: string;
   headline: string;
   headlineEmphasisWord: string;
   headlineEmphasisWord2?: string;
@@ -69,6 +68,19 @@ function FounderImmersiveScrollBody({
 }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const progress = useMotionValue(0);
+  const [copyInteractive, setCopyInteractive] = useState(false);
+  const [nativeScroll, setNativeScroll] = useState(false);
+
+  useEffect(() => {
+    setNativeScroll(prefersNativeScroll());
+    const onResize = () => setNativeScroll(prefersNativeScroll());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useMotionValueEvent(progress, "change", (value) => {
+    setCopyInteractive(value >= FOUNDER_COPY_FADE_IN_START);
+  });
 
   const opacityCopy = useTransform(
     progress,
@@ -138,9 +150,13 @@ function FounderImmersiveScrollBody({
     <section
       ref={sectionRef}
       id={id}
-      className={cn("relative h-[340vh] scroll-mt-28 bg-arc-cream pt-0", className)}
+      className={cn(
+        "relative scroll-mt-28 bg-arc-cream pt-0",
+        nativeScroll ? "h-[min(240vh,2400px)]" : "h-[340vh]",
+        className,
+      )}
     >
-      <div className="sticky top-0 relative flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-arc-cream">
+      <div className="sticky top-0 relative flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-arc-cream touch-pan-y">
         <div className="pointer-events-none absolute inset-0 z-0">
           <Image
             src={FOUNDER_SECTION_AMBIENT_SRC}
@@ -179,16 +195,18 @@ function FounderImmersiveScrollBody({
             ARC_PINNED_CLEAR_BELOW_LOGO,
             "relative z-20 mx-auto flex h-full min-h-0 w-full max-w-3xl flex-1 flex-col justify-start px-5 pb-6 sm:px-7 md:max-w-4xl md:px-10 lg:max-w-5xl lg:px-12 xl:max-w-6xl 2xl:max-w-7xl",
             "[@media(max-height:760px)]:pb-4",
+            copyInteractive ? "pointer-events-auto" : "pointer-events-none",
           )}
         >
-          <div className="pointer-events-auto flex min-h-0 min-w-0 flex-1 flex-col justify-center">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-center">
             <motion.div
               style={{ scale: copyScale }}
               className="flex min-h-0 min-w-0 max-w-full flex-1 flex-col justify-center origin-top"
             >
               <div
                 className={cn(
-                  "min-h-0 min-w-0 w-full max-w-full flex-1 overflow-y-auto overscroll-y-contain break-words text-pretty text-left",
+                  "min-h-0 min-w-0 w-full max-w-full flex-1 break-words text-pretty text-left",
+                  nativeScroll ? "overflow-visible" : "overflow-y-auto overscroll-y-contain",
                   "pl-0 sm:pl-1 md:pl-28 lg:pl-44 xl:pl-72 2xl:pl-[22rem]",
                   "[scrollbar-gutter:stable]",
                   "pb-[max(0.75rem,env(safe-area-inset-bottom))]",
@@ -214,7 +232,6 @@ export function ArcFounderIntroSection({
   className,
   imageSrc,
   imageAlt,
-  eyebrow,
   headline,
   headlineEmphasisWord,
   headlineEmphasisWord2,
@@ -279,15 +296,6 @@ export function ArcFounderIntroSection({
 
   const copyInner = (
     <>
-      {eyebrow?.trim() ? (
-        <div className="mb-4 flex items-center gap-3 sm:mb-5">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-arc-rose-gold-ink">
-            {eyebrow}
-          </span>
-          <span className="h-px flex-1 max-w-[120px] bg-arc-rose-gold-ink/45" aria-hidden />
-        </div>
-      ) : null}
-
       <h2 className="mb-2 max-w-full break-words font-serif text-[2.15rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.45rem] sm:leading-[1.06] md:text-[2.9rem] md:leading-[1.05] lg:text-[3.25rem] lg:leading-[1.04] xl:text-[3.55rem]">
         {hasDoubleEmphasis ? (
           <>

@@ -78,12 +78,9 @@ export function ClinicGalleryOverlay({
         >
           <header className="relative z-20 flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-8 sm:py-5">
             <div className="min-w-0">
-              <p className="font-sans text-[10px] font-bold uppercase tracking-[0.28em] text-arc-teal sm:text-[11px]">
-                The space
-              </p>
               <p
                 id="clinic-gallery-exit-hint"
-                className="mt-1 font-sans text-sm text-white/55 sm:text-[0.9375rem]"
+                className="font-sans text-sm text-white/55 sm:text-[0.9375rem]"
               >
                 Drag to explore · Hover each photo for its story · Press Esc or close to exit
               </p>

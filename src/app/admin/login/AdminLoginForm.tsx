@@ -40,7 +40,7 @@ export function AdminLoginForm({ configured }: { configured: boolean }) {
 
   return (
     <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col justify-center px-6 py-16">
-      <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal-ink">
+      <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-charcoal">
         Arc Wellness
       </p>
       <h1 className="mt-3 font-serif text-3xl font-semibold text-arc-charcoal">Admin sign in</h1>
@@ -97,7 +97,7 @@ export function AdminLoginForm({ configured }: { configured: boolean }) {
 
       <Link
         href="/case-studies"
-        className="mt-10 text-center text-sm font-medium text-arc-charcoal/55 underline-offset-2 hover:text-arc-teal-ink hover:underline"
+        className="mt-10 text-center text-sm font-medium text-arc-charcoal/55 underline-offset-2 hover:text-arc-teal hover:underline"
       >
         ← Back to Insights
       </Link>

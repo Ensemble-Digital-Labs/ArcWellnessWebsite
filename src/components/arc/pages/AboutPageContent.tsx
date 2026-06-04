@@ -2,16 +2,20 @@
 
 import { ArcAboutNarrativePinSection } from "@/components/arc/ArcAboutNarrativePinSection";
 import { ArcClinicSpaceTeaserSection } from "@/components/arc/ArcClinicSpaceTeaserSection";
+import { ArcFounderNoteSection } from "@/components/arc/ArcFounderNoteSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
 import { ArcValuesRevealSection } from "@/components/arc/ArcValuesRevealSection";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
+import { ABOUT_HERO_CANVAS_TILES } from "@/content/aboutHeroCanvas";
+import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
+import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { aboutPage } from "@/content/pages/about";
 import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 
 export function AboutPageContent() {
-  const { hero, clinicTour, mission, vision, values, founder, differentiators } = aboutPage;
+  const { hero, clinicTour, mission, vision, values, founder } = aboutPage;
 
   const storyLines = hero.paragraphs;
 
@@ -19,101 +23,84 @@ export function AboutPageContent() {
     <>
       <ScrollChapterIntroSection
         id="about-hero"
+        layout="ambient-full"
         motion="enter-once"
-        eyebrow={hero.eyebrow}
-        headline={`${hero.title} ${hero.titleEmphasis}`}
-        body={hero.paragraphs[0] ?? hero.paragraphs.join(" ")}
+        headline={hero.headline}
+        headlineEmphasis={hero.headlineEmphasis}
+        body=""
         introMode="visible-on-load"
-        imageSrc={images.clinicInteriors.consultationLounge}
-        floatingMedia={{
-          src: images.membershipCohortHero,
-          alt: "Consultation at ARC Wellness",
-        }}
-        ctaHref="/book"
-        ctaLabel="Book a free consultation"
+        copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
+        heroCanvasTiles={ABOUT_HERO_CANVAS_TILES}
       />
 
       <ArcAboutNarrativePinSection
         id="about-story"
         motion="enter-once"
-        eyebrow={hero.eyebrow}
         title={hero.title}
         titleEmphasis={hero.titleEmphasis}
         storyLines={storyLines}
-        ctaHref="/contact"
-        ctaLabel="Meet our team"
+        sideImageSrc={hero.storySideImage}
+        sideImageAlt={hero.storySideImageAlt}
       />
 
       <ArcClinicSpaceTeaserSection
         id="about-clinic"
-        eyebrow={clinicTour.eyebrow}
         title={clinicTour.title}
         titleEmphasis={clinicTour.titleEmphasis}
+        ctaPrimary={clinicTour.ctaPrimary}
+        ctaSecondary={clinicTour.ctaSecondary}
         slides={clinicTour.slides}
       />
 
       <ArcScrollEditorialSection
         id="mission"
-        eyebrow="Mission"
         title={mission.title}
         titleEmphasis={mission.subtitle}
+        headlineLayout="stacked"
+        bodyTypography="editorial"
         paragraphs={[mission.body]}
-        imageSrc={images.whoWeAre}
-        imageAlt="Consultation at ARC Wellness"
+        imageSrc={CLINIC_INTERIOR_IMAGES.consultationLounge}
+        imageAlt={CLINIC_INTERIOR_ALT.consultationLounge}
         revealLines
       />
 
       <ArcScrollEditorialSection
         id="vision"
-        variant="muted"
-        eyebrow="Vision"
         title={vision.title}
         titleEmphasis={vision.subtitle}
+        headlineLayout="stacked"
+        bodyTypography="editorial"
         paragraphs={[vision.body]}
-        imageSrc={images.clinicInteriors.ivTherapyReclinerRoom}
-        imageAlt="IV therapy lounge at ARC Wellness"
+        imageSrc={CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom}
+        imageAlt={CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom}
         imagePosition="left"
         revealLines
       />
 
       <ArcValuesRevealSection
         id="values"
-        eyebrow={values.eyebrow}
         title={values.title}
         titleEmphasis={values.titleEmphasis}
         intro={values.intro}
         items={values.items}
       />
 
-      <ArcScrollEditorialSection
-        id="differentiators"
-        eyebrow="How we care"
-        title="What sets us apart"
-        paragraphs={differentiators.map((d) => `${d.title} — ${d.body}`)}
-        imageSrc={images.clinicInteriors.hallwayAccentSeating}
-        imageAlt="ARC Wellness interior"
-        revealLines
-        cta={{ href: "/treatments", label: "Explore treatments" }}
-      />
-
-      <ArcScrollEditorialSection
+      <ArcFounderNoteSection
         id="founder"
-        variant="muted"
-        eyebrow={founder.title}
-        title="A note from"
-        titleEmphasis="our founder"
-        paragraphs={[
-          ...founder.paragraphs,
-          `— ${founder.signoff}`,
-          founder.role,
-        ]}
+        title={founder.title}
+        titleEmphasis={founder.titleEmphasis}
+        lead={founder.lead}
+        body={founder.body}
+        signoff={founder.signoff}
+        role={founder.role}
         imageSrc={images.founderPortrait}
         imageAlt="Dr. Danish Jabbar, Founder & Medical Director"
-        imagePosition="left"
-        revealLines
       />
 
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection
+        imageSrc={CLINIC_INTERIOR_IMAGES.heroLobbyLounge}
+        supportingLine={homeInvestSupport}
+      />
     </>
   );
 }

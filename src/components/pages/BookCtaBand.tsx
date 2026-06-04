@@ -38,7 +38,7 @@ export function BookCtaBand({
           </Link>
           <a
             href={`tel:${siteMeta.phoneTel}`}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-arc-charcoal/15 bg-white/80 px-8 py-3 font-sans text-sm font-medium text-arc-charcoal transition-colors hover:border-arc-teal/40 hover:text-arc-teal-ink"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-arc-charcoal/15 bg-white/80 px-8 py-3 font-sans text-sm font-medium text-arc-charcoal transition-colors hover:border-arc-teal/40 hover:text-arc-teal"
           >
             {siteMeta.phone}
           </a>

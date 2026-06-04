@@ -7,7 +7,9 @@ type ArcVoobanHeadlineProps = {
   text: string;
   scrollProgress: number;
   className?: string;
-  as?: "h1" | "h2";
+  as?: "h1" | "h2" | "span";
+  /** `inline` — sits beside script emphasis on one baseline (no top-aligned mask boxes). */
+  variant?: "block" | "inline";
 };
 
 /** Headline with per-word mask reveal on scroll scrub (Vooban-style) */
@@ -16,13 +18,21 @@ export function ArcVoobanHeadline({
   scrollProgress,
   className,
   as: Tag = "h2",
+  variant = "block",
 }: ArcVoobanHeadlineProps) {
   const words = text.trim().split(/\s+/).filter(Boolean);
+  const inline = variant === "inline";
 
   return (
-    <Tag className={className}>
+    <Tag className={cn(!inline && "pb-[0.06em]", className)}>
       {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="mr-[0.28em] inline-block overflow-hidden align-top last:mr-0">
+        <span
+          key={`${word}-${i}`}
+          className={cn(
+            "mr-[0.28em] inline-block overflow-hidden last:mr-0",
+            inline ? "align-baseline pb-[0.1em]" : "align-top pb-[0.2em]",
+          )}
+        >
           <span
             className="inline-block will-change-transform"
             style={voobanWordRevealStyle(i, words.length, scrollProgress)}

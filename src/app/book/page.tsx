@@ -21,7 +21,6 @@ export default function BookPage() {
         ctaLabel="Open online scheduler"
       />
       <ArcScrollEditorialSection
-        eyebrow="Prefer to call?"
         title="We're here to help"
         paragraphs={[
           `Call ${siteMeta.phone}—we return messages within one business day.`,

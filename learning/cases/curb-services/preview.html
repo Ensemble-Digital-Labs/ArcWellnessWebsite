@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DESIGN.md Preview https://curbcph.tv</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Items Condensed', system-ui, -apple-system, sans-serif;
+    background: #ffffff;
+    color: #000000;
+    line-height: 1.5;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; margin-bottom: 2rem; font-weight: 700; }
+  h2 { font-size: 1.25rem; margin: 2.5rem 0 1rem; font-weight: 600; border-bottom: 1px solid #0000ee40; padding-bottom: 0.5rem; }
+  .section { margin-bottom: 3rem; }
+
+  /* Color Swatches */
+  .color-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .color-swatch {
+    width: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #00000020;
+  }
+  .color-swatch__block { height: 60px; }
+  .color-swatch__info { padding: 0.5rem; font-size: 0.75rem; }
+  .color-swatch__hex { font-family: monospace; font-weight: 600; }
+  .color-swatch__freq { opacity: 0.6; }
+
+  /* Typography Scale */
+  .typo-row { margin-bottom: 1rem; padding: 0.75rem; border-left: 3px solid #0000ee; background: #00000005; }
+  .typo-meta { font-size: 0.75rem; opacity: 0.6; font-family: monospace; margin-top: 0.25rem; }
+
+  /* Components */
+  .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn { transition: opacity 0.15s; }
+  .btn:hover { opacity: 0.85; }
+  .btn--primary { background: #0000ee; color: #fff; }
+  .btn--secondary { background: transparent; color: #000000; border: 1px solid #00000030; }
+
+  /* Shadow Showcase */
+  .shadow-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+  .shadow-card {
+    width: 160px;
+    height: 100px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-family: monospace;
+    word-break: break-all;
+    padding: 0.5rem;
+    border: 1px solid #00000010;
+  }
+
+  /* Input */
+  .input-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .input {
+    padding: 0.625rem 0.875rem;
+    border: 1px solid #00000030;
+    background: #ffffff;
+    color: #000000;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    width: 280px;
+  }
+
+  /* Card */
+  .card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #00000015;
+    max-width: 360px;
+  }
+  .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .card p { font-size: 0.875rem; opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<h1>DESIGN.md Preview</h1>
+<p style="opacity:0.6;margin-bottom:2rem;">Auto-generated from tokens.json https://curbcph.tv</p>
+
+<!-- Color Palette -->
+<section class="section">
+<h2>Color Palette (9 tokens)</h2>
+<div class="color-grid">
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#ffffff"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#ffffff</div>
+      <div class="color-swatch__freq">freq: 904</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#0000ee"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#0000ee</div>
+      <div class="color-swatch__freq">freq: 121</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#f7f3f1"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#f7f3f1</div>
+      <div class="color-swatch__freq">freq: 1470</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#201f1f"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#201f1f</div>
+      <div class="color-swatch__freq">freq: 812</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#000000"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#000000</div>
+      <div class="color-swatch__freq">freq: 51</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#111111"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#111111</div>
+      <div class="color-swatch__freq">freq: 17</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#a3a3a3"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#a3a3a3</div>
+      <div class="color-swatch__freq">freq: 76</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#424242"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#424242</div>
+      <div class="color-swatch__freq">freq: 30</div>
+    </div>
+  </div>
+  <div class="color-swatch">
+    <div class="color-swatch__block" style="background:#c5c5c5"></div>
+    <div class="color-swatch__info">
+      <div class="color-swatch__hex">#c5c5c5</div>
+      <div class="color-swatch__freq">freq: 26</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Typography Scale -->
+<section class="section">
+<h2>Typography Scale (8 levels)</h2>
+<div class="typo-row">
+  <div style="font-family:'Items Condensed',system-ui;font-size:230px;font-weight:400;line-height:173px">The quick brown fox</div>
+  <div class="typo-meta">Items Condensed · 230px · 400 · 173px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Items Condensed',system-ui;font-size:173px;font-weight:400;line-height:130px">The quick brown fox</div>
+  <div class="typo-meta">Items Condensed · 173px · 400 · 130px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Oldschool Grotesk Condensed',system-ui;font-size:173px;font-weight:700;line-height:151px">The quick brown fox</div>
+  <div class="typo-meta">Oldschool Grotesk Condensed · 173px · 700 · 151px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Oldschool Grotesk Condensed',system-ui;font-size:96px;font-weight:700;line-height:82px">The quick brown fox</div>
+  <div class="typo-meta">Oldschool Grotesk Condensed · 96px · 700 · 82px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Oldschool Grotesk Condensed',system-ui;font-size:86px;font-weight:700;line-height:73px">The quick brown fox</div>
+  <div class="typo-meta">Oldschool Grotesk Condensed · 86px · 700 · 73px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Items Condensed',system-ui;font-size:58px;font-weight:400;line-height:50px">The quick brown fox</div>
+  <div class="typo-meta">Items Condensed · 58px · 400 · 50px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Items Condensed',system-ui;font-size:46px;font-weight:400;line-height:36px">The quick brown fox</div>
+  <div class="typo-meta">Items Condensed · 46px · 400 · 36px</div>
+</div>
+<div class="typo-row">
+  <div style="font-family:'Oldschool Grotesk Condensed',system-ui;font-size:46px;font-weight:700;line-height:37px">The quick brown fox</div>
+  <div class="typo-meta">Oldschool Grotesk Condensed · 46px · 700 · 37px</div>
+</div>
+</section>
+
+<!-- Components -->
+<section class="section">
+<h2>Buttons</h2>
+<div class="btn-row">
+  <button class="btn btn--primary" style="border-radius:6px">Primary Action</button>
+  <button class="btn btn--secondary" style="border-radius:6px">Secondary</button>
+</div>
+</section>
+
+<section class="section">
+<h2>Input</h2>
+<div class="input-demo">
+  <input class="input" style="border-radius:6px" placeholder="Email address" />
+  <button class="btn btn--primary" style="border-radius:6px">Submit</button>
+</div>
+</section>
+
+<!-- Shadows -->
+
+
+<!-- Card -->
+<section class="section">
+<h2>Card</h2>
+<div class="card" style="border-radius:6px;">
+  <h3>Example Card</h3>
+  <p>This card uses the extracted tokens background, border, shadow, and radius values all come from the site's design system.</p>
+</div>
+</section>
+
+</body>
+</html>

@@ -193,7 +193,7 @@ export function AdminInsightsManager({
     <div className="mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col px-5 py-10 sm:px-8 lg:px-10">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-arc-charcoal/10 pb-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal-ink">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-arc-charcoal">
             Content management
           </p>
           <h1 className="mt-2 font-serif text-3xl font-semibold">Insights posts</h1>
@@ -267,7 +267,7 @@ export function AdminInsightsManager({
             {!isNew && selectedId ? (
               <Link
                 href={insightHref({ kind: draft.kind, slug: draft.slug })}
-                className="text-sm font-medium text-arc-teal-ink underline-offset-2 hover:underline"
+                className="text-sm font-medium text-arc-charcoal underline-offset-2 hover:underline"
                 target="_blank"
               >
                 View live →
@@ -362,7 +362,7 @@ export function AdminInsightsManager({
             </p>
           ) : null}
           {message ? (
-            <p className="mt-5 text-sm font-medium text-arc-teal-ink" role="status">
+            <p className="mt-5 text-sm font-medium text-arc-charcoal" role="status">
               {message}
             </p>
           ) : null}

@@ -65,14 +65,11 @@ export function bindArcEnterOnceProgress(options: ArcEnterOnceProgressOptions): 
     });
   }, trigger);
 
-  const scheduleLoadPlay = () => {
-    if (!playIfVisibleOnLoad || !isArcSectionVisibleOnLoad(trigger)) return;
-    gsap.delayedCall(loadDelay, play);
-  };
-
   requestAnimationFrame(() => {
     ScrollTrigger.refresh();
-    scheduleLoadPlay();
+    if (playIfVisibleOnLoad && isArcSectionVisibleOnLoad(trigger)) {
+      gsap.delayedCall(loadDelay, play);
+    }
   });
 
   return () => {

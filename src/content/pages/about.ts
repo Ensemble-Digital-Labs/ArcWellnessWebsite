@@ -10,6 +10,9 @@ export const aboutPage = {
   },
   hero: {
     eyebrow: "Our story",
+    /** About hero masthead (ambient chapter intro). */
+    headline: "About",
+    headlineEmphasis: "Us",
     title: "The Arc Toward",
     titleEmphasis: "Lifelong Vitality",
     paragraphs: [
@@ -17,11 +20,14 @@ export const aboutPage = {
       "Arc Wellness began as a question Dr. Jabbar couldn’t stop asking: “Why do so many people who follow medical advice still feel unwell?”",
       "The answer, he realized, lay in patients’ willingness to heal—supported by guidance, care, and human connection.",
     ],
+    storySideImage: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+    storySideImageAlt: CLINIC_INTERIOR_ALT.plantBonsaiWindowSill,
   },
   clinicTour: {
-    eyebrow: "The space",
     title: "Designed for calm",
     titleEmphasis: "before care begins",
+    ctaPrimary: "Click here",
+    ctaSecondary: "to see our space",
     slides: [
       {
         src: CLINIC_INTERIOR_IMAGES.heroExteriorSunset,
@@ -135,7 +141,7 @@ export const aboutPage = {
   },
   mission: {
     title: "Our Mission",
-    subtitle: "Vitality, powered by science and care",
+    subtitle: "Vitality, powered by\nscience and care",
     body: "Our goal is to bridge the gap between traditional medicine and transformative wellness—uniting medical expertise, modern innovation, and restorative therapies to deliver results that elevate your body, mind, and core.",
   },
   vision: {
@@ -172,14 +178,10 @@ export const aboutPage = {
     ],
   },
   founder: {
-    title: "A Note From Our Founder",
-    paragraphs: [
-      "As a physician, I’ve dedicated my career to helping people manage their health—but I always knew there was more to offer than prescriptions and routine visits.",
-      "Too often, I met patients living in quiet survival mode—physically depleted, mentally foggy, and disconnected from themselves. They weren’t simply unwell; they were experiencing a slow erosion of strength, vitality, and joy.",
-      "That realization inspired Arc Wellness: a space designed to go beyond symptom relief and build lifelong resilience through science, technology, intention, and care.",
-      "At Arc, we take a physician-guided, whole-person approach focused on prevention, function, and longevity—through treatments like Emsculpt Neo, Emsella, and ExoMind, alongside IV infusions, peptide therapy, and nutritional support.",
-      "Thank you for trusting us with your journey. We’re honored to walk alongside you every step of the way.",
-    ],
+    title: "A note from",
+    titleEmphasis: "our founder",
+    lead: "Arc exists for people ready to move past survival mode—and into lasting vitality.",
+    body: "As a physician, I saw too many patients following medical advice yet still feeling depleted. Arc brings physician-led, whole-person care together with proven technology and restorative therapies—built around prevention, function, and longevity.",
     signoff: "Dr. Danish A. Jabbar",
     role: "Founder & Medical Director, Arc Wellness",
   },

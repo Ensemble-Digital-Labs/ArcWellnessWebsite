@@ -18,6 +18,8 @@ export type ArcFullscreenPinOptions = {
   onProgress?: (progress: number) => void;
   /** Scroll distance multiplier for pin duration (1 = one viewport, lower = shorter lock). */
   pinDistanceMultiplier?: number;
+  /** Skip pin setup (e.g. footer on mobile native scroll). */
+  disabled?: boolean;
 };
 
 /**
@@ -31,9 +33,10 @@ export function useArcFullscreenPin(
   const onProgressRef = useRef<ArcFullscreenPinOptions["onProgress"]>(undefined);
   onProgressRef.current = options?.onProgress;
   const pinDistanceMultiplier = options?.pinDistanceMultiplier ?? 1;
+  const disabled = options?.disabled ?? false;
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (prefersReducedMotion() || disabled) return;
 
     let revert: (() => void) | null = null;
     let cancelled = false;
@@ -90,5 +93,5 @@ export function useArcFullscreenPin(
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [sectionRef, pinDistanceMultiplier]);
+  }, [sectionRef, pinDistanceMultiplier, disabled]);
 }

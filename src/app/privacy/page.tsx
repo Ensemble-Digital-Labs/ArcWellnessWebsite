@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p>
             This page is a placeholder. Replace with attorney-approved privacy policy copy for{" "}
             {siteMeta.brand}. Contact{" "}
-            <a href={`mailto:${siteMeta.email}`} className="text-arc-teal-ink">
+            <a href={`mailto:${siteMeta.email}`} className="text-arc-charcoal">
               {siteMeta.email}
             </a>{" "}
             with questions about how we handle your information.

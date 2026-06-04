@@ -1,12 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
 import { ArcScrollRevealMask, ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import {
+  ARC_EDITORIAL_BODY_CLASS,
+  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+  ARC_SPLIT_HEADLINE_SERIF_CLASS,
+  TitleEmphasis,
+} from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
   arcScrollTriggerScrollerProps,
@@ -14,6 +20,7 @@ import {
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
 import { pathPinFadeUp } from "@/lib/arcPinReveal";
+import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -21,32 +28,133 @@ gsap.registerPlugin(ScrollTrigger);
 
 type ArcAboutNarrativePinSectionProps = {
   id?: string;
-  eyebrow: string;
   title: string;
   titleEmphasis: string;
   storyLines: readonly string[];
+  sideImageSrc?: string;
+  sideImageAlt?: string;
   ctaHref?: string;
   ctaLabel?: string;
   /** `pin-scrub` locks viewport; `enter-once` reveals lines automatically when scrolled into view. */
   motion?: "pin-scrub" | "enter-once";
 };
 
+function useStorySideImageReveal(
+  imageRef: React.RefObject<HTMLDivElement | null>,
+  enabled: boolean,
+) {
+  useEffect(() => {
+    if (!enabled) return;
+    const el = imageRef.current;
+    if (!el) return;
+
+    let revert: (() => void) | null = null;
+    let cancelled = false;
+
+    const setup = () => {
+      if (cancelled || !imageRef.current) return;
+
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          imageRef.current,
+          { opacity: 0, y: 32, scale: 1.03 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1.15,
+            ease: ARC_VOOBAN_EASE,
+            scrollTrigger: {
+              trigger: imageRef.current,
+              ...arcScrollTriggerScrollerProps(),
+              start: "top 90%",
+              once: true,
+            },
+          },
+        );
+      }, imageRef.current);
+
+      revert = () => ctx.revert();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+
+    const onReady = () => queueMicrotask(setup);
+    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) onReady();
+    const fallback = window.setTimeout(() => {
+      if (!cancelled && revert === null) setup();
+    }, 1600);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      window.clearTimeout(fallback);
+      revert?.();
+    };
+  }, [enabled, imageRef]);
+}
+
+const storySideImageFrameClass =
+  "group relative overflow-hidden rounded-sm border border-arc-charcoal/8 bg-arc-cream-deep shadow-[0_20px_48px_rgba(44,44,44,0.1)] motion-reduce:opacity-100 sm:shadow-[0_24px_56px_rgba(44,44,44,0.12)]";
+
+function StorySideImage({
+  src,
+  alt,
+  imageRef,
+  aspectClass,
+  sizes,
+  objectClass,
+}: {
+  src: string;
+  alt: string;
+  imageRef: React.RefObject<HTMLDivElement | null>;
+  aspectClass: string;
+  sizes: string;
+  objectClass: string;
+}) {
+  return (
+    <div ref={imageRef} className={cn(storySideImageFrameClass, aspectClass)}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className={cn(
+          "object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none",
+          objectClass,
+        )}
+        sizes={sizes}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/12 via-transparent to-arc-cream/10"
+        aria-hidden
+      />
+    </div>
+  );
+}
+
 /**
  * Pinned about narrative — scroll scrubs line-by-line text reveal (Vooban-style).
  */
 export function ArcAboutNarrativePinSection({
   id,
-  eyebrow,
   title,
   titleEmphasis,
   storyLines,
+  sideImageSrc,
+  sideImageAlt = "",
   ctaHref,
   ctaLabel,
   motion = "enter-once",
 }: ArcAboutNarrativePinSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const sideImageMobileRef = useRef<HTMLDivElement>(null);
+  const sideImageDesktopRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
+
+  const revealSideImage = Boolean(sideImageSrc) && !reduceMotion;
+  useStorySideImageReveal(sideImageMobileRef, revealSideImage);
+  useStorySideImageReveal(sideImageDesktopRef, revealSideImage);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -145,32 +253,82 @@ export function ArcAboutNarrativePinSection({
 
       <div
         className={cn(
-          "relative z-10 mx-auto flex w-full flex-col justify-center px-6 sm:px-10 md:px-12",
+          "relative z-10 mx-auto w-full px-6 sm:px-10 md:px-12",
           pinScrub ? "min-h-[100dvh] py-20" : "py-0",
+          sideImageSrc
+            ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] lg:items-start lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)] xl:gap-16"
+            : "flex flex-col justify-center",
           ARC_PAGE_RAIL_MAX,
         )}
       >
-        <div style={headerMotion}>
-          <p className="font-sans text-xs font-bold uppercase tracking-[0.28em] text-arc-teal-ink">{eyebrow}</p>
-          <ArcScrollRevealMask className="mt-4">
-            <h2 className="max-w-[18ch] font-serif text-[clamp(2rem,6vw,3.25rem)] font-semibold leading-[1.08] tracking-tight text-arc-charcoal">
-              {title}{" "}
-              <TitleEmphasis className="text-[1.12em] text-arc-rose-gold-ink">{titleEmphasis}</TitleEmphasis>
-            </h2>
-          </ArcScrollRevealMask>
+        <div className="min-w-0">
+          <div style={headerMotion}>
+            <ArcScrollRevealMask className="overflow-x-clip overflow-y-visible pb-[0.12em]">
+              <h2
+                className={cn(
+                  "max-w-full text-arc-charcoal",
+                  sideImageSrc
+                    ? "flex flex-col items-start gap-0 lg:inline-flex lg:max-w-none lg:flex-row lg:flex-wrap lg:items-baseline lg:gap-x-[0.28em] lg:flex-nowrap"
+                    : "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap",
+                  ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                )}
+              >
+                <span className="shrink-0">{title}</span>
+                <TitleEmphasis
+                  className={cn(
+                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    sideImageSrc
+                      ? "mt-1 block shrink-0 leading-[1.04] lg:mt-0 lg:inline lg:align-baseline lg:leading-none"
+                      : "inline shrink-0 align-baseline leading-none",
+                  )}
+                >
+                  {titleEmphasis}
+                </TitleEmphasis>
+              </h2>
+            </ArcScrollRevealMask>
+          </div>
+
+          {sideImageSrc ? (
+            <div className="mt-8 w-full max-w-md sm:mt-10 lg:hidden">
+              <StorySideImage
+                src={sideImageSrc}
+                alt={sideImageAlt}
+                imageRef={sideImageMobileRef}
+                aspectClass="aspect-[4/3] sm:aspect-[5/4]"
+                sizes="(max-width: 1023px) 100vw, 0px"
+                objectClass="object-cover object-[50%_42%]"
+              />
+            </div>
+          ) : null}
+
+          <ArcScrollSplitReveal
+            className={cn(
+              "max-w-3xl",
+              sideImageSrc ? "mt-8 sm:mt-10 lg:mt-12" : "mt-10 sm:mt-12 md:mt-14",
+            )}
+            lines={storyLines}
+            scrubProgress={pinScrub ? p : undefined}
+            lineClassName={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}
+          />
+
+          {ctaHref && ctaLabel ? (
+            <div className="mt-10 sm:mt-12" style={ctaMotion}>
+              <ArcStandardCta href={ctaHref}>{ctaLabel}</ArcStandardCta>
+            </div>
+          ) : null}
         </div>
 
-        <ArcScrollSplitReveal
-          className="mt-10 max-w-3xl sm:mt-12 md:mt-14"
-          lines={storyLines}
-          scrubProgress={pinScrub ? p : undefined}
-          lineClassName="font-serif text-[clamp(1.25rem,3.2vw,2rem)] font-medium leading-[1.35] tracking-tight text-arc-charcoal/92"
-        />
-
-        {ctaHref && ctaLabel ? (
-          <div className="mt-10 sm:mt-12" style={ctaMotion}>
-            <ArcStandardCta href={ctaHref}>{ctaLabel}</ArcStandardCta>
-          </div>
+        {sideImageSrc ? (
+          <aside className="hidden min-w-0 lg:block lg:sticky lg:top-[16vh] lg:pt-1 xl:top-24">
+            <StorySideImage
+              src={sideImageSrc}
+              alt={sideImageAlt}
+              imageRef={sideImageDesktopRef}
+              aspectClass="aspect-[4/5]"
+              sizes="(min-width: 1024px) 26vw, 0px"
+              objectClass="object-cover object-[50%_42%] lg:object-[48%_38%]"
+            />
+          </aside>
         ) : null}
       </div>
     </section>

@@ -17,10 +17,10 @@ export function ArcInnerHeader() {
     <header className="sticky top-0 z-[100] border-b border-arc-charcoal/8 bg-arc-cream/92 backdrop-blur-md supports-[backdrop-filter]:bg-arc-cream/85">
       <div className="border-b border-arc-teal/10 bg-arc-teal-muted/35">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-2 font-sans text-xs text-arc-charcoal/75 sm:px-6 lg:px-8">
-          <a href={`tel:${siteMeta.phoneTel}`} className="hover:text-arc-teal-ink">
+          <a href={`tel:${siteMeta.phoneTel}`} className="hover:text-arc-teal">
             {siteMeta.phone}
           </a>
-          <a href={`mailto:${siteMeta.email}`} className="hover:text-arc-teal-ink">
+          <a href={`mailto:${siteMeta.email}`} className="hover:text-arc-teal">
             {siteMeta.email}
           </a>
         </div>
@@ -54,7 +54,7 @@ export function ArcInnerHeader() {
                 href={item.href}
                 className={cn(
                   "font-sans text-[13px] font-medium transition-colors xl:text-sm",
-                  active ? "text-arc-teal-ink" : "text-arc-charcoal/80 hover:text-arc-teal-ink",
+                  active ? "text-arc-charcoal" : "text-arc-charcoal/80 hover:text-arc-teal",
                 )}
               >
                 {item.label}

@@ -3,20 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown } from "lucide-react";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import {
-  arcScrollTriggerScrollerProps,
-  getArcScrollTriggerScroller,
-  getArcScrollViewportHeight,
-} from "@/lib/arcScrollMode";
+import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import type { TreatmentPage } from "@/content/pages/treatments";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /** Featured image tabs in the pin row; remaining modalities live under “See more”. */
 const FEATURED_TAB_COUNT = 5;
@@ -56,47 +48,35 @@ export function ArcTreatmentsPinExplorer({
       setProgress(1);
       return;
     }
-    let revert: (() => void) | null = null;
+    let dispose: (() => void) | null = null;
     let cancelled = false;
 
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
       if (!section) return;
-      const scroller = getArcScrollTriggerScroller();
-      const endDist = () => Math.round(getArcScrollViewportHeight(scroller) * 0.95);
 
-      const ctx = gsap.context(() => {
-        ScrollTrigger.create({
-          trigger: section,
-          ...arcScrollTriggerScrollerProps(),
-          start: "top top",
-          end: () => `+=${endDist()}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.75,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => setProgress(self.progress),
-        });
-      }, section);
-
-      revert = () => ctx.revert();
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      dispose = bindArcEnterOnceProgress({
+        trigger: section,
+        onProgress: setProgress,
+        playIfVisibleOnLoad: false,
+        scrollStart: "top 85%",
+        duration: 1.15,
+      });
     };
 
     const onReady = () => queueMicrotask(setup);
     window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
     if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) onReady();
     const fallback = window.setTimeout(() => {
-      if (!cancelled && revert === null) setup();
+      if (!cancelled && dispose === null) setup();
     }, 1800);
 
     return () => {
       cancelled = true;
       window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
       window.clearTimeout(fallback);
-      revert?.();
+      dispose?.();
     };
   }, [reduceMotion]);
 
@@ -108,7 +88,7 @@ export function ArcTreatmentsPinExplorer({
     <section
       ref={sectionRef}
       id={id}
-      className="relative flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-arc-charcoal"
+      className="relative overflow-hidden bg-arc-charcoal py-20 sm:py-24 md:py-28"
     >
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-charcoal/40 via-arc-charcoal/20 to-arc-charcoal/55"
@@ -116,10 +96,10 @@ export function ArcTreatmentsPinExplorer({
       />
 
       <div
-        className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-4 pt-28 sm:px-6 sm:pt-32 md:px-10 md:pt-36"
+        className="relative z-10 flex flex-col px-4 sm:px-6 md:px-10"
         style={{
-          opacity: Math.min(1, p * 1.5),
-          transform: `translate3d(0, ${Math.max(0, 24 - p * 24)}px, 0)`,
+          opacity: Math.min(1, 0.72 + p * 0.28),
+          transform: `translate3d(0, ${Math.max(0, 28 - p * 28)}px, 0)`,
         }}
       >
         <div className="mx-auto w-full max-w-7xl text-center">
@@ -134,11 +114,13 @@ export function ArcTreatmentsPinExplorer({
           </p>
         </div>
 
-        <div className="mx-auto mt-6 flex min-h-0 w-full max-w-7xl flex-1 flex-col gap-2 md:mt-8">
+        <div className="mx-auto mt-6 flex w-full max-w-7xl flex-col gap-2 md:mt-8">
           <div
             className={cn(
-              "flex min-h-0 gap-2",
-              seeMoreOpen ? "flex-[0.55] md:flex-[0.62]" : "min-h-0 flex-1",
+              "flex gap-2",
+              seeMoreOpen
+                ? "h-[min(36vh,340px)] md:h-[min(40vh,380px)]"
+                : "h-[min(44vh,420px)] sm:h-[min(46vh,460px)] md:h-[min(52vh,520px)]",
               "max-md:-mx-1 max-md:overflow-x-auto max-md:px-1 max-md:pb-1 max-md:snap-x max-md:snap-mandatory",
             )}
           >
@@ -158,7 +140,7 @@ export function ArcTreatmentsPinExplorer({
                   }}
                   className={cn(
                     "group relative min-h-[9.5rem] min-w-0 overflow-hidden transition-[flex,opacity] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/60",
-                    "max-md:min-h-[10.5rem] max-md:snap-start max-md:flex-none max-md:basis-[44%]",
+                    "h-full max-md:min-h-[10.5rem] max-md:h-auto max-md:snap-start max-md:flex-none max-md:basis-[44%]",
                     isActive ? "md:flex-[2.6]" : "md:flex-[1]",
                   )}
                 >
@@ -191,7 +173,7 @@ export function ArcTreatmentsPinExplorer({
               aria-controls="treatments-see-more-list"
               className={cn(
                 "relative flex min-h-[9.5rem] min-w-0 flex-col items-center justify-center gap-2 border border-white/14 bg-white/[0.06] px-3 text-center transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50",
-                "max-md:min-h-[10.5rem] max-md:snap-start max-md:flex-none max-md:basis-[32%]",
+                "h-full max-md:min-h-[10.5rem] max-md:h-auto max-md:snap-start max-md:flex-none max-md:basis-[32%]",
                 seeMoreOpen
                   ? "border-arc-teal/35 bg-arc-teal/10 md:flex-[0.85]"
                   : "hover:border-white/22 hover:bg-white/[0.09] md:flex-[0.75]",
@@ -218,7 +200,7 @@ export function ArcTreatmentsPinExplorer({
             id="treatments-see-more-list"
             className={cn(
               "overflow-hidden rounded-lg border border-white/10 bg-black/35 backdrop-blur-sm",
-              seeMoreOpen ? "visible max-h-[min(42vh,22rem)] flex-1 opacity-100" : "pointer-events-none invisible max-h-0 opacity-0",
+              seeMoreOpen ? "visible mt-2 max-h-[min(42vh,22rem)] opacity-100" : "pointer-events-none invisible max-h-0 opacity-0",
               reduceMotion ? "" : "transition-[max-height,opacity] duration-300 ease-out",
             )}
             aria-hidden={!seeMoreOpen}

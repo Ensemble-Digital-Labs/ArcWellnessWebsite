@@ -55,8 +55,8 @@ function ArcFaqAccordionRow({
         >
           <Plus
             className={cn(
-              "size-5 text-arc-teal-ink",
-              open ? "text-arc-teal-ink" : "text-arc-charcoal/45",
+              "size-5 text-arc-charcoal",
+              open ? "text-arc-charcoal" : "text-arc-charcoal/45",
             )}
             strokeWidth={2}
             aria-hidden
@@ -119,15 +119,9 @@ export function ArcFaqSection({
         className="relative mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]"
       >
         <header className="mb-10 shrink-0 text-left lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 xl:top-52">
-          <p className="mb-3 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-arc-teal-ink">
-            Questions
-          </p>
-          <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-4xl">
-            Frequently asked
+          <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">
+            FAQ
           </h2>
-          <p className="mt-4 font-sans text-sm leading-relaxed text-arc-charcoal/72 md:text-[0.9375rem]">
-            Straight answers about how we work—before you book.
-          </p>
         </header>
 
         <div className="relative min-w-0 flex-1 lg:pt-2">
@@ -139,37 +133,39 @@ export function ArcFaqSection({
           </div>
 
           <div className="relative z-10 space-y-5">
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              {Object.entries(categories).map(([key, label]) => {
-                const selected = selectedCategory === key;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setSelectedCategory(key)}
-                    className={cn(
-                      "relative overflow-hidden rounded-full border px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-300 sm:text-[0.8125rem]",
-                      selected
-                        ? "border-arc-teal text-white"
-                        : "border-arc-teal/25 bg-white/70 text-arc-charcoal/75 hover:border-arc-teal/40 hover:text-arc-charcoal",
-                    )}
-                  >
-                    <span className="relative z-10">{label}</span>
-                    {selected ? (
-                      <motion.span
-                        layoutId="faq-tab-pill"
-                        className="absolute inset-0 z-0 bg-gradient-to-r from-arc-teal to-arc-teal-hover"
-                        transition={{
-                          type: "spring",
-                          stiffness: 380,
-                          damping: 34,
-                        }}
-                      />
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
+            {categoryKeys.length > 1 ? (
+              <div className="flex flex-wrap gap-2 sm:gap-3">
+                {Object.entries(categories).map(([key, label]) => {
+                  const selected = selectedCategory === key;
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setSelectedCategory(key)}
+                      className={cn(
+                        "relative overflow-hidden rounded-full border px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-300 sm:text-[0.8125rem]",
+                        selected
+                          ? "border-arc-teal text-white"
+                          : "border-arc-teal/25 bg-white/70 text-arc-charcoal/75 hover:border-arc-teal/40 hover:text-arc-charcoal",
+                      )}
+                    >
+                      <span className="relative z-10">{label}</span>
+                      {selected ? (
+                        <motion.span
+                          layoutId="faq-tab-pill"
+                          className="absolute inset-0 z-0 bg-gradient-to-r from-arc-teal to-arc-teal-hover"
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 34,
+                          }}
+                        />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
 
             <div className="rounded-2xl border border-arc-teal/15 bg-white/90 p-3 shadow-[0_20px_50px_rgba(44,44,44,0.07)] backdrop-blur-sm sm:p-4">
               <AnimatePresence mode="wait" initial={false}>

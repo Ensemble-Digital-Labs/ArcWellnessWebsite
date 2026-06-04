@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { SeamlessLoopVideo, type SeamlessLoopVideoHandle } from "@/components/arc/SeamlessLoopVideo";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import { ARC_HEADLINE_TITLE_EMPHASIS_CLASS, TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
   arcScrollTriggerScrollerProps,
@@ -20,7 +20,6 @@ gsap.registerPlugin(ScrollTrigger);
 type ArcMicroStatementSectionProps = {
   id?: string;
   className?: string;
-  eyebrow?: string;
   headlineBefore: string;
   headlineEmphasis: string;
   headlineAfter?: string;
@@ -61,7 +60,6 @@ function headlineAfterNode(headlineAfter: string) {
 export function ArcMicroStatementSection({
   id,
   className,
-  eyebrow,
   headlineBefore,
   headlineEmphasis,
   headlineAfter = "",
@@ -178,7 +176,6 @@ export function ArcMicroStatementSection({
     };
   };
 
-  const eyebrowMotion = fadeUp(0, 2.75);
   const headlineMotion = fadeUp(0.08, 2.35);
   const uspMotion = fadeUp(0.16, 2.05);
   const linkMotion = fadeUp(0.26, 2.2);
@@ -186,22 +183,13 @@ export function ArcMicroStatementSection({
 
   const inner = (
     <>
-      {eyebrow ? (
-        <p
-          className="mb-5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-arc-teal-ink sm:text-xs"
-          style={pinnedScrollMotion ? eyebrowMotion : undefined}
-        >
-          {eyebrow}
-        </p>
-      ) : null}
-
       <h2
         className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]"
         style={pinnedScrollMotion ? headlineMotion : undefined}
       >
         <span className="text-balance">
           {headlineBefore}{" "}
-          <TitleEmphasis className="text-[1.52em] leading-[1.04] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+          <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>
             {headlineEmphasis}
           </TitleEmphasis>
           {headlineAfterNode(headlineAfter)}

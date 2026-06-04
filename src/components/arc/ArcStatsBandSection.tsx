@@ -15,7 +15,6 @@ export type ArcStatItem = {
 
 type ArcStatsBandSectionProps = {
   id?: string;
-  eyebrow?: string;
   title: string;
   titleEmphasis?: string;
   items: readonly ArcStatItem[];
@@ -27,7 +26,6 @@ type ArcStatsBandSectionProps = {
  */
 export function ArcStatsBandSection({
   id,
-  eyebrow,
   title,
   titleEmphasis,
   items,
@@ -48,12 +46,7 @@ export function ArcStatsBandSection({
 
       <div className={cn("relative", ARC_PAGE_RAIL_MAX)}>
         <div data-scroll-section className="max-w-2xl">
-          {eyebrow ? (
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-arc-teal/90">
-              {eyebrow}
-            </p>
-          ) : null}
-          <h2 className="mt-3 font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.35rem]">
+          <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.35rem]">
             {title}
             {titleEmphasis ? (
               <>

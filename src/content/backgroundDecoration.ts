@@ -13,6 +13,14 @@ export const BACKGROUND_DECORATION_IMAGES = [
   "/assets/decoration/background/ambient-08.png",
 ] as const;
 
+/** Insights / case-studies hub masthead + feed plate (`ambient-02` — highest-res file in set). */
+export const INSIGHTS_FEED_AMBIENT_SRC = BACKGROUND_DECORATION_IMAGES[1]!;
+
+/** About hero — full-bleed marble plate (`ambient-01` only). */
+export const ABOUT_HERO_COPY_AMBIENT_IMAGES = [
+  BACKGROUND_DECORATION_IMAGES[0],
+] as const;
+
 /** Full-bleed plate under `#founder` immersive stack (visible as editorial hero fades into detail copy). */
 export const FOUNDER_SECTION_AMBIENT_SRC =
   "/assets/decoration/background/founder-section-ambient.png" as const;

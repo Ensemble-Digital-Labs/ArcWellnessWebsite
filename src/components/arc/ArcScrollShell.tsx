@@ -67,7 +67,7 @@ export function ArcScrollShell({ children }: ArcScrollShellProps) {
 
   if (nativeScroll) {
     return (
-      <div id="main" className="relative w-full touch-pan-y bg-arc-cream">
+      <div id="main" className="relative w-full touch-pan-y overflow-x-clip bg-arc-cream">
         <ScrollRevealInit />
         {children}
       </div>

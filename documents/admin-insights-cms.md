@@ -43,3 +43,7 @@ On the edit form, use **Upload image** under **Feature image** (JPG, PNG, WebP, 
 | `/api/admin/upload` | Feature image upload (POST, multipart) |
 
 All admin API routes require a valid session cookie.
+
+---
+
+**Hosting / production CMS:** Explored Netlify Blobs + committed `local-envdev/` — **reverted**; see [`cms-hosting-deferred.md`](./cms-hosting-deferred.md).

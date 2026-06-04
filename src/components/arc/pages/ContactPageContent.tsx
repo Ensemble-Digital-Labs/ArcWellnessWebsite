@@ -33,7 +33,6 @@ export function ContactPageContent() {
 
       <ArcScrollEditorialSection
         id="visit"
-        eyebrow="Visit"
         title="St. Louis clinic"
         paragraphs={[
           `${siteMeta.address.line1}, ${siteMeta.address.line2}`,
@@ -52,25 +51,25 @@ export function ContactPageContent() {
             <h2 className="font-serif text-3xl font-semibold text-arc-charcoal sm:text-4xl">Reach out your way</h2>
             <ul className="mt-8 space-y-6">
               <li className="flex gap-4">
-                <Phone className="mt-0.5 size-5 shrink-0 text-arc-teal-ink" aria-hidden />
+                <Phone className="mt-0.5 size-5 shrink-0 text-arc-charcoal" aria-hidden />
                 <div>
                   <p className="font-sans text-sm font-semibold text-arc-charcoal">Phone</p>
-                  <a href={`tel:${siteMeta.phoneTel}`} className="mt-1 block font-sans text-arc-teal-ink">
+                  <a href={`tel:${siteMeta.phoneTel}`} className="mt-1 block font-sans text-arc-charcoal">
                     {siteMeta.phone}
                   </a>
                 </div>
               </li>
               <li className="flex gap-4">
-                <Mail className="mt-0.5 size-5 shrink-0 text-arc-teal-ink" aria-hidden />
+                <Mail className="mt-0.5 size-5 shrink-0 text-arc-charcoal" aria-hidden />
                 <div>
                   <p className="font-sans text-sm font-semibold text-arc-charcoal">Email</p>
-                  <a href={`mailto:${siteMeta.email}`} className="mt-1 block font-sans text-arc-teal-ink">
+                  <a href={`mailto:${siteMeta.email}`} className="mt-1 block font-sans text-arc-charcoal">
                     {siteMeta.email}
                   </a>
                 </div>
               </li>
               <li className="flex gap-4">
-                <MapPin className="mt-0.5 size-5 shrink-0 text-arc-teal-ink" aria-hidden />
+                <MapPin className="mt-0.5 size-5 shrink-0 text-arc-charcoal" aria-hidden />
                 <div>
                   <p className="font-sans text-sm font-semibold text-arc-charcoal">Address</p>
                   <p className="mt-1 font-sans text-sm text-arc-charcoal/75">

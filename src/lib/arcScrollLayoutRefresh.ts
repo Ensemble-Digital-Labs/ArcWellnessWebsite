@@ -2,7 +2,7 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { getArcScrollTriggerScroller } from "@/lib/arcScrollMode";
+import { getArcScrollTriggerScroller, prefersNativeScroll } from "@/lib/arcScrollMode";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,8 +25,9 @@ function currentScrollY(): number {
     if (typeof s === "number") return s;
     if (s && typeof s === "object" && typeof s.y === "number") return s.y;
   }
+  if (prefersNativeScroll()) return window.scrollY;
   const main = document.getElementById("main");
-  if (main?.classList.contains("touch-pan-y")) return main.scrollTop;
+  if (main) return main.scrollTop;
   return window.scrollY;
 }
 

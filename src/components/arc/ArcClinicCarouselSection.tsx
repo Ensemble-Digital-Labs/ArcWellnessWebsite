@@ -30,7 +30,6 @@ export type ClinicCarouselSlide = {
 
 type ArcClinicCarouselSectionProps = {
   id?: string;
-  eyebrow?: string;
   title: string;
   titleEmphasis?: string;
   slides: readonly ClinicCarouselSlide[];
@@ -39,7 +38,6 @@ type ArcClinicCarouselSectionProps = {
 
 export function ArcClinicCarouselSection({
   id,
-  eyebrow = "The space",
   title,
   titleEmphasis,
   slides,
@@ -168,19 +166,8 @@ export function ArcClinicCarouselSection({
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-center py-20 pt-28 sm:pt-32">
         <div className={cn("mb-8 px-6 sm:mb-10 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
-          {eyebrow ? (
-            <p
-              className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-arc-teal"
-              style={{
-                opacity: Math.min(1, 0.6 + pinProgress * 0.5),
-                transform: `translate3d(${-16 + pinProgress * 16}px, 0, 0)`,
-              }}
-            >
-              {eyebrow}
-            </p>
-          ) : null}
           <ArcScrollSplitReveal
-            className="mt-3"
+            className="mt-0"
             lines={[title]}
             scrubProgress={pinProgress}
             lineClassName="font-serif text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.35rem]"

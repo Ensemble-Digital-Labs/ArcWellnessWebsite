@@ -6,10 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
-import {
-  servicesShowcaseEyebrow,
-  servicesShowcaseNavLabel,
-} from "@/content/servicesShowcaseSlides";
+import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
 import {
   servicesShowcaseFragmentShader,
@@ -144,9 +141,6 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
           Whole-Body Care. Inside and Out.
         </h2>
         <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
-          <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
-            {servicesShowcaseEyebrow(current)}
-          </p>
           <h3 className="mb-3 max-w-full font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
             {current.title}
           </h3>
@@ -224,7 +218,6 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 function WebGLShowcase({ slides, className }: ShowcaseProps) {
   const rootRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -239,11 +232,10 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
   useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
-    const eyebrowEl = eyebrowRef.current;
     const titleEl = titleRef.current;
     const descEl = descRef.current;
     const navEl = navRef.current;
-    if (!root || !canvas || !eyebrowEl || !titleEl || !descEl || !navEl) return;
+    if (!root || !canvas || !titleEl || !descEl || !navEl) return;
 
     const slideList = slidesRef.current;
     if (slideList.length < 2) return;
@@ -411,8 +403,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
       window.setTimeout(() => {
         if (disposed) return;
-        const eb = eyebrowRef.current;
-        if (eb) eb.textContent = servicesShowcaseEyebrow(slideList[idx]);
         titleEl.innerHTML = splitTextForTitle(slideList[idx].title);
         descEl.textContent = slideList[idx].description;
         gsap.set(titleEl.children, { opacity: 0 });
@@ -677,7 +667,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     createSlidesNavigation();
     updateCounter(0);
 
-    eyebrowEl.textContent = servicesShowcaseEyebrow(slideList[0]);
     titleEl.innerHTML = splitTextForTitle(slideList[0].title);
     descEl.textContent = slideList[0].description;
     gsap.fromTo(
@@ -935,12 +924,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           Whole-Body Care. Inside and Out.
         </h2>
         <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
-          <p
-            ref={eyebrowRef}
-            className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70"
-          >
-            {servicesShowcaseEyebrow(slides[0]!)}
-          </p>
           <h3
             ref={titleRef}
             id="arc-showcase-title"

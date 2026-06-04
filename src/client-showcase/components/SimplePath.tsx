@@ -38,7 +38,7 @@ export function SimplePath() {
           </h2>
           <Link
             href={showcaseInternalHref("/#book")}
-            className="mt-6 inline-flex font-sans text-sm font-semibold text-arc-teal-ink underline-offset-4 hover:underline"
+            className="mt-6 inline-flex font-sans text-sm font-semibold text-arc-charcoal underline-offset-4 hover:underline"
           >
             Start your journey
           </Link>
@@ -57,7 +57,7 @@ export function SimplePath() {
               </div>
               <div>
                 <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-arc-charcoal/55">{step.stepMeta}</p>
-                <p className="mt-2 font-serif text-sm font-medium text-arc-teal-ink">{step.numeral}</p>
+                <p className="mt-2 font-serif text-sm font-medium text-arc-charcoal">{step.numeral}</p>
                 <h3 className="mt-1 font-serif text-2xl font-semibold text-arc-charcoal sm:text-3xl">{step.title}</h3>
                 <p className="mt-4 font-sans text-base leading-relaxed text-arc-charcoal/85">{step.description}</p>
               </div>

@@ -5,8 +5,8 @@
   --arc-teal: #4ec4b0;
   --arc-teal-hover: #369d88;
   /**
-   * Darker teal for small text / links on cream, white, or light grey (better contrast than `--arc-teal`).
-   * Keeps brand hue; use for CTAs on light surfaces. Vivid `--arc-teal` stays for fills + dark/photo UI.
+   * Dark teal surface token (e.g. stats band `bg-arc-teal-ink`). **Do not use for headline/body type**
+   * — use `--arc-charcoal` / `text-white` for serif leads and `text-arc-teal` for eyebrows; rose-gold for script emphasis.
    */
   --arc-teal-ink: #287a6d;
   --arc-teal-ink-hover: #1f6056;
