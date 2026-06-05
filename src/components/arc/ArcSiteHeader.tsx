@@ -68,6 +68,9 @@ export const SITE_HEADER_OFFSET = "0";
 const NAV_STACK_OVERLAY = "z-[1000]";
 const NAV_STACK_DRAWER = "z-[1001]";
 const NAV_STACK_CHROME = "z-[1002]";
+/** Drawer + chrome while menu is open — chrome (logo, close) stays above the drawer. */
+const NAV_STACK_DRAWER_OPEN = "z-[1003]";
+const NAV_STACK_CHROME_OPEN = "z-[1004]";
 
 /** Mobile wordmark — explicit height so `h-full` + narrow max-w doesn’t cap size invisibly. */
 const ARC_HEADER_LOGO_LINK_CLASS =
@@ -155,8 +158,9 @@ const navTreatmentPreviewVariants = {
   },
 };
 
-/** Ignore small finger drift so vertical menu scroll doesn’t flash row highlights. */
-const NAV_TOUCH_SCROLL_MOVE_PX = 10;
+/** Mobile nav links — full-width tap target; touch uses CSS :active, not pointer-hover JS. */
+const ARC_NAV_LINK_ROW_CLASS =
+  "group relative flex w-full min-h-[52px] touch-manipulation items-center justify-between gap-4 overflow-visible border-b py-3 font-serif text-3xl font-semibold tracking-tight transition-colors duration-300 sm:min-h-[56px] sm:py-4 sm:text-4xl";
 
 type TreatmentNavLink = (typeof ARC_TREATMENT_NAV_LINKS)[number];
 
@@ -212,11 +216,11 @@ function ArcNavTreatmentLinkRow({
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") setHovered(true);
+    if (canHover && e.pointerType === "touch") setHovered(true);
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") handleLeave();
+    if (canHover && e.pointerType === "touch") handleLeave();
   };
 
   return (
@@ -226,11 +230,15 @@ function ArcNavTreatmentLinkRow({
       onMouseEnter={() => showFloatingPreview && setHovered(true)}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
+      {...(canHover
+        ? {
+            onPointerDown: handlePointerDown,
+            onPointerUp: handlePointerUp,
+            onPointerCancel: handlePointerUp,
+          }
+        : {})}
       className={cn(
-        "group relative flex min-h-[56px] items-center overflow-visible rounded-lg py-2 pl-2 pr-2 font-sans text-[0.9375rem] text-arc-charcoal/72 transition-[color,padding,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 sm:min-h-[64px]",
+        "group relative flex min-h-[56px] w-full touch-manipulation items-center overflow-visible rounded-lg py-2 pl-2 pr-2 font-sans text-[0.9375rem] text-arc-charcoal/72 transition-[color,padding,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 sm:min-h-[64px]",
         showInlineThumb && "pl-1",
         showFloatingPreview &&
           "hover:bg-arc-teal-muted/45 hover:pr-[10.75rem] hover:text-arc-teal sm:hover:pr-[12.5rem]",
@@ -285,6 +293,7 @@ function ArcNavMenuLinkRow({
   closeMenu,
   assignRef,
   nested = false,
+  canHover,
 }: {
   item: NavLinkItem;
   reducedMotion: boolean;
@@ -292,9 +301,10 @@ function ArcNavMenuLinkRow({
   assignRef: (el: HTMLAnchorElement | null) => void;
   /** When true, omit outer `<li>` — parent list item wraps this row (e.g. Treatments + sub-list). */
   nested?: boolean;
+  canHover: boolean;
 }) {
+  const showRichMotion = canHover && !reducedMotion;
   const [hovered, setHovered] = useState(false);
-  const touchScrollRef = useRef(false);
   const px = useMotionValue(0);
   const py = useMotionValue(0);
   const springX = useSpring(px, { stiffness: 280, damping: 32, mass: 0.55 });
@@ -305,44 +315,22 @@ function ArcNavMenuLinkRow({
   const resetHover = () => {
     px.set(0);
     py.set(0);
-    touchScrollRef.current = false;
     setHovered(false);
   };
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") return;
+    if (!showRichMotion || e.pointerType === "touch") return;
     setHovered(true);
   };
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") {
-      touchScrollRef.current = false;
-      setHovered(true);
-    }
-  };
-
   const handlePointerMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") {
-      if (
-        Math.abs(e.movementY) > NAV_TOUCH_SCROLL_MOVE_PX ||
-        Math.abs(e.movementX) > NAV_TOUCH_SCROLL_MOVE_PX
-      ) {
-        touchScrollRef.current = true;
-        setHovered(false);
-      }
-      return;
-    }
-    if (reducedMotion) return;
+    if (!showRichMotion || e.pointerType === "touch") return;
     const rect = e.currentTarget.getBoundingClientRect();
     const w = rect.width;
     const h = rect.height;
     if (!w || !h) return;
     px.set((e.clientX - rect.left) / w - 0.5);
     py.set((e.clientY - rect.top) / h - 0.5);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (e.pointerType === "touch") resetHover();
   };
 
   const handlePointerLeave = (e: React.PointerEvent<HTMLAnchorElement>) => {
@@ -355,21 +343,24 @@ function ArcNavMenuLinkRow({
       ref={assignRef}
       href={item.href}
       onClick={closeMenu}
-      onPointerEnter={handlePointerEnter}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-      onPointerLeave={handlePointerLeave}
+      {...(showRichMotion
+        ? {
+            onPointerEnter: handlePointerEnter,
+            onPointerMove: handlePointerMove,
+            onPointerLeave: handlePointerLeave,
+          }
+        : {})}
       className={cn(
-        "group relative flex items-center justify-between gap-4 overflow-visible border-b py-3 font-serif text-3xl font-semibold tracking-tight transition-colors duration-300 sm:py-4 sm:text-4xl",
+        ARC_NAV_LINK_ROW_CLASS,
         nested ? "border-b-0" : "last:border-b-0",
-        hovered
+        showRichMotion && hovered
           ? "border-arc-teal/40 text-arc-teal"
-          : "border-arc-charcoal/10 text-arc-charcoal",
+          : showRichMotion
+            ? "border-arc-charcoal/10 text-arc-charcoal"
+            : "border-arc-charcoal/10 text-arc-charcoal active:border-arc-teal/40 active:text-arc-teal",
       )}
     >
-        {!reducedMotion ? (
+        {showRichMotion ? (
           <motion.div
             className="pointer-events-none absolute left-0 top-1/2 z-[1] h-[5.5rem] w-[7.25rem] sm:h-[7rem] sm:w-[9.25rem]"
             style={{
@@ -398,26 +389,24 @@ function ArcNavMenuLinkRow({
         <span
           className={cn(
             "pointer-events-none absolute inset-x-0 bottom-0 top-0 z-0 scale-x-0 bg-arc-teal-muted/60 transition-transform duration-300 ease-out",
-            hovered && "scale-x-100",
+            showRichMotion && hovered && "scale-x-100",
+            !showRichMotion && "group-active:scale-x-100",
           )}
           aria-hidden
         />
 
-        {reducedMotion ? (
+        {!showRichMotion ? (
           <>
             <span className="relative z-10 min-w-0 flex-1">{item.label}</span>
             <ArrowRight
-              className={cn(
-                "relative z-10 size-7 shrink-0 text-arc-teal transition-all duration-300 sm:size-9",
-                hovered ? "translate-x-0 opacity-100" : "translate-x-2 opacity-0",
-              )}
+              className="relative z-10 size-7 shrink-0 translate-x-0 text-arc-teal opacity-100 sm:size-9"
               strokeWidth={1.75}
               aria-hidden
             />
           </>
         ) : (
           <motion.div
-            className="relative z-10 flex w-full min-w-0 items-center justify-between gap-4"
+            className="pointer-events-none relative z-10 flex w-full min-w-0 items-center justify-between gap-4"
             initial="initial"
             animate={hovered ? "hover" : "initial"}
             variants={navRowRootVariants}
@@ -940,7 +929,9 @@ export function ArcSiteHeader({
         id="arc-nav-overlay"
         className={cn("fixed inset-0 bg-black/55", NAV_STACK_OVERLAY)}
         aria-hidden={!isMenuOpen}
-        onClick={closeMenu}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closeMenu();
+        }}
       />
 
       <nav
@@ -948,7 +939,7 @@ export function ArcSiteHeader({
         inert={!isMenuOpen}
         className={cn(
           "fixed inset-y-0 right-0 flex max-h-[100dvh] w-full max-w-[min(100vw,28rem)] flex-col bg-arc-cream text-arc-charcoal shadow-[-12px_0_40px_rgba(0,0,0,0.12)] sm:max-w-[min(100vw,32rem)]",
-          NAV_STACK_DRAWER,
+          isMenuOpen ? NAV_STACK_DRAWER_OPEN : NAV_STACK_DRAWER,
         )}
         aria-label="Site navigation"
       >
@@ -1015,7 +1006,7 @@ export function ArcSiteHeader({
           </div>
         </div>
 
-        <div className="arc-scroll-subtle relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-8 pb-12 pt-36 max-md:touch-pan-y sm:px-10 sm:pt-40">
+        <div className="arc-scroll-subtle relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-8 pb-12 pt-40 max-md:touch-pan-y max-md:pt-[9.75rem] sm:px-10 sm:pt-44">
           <ul className="flex flex-col gap-2">
             {navLinks.map((item, i) => {
               const isTreatmentsHub =
@@ -1032,6 +1023,7 @@ export function ArcSiteHeader({
                       item={item}
                       reducedMotion={reducedMotion}
                       closeMenu={closeMenu}
+                      canHover={canHover}
                       nested
                       assignRef={(el) => {
                         menuLinksRef.current[i] = el;
@@ -1053,6 +1045,7 @@ export function ArcSiteHeader({
                   item={item}
                   reducedMotion={reducedMotion}
                   closeMenu={closeMenu}
+                  canHover={canHover}
                   assignRef={(el) => {
                     menuLinksRef.current[i] = el;
                   }}
@@ -1067,7 +1060,7 @@ export function ArcSiteHeader({
         ref={headerChromeRef}
         className={cn(
           "pointer-events-none fixed inset-x-0 top-0 flex w-full justify-center bg-transparent",
-          NAV_STACK_CHROME,
+          isMenuOpen ? NAV_STACK_CHROME_OPEN : NAV_STACK_CHROME,
         )}
       >
         <div
