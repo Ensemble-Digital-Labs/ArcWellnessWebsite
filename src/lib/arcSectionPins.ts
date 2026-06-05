@@ -4,6 +4,7 @@ import { useEffect, useRef, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
@@ -18,7 +19,7 @@ export type ArcFullscreenPinOptions = {
   onProgress?: (progress: number) => void;
   /** Scroll distance multiplier for pin duration (1 = one viewport, lower = shorter lock). */
   pinDistanceMultiplier?: number;
-  /** Skip pin setup (e.g. footer on mobile native scroll). */
+  /** Skip pin setup (e.g. footer / testimonials on mobile native scroll). */
   disabled?: boolean;
 };
 
@@ -33,10 +34,11 @@ export function useArcFullscreenPin(
   const onProgressRef = useRef<ArcFullscreenPinOptions["onProgress"]>(undefined);
   onProgressRef.current = options?.onProgress;
   const pinDistanceMultiplier = options?.pinDistanceMultiplier ?? 1;
-  const disabled = options?.disabled ?? false;
+  const disabledRef = useRef(options?.disabled ?? false);
+  disabledRef.current = options?.disabled ?? false;
 
   useEffect(() => {
-    if (prefersReducedMotion() || disabled) return;
+    if (prefersReducedMotion()) return;
 
     let revert: (() => void) | null = null;
     let cancelled = false;
@@ -46,6 +48,11 @@ export function useArcFullscreenPin(
       const trigger = sectionRef.current;
       if (!trigger) return;
 
+      if (disabledRef.current) {
+        onProgressRef.current?.(1);
+        return;
+      }
+
       const scroller = getArcScrollTriggerScroller();
       const endDist = () =>
         getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
@@ -54,10 +61,12 @@ export function useArcFullscreenPin(
         ScrollTrigger.create({
           trigger,
           ...arcScrollTriggerScrollerProps(),
+          ...arcScrollTriggerPinOptions(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
           pinSpacing: true,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -91,7 +100,13 @@ export function useArcFullscreenPin(
       cancelled = true;
       window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
       window.clearTimeout(fallback);
+      const trigger = sectionRef.current;
+      if (trigger) {
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger === trigger) st.kill();
+        });
+      }
       revert?.();
     };
-  }, [sectionRef, pinDistanceMultiplier, disabled]);
+  }, [sectionRef, pinDistanceMultiplier]);
 }

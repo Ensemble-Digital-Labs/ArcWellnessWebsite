@@ -342,7 +342,7 @@ export function ArcChapterHeroImageCanvas({
                 fill
                 className="object-cover"
                 sizes="(min-width: 768px) 220px, 30vw"
-                priority={index === 0}
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
             </div>
@@ -555,7 +555,7 @@ export function ArcChapterHeroImageCanvasMobile({
             hideUntilAnimate && CANVAS_TILE_HIDDEN_CLASS,
           )}
         >
-          <Image src={soloTile.src} alt={soloTile.alt} fill className="object-cover" sizes="72vw" priority />
+          <Image src={soloTile.src} alt={soloTile.alt} fill className="object-cover" sizes="72vw" loading="lazy" />
         </div>
       </div>
     );

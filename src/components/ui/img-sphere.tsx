@@ -10,7 +10,6 @@ import {
   useState,
   useSyncExternalStore,
   type MouseEvent as ReactMouseEvent,
-  type TouchEvent as ReactTouchEvent,
 } from "react";
 
 import { cn } from "@/lib/utils";
@@ -178,6 +177,7 @@ export default function SphereImageGrid({
     initialRotationProp ??
     (isDemoLayout ? { x: 15, y: 15, z: 0 } : { x: 22, y: -14, z: 0 });
   const outerRef = useRef<HTMLDivElement>(null);
+  const dragSurfaceRef = useRef<HTMLDivElement>(null);
   const [measuredW, setMeasuredW] = useState(0);
   const [layoutReady, setLayoutReady] = useState(false);
   const reduceMotion = useSyncExternalStore(
@@ -419,11 +419,10 @@ export default function SphereImageGrid({
     lastMousePos.current = { x: e.clientX, y: e.clientY };
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: globalThis.MouseEvent) => {
-      if (!isDraggingRef.current) return;
-      const deltaX = e.clientX - lastMousePos.current.x;
-      const deltaY = e.clientY - lastMousePos.current.y;
+  const applyDragDelta = useCallback(
+    (clientX: number, clientY: number) => {
+      const deltaX = clientX - lastMousePos.current.x;
+      const deltaY = clientY - lastMousePos.current.y;
       const rotationDelta = {
         x: -deltaY * dragSensitivity,
         y: deltaX * dragSensitivity,
@@ -444,9 +443,17 @@ export default function SphereImageGrid({
         x: clampRotationSpeed(rotationDelta.x),
         y: clampRotationSpeed(rotationDelta.y),
       };
-      lastMousePos.current = { x: e.clientX, y: e.clientY };
+      lastMousePos.current = { x: clientX, y: clientY };
     },
     [dragSensitivity, clampRotationSpeed],
+  );
+
+  const handleMouseMove = useCallback(
+    (e: globalThis.MouseEvent) => {
+      if (!isDraggingRef.current) return;
+      applyDragDelta(e.clientX, e.clientY);
+    },
+    [applyDragDelta],
   );
 
   useEffect(() => {
@@ -457,65 +464,109 @@ export default function SphereImageGrid({
     isDraggingRef.current = false;
   }, []);
 
-  const handleTouchStart = useCallback((e: ReactTouchEvent) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    if (!touch) return;
-    isDraggingRef.current = true;
-    velocityRef.current = { x: 0, y: 0 };
-    lastMousePos.current = { x: touch.clientX, y: touch.clientY };
-  }, []);
+  useEffect(() => {
+    if (reduceMotion) return;
+    const el = dragSurfaceRef.current;
+    if (!el) return;
 
-  const handleTouchMove = useCallback(
-    (e: globalThis.TouchEvent) => {
-      if (!isDraggingRef.current) return;
-      e.preventDefault();
+    const TOUCH_SLOP_PX = 10;
+    /** Vertical movement must exceed horizontal by this ratio to count as page scroll. */
+    const SCROLL_DOMINANCE = 1.15;
+
+    let mode: "undecided" | "scroll" | "rotate" = "undecided";
+    let startX = 0;
+    let startY = 0;
+    let onMove: ((e: TouchEvent) => void) | null = null;
+    let onEnd: (() => void) | null = null;
+
+    const detachGesture = () => {
+      if (onMove) {
+        el.removeEventListener("touchmove", onMove);
+        document.removeEventListener("touchmove", onMove);
+        onMove = null;
+      }
+      if (onEnd) {
+        el.removeEventListener("touchend", onEnd);
+        el.removeEventListener("touchcancel", onEnd);
+        document.removeEventListener("touchend", onEnd);
+        document.removeEventListener("touchcancel", onEnd);
+        onEnd = null;
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
       const touch = e.touches[0];
       if (!touch) return;
-      const deltaX = touch.clientX - lastMousePos.current.x;
-      const deltaY = touch.clientY - lastMousePos.current.y;
-      const rotationDelta = {
-        x: -deltaY * dragSensitivity,
-        y: deltaX * dragSensitivity,
-      };
-      const prev = rotationRef.current;
-      const next = {
-        x: SPHERE_MATH.normalizeAngle(
-          prev.x + clampRotationSpeed(rotationDelta.x),
-        ),
-        y: SPHERE_MATH.normalizeAngle(
-          prev.y + clampRotationSpeed(rotationDelta.y),
-        ),
-        z: prev.z,
-      };
-      rotationRef.current = next;
-      setRotation(next);
-      velocityRef.current = {
-        x: clampRotationSpeed(rotationDelta.x),
-        y: clampRotationSpeed(rotationDelta.y),
-      };
-      lastMousePos.current = { x: touch.clientX, y: touch.clientY };
-    },
-    [dragSensitivity, clampRotationSpeed],
-  );
 
-  const handleTouchEnd = useCallback(() => {
-    isDraggingRef.current = false;
-  }, []);
+      const target = e.target;
+      if (target instanceof Element && target.closest("button")) return;
+
+      detachGesture();
+      mode = "undecided";
+      startX = touch.clientX;
+      startY = touch.clientY;
+
+      onMove = (moveEvent: TouchEvent) => {
+        const moveTouch = moveEvent.touches[0];
+        if (!moveTouch) return;
+
+        const dx = moveTouch.clientX - startX;
+        const dy = moveTouch.clientY - startY;
+
+        if (mode === "undecided") {
+          if (Math.hypot(dx, dy) < TOUCH_SLOP_PX) return;
+
+          if (Math.abs(dy) > Math.abs(dx) * SCROLL_DOMINANCE) {
+            mode = "scroll";
+            detachGesture();
+            return;
+          }
+
+          mode = "rotate";
+          isDraggingRef.current = true;
+          velocityRef.current = { x: 0, y: 0 };
+          lastMousePos.current = { x: moveTouch.clientX, y: moveTouch.clientY };
+
+          el.removeEventListener("touchmove", onMove!);
+          document.addEventListener("touchmove", onMove!, { passive: false });
+          if (moveEvent.cancelable) moveEvent.preventDefault();
+          return;
+        }
+
+        if (mode === "rotate") {
+          if (moveEvent.cancelable) moveEvent.preventDefault();
+          applyDragDelta(moveTouch.clientX, moveTouch.clientY);
+        }
+      };
+
+      onEnd = () => {
+        isDraggingRef.current = false;
+        mode = "undecided";
+        detachGesture();
+      };
+
+      el.addEventListener("touchmove", onMove, { passive: true });
+      el.addEventListener("touchend", onEnd, { passive: true });
+      el.addEventListener("touchcancel", onEnd, { passive: true });
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      detachGesture();
+    };
+  }, [reduceMotion, layoutReady, applyDragDelta]);
 
   useEffect(() => {
     if (reduceMotion) return;
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("touchmove", handleTouchMove, { passive: false });
-    document.addEventListener("touchend", handleTouchEnd);
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [reduceMotion, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
+  }, [reduceMotion, handleMouseMove, handleMouseUp]);
 
   const tileRing = isDark
     ? "border-white/18 shadow-[0_10px_36px_rgba(0,0,0,0.88)] focus-visible:ring-offset-black"
@@ -605,14 +656,14 @@ export default function SphereImageGrid({
   return (
     <div ref={outerRef} className={cn("flex justify-center", className)}>
       <div
-        className="relative cursor-grab select-none active:cursor-grabbing"
+        ref={dragSurfaceRef}
+        className="relative cursor-grab touch-pan-y select-none active:cursor-grabbing"
         style={{
           width: containerSize,
           height: containerSize,
           perspective: `${Math.round(isDark ? perspective * 1.38 : perspective)}px`,
         }}
         onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
       >
         <div className="relative size-full" style={{ zIndex: 10 }}>
           {images.map((image, index) => {

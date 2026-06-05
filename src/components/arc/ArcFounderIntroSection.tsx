@@ -22,7 +22,8 @@ import {
 import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import { arcScrollTriggerScrollerProps, prefersNativeScroll } from "@/lib/arcScrollMode";
+import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -69,14 +70,7 @@ function FounderImmersiveScrollBody({
   const sectionRef = useRef<HTMLElement | null>(null);
   const progress = useMotionValue(0);
   const [copyInteractive, setCopyInteractive] = useState(false);
-  const [nativeScroll, setNativeScroll] = useState(false);
-
-  useEffect(() => {
-    setNativeScroll(prefersNativeScroll());
-    const onResize = () => setNativeScroll(prefersNativeScroll());
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const nativeScroll = useStableNativeScroll();
 
   useMotionValueEvent(progress, "change", (value) => {
     setCopyInteractive(value >= FOUNDER_COPY_FADE_IN_START);

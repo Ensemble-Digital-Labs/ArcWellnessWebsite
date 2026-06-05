@@ -167,7 +167,7 @@ export function ArcFounderNoteSection({
               src={imageSrc}
               alt={imageAlt}
               fill
-              priority
+              loading="lazy"
               className="object-cover object-[50%_18%]"
               sizes="(min-width: 1024px) 55vw, 100vw"
             />

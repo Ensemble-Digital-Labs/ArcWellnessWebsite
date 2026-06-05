@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Phone, Star } from "lucide-react";
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
-import { prefersNativeScroll } from "@/lib/arcScrollMode";
+import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { useArcFullscreenPin } from "@/lib/arcSectionPins";
@@ -137,14 +137,7 @@ function StarRatingBlock() {
 
 export function ArcFooter() {
   const rootRef = useRef<HTMLElement>(null);
-  const [nativeScroll, setNativeScroll] = useState(false);
-
-  useEffect(() => {
-    const sync = () => setNativeScroll(prefersNativeScroll());
-    sync();
-    window.addEventListener("resize", sync);
-    return () => window.removeEventListener("resize", sync);
-  }, []);
+  const nativeScroll = useStableNativeScroll();
 
   useArcFullscreenPin(rootRef, { disabled: nativeScroll });
   const year = new Date().getFullYear();

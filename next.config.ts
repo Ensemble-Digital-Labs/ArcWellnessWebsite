@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     root: appRoot,
   },
   images: {
+    formats: ["image/avif", "image/webp"],
+    /** Cache optimized variants at the CDN (Netlify image transform). */
+    minimumCacheTTL: 60 * 60 * 24 * 365,
     remotePatterns: [
       {
         protocol: "https",

@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { prefersNativeScroll } from "@/lib/arcScrollMode";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT, useLocomotiveScroll } from "@/lib/locomotive";
+import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { ScrollRevealInit } from "@/components/arc/ScrollRevealInit";
 import "locomotive-scroll/dist/locomotive-scroll.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type ArcScrollShellProps = {
   children: ReactNode;
@@ -17,21 +21,14 @@ type ArcScrollShellProps = {
 export function ArcScrollShell({ children }: ArcScrollShellProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [nativeScroll, setNativeScroll] = useState(false);
+  const nativeScroll = useStableNativeScroll();
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => {
-      setReducedMotion(mq.matches);
-      setNativeScroll(prefersNativeScroll());
-    };
+    const sync = () => setReducedMotion(mq.matches);
     sync();
     mq.addEventListener("change", sync);
-    window.addEventListener("resize", sync);
-    return () => {
-      mq.removeEventListener("change", sync);
-      window.removeEventListener("resize", sync);
-    };
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   const locomotiveDisabled = reducedMotion || nativeScroll;
@@ -59,6 +56,13 @@ export function ArcScrollShell({ children }: ArcScrollShellProps) {
       );
     }, 50);
     return () => window.clearTimeout(timer);
+  }, [reducedMotion, nativeScroll]);
+
+  useEffect(() => {
+    if (reducedMotion || !nativeScroll) return;
+    const onScroll = () => ScrollTrigger.update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [reducedMotion, nativeScroll]);
 
   if (reducedMotion) {

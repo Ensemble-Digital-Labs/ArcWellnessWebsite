@@ -336,6 +336,7 @@ export function ScrollChapterIntroSection({
                 className="object-cover"
                 sizes="72vw"
                 priority
+                fetchPriority="high"
               />
             </div>
           </div>

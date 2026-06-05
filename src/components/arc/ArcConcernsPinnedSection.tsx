@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
+  arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
@@ -98,6 +99,7 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
           id: "arc-concerns-pin",
           trigger: section,
           ...arcScrollTriggerScrollerProps(),
+          ...arcScrollTriggerPinOptions(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,

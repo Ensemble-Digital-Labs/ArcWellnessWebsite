@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
+  arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
@@ -331,7 +332,9 @@ export function ScrollExpandHero({
   titleKeywords = DEFAULT_HERO_TITLE_KEYWORDS,
 }: ScrollExpandHeroProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isMobileState, setIsMobileState] = useState(false);
+  const [isMobileState] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
+  );
   const [reduceMotion, setReduceMotion] = useState(false);
 
   const heroRef = useRef<HTMLElement | null>(null);
@@ -368,6 +371,7 @@ export function ScrollExpandHero({
         ScrollTrigger.create({
           trigger: hero,
           ...arcScrollTriggerScrollerProps(),
+          ...arcScrollTriggerPinOptions(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -405,13 +409,6 @@ export function ScrollExpandHero({
       revert?.();
     };
   }, [reduceMotion, bgImageSrc, mediaSrc]);
-
-  useEffect(() => {
-    const checkIfMobile = () => setIsMobileState(window.innerWidth < 768);
-    checkIfMobile();
-    window.addEventListener("resize", checkIfMobile);
-    return () => window.removeEventListener("resize", checkIfMobile);
-  }, []);
 
   const progress = reduceMotion ? 1 : scrollProgress;
   const mediaBaseW = 300;

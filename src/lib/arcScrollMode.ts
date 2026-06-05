@@ -31,6 +31,11 @@ export function arcScrollTriggerScrollerProps():
   return scroller ? { scroller } : {};
 }
 
+/** Pin options when scroll runs on the document (mobile native path). */
+export function arcScrollTriggerPinOptions(): { pinType: "fixed" } | Record<string, never> {
+  return getArcScrollTriggerScroller() ? {} : { pinType: "fixed" };
+}
+
 /**
  * Fixed header chrome (logo, menu) sits above `#main`; wheel there does not reach Lenis.
  * Re-dispatch on `#main` so speed/easing match normal page scroll.
