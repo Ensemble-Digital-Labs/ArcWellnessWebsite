@@ -39,9 +39,10 @@ export const videos = {
 export const images = {
   /** Header wordmark — RGBA PNG (`scripts/make-logo-transparent.cjs` removes cream plate from source art). */
   logo: "/assets/branding/arc-wellness-logo-v3.png",
-  heroBg: "/assets/hero/arc-wellness-exterior-sunset.png",
-  /** Scroll-expand hero center frame — see `ScrollExpandHero` `mediaSrc`. Replace PNG in `public/assets/hero/` to update. */
-  heroMedia: "/assets/hero/arc-wellness-reception-interior.png",
+  /** Full-bleed hero background (`ScrollExpandHero` `bgImageSrc`) — open glass doors, reception beyond. */
+  heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.png",
+  /** Scroll-expand hero center frame (`ScrollExpandHero` `mediaSrc`) — mint wall, backlit logo. */
+  heroMedia: "/assets/hero/arc-wellness-reception-mint-logo-wall.png",
   heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.png",
   /**
@@ -68,7 +69,7 @@ export const images = {
     "/assets/sections/whole-body/body-contouring-session.png",
     "/assets/sections/who-we-are/biometric-consultation-room.png",
     "/assets/hero/arc-wellness-lobby-lounge.png",
-    "/assets/hero/arc-wellness-reception-interior.png",
+    "/assets/hero/arc-wellness-reception-mint-logo-wall.png",
   ],
   /** Production St. Louis clinic interiors — `public/assets/sections/clinic-interiors/` */
   clinicInteriors: CLINIC_INTERIOR_IMAGES,

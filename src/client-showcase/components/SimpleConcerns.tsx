@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { showcaseConcernPanels, showcaseUspStats } from "@/client-showcase/content";
 
-const SECTION_BG = "/assets/sections/concerns/concerns-section-background.png" as const;
+import { CONCERNS_SECTION_BG } from "@/content/concernsSection";
+
+const SECTION_BG = CONCERNS_SECTION_BG;
 
 export function SimpleConcerns() {
   return (

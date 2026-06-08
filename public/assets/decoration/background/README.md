@@ -4,8 +4,8 @@ General-purpose **non–St. Louis** art: abstract textures, ambient mood, or lay
 
 | File | Notes |
 |------|--------|
-| `ambient-01.png` | First slot (migrated from an earlier STL mis-file); use as subtle background / overlay. |
-| `ambient-02.png` … `ambient-04.png` | Ambient / mood layers; **rename** (e.g. `marble-soft.png`) when you know each look. |
+| `ambient-01-light.png` … `ambient-04-light.png` | **Default** light-tone plates for slots 01–04 (`BACKGROUND_DECORATION_IMAGES[0]`…`[3]`). |
+| `ambient-01.png` … `ambient-04.png` | Original darker plates — rollback only (`BACKGROUND_DECORATION_DARK_IMAGES`). |
 | `welcome-copy-stage-cream.png` | Welcome / about **copy-phase** full-bleed — cream / fabric / portrait mood (see `ArcWelcomeSplitSection.tsx` → `WELCOME_COPY_STAGE_BG`). |
 | `about-copy-stage--previous.png` | Prior copy-stage art (kept for rollback). |
 | `founder-section-ambient.png` | Founder immersive stack — full-bleed under editorial hero; visible in detail-copy phase (`FOUNDER_SECTION_AMBIENT_SRC`). |

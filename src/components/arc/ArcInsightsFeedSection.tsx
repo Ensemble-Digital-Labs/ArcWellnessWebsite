@@ -116,7 +116,7 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
       <Link
         href={href}
         className={cn(
-          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal",
+          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
           aspectClass,
         )}
       >
@@ -142,7 +142,7 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
       </Link>
 
       <div className="mt-5 sm:mt-6">
-        <h3 className="font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.42)] sm:text-lg lg:text-xl">
+        <h3 className="font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-arc-charcoal sm:text-lg lg:text-xl">
           <Link
             href={href}
             className="underline-offset-[5px] transition-[color,text-decoration] duration-200 hover:text-arc-teal hover:underline focus-visible:outline-none focus-visible:underline"
@@ -150,9 +150,9 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
             {entry.title}
           </Link>
         </h3>
-        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 sm:text-[11px]">
+        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-arc-charcoal/55 sm:text-[11px]">
           {formatMetaDate(entry.publishedAt)}
-          <span className="mx-2 text-white/30" aria-hidden>
+          <span className="mx-2 text-arc-charcoal/30" aria-hidden>
             /
           </span>
           {kindLabelUpper(entry.kind)}
@@ -232,12 +232,12 @@ function InsightsFilterPanel({
             onSettled?.();
           }
         }}
-        className="mt-14 text-center font-sans text-base text-white/70 sm:mt-16"
+        className="mt-14 text-center font-sans text-base text-arc-charcoal/70 sm:mt-16"
       >
         No posts in this category yet. Explore our{" "}
         <Link
           href="/treatments"
-          className="font-semibold text-white underline-offset-2 hover:text-arc-teal hover:underline"
+          className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
         >
           treatments
         </Link>
@@ -380,15 +380,15 @@ export function ArcInsightsFeedSection({
           )}
         >
           <div className="mx-auto w-full max-w-[min(100%,1440px)]">
-            <header className="border-b border-white/15 pb-10 text-center sm:pb-12 md:pb-14">
+            <header className="border-b border-arc-charcoal/10 pb-10 text-center sm:pb-12 md:pb-14">
               <h1
                 ref={mastheadTitleRef}
                 id="insights-masthead-title"
-                className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45),0_1px_3px_rgba(0,0,0,0.35)]"
+                className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-arc-charcoal"
               >
                 {feed.masthead}
               </h1>
-              <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-white/90 sm:text-base md:mt-6 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)]">
+              <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base md:mt-6">
                 {feed.subtitle}
               </p>
             </header>
@@ -396,11 +396,11 @@ export function ArcInsightsFeedSection({
         </div>
       </div>
 
-      <div className="relative z-10 bg-black px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
+      <div className="relative z-10 bg-white px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
         <div className="mx-auto w-full max-w-[min(100%,1440px)]">
           <div
             id="insights-filter-bar"
-            className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b border-white/15 pt-8 sm:gap-x-10 sm:pt-10 md:gap-x-14"
+            className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b-2 border-arc-charcoal/25 pt-8 sm:gap-x-10 sm:pt-10 md:gap-x-14"
             role="tablist"
             aria-label="Filter insights"
           >
@@ -416,8 +416,8 @@ export function ArcInsightsFeedSection({
                   aria-selected={active}
                   onClick={() => selectFilter(tab)}
                   className={cn(
-                    "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:text-[13px]",
-                    active ? "text-white" : "text-white/55 hover:text-white/90",
+                    "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-[13px]",
+                    active ? "text-arc-charcoal" : "text-arc-charcoal/55 hover:text-arc-charcoal/90",
                   )}
                 >
                   {TAB_LABELS[tab]}
@@ -427,7 +427,7 @@ export function ArcInsightsFeedSection({
                   {active ? (
                     <motion.span
                       layoutId="insights-filter-underline"
-                      className="absolute inset-x-0 bottom-0 h-[2px] bg-white"
+                      className="absolute inset-x-0 bottom-0 h-[2px] bg-arc-charcoal"
                       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                     />
                   ) : null}

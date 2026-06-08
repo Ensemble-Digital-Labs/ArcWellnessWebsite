@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { images } from "@/content/site";
+import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
 import { CLIENT_SHOWCASE_BASE } from "@/client-showcase/content";
 import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
@@ -83,7 +84,7 @@ export function ArcDesignHeader() {
       <div
         className="border-b border-arc-charcoal/10"
         style={{
-          backgroundImage: "url('/assets/decoration/background/ambient-02.png')",
+          backgroundImage: `url('${BACKGROUND_DECORATION_IMAGES[1]}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

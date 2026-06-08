@@ -1,4 +1,5 @@
 import { PATH_STEP_IMAGE_SRC } from "@/content/backgroundDecoration";
+import { CONCERN_PANELS } from "@/content/concernsSection";
 
 /** Base path for in-app anchor links from the showcase header. */
 export const CLIENT_SHOWCASE_BASE = "/client-showcase" as const;
@@ -11,38 +12,7 @@ export function showcaseInternalHref(href: string): string {
   return href;
 }
 
-export const showcaseConcernPanels = [
-  {
-    title: "Low Energy & Burnout",
-    image: "/assets/sections/concerns/concern-low-energy-burnout.png",
-    blurb:
-      "We connect sleep, stress, hormones, and nutrition so fatigue is understood as a pattern—not dismissed as “just busy.”",
-  },
-  {
-    title: "Hormonal Imbalance & Weight Gain",
-    image: "/assets/sections/concerns/concern-hormonal-imbalance-weight-gain.png",
-    blurb:
-      "Metabolic and hormonal insight paired with lifestyle support, aimed at sustainable change rather than quick fixes.",
-  },
-  {
-    title: "Poor Sleep & Recovery",
-    image: "/assets/sections/concerns/concern-poor-sleep-recovery.png",
-    blurb:
-      "From circadian rhythm to stress load, we map what blocks restorative sleep and recovery in your real life.",
-  },
-  {
-    title: "Aging Skin & Body Changes",
-    image: "/assets/sections/concerns/concern-aging-skin-body-changes.png",
-    blurb:
-      "Evidence-based aesthetics and longevity-aligned care, tuned to how you want to look and feel over time.",
-  },
-  {
-    title: "Brain Fog & Focus Issues",
-    image: "/assets/sections/concerns/concern-brain-fog-focus-issues.png",
-    blurb:
-      "Whole-person assessment to clarify cognition—nutrition, sleep, hormones, and stress—before jumping to stimulants alone.",
-  },
-] as const;
+export const showcaseConcernPanels = CONCERN_PANELS;
 
 export const showcasePathSteps = [
   {

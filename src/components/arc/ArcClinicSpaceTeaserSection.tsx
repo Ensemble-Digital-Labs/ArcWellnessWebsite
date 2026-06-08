@@ -1,15 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
 import { ClinicGalleryOverlay } from "@/components/arc/clinic-gallery/ClinicGalleryOverlay";
 import {
-  ARC_HEADLINE_TITLE_EMPHASIS_DARK_CLASS,
+  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
+import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
@@ -57,7 +59,7 @@ function ClinicCornerArcCta({
           "group relative block size-full cursor-pointer overflow-visible text-left",
           "transition-transform duration-500 ease-out",
           "hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-rose-gold/55 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-charcoal",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/90",
         )}
       >
         <svg
@@ -73,7 +75,7 @@ function ClinicCornerArcCta({
             fill="none"
             stroke="currentColor"
             strokeWidth="32"
-            className="text-arc-rose-gold/55 transition-colors duration-300 group-hover:text-arc-rose-gold/75"
+            className="text-arc-teal/35 transition-colors duration-300 group-hover:text-arc-teal/50"
           />
           <circle
             cx="400"
@@ -82,23 +84,23 @@ function ClinicCornerArcCta({
             fill="none"
             stroke="currentColor"
             strokeWidth="26"
-            className="text-arc-rose-gold/90 transition-colors duration-300 group-hover:text-arc-rose-gold"
+            className="text-arc-teal-ink/55 transition-colors duration-300 group-hover:text-arc-teal-ink/75"
           />
           <circle
             cx="400"
             cy="400"
             r="194"
-            className="fill-arc-rose-gold/12 transition-[fill] duration-300 group-hover:fill-arc-rose-gold/22"
+            className="fill-arc-teal-muted/55 transition-[fill] duration-300 group-hover:fill-arc-teal-muted/72"
           />
         </svg>
 
         {/* Sit in the visible ring band — upper-left quadrant of the corner arcs */}
         <span className="pointer-events-none absolute left-[50%] top-[62%] z-10 flex w-[min(15rem,62%)] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 text-center sm:top-[64%] sm:w-[min(16.5rem,58%)] sm:gap-2.5 md:top-[65%] lg:w-[min(18rem,55%)]">
-          <span className="font-sans text-[clamp(0.8125rem,2.4vw,1rem)] font-bold uppercase tracking-[0.2em] text-white transition-colors duration-300 [text-shadow:0_1px_18px_rgba(0,0,0,0.55)] group-hover:text-arc-rose-gold-hover">
+          <span className="font-sans text-[clamp(0.8125rem,2.4vw,1rem)] font-bold uppercase tracking-[0.2em] text-arc-charcoal transition-colors duration-300 group-hover:text-arc-teal-ink">
             {ctaPrimary}
           </span>
           {ctaSecondary ? (
-            <span className="font-serif text-[clamp(1.45rem,4.8vw,2.25rem)] italic leading-[1.12] text-arc-rose-gold transition-colors duration-300 [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] group-hover:text-arc-rose-gold-hover">
+            <span className="font-serif text-[clamp(1.45rem,4.8vw,2.25rem)] italic leading-[1.12] text-arc-teal-ink transition-colors duration-300 group-hover:text-arc-teal">
               {ctaSecondary}
             </span>
           ) : null}
@@ -189,22 +191,20 @@ export function ArcClinicSpaceTeaserSection({
         ref={sectionRef}
         id={id}
         className={cn(
-          "relative overflow-hidden bg-arc-charcoal py-20 text-white sm:py-24 md:py-28",
+          "relative overflow-hidden bg-arc-cream py-20 text-arc-charcoal sm:py-24 md:py-28",
           className,
         )}
       >
-        <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-charcoal via-arc-charcoal/95 to-arc-charcoal/90"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 20%, rgba(78,196,176,0.35), transparent 45%), radial-gradient(circle at 80% 70%, rgba(201,150,78,0.2), transparent 40%)",
-          }}
-          aria-hidden
-        />
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <Image
+            src={CLINIC_SPACE_TEASER_AMBIENT_SRC}
+            alt=""
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-arc-cream/28" />
+        </div>
 
         <ClinicCornerArcCta
           label={ctaAriaLabel}
@@ -219,25 +219,21 @@ export function ArcClinicSpaceTeaserSection({
           <div className="relative max-w-3xl pb-[min(42vw,11.5rem)] sm:max-w-2xl sm:pb-[min(36vw,12rem)] md:max-w-[min(100%,34rem)] md:pb-20 lg:pb-16">
             <h2
               className={cn(
-                "pointer-events-auto max-w-none pb-[0.14em] text-white will-change-transform",
-                "max-md:[text-shadow:0_2px_28px_rgba(0,0,0,0.75)]",
+                "pointer-events-auto max-w-none pb-[0.14em] text-arc-charcoal will-change-transform",
                 ARC_SPLIT_HEADLINE_SERIF_CLASS,
               )}
               style={titleMotion}
             >
-              <span className="block text-white">{title}</span>
+              <span className="block text-arc-charcoal">{title}</span>
               {titleEmphasis ? (
-                <>
-                  <span className="mt-1 block text-white md:hidden">{titleEmphasis}</span>
-                  <TitleEmphasis
-                    className={cn(
-                      ARC_HEADLINE_TITLE_EMPHASIS_DARK_CLASS,
-                      "mt-1 hidden leading-[1.04] md:block sm:mt-1.5",
-                    )}
-                  >
-                    {titleEmphasis}
-                  </TitleEmphasis>
-                </>
+                <TitleEmphasis
+                  className={cn(
+                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    "mt-1 block leading-[1.04] sm:mt-1.5",
+                  )}
+                >
+                  {titleEmphasis}
+                </TitleEmphasis>
               ) : null}
             </h2>
           </div>

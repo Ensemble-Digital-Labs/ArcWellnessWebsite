@@ -13,6 +13,7 @@ import {
   getWelcomeGallerySlots,
   WELCOME_GALLERY_FOCAL_INDEX,
 } from "@/content/welcomeGallery";
+import { WELCOME_COPY_STAGE_BG } from "@/content/backgroundDecoration";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { IMMERSIVE_COLLAGE_FRAME_CLASSES } from "@/lib/immersiveCollageFrames";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
@@ -40,14 +41,19 @@ const WELCOME_PARALLAX_HOLD = 0.14;
 const COPY_FADE_IN_START = 0.34;
 const COPY_FADE_IN_END = 0.56;
 
-/** Full-bleed art behind the about copy phase (after collage fades). */
-/** Full-bleed art behind welcome / about copy phase (collage handoff). */
-const WELCOME_COPY_STAGE_BG =
-  "/assets/decoration/background/welcome-copy-stage-cream.png";
-
 /** Same right-anchored crop as phones for every width below 1440px; center only on wide desktops. */
 const COPY_STAGE_BG_OBJECT =
   "object-cover object-right min-[1440px]:object-center";
+
+/** Copy-phase type on light cream plate (immersive scroll handoff). */
+const WELCOME_COPY_HEADLINE_SERIF_CLASS = "text-arc-charcoal";
+const WELCOME_COPY_HEADLINE_EMPHASIS_CLASS =
+  "text-[1.52em] leading-[1.04] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+const WELCOME_COPY_BODY_CLASS =
+  "space-y-3 font-sans text-[13px] leading-relaxed text-arc-charcoal/88 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:max-w-[54rem] lg:text-base";
+
+/** Client-approved underline CTA + center vine flourish (`ArcTextUnderlineCta`). */
+const WELCOME_BRANDING_TRAIL_CTA_CLASS = "mt-6 sm:mt-8";
 
 /** Background art ramps in slightly earlier so it reads during the collage → copy handoff. */
 function copyStageBgOpacity(sectionProgress: number): number {
@@ -255,7 +261,7 @@ function WelcomeSplitStaticBody({
               <>
                 {before}
                 {before ? " " : null}
-                <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-rose-gold-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]">
+                <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
                   {headlineEmphasisWord}
                 </TitleEmphasis>
                 {after ? <> {after}</> : null}
@@ -274,11 +280,7 @@ function WelcomeSplitStaticBody({
             </p>
           </div>
 
-          <ArcTextUnderlineCta
-            href={ctaHref}
-            accent="roseGoldInk"
-            className="mt-5 w-fit items-start sm:mt-6 md:mt-7"
-          >
+          <ArcTextUnderlineCta href={ctaHref} accent="teal" className="mt-5 w-fit items-stretch sm:mt-6 md:mt-7">
             {ctaLabel}
           </ArcTextUnderlineCta>
         </ArcTibbixelCopyFrame>
@@ -505,7 +507,7 @@ function WelcomeImmersiveScrollBody({
             decoding="async"
             fetchPriority="high"
           />
-          <div className="pointer-events-none absolute inset-0 bg-black/[0.12]" />
+          <div className="absolute inset-0 bg-arc-cream/25" />
         </div>
 
         <motion.div
@@ -522,45 +524,40 @@ function WelcomeImmersiveScrollBody({
             <h2 className="mb-4 font-serif text-[1.65rem] font-bold leading-[1.12] tracking-tight sm:mb-5 sm:text-3xl md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
               {hasEmphasis ? (
                 <>
-                  <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.75),0_0_32px_rgba(0,0,0,0.35)]">
-                    {before}
-                  </span>
+                  <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{before}</span>
                   {before ? " " : null}
-                  <TitleEmphasis className="text-[1.52em] leading-[1.04] sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] text-arc-rose-gold [text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                  <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
                     {headlineEmphasisWord}
                   </TitleEmphasis>
                   {after ? (
                     after.trim() === "." ? (
-                      <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
-                        .
-                      </span>
+                      <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
                     ) : (
                       <> {after}</>
                     )
                   ) : (
-                    <span className="font-serif text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.55),0_0_28px_var(--arc-rose-gold-glow)]">
-                      .
-                    </span>
+                    <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
                   )}
                 </>
               ) : (
-                <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.75)]">{headline}</span>
+                <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{headline}</span>
               )}
             </h2>
 
-            <div className="space-y-3 font-sans text-[13px] leading-relaxed text-[#f7f4ef]/90 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:max-w-[54rem] lg:text-base">
+            <div className={WELCOME_COPY_BODY_CLASS}>
               <p>{paragraph1}</p>
               <p>{paragraph2}</p>
-              <p className="text-[#f7f4ef]/95">
-                <strong className="font-semibold text-white">{proofLead}</strong>{" "}
+              <p className="text-arc-charcoal">
+                <strong className="font-semibold text-arc-charcoal">{proofLead}</strong>{" "}
                 {proofRest}
               </p>
             </div>
 
             <ArcTextUnderlineCta
               href={ctaHref}
-              accent="roseGoldBright"
-              className="mt-6 items-center sm:mt-8"
+              accent="teal"
+              centered
+              className={WELCOME_BRANDING_TRAIL_CTA_CLASS}
             >
               {ctaLabel}
             </ArcTextUnderlineCta>

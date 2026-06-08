@@ -51,6 +51,39 @@ const SLIDER_CONFIG = {
   },
 };
 
+/** Light editorial photography — cream plate, charcoal type, frosted nav. */
+const SHOWCASE_SHELL_CLASS =
+  "relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-cream";
+/** Bottom + top scrims — lighten photo behind type; no text-shadow halos. */
+function ShowcaseScrimOverlays() {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+      <div className="absolute inset-x-0 top-0 h-[40%] bg-gradient-to-b from-arc-cream/68 via-arc-cream/28 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-arc-cream/95 via-arc-cream/55 to-transparent" />
+    </div>
+  );
+}
+
+const SHOWCASE_HEADLINE_CLASS =
+  "shrink-0 text-center font-serif text-2xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-3xl lg:text-[2.5rem]";
+/** Transparent glass chip — hugs slide title + description (not full-bleed). */
+const SHOWCASE_SLIDE_GLASS_CLASS =
+  "inline-flex w-fit max-w-[min(calc(100vw-3rem),34rem)] flex-col items-center gap-2 rounded-2xl border border-white/50 bg-white/30 px-5 py-4 text-center shadow-[0_12px_40px_rgba(44,44,44,0.1)] ring-1 ring-arc-charcoal/10 backdrop-blur-xl supports-[backdrop-filter]:bg-white/22 sm:gap-2.5 sm:px-7 sm:py-5";
+const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
+  "pointer-events-auto mt-auto flex w-full shrink-0 justify-center px-4 sm:px-6";
+const SHOWCASE_SLIDE_TITLE_CLASS =
+  "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-arc-charcoal";
+const SHOWCASE_SLIDE_DESC_CLASS =
+  "mx-auto max-w-md font-sans text-sm leading-relaxed text-arc-charcoal sm:text-[0.9375rem] md:leading-relaxed";
+const SHOWCASE_CTRL_BTN_CLASS =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
+const SHOWCASE_CTRL_NUM_CLASS =
+  "min-w-[1.75ch] font-sans text-sm font-medium tabular-nums tracking-[0.2em] text-arc-charcoal md:text-base";
+const SHOWCASE_CTRL_TOTAL_CLASS =
+  "min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-arc-charcoal/72 md:text-base";
+const SHOWCASE_NAV_CLASS =
+  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-charcoal/10 bg-arc-cream/97 px-2 py-4 shadow-[0_-8px_32px_rgba(44,44,44,0.08)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+
 function getEffectIndex(name: string): number {
   const map: Record<string, number> = {
     glass: 0,
@@ -101,10 +134,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 
   return (
     <section
-      className={cn(
-        "relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-charcoal",
-        className,
-      )}
+      className={cn(SHOWCASE_SHELL_CLASS, className)}
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
@@ -129,31 +159,23 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
           </div>
         ))}
       </div>
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"
-        aria-hidden
-      />
+      <ShowcaseScrimOverlays />
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2
-          data-scroll-section
-          className="shrink-0 text-center font-serif text-2xl font-semibold leading-tight text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] md:text-3xl lg:text-[2.5rem]"
-        >
+        <h2 data-scroll-section className={SHOWCASE_HEADLINE_CLASS}>
           Whole-Body Care. Inside and Out.
         </h2>
-        <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
-          <h3 className="mb-3 max-w-full font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
-            {current.title}
-          </h3>
-          <p className="mx-auto max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base">
-            {current.description}
-          </p>
+        <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
+          <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
+            <h3 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h3>
+            <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
+          </div>
         </div>
       </div>
 
       <div className="pointer-events-auto absolute left-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:left-4 md:left-6">
         <button
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-black/45 text-white/90 shadow-sm backdrop-blur-sm transition hover:bg-black/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          className={SHOWCASE_CTRL_BTN_CLASS}
           aria-label="Previous slide"
           onClick={() =>
             setIndex((i) => (i - 1 + slides.length) % slides.length)
@@ -161,10 +183,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         >
           <ChevronLeft className="size-5" strokeWidth={1.5} />
         </button>
-        <span
-          id="slideNumber"
-          className="min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-white/90 md:text-base"
-        >
+        <span id="slideNumber" className={SHOWCASE_CTRL_NUM_CLASS}>
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
@@ -172,23 +191,20 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
       <div className="pointer-events-auto absolute right-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:right-4 md:right-6">
         <button
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-black/45 text-white/90 shadow-sm backdrop-blur-sm transition hover:bg-black/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          className={SHOWCASE_CTRL_BTN_CLASS}
           aria-label="Next slide"
           onClick={() => setIndex((i) => (i + 1) % slides.length)}
         >
           <ChevronRight className="size-5" strokeWidth={1.5} />
         </button>
-        <span
-          id="slideTotal"
-          className="min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-white/70 md:text-base"
-        >
+        <span id="slideTotal" className={SHOWCASE_CTRL_TOTAL_CLASS}>
           {String(slides.length).padStart(2, "0")}
         </span>
       </div>
 
       <nav
         id="slidesNav"
-        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-4 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden"
+        className={SHOWCASE_NAV_CLASS}
         aria-label="Slide navigation"
       >
         {slides.map((s, i) => (
@@ -703,7 +719,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
       renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: false,
+        antialias: true,
         alpha: false,
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -863,10 +879,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
   return (
     <section
       ref={rootRef}
-      className={cn(
-        "slider-wrapper relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-charcoal",
-        className,
-      )}
+      className={cn(SHOWCASE_SHELL_CLASS, className)}
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
@@ -875,16 +888,13 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         className="webgl-canvas absolute inset-0 block h-full w-full"
         aria-hidden
       />
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10"
-        aria-hidden
-      />
+      <ShowcaseScrimOverlays />
 
       <div className="pointer-events-auto absolute left-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:left-4 md:left-6">
         <button
           ref={prevBtnRef}
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-black/45 text-white/90 shadow-sm backdrop-blur-sm transition hover:bg-black/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          className={SHOWCASE_CTRL_BTN_CLASS}
           aria-label="Previous slide"
         >
           <ChevronLeft className="size-5" strokeWidth={1.5} />
@@ -892,7 +902,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         <span
           id="slideNumber"
           ref={slideNumberRef}
-          className="min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-white/90 md:text-base"
+          className={SHOWCASE_CTRL_NUM_CLASS}
         >
           01
         </span>
@@ -902,7 +912,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         <button
           ref={nextBtnRef}
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-black/45 text-white/90 shadow-sm backdrop-blur-sm transition hover:bg-black/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+          className={SHOWCASE_CTRL_BTN_CLASS}
           aria-label="Next slide"
         >
           <ChevronRight className="size-5" strokeWidth={1.5} />
@@ -910,37 +920,39 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         <span
           id="slideTotal"
           ref={slideTotalRef}
-          className="min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-white/70 md:text-base"
+          className={SHOWCASE_CTRL_TOTAL_CLASS}
         >
           {String(slides.length).padStart(2, "0")}
         </span>
       </div>
 
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2
-          data-scroll-section
-          className="shrink-0 text-center font-serif text-2xl font-semibold leading-tight text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] md:text-3xl lg:text-[2.5rem]"
-        >
+        <h2 data-scroll-section className={SHOWCASE_HEADLINE_CLASS}>
           Whole-Body Care. Inside and Out.
         </h2>
-        <div className="pointer-events-auto mt-auto mx-auto flex w-full max-w-xl shrink-0 flex-col items-center text-center">
-          <h3
-            ref={titleRef}
-            id="arc-showcase-title"
-            className="slide-title mb-3 max-w-full font-serif text-2xl font-semibold tracking-tight text-white md:text-3xl [&_span]:will-change-transform"
-          />
-          <p
-            ref={descRef}
-            id="arc-showcase-desc"
-            className="slide-description mx-auto max-w-md font-sans text-sm leading-relaxed text-white/90 md:text-base"
-          />
+        <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
+          <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
+            <h3
+              ref={titleRef}
+              id="arc-showcase-title"
+              className={cn(
+                SHOWCASE_SLIDE_TITLE_CLASS,
+                "slide-title mb-0 [&_span]:will-change-transform",
+              )}
+            />
+            <p
+              ref={descRef}
+              id="arc-showcase-desc"
+              className={cn(SHOWCASE_SLIDE_DESC_CLASS, "slide-description")}
+            />
+          </div>
         </div>
       </div>
 
       <nav
         id="slidesNav"
         ref={navRef}
-        className="arc-slide-nav slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-white/12 bg-gradient-to-t from-black/85 via-black/70 to-black/78 px-2 py-4 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] [-ms-overflow-style:none] [scrollbar-width:none] backdrop-blur-md sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden"
+        className={SHOWCASE_NAV_CLASS}
         aria-label="Slide navigation"
       />
     </section>

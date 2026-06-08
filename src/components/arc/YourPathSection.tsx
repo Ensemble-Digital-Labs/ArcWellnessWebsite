@@ -5,7 +5,6 @@ import type { CSSProperties } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
 import {
@@ -77,19 +76,23 @@ const PATH_STEPS: PathStep[] = [
   },
 ];
 
+/** Script keywords on light path intro plate. */
+const PATH_INTRO_EMPHASIS_CLASS =
+  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+
 function YourPathHeadlineTitle() {
   return (
     <>
       Your Path to{" "}
-      <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>
+      <TitleEmphasis className={PATH_INTRO_EMPHASIS_CLASS}>
         Feeling
       </TitleEmphasis>{" "}
       and{" "}
-      <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>
+      <TitleEmphasis className={PATH_INTRO_EMPHASIS_CLASS}>
         Living
       </TitleEmphasis>{" "}
       at Your{" "}
-      <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>
+      <TitleEmphasis className={PATH_INTRO_EMPHASIS_CLASS}>
         Best
       </TitleEmphasis>
     </>
@@ -133,8 +136,9 @@ function YourPathIntroSection() {
           <div style={linkMotion}>
             <ArcTextUnderlineCta
               href="/book"
-              accent="roseGoldInk"
-              className="items-center"
+              accent="teal"
+              centered
+              className="mt-1"
             >
               Start Your Journey
             </ArcTextUnderlineCta>

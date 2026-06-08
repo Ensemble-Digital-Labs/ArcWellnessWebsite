@@ -570,7 +570,13 @@ export default function SphereImageGrid({
 
   const tileRing = isDark
     ? "border-white/18 shadow-[0_10px_36px_rgba(0,0,0,0.88)] focus-visible:ring-offset-black"
-    : "border-white/20 shadow-lg focus-visible:ring-offset-white";
+    : "border-arc-charcoal/12 shadow-md focus-visible:ring-offset-arc-cream";
+
+  /** Selected portrait on light plates — dark rose-gold ink + white halo (reads on cream/mint). */
+  const tileSelectedLight = cn(
+    "border-[3.5px] border-arc-rose-gold-ink ring-[3px] ring-white/95",
+    "shadow-[0_0_0_2px_rgba(255,255,255,1),0_0_0_5px_rgba(143,83,70,0.92),0_0_24px_rgba(143,83,70,0.45)]",
+  );
 
   const tileSelected = "border-arc-teal ring-2 ring-arc-teal/75";
   /** Thick mint/teal halo like the reference split-layout mock */
@@ -633,7 +639,7 @@ export default function SphereImageGrid({
               className={cn(
                 "relative size-20 overflow-hidden rounded-full border-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal focus-visible:ring-offset-2 sm:size-24",
                 tileRing,
-                isTileSelected(img) ? (isDark ? tileSelectedDark : tileSelected) : null,
+                isTileSelected(img) ? (isDark ? tileSelectedDark : tileSelectedLight) : null,
               )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -677,7 +683,7 @@ export default function SphereImageGrid({
               ? Math.min(hoverScale, hoverScale / Math.max(position.scale, 0.22))
               : 1;
             const selectedMul =
-              isDark && !isDemoLayout && selectedTile ? 1.58 : 1;
+              selectedTile && !isDemoLayout ? (isDark ? 1.58 : 1.24) : 1;
             const finalScale = hoverMul * selectedMul;
             const opacity = position.fadeOpacity * position.depthOpacity;
 
@@ -706,7 +712,7 @@ export default function SphereImageGrid({
                     isTileSelected(image)
                       ? isDark
                         ? tileSelectedDark
-                        : tileSelected
+                        : tileSelectedLight
                       : null,
                   )}
                   aria-label={image.title ?? image.alt}

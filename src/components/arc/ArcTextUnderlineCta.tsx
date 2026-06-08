@@ -9,6 +9,8 @@ type ArcTextUnderlineCtaProps = {
   className?: string;
   /** `xs`/`sm` for dense UI; default matches hero / section links */
   size?: "xs" | "sm" | "md";
+  /** Center label + branding trail (welcome / micro statement on cream). */
+  centered?: boolean;
   /**
    * - **`teal`** — darker ink teal for cream / light grey backgrounds (default).
    * - **`tealBright`** — signature vivid teal for dark photography or heavy overlays (e.g. hero).
@@ -21,13 +23,14 @@ type ArcTextUnderlineCtaProps = {
 
 /**
  * Minimal CTA: label + thin **→** + full-width hairline under both (no fill, no pill).
- * Default on-light uses charcoal + teal hover; use **`tealBright`** on dark hero/photo bands.
+ * Default on-light uses teal ink → bright teal on hover; use **`tealBright`** on dark hero/photo bands.
  */
 export function ArcTextUnderlineCta({
   href,
   children,
   className,
   size = "md",
+  centered = false,
   accent = "teal",
 }: ArcTextUnderlineCtaProps) {
   const rowType =
@@ -63,8 +66,9 @@ export function ArcTextUnderlineCta({
             "focus-visible:ring-arc-teal/50 focus-visible:ring-offset-black/35",
           ]
         : [
-            "text-arc-charcoal hover:text-arc-teal",
-            "[text-shadow:0_1px_0_rgba(255,255,255,0.55),0_1px_3px_rgba(44,44,44,0.14),0_0_18px_rgba(40,122,109,0.22)]",
+            "text-arc-teal-ink hover:text-arc-teal",
+            "[text-shadow:0_1px_0_rgba(255,255,255,0.55),0_1px_3px_rgba(44,44,44,0.1)]",
+            "hover:[text-shadow:0_1px_0_rgba(255,255,255,0.72),0_0_22px_rgba(78,196,176,0.38)]",
             "focus-visible:ring-arc-teal/55 focus-visible:ring-offset-arc-cream/80",
           ];
 
@@ -73,6 +77,7 @@ export function ArcTextUnderlineCta({
       href={href}
       className={cn(
         "group inline-flex max-w-full flex-col items-stretch outline-none",
+        centered && "mx-auto w-full max-w-[min(100%,22rem)] sm:max-w-md",
         "transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
         "focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2",
         accentClasses,
@@ -80,7 +85,13 @@ export function ArcTextUnderlineCta({
         className,
       )}
     >
-      <span className={cn("inline-flex items-center gap-2.5", rowType)}>
+      <span
+        className={cn(
+          "inline-flex items-center gap-2.5",
+          centered && "w-full justify-center",
+          rowType,
+        )}
+      >
         <span>{children}</span>
         <svg
           viewBox="0 0 44 12"

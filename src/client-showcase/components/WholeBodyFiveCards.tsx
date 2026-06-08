@@ -12,12 +12,12 @@ import {
   wholeBodySectionHeading,
   type WholeBodyCardData,
 } from "@/client-showcase/mock-page-content";
+import { FOOTER_AMBIENT_BG as SERVICES_AMBIENT_BG } from "@/content/backgroundDecoration";
 
 const EASE = [0.33, 0, 0.2, 1] as const;
 const VIEWPORT = { once: true as const, amount: 0.1, margin: "0px 0px 14% 0px" } as const;
 
 /** Ambient plate — same family as main site (`public/assets/decoration/background/`). */
-const SERVICES_AMBIENT_BG = "/assets/decoration/background/ambient-04.png" as const;
 
 function ServicesAmbientBackdrop() {
   return (

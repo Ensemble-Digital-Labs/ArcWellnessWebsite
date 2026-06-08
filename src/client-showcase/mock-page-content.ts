@@ -1,6 +1,7 @@
 import { Calendar, Headphones, HeartPulse, Shield, Sparkles } from "lucide-react";
 import { EDITORIAL_SPA_IMAGES } from "@/content/editorialSpaImages";
 import { PATIENT_EXPERIENCE_IMAGES } from "@/content/patientExperienceImages";
+import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
 import { images } from "@/content/site";
 
 export type WholeBodyCardData = {
@@ -256,8 +257,7 @@ export const showcaseTestimonialsHeading = {
 } as const;
 
 /** Full-bleed plate on collapsed carousel cards (`ShowcaseTestimonialsCarousel`) — no cream overlay on top. */
-export const showcaseTestimonialCardAmbient =
-  "/assets/decoration/background/ambient-01.png" as const;
+export const showcaseTestimonialCardAmbient = BACKGROUND_DECORATION_IMAGES[0];
 
 /** FAQ — concise entries aligned with main-site `#faq` themes (edit with legal/clinical approval). */
 export type ShowcaseFaqItem = {

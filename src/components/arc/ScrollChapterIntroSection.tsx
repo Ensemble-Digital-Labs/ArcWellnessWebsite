@@ -11,7 +11,12 @@ import {
 } from "@/components/arc/ArcChapterHeroImageCanvas";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
-import { ARC_HEADLINE_TITLE_EMPHASIS_CLASS, TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import {
+  ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS,
+  ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS,
+  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+  TitleEmphasis,
+} from "@/components/arc/TitleEmphasis";
 import { ArcVoobanHeadline } from "@/components/arc/ArcVoobanHeadline";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
@@ -65,6 +70,8 @@ type ScrollChapterIntroSectionProps = {
   heroCanvasTiles?: readonly ArcChapterHeroCanvasTile[];
   /** `compact` — smaller script line for long taglines (treatment detail heroes). */
   headlineEmphasisSize?: "default" | "compact";
+  /** Override copy color logic — default auto-detects from `-light` ambient paths. */
+  copyTone?: "light" | "dark";
 };
 
 /**
@@ -90,6 +97,7 @@ export function ScrollChapterIntroSection({
   heroCanvasTiles,
   layout = "split-photo",
   headlineEmphasisSize = "default",
+  copyTone,
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -226,7 +234,18 @@ export function ScrollChapterIntroSection({
     : 1;
   const heroCopyLift = ambientEnterOnce ? (1 - p) * 28 : 0;
   const ambientCount = copyColumnAmbients?.length ?? 0;
-  const onDarkCopy = ambientFullBleed || ambientCount > 0;
+  const ambientsIncludeLightPlate =
+    copyColumnAmbients?.some((src) =>
+      /-light|welcome-copy-stage-cream|cream\.png/i.test(src),
+    ) ?? false;
+  const onDarkCopy =
+    copyTone === "dark"
+      ? true
+      : copyTone === "light"
+        ? false
+        : ambientFullBleed
+          ? !ambientsIncludeLightPlate && ambientCount === 0
+          : ambientCount > 0 && !ambientsIncludeLightPlate;
   const singleTileHero = Boolean(heroCanvasTiles?.length === 1);
 
   const ambientLayerOpacity = (index: number) => {
@@ -245,7 +264,12 @@ export function ScrollChapterIntroSection({
       id={id}
       className={cn(
         "relative isolate flex flex-col",
-        ambientFullBleed ? "overflow-x-clip overflow-y-visible bg-arc-charcoal" : "overflow-hidden bg-arc-cream",
+        ambientFullBleed
+          ? cn(
+              "overflow-x-clip overflow-y-visible",
+              onDarkCopy ? "bg-arc-charcoal" : "bg-arc-cream",
+            )
+          : "overflow-hidden bg-arc-cream",
         pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
         className,
       )}
@@ -426,7 +450,14 @@ export function ScrollChapterIntroSection({
             >
               {ambientFullBleed && headlineEmphasis ? (
                 <>
-                  <span className="font-serif font-semibold tracking-tight">{headline}</span>
+                  <span
+                    className={cn(
+                      "font-serif font-semibold tracking-tight",
+                      !onDarkCopy && "text-arc-charcoal",
+                    )}
+                  >
+                    {headline}
+                  </span>
                   <TitleEmphasis
                     className={cn(
                       compactEmphasis
@@ -434,9 +465,11 @@ export function ScrollChapterIntroSection({
                         : "inline align-baseline leading-none tracking-tight",
                       onDarkCopy
                         ? compactEmphasis
-                          ? "text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.38),0_0_24px_var(--arc-rose-gold-glow)]"
+                          ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
                           : "text-[1.42em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)]"
-                        : !compactEmphasis && ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                        : compactEmphasis
+                          ? ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS
+                          : ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
                     )}
                   >
                     {headlineEmphasis}

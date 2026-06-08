@@ -16,7 +16,6 @@ import {
 import { FounderGalleryMosaic } from "@/components/arc/FounderGalleryMosaic";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
 import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
@@ -27,6 +26,16 @@ import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Copy-phase typography on light founder ambient plate (scroll stage 2). */
+const FOUNDER_COPY_NAME_EMPHASIS_CLASS =
+  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+const FOUNDER_COPY_EYEBROW_CLASS =
+  "font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-charcoal/62 sm:text-[0.7rem]";
+const FOUNDER_COPY_BODY_CLASS =
+  "font-sans text-sm leading-relaxed text-arc-charcoal/88 sm:text-[0.95rem] md:text-base";
+const FOUNDER_COPY_LIST_CLASS =
+  "min-w-0 flex-1 break-words font-sans text-[0.8125rem] leading-snug text-arc-charcoal/88 sm:text-sm";
 
 export type FounderAccordionPanel = {
   title: string;
@@ -295,16 +304,16 @@ export function ArcFounderIntroSection({
           <>
             {beforeDouble}
             {beforeDouble ? " " : null}
-            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
+            <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
             {gapDouble || " "}
-            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e2}</TitleEmphasis>
+            <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{e2}</TitleEmphasis>
             {afterDouble ? <> {afterDouble}</> : null}
           </>
         ) : hasSingleEmphasis ? (
           <>
             {beforeSingle}
             {beforeSingle ? " " : null}
-            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
+            <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{e1}</TitleEmphasis>
             {afterSingle ? <> {afterSingle}</> : null}
           </>
         ) : (
@@ -312,27 +321,27 @@ export function ArcFounderIntroSection({
         )}
       </h2>
 
-      <p className="mb-4 font-sans text-xs font-medium uppercase tracking-[0.18em] text-arc-charcoal/70 sm:mb-5 sm:text-[0.7rem]">
+      <p className={cn("mb-4 sm:mb-5", FOUNDER_COPY_EYEBROW_CLASS)}>
         {roleTitle}
       </p>
 
-      <p className="mb-6 font-sans text-sm leading-relaxed text-arc-charcoal/90 sm:mb-8 sm:text-[0.95rem] md:text-base">
+      <p className={cn("mb-6 sm:mb-8", FOUNDER_COPY_BODY_CLASS)}>
         {intro}
       </p>
 
-      <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/80">
+      <p className={cn("mb-3", FOUNDER_COPY_EYEBROW_CLASS)}>
         {deliverablesHeading}
       </p>
       <ul className="space-y-2.5 sm:space-y-3">
         {deliverables.map((line) => (
           <li key={line} className="flex min-w-0 gap-2.5 text-left sm:gap-3">
             <span
-              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-rose-gold-ink/12 text-arc-rose-gold-ink"
+              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-arc-teal/12 text-arc-teal-ink"
               aria-hidden
             >
               <Check className="size-3" strokeWidth={2.5} />
             </span>
-            <span className="min-w-0 flex-1 break-words font-sans text-[0.8125rem] leading-snug text-arc-charcoal/90 sm:text-sm">
+            <span className={FOUNDER_COPY_LIST_CLASS}>
               {line}
             </span>
           </li>

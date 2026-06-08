@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { Phone, Star } from "lucide-react";
 import { siteMeta } from "@/content/siteMeta";
+import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { cn } from "@/lib/utils";
@@ -12,20 +13,25 @@ import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { useArcFullscreenPin } from "@/lib/arcSectionPins";
 
 /** Footer ambient plate — same asset family as site decoration (`public/assets/decoration/background/`). */
-const FOOTER_AMBIENT_BG = "/assets/decoration/background/ambient-04.png" as const;
+
+const footerEyebrowClass =
+  "font-sans text-xs font-semibold uppercase tracking-[0.28em] text-arc-charcoal/55 sm:text-[0.8125rem]";
+
+const footerBodyClass =
+  "font-sans text-base leading-relaxed text-arc-charcoal/90 md:text-lg";
 
 const footerLinkClass = cn(
-  "text-white/88 transition-colors duration-200",
+  "text-arc-charcoal/88 transition-colors duration-200",
   "underline decoration-transparent underline-offset-[4px]",
-  "hover:text-arc-teal hover:decoration-arc-teal/50",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/55 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950",
+  "hover:text-arc-teal-ink hover:decoration-arc-teal-ink/45",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/55 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80",
 );
 
 const legalLinkClass = cn(
-  "text-white/55 transition-colors duration-200",
+  "text-arc-charcoal/55 transition-colors duration-200",
   "underline decoration-transparent underline-offset-2",
-  "hover:text-white/90 hover:decoration-white/35",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950",
+  "hover:text-arc-charcoal hover:decoration-arc-charcoal/35",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80",
 );
 
 function TikTokIcon({ className }: { className?: string }) {
@@ -98,7 +104,7 @@ function scrollMainToTop() {
 
 function SocialRow({ className }: { className?: string }) {
   const iconWrap =
-    "rounded-full p-3 text-arc-champagne transition-colors hover:bg-white/10 hover:text-arc-champagne-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-champagne/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950";
+    "rounded-full p-3 text-arc-charcoal/72 transition-colors hover:bg-arc-charcoal/5 hover:text-arc-teal-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80";
   return (
     <div className={cn("flex items-center justify-center gap-1 sm:gap-2", className)}>
       <a href="#" aria-label="Instagram" className={iconWrap}>
@@ -118,16 +124,14 @@ function StarRatingBlock() {
   return (
     <div className="flex flex-col items-start gap-1 text-left">
       <p className="sr-only">Rated 5.0 out of 5 based on patient feedback.</p>
-      <span className="font-sans text-xs font-medium uppercase tracking-[0.2em] text-white/55">
-        Patient experience
-      </span>
+      <span className={footerEyebrowClass}>Patient experience</span>
       <div className="flex items-baseline gap-2" aria-hidden>
-        <span className="font-serif text-[2.85rem] font-light leading-none tracking-tight text-arc-champagne sm:text-[3.35rem] md:text-[3.65rem]">
+        <span className="font-serif text-[2.85rem] font-light leading-none tracking-tight text-arc-teal-ink sm:text-[3.35rem] md:text-[3.65rem]">
           5.0
         </span>
         <div className="flex gap-0.5 pb-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className="size-[1.05rem] fill-arc-champagne text-arc-champagne sm:size-[1.15rem]" strokeWidth={0} />
+            <Star key={i} className="size-[1.05rem] fill-arc-teal text-arc-teal sm:size-[1.15rem]" strokeWidth={0} />
           ))}
         </div>
       </div>
@@ -146,7 +150,7 @@ export function ArcFooter() {
     <footer
       ref={rootRef}
       id="contact"
-      className={cn(ARC_SECTION_SEAM_TOP, "relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-charcoal")}
+      className={cn(ARC_SECTION_SEAM_TOP, "relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream")}
     >
       <div className="border-b border-arc-charcoal/10 bg-[#ebe8e2]/90 py-2.5 overflow-hidden">
         <div className="animate-arc-marquee gap-10 whitespace-nowrap font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-arc-charcoal/50">
@@ -154,7 +158,7 @@ export function ArcFooter() {
             <span key={dup} className="inline-flex gap-10 pr-10">
               {marqueeItems.map((t) => (
                 <span key={`${dup}-${t}`}>
-                  {t} <span className="text-arc-champagne">✦</span>
+                  {t} <span className="text-arc-teal">✦</span>
                 </span>
               ))}
             </span>
@@ -162,7 +166,7 @@ export function ArcFooter() {
         </div>
       </div>
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-zinc-950 text-white">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-arc-cream/40 text-arc-charcoal">
         <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
           <Image
             src={FOOTER_AMBIENT_BG}
@@ -171,44 +175,40 @@ export function ArcFooter() {
             className="object-cover object-center"
             sizes="100vw"
           />
+          <div className="absolute inset-0 bg-arc-cream/30" />
         </div>
 
         <div className="relative z-[1] mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 pt-24 md:px-10 md:pt-32 lg:px-12 lg:pt-36">
           {/* Tier 1 — address | brand | contact */}
           <div className="grid gap-14 md:grid-cols-3 md:items-start md:gap-10 lg:gap-14">
             <div className="order-2 flex flex-col gap-1.5 text-center md:order-1 md:text-left">
-              <span className="font-sans text-xs font-semibold uppercase tracking-[0.28em] text-white/55 [text-shadow:0_1px_2px_rgba(0,0,0,0.65)] sm:text-[0.8125rem]">
-                Visit
-              </span>
+              <span className={footerEyebrowClass}>Visit</span>
               <address className="not-italic">
-                <p className="font-sans text-base leading-relaxed text-white/92 [text-shadow:0_1px_3px_rgba(0,0,0,0.75)] md:text-lg">
-                  {FOOTER_ADDRESS.line1}
-                </p>
-                <p className="font-sans text-base leading-relaxed text-white/92 [text-shadow:0_1px_3px_rgba(0,0,0,0.75)] md:text-lg">
-                  {FOOTER_ADDRESS.line2}
-                </p>
+                <p className={footerBodyClass}>{FOOTER_ADDRESS.line1}</p>
+                <p className={footerBodyClass}>{FOOTER_ADDRESS.line2}</p>
               </address>
             </div>
 
             <div className="order-1 flex flex-col items-center justify-center text-center md:order-2">
-              <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-[#f7f4ef]/92 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)] sm:text-xl md:text-2xl md:leading-relaxed">
+              <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-arc-charcoal/88 sm:text-xl md:text-2xl md:leading-relaxed">
                 Elevated care, extraordinary results — a life well-lived.
               </p>
             </div>
 
             <div className="order-3 flex flex-col items-center text-center md:items-end md:text-right">
               <div>
-                <span className="font-sans text-xs font-semibold uppercase tracking-[0.28em] text-white/55 [text-shadow:0_1px_2px_rgba(0,0,0,0.65)] sm:text-[0.8125rem]">
-                  Contact
-                </span>
+                <span className={footerEyebrowClass}>Contact</span>
                 <a
                   href={`tel:${siteMeta.phoneTel}`}
-                  className="mt-2 flex min-h-[48px] items-center justify-center gap-2.5 font-sans text-base font-medium text-white/92 transition-colors [text-shadow:0_1px_3px_rgba(0,0,0,0.75)] hover:text-arc-teal md:justify-end md:text-lg"
+                  className={cn(
+                    footerBodyClass,
+                    "mt-2 flex min-h-[48px] items-center justify-center gap-2.5 font-medium transition-colors hover:text-arc-teal-ink md:justify-end",
+                  )}
                 >
-                  <Phone className="size-5 shrink-0 text-arc-champagne md:size-[1.35rem]" aria-hidden />
+                  <Phone className="size-5 shrink-0 text-arc-teal md:size-[1.35rem]" aria-hidden />
                   {siteMeta.phone}
                 </a>
-                <ul className="mt-2 space-y-1.5 font-sans text-sm leading-relaxed text-white/78 [text-shadow:0_1px_2px_rgba(0,0,0,0.7)] md:text-base">
+                <ul className="mt-2 space-y-1.5 font-sans text-sm leading-relaxed text-arc-charcoal/78 md:text-base">
                   {FOOTER_HOURS.map((line) => (
                     <li key={line}>{line}</li>
                   ))}
@@ -217,13 +217,13 @@ export function ArcFooter() {
             </div>
           </div>
 
-          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-8" aria-hidden />
+          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-arc-charcoal/14 to-transparent md:my-8" aria-hidden />
 
           {/* Sitemap-style columns */}
           <nav className="grid grid-cols-2 gap-x-8 gap-y-9 sm:grid-cols-4" aria-label="Footer sitemap">
             {Object.entries(footerLinks).map(([heading, items]) => (
               <div key={heading}>
-                <p className="mb-3.5 font-sans text-xs font-semibold uppercase tracking-[0.28em] text-white/60 [text-shadow:0_1px_2px_rgba(0,0,0,0.65)] sm:text-[0.8125rem]">
+                <p className={cn("mb-3.5", footerEyebrowClass)}>
                   {heading}
                 </p>
                 <ul className="space-y-2.5 font-sans text-sm leading-snug md:text-base">
@@ -239,7 +239,7 @@ export function ArcFooter() {
             ))}
           </nav>
 
-          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent md:my-8" aria-hidden />
+          <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-arc-charcoal/14 to-transparent md:my-8" aria-hidden />
         </div>
 
         {/* Tier 2 — full-width rail: rating flush left, social/legal centered, CTA flush right */}
@@ -251,37 +251,37 @@ export function ArcFooter() {
 
             <div className="flex flex-col items-center gap-5 justify-self-center">
               <SocialRow />
-              <p className="max-w-[min(100%,36rem)] text-center font-sans text-[10px] font-medium uppercase leading-relaxed tracking-[0.14em] text-white/60 [text-shadow:0_1px_2px_rgba(0,0,0,0.65)] sm:max-w-none sm:text-xs sm:tracking-[0.18em] md:text-[0.8125rem]">
+              <p className="max-w-[min(100%,36rem)] text-center font-sans text-[10px] font-medium uppercase leading-relaxed tracking-[0.14em] text-arc-charcoal/58 sm:max-w-none sm:text-xs sm:tracking-[0.18em] md:text-[0.8125rem]">
                 <span>© {year} ARC Wellness</span>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <span>All rights reserved</span>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <Link href="#" className={legalLinkClass}>
                   Sitemap
                 </Link>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <Link href="/privacy" className={legalLinkClass}>
                   Privacy
                 </Link>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <Link href="/terms" className={legalLinkClass}>
                   Terms
                 </Link>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <Link href="#" className={legalLinkClass}>
                   Accessibility
                 </Link>
-                <span className="mx-1.5 text-white/30" aria-hidden>
+                <span className="mx-1.5 text-arc-charcoal/28" aria-hidden>
                   |
                 </span>
                 <button type="button" className={cn(legalLinkClass, "cursor-pointer border-0 bg-transparent p-0")} onClick={scrollMainToTop}>
@@ -291,12 +291,10 @@ export function ArcFooter() {
             </div>
 
             <div className="flex flex-col items-center text-center md:items-end md:justify-self-end md:text-right">
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.28em] text-white/55 [text-shadow:0_1px_2px_rgba(0,0,0,0.65)] sm:text-[0.8125rem]">
-                New patients
-              </p>
+              <p className={footerEyebrowClass}>New patients</p>
               <Link
                 href="/book"
-                className="mt-4 inline-block font-serif text-xl italic text-arc-champagne [text-shadow:0_2px_14px_rgba(0,0,0,0.75)] transition-colors hover:text-arc-champagne-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-champagne/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 sm:text-2xl md:text-[1.75rem]"
+                className="mt-4 inline-block font-serif text-xl italic text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80 sm:text-2xl md:text-[1.75rem]"
               >
                 Schedule your consultation
               </Link>

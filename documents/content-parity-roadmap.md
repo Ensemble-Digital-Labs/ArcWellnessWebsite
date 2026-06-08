@@ -53,24 +53,26 @@ npm run content:spreadsheet
 
 ## Current status (high level)
 
-| Area | Routes | Copy parity | Notes |
-|------|--------|-------------|-------|
-| Homepage | ✅ | ⏸ **Frozen** | Premium scroll layout stays; **do not** replace with live Squarespace copy unless requested |
-| About | ✅ | 🟡 Partial | Mission/vision/founder aligned; verify exact live paragraphs |
-| Treatments hub | ✅ | 🟢 Synced | Live **Our Services** copy in `treatmentsHub` + overview |
-| Wellness hub | ✅ merged | 🟢 Synced | Nutrient/peptide/supplements copy from live |
-| 12 modality pages | ✅ | 🟢 Synced | `treatments.ts` batch 1 — FAQs on major device/wellness pages |
-| Aesthetics | ✅ | 🟢 Synced | Hero + principles from live |
-| Programs | ✅ | 🟡 Partial | Hero + program summaries; full pricing tables TBD in UI |
-| Financing | ✅ | 🟢 Synced | SEO + hero; live page minimal |
-| Contact | ✅ | 🟢 Synced | Hero + channels from live |
-| Book | ✅ | 🟡 | Wire Mangomint URL from inventory |
-| Privacy / Terms | placeholder | 🔴 Missing | Not on live sitemap — obtain from client |
-| Case studies | ✅ extra | N/A | Not on live site — see **Insights** hub at `/case-studies` |
-| **Insights hub** | ✅ shell | 🔴 New content | `/case-studies` — case studies + blog (rebuild only) |
-| **Blog** | 🔴 to build | 🔴 New content | `/blog` + `/blog/[slug]` planned |
+*Updated 2026-05-27 — shareable tracker: `documents/arc-wellness-content-parity.xlsx` · route map: `documents/sitemap.md`*
 
-Legend: ✅ done structurally · 🟡 needs copy pass · 🔴 needs full review
+**Status values:** **Completed** | **In progress** | **Pending** (notes only on the last two)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Homepage | **Completed** | Premium `ArcMarketingHome` on Netlify |
+| About | **Completed** | |
+| Treatments hub + overview | **Completed** | Our Services copy in `treatmentsHub` |
+| Wellness + 12 modality pages | **Completed** | All slugs in `treatments.ts` |
+| Aesthetics | **Completed** | |
+| Programs | **In progress** | Membership/pricing tables still to finalize with client |
+| Financing | **Completed** | |
+| Contact | **Completed** | |
+| Book | **Completed** | `/book` + Mangomint URL |
+| Privacy / Terms | **Pending** | Waiting on approved legal copy |
+| Insights hub | **Completed** | `/case-studies` — 6 seed entries, admin CMS |
+| Blog posts | **Completed** | 4 posts via Insights **Blogs** tab |
+| Case studies | **Completed** | 2 stories on `/case-studies/[slug]` |
+| Sitewide photography | **In progress** | Optional — swap remaining stock for final clinic assets |
 
 ---
 

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { images } from "@/content/site";
+import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { siteMeta } from "@/content/siteMeta";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { cn } from "@/lib/utils";
@@ -32,7 +33,7 @@ export function ArcSimpleFooter() {
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
         aria-hidden
       >
-        <Image src="/assets/decoration/background/ambient-04.png" alt="" fill className="object-cover" sizes="100vw" />
+        <Image src={FOOTER_AMBIENT_BG} alt="" fill className="object-cover" sizes="100vw" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">

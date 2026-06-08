@@ -10,6 +10,7 @@ import { PinnedSection } from "@/components/arc/PinnedSection";
 import SphereImageGrid, {
   type ImageData,
 } from "@/components/ui/img-sphere";
+import { TESTIMONIALS_SECTION_BACKGROUND_SRC } from "@/content/backgroundDecoration";
 import {
   TESTIMONIAL_SPHERE_TILE_COUNT,
   testimonialSphereBaseImages,
@@ -17,9 +18,6 @@ import {
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { cn } from "@/lib/utils";
-
-const TESTIMONIALS_BACKGROUND_SRC =
-  "/assets/sections/testimonials/testimonials-background.png" as const;
 
 export type ArcTestimonialItem = {
   id: string;
@@ -81,7 +79,7 @@ const carouselSlotLayoutDefault: Record<
     y: "-50%",
     rotateY: 32,
     scale: 0.72,
-    opacity: 0.88,
+    opacity: 0.94,
     zIndex: 2,
     width: "28%",
   },
@@ -99,7 +97,7 @@ const carouselSlotLayoutDefault: Record<
     y: "-50%",
     rotateY: -32,
     scale: 0.72,
-    opacity: 0.88,
+    opacity: 0.94,
     zIndex: 2,
     width: "28%",
   },
@@ -130,7 +128,7 @@ const carouselSlotLayoutCompact: typeof carouselSlotLayoutDefault = {
     y: "-50%",
     rotateY: 34,
     scale: 0.6,
-    opacity: 0.62,
+    opacity: 0.82,
     zIndex: 2,
     width: "22%",
   },
@@ -148,7 +146,7 @@ const carouselSlotLayoutCompact: typeof carouselSlotLayoutDefault = {
     y: "-50%",
     rotateY: -34,
     scale: 0.6,
-    opacity: 0.62,
+    opacity: 0.82,
     zIndex: 2,
     width: "22%",
   },
@@ -234,13 +232,19 @@ function ArcTestimonialGlassCard({
   return (
     <figure
       className={cn(
-        "flex h-full flex-col overflow-hidden rounded-2xl border shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl lg:rounded-3xl",
-        "border-white/30 bg-white/18 supports-[backdrop-filter]:bg-white/12",
-        isActive &&
-          "border-white/45 bg-white/[0.18] shadow-[0_24px_64px_rgba(0,0,0,0.35)] ring-1 ring-white/25",
+        "relative flex h-full flex-col overflow-hidden rounded-2xl border backdrop-blur-md lg:rounded-3xl",
+        isActive
+          ? "border-arc-teal/35 bg-white shadow-[0_24px_70px_rgba(44,44,44,0.18),0_10px_32px_rgba(78,196,176,0.14)] ring-2 ring-arc-teal/22"
+          : "border-arc-charcoal/20 bg-arc-cream-deep/96 shadow-[0_16px_48px_rgba(44,44,44,0.14)] ring-1 ring-arc-charcoal/12",
         className,
       )}
     >
+      {isActive ? (
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-arc-teal/15 via-arc-teal/70 to-arc-teal/15"
+          aria-hidden
+        />
+      ) : null}
       <div className={cn("flex items-center gap-3", isActive ? "p-5 pb-3 sm:p-6 sm:pb-4" : "p-4 pb-2")}>
         <GoogleReviewMark className={cn(!isActive && "scale-90")} />
         <TestimonialStars />
@@ -248,7 +252,7 @@ function ArcTestimonialGlassCard({
 
       <div
         className={cn(
-          "relative mx-auto w-[calc(100%-1.5rem)] overflow-hidden rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.28)] ring-1 ring-white/20",
+          "relative mx-auto w-[calc(100%-1.5rem)] overflow-hidden rounded-xl shadow-[0_8px_24px_rgba(28,32,36,0.1)] ring-1 ring-arc-charcoal/10",
           isActive ? "aspect-[4/3] max-h-52 sm:max-h-56 [@media(max-height:820px)]:max-h-44" : "aspect-[5/4] max-h-32 [@media(max-height:820px)]:max-h-28",
         )}
       >
@@ -259,13 +263,13 @@ function ArcTestimonialGlassCard({
           className="object-cover"
           sizes={isActive ? "(max-width: 640px) 320px, 380px" : "200px"}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/15 via-transparent to-transparent" />
       </div>
 
       <blockquote className={cn("flex flex-1 items-center", isActive ? "px-5 py-5 sm:px-6 sm:py-6" : "px-4 py-3")}>
         <p
           className={cn(
-            "w-full text-pretty text-center font-serif italic leading-relaxed text-white",
+            "w-full text-pretty text-center font-serif italic leading-relaxed text-arc-charcoal",
             isActive
               ? "text-base sm:text-lg lg:text-[1.12rem] lg:leading-[1.65]"
               : "line-clamp-3 text-sm leading-snug [@media(max-width:1320px)]:line-clamp-2 [@media(max-height:820px)]:line-clamp-2",
@@ -277,7 +281,7 @@ function ArcTestimonialGlassCard({
 
       <figcaption
         className={cn(
-          "text-right font-sans leading-snug text-white/88",
+          "text-right font-sans leading-snug text-arc-charcoal/78",
           isActive ? "px-5 pb-5 text-xs sm:px-6 sm:pb-6 sm:text-sm" : "px-4 pb-4 text-[11px]",
         )}
       >
@@ -521,13 +525,13 @@ export function ArcTestimonialsSection({
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <Image
-          src={TESTIMONIALS_BACKGROUND_SRC}
+          src={TESTIMONIALS_SECTION_BACKGROUND_SRC}
           alt=""
           fill
           className="object-cover object-center"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/35 via-arc-cream/18 to-arc-cream/28" />
       </div>
 
       <div className="flex min-h-0 flex-col max-md:overflow-visible md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
@@ -574,7 +578,7 @@ export function ArcTestimonialsSection({
             </div>
             <p
               id={sphereHintId}
-              className="mt-4 max-w-[min(100%,20rem)] text-balance text-center font-sans text-xs leading-relaxed text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] sm:mt-5 sm:max-w-sm sm:text-[0.8125rem]"
+              className="mt-4 max-w-[min(100%,20rem)] text-balance text-center font-sans text-xs leading-relaxed text-arc-charcoal sm:mt-5 sm:max-w-sm sm:text-[0.8125rem]"
               style={hintMotion}
             >
               {sphereInteractionHint}
@@ -594,7 +598,7 @@ export function ArcTestimonialsSection({
               <div style={titleMotion} className="shrink-0">
                 <h2
                   id="testimonials-heading"
-                  className="mb-4 text-center font-serif text-[2.1rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.45)] sm:mb-5 sm:text-4xl md:text-[2.45rem] lg:mx-auto lg:mb-5 lg:w-[min(100%,26rem)] lg:text-[2.65rem] [@media(max-height:820px)]:lg:mb-4 [@media(max-height:820px)]:lg:text-[2.15rem]"
+                  className="mb-4 text-center font-serif text-[2.1rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:mb-5 sm:text-4xl md:text-[2.45rem] lg:mx-auto lg:mb-5 lg:w-[min(100%,26rem)] lg:text-[2.65rem] [@media(max-height:820px)]:lg:mb-4 [@media(max-height:820px)]:lg:text-[2.15rem]"
                 >
                   Testimonials
                 </h2>

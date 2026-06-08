@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { CLIENT_SHOWCASE_BASE } from "@/client-showcase/content";
 
-const FOOTER_AMBIENT_BG = "/assets/decoration/background/ambient-04.png" as const;
+import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 
 const footerLinkClass = cn(
   "text-white/88 transition-colors duration-200",

@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     /** Cache optimized variants at the CDN (Netlify image transform). */
     minimumCacheTTL: 60 * 60 * 24 * 365,
+    /** Local `/public` assets — omit `search` so `?v=` cache-bust query strings are allowed. */
+    localPatterns: [
+      {
+        pathname: "/assets/**",
+      },
+    ],
     remotePatterns: [
       {
         protocol: "https",

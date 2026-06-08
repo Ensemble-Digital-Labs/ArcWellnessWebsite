@@ -350,6 +350,29 @@ html.arc-scroll-lock::-webkit-scrollbar {
     0 1px 10px rgba(0, 0, 0, 0.45);
 }
 
+/** Whole-Body Care slider — light editorial photography + cream nav bar. */
+.arc-slide-nav--light .slide-progress-line {
+  background-color: color-mix(in srgb, var(--arc-charcoal) 14%, transparent);
+}
+
+.arc-slide-nav--light .arc-slide-nav-item[data-active="true"] .slide-progress-line,
+.arc-slide-nav--light .arc-slide-nav-item.active .slide-progress-line {
+  background-color: color-mix(in srgb, var(--arc-charcoal) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arc-charcoal) 8%, transparent);
+}
+
+.arc-slide-nav--light .slide-nav-title.arc-slide-nav-label {
+  color: color-mix(in srgb, var(--arc-charcoal) 82%, transparent);
+  text-shadow: none;
+}
+
+.arc-slide-nav--light .arc-slide-nav-item[data-active="true"] .slide-nav-title,
+.arc-slide-nav--light .arc-slide-nav-item.active .slide-nav-title {
+  color: var(--arc-charcoal);
+  font-weight: 700;
+  text-shadow: none;
+}
+
 /**
  * Your Path — immersive steps: shared soft-teal ambient art with distinct gradient + focal shift per step.
  * Asset: `public/assets/decoration/background/path-step-ambient.png`
