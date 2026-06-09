@@ -46,7 +46,7 @@ export default function AestheticsPage() {
           ))}
         </div>
       </section>
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
     </ArcMarketingShell>
   );
 }

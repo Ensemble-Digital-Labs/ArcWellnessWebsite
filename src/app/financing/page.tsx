@@ -32,7 +32,7 @@ export default function FinancingPage() {
         imageAlt="Consultation"
         pinned
       />
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
     </ArcMarketingShell>
   );
 }

@@ -107,7 +107,6 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
       <InvestCTASection
         imageSrc={treatment.imageSrc}
         supportingLine={homeInvestSupport}
-        pin={false}
       />
     </>
   );

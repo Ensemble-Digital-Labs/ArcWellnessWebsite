@@ -32,7 +32,7 @@ export default function ProgramsPage() {
         pinned
         cta={{ href: "/contact", label: "Contact our team" }}
       />
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
     </ArcMarketingShell>
   );
 }

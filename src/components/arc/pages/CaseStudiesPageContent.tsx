@@ -36,9 +36,8 @@ export function CaseStudiesPageContent({ entries }: { entries: readonly InsightE
     <>
       <ArcInsightsFeedSection id="case-studies" entries={entries} />
       <InvestCTASection
-        imageSrc={images.investBanner}
+        imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
-        pin={false}
       />
     </>
   );

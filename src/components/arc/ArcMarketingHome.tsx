@@ -91,7 +91,7 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
         <WholeBodySection />
         <YourPathSection />
         <ArcTestimonialsSection items={homeTestimonials} />
-        <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+        <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
         <ArcFooter />
       </ArcScrollShell>
     </>

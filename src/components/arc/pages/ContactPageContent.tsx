@@ -104,7 +104,7 @@ export function ContactPageContent() {
         faqByCategory={{ general: liveSiteFaqs }}
       />
 
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
     </>
   );
 }

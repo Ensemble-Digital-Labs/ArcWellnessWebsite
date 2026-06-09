@@ -98,7 +98,7 @@ export function AboutPageContent() {
       />
 
       <InvestCTASection
-        imageSrc={CLINIC_INTERIOR_IMAGES.heroLobbyLounge}
+        imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
       />
     </>

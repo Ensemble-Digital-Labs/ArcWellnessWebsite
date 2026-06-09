@@ -58,7 +58,7 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
         </div>
       </section>
 
-      <InvestCTASection imageSrc={images.investBanner} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
     </>
   );
 }

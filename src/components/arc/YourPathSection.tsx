@@ -1,7 +1,8 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
@@ -12,6 +13,8 @@ import {
   PATH_STEP_IMAGE_SRC,
 } from "@/content/backgroundDecoration";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
+import { useMinMd } from "@/lib/useMinMd";
+import { cn } from "@/lib/utils";
 
 type PathStep = {
   numeral: string;
@@ -122,7 +125,7 @@ function YourPathIntroSection() {
         />
       </div>
 
-      <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pt-36 lg:pt-40">
+      <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pb-16 md:pt-36 lg:pt-40">
         <div
           data-scroll-section
           className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center lg:max-w-3xl"
@@ -147,7 +150,7 @@ function YourPathIntroSection() {
       </div>
 
       <div
-        className="absolute inset-x-0 bottom-0 z-[2] flex min-h-[5.75rem] w-full flex-col items-center justify-center gap-2 bg-gradient-to-b from-arc-teal-muted/45 to-arc-teal-muted/70 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] pt-5 sm:min-h-[6.5rem] sm:gap-2.5 sm:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] sm:pt-6"
+        className="absolute inset-x-0 bottom-0 z-[2] flex min-h-[5.75rem] w-full flex-col items-center justify-center gap-2 bg-gradient-to-b from-arc-teal-muted/45 to-arc-teal-muted/70 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] pt-5 sm:min-h-[6.5rem] sm:gap-2.5 sm:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] sm:pt-6 md:hidden"
         role="note"
         style={scrollHintMotion}
       >
@@ -233,74 +236,103 @@ function YourPathStepPanel({
   );
 }
 
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
+function getMobileStepOpacities(
+  index: number,
+  stepCount: number,
+  timeline: number,
+  revealProgress: number,
+  holdUnitsPerStep: number,
+  crossfadeUnitsBetweenSteps: number,
+  imageFadeInUnits: number,
+  textFadeInUnits: number,
+) {
+  const isLastStep = index === stepCount - 1;
+  const segmentStart = index * (holdUnitsPerStep + crossfadeUnitsBetweenSteps);
+  const holdEnd = segmentStart + holdUnitsPerStep;
+  const segmentEnd = holdEnd + crossfadeUnitsBetweenSteps;
+  const local = timeline - segmentStart;
+  const textFadeInStart = imageFadeInUnits;
+
+  let panelOpacity = 0;
+  let imageOpacity = 0;
+  let textOpacity = 0;
+
+  if (index === 0) {
+    if (timeline >= segmentStart && timeline <= holdEnd) {
+      panelOpacity = 1;
+      imageOpacity = 1;
+      textOpacity = revealProgress;
+    } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
+      const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
+      panelOpacity = fadeOut;
+      imageOpacity = fadeOut;
+      textOpacity = Math.min(1, revealProgress) * fadeOut;
+    } else if (isLastStep && timeline > segmentStart) {
+      panelOpacity = 1;
+      imageOpacity = 1;
+      textOpacity = 1;
+    }
+  } else if (local >= 0 && local <= holdUnitsPerStep) {
+    panelOpacity = 1;
+    imageOpacity = clamp01(local / imageFadeInUnits);
+    textOpacity =
+      local < textFadeInStart ? 0 : clamp01((local - textFadeInStart) / textFadeInUnits);
+  } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
+    const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
+    panelOpacity = fadeOut;
+    imageOpacity = fadeOut;
+    textOpacity = fadeOut;
+  } else if (isLastStep && local > 0) {
+    panelOpacity = 1;
+    imageOpacity = 1;
+    textOpacity = 1;
+  }
+
+  return { panelOpacity, imageOpacity, textOpacity };
+}
+
+/** Mobile-only scroll-scrub crossfade (pinned). Laptop uses {@link YourPathStepsInteractiveSection}. */
+const MOBILE_STEP_SEQUENCE_PIN_DISTANCE = 4.2;
+
 function YourPathStepsCrossfadeSection() {
   const { p, setPinProgress } = usePathPinScrubProgress();
+  const isSplitViewport = useMinMd();
   const stepCount = PATH_STEPS.length;
-  const stepSequencePinDistance = 4.2;
   const introRevealPortion = 0.08;
   const revealProgress = Math.min(1, Math.max(0, p / introRevealPortion));
-  const transitionProgress = Math.min(1, Math.max(0, (p - introRevealPortion) / (1 - introRevealPortion)));
   const holdUnitsPerStep = 1.4;
   const crossfadeUnitsBetweenSteps = 1.4;
   const imageFadeInUnits = 0.45;
   const textFadeInUnits = 0.45;
+  const transitionProgress = Math.min(
+    1,
+    Math.max(0, (p - introRevealPortion) / (1 - introRevealPortion)),
+  );
   const totalTimelineUnits =
     stepCount * holdUnitsPerStep + Math.max(0, stepCount - 1) * crossfadeUnitsBetweenSteps;
   const timeline = transitionProgress * totalTimelineUnits;
 
   return (
     <PinnedSection
-      pinDistanceMultiplier={stepSequencePinDistance}
+      pinDistanceMultiplier={MOBILE_STEP_SEQUENCE_PIN_DISTANCE}
       onProgress={setPinProgress}
-      className="relative min-h-[100dvh] overflow-clip bg-arc-cream"
+      disabled={isSplitViewport}
+      className="relative min-h-[100dvh] overflow-clip bg-arc-cream md:hidden"
     >
       <div className="relative min-h-[100dvh]">
         {PATH_STEPS.map((step, index) => {
-          const isLastStep = index === stepCount - 1;
-          const segmentStart = index * (holdUnitsPerStep + crossfadeUnitsBetweenSteps);
-          const holdEnd = segmentStart + holdUnitsPerStep;
-          const segmentEnd = holdEnd + crossfadeUnitsBetweenSteps;
-          const local = timeline - segmentStart;
-          const textFadeInStart = imageFadeInUnits;
-
-          const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
-
-          let panelOpacity = 0;
-          let imageOpacity = 0;
-          let textOpacity = 0;
-
-          if (index === 0) {
-            if (timeline >= segmentStart && timeline <= holdEnd) {
-              panelOpacity = 1;
-              imageOpacity = 1;
-              textOpacity = revealProgress;
-            } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
-              const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
-              panelOpacity = fadeOut;
-              imageOpacity = fadeOut;
-              textOpacity = Math.min(1, revealProgress) * fadeOut;
-            } else if (isLastStep && timeline > segmentStart) {
-              panelOpacity = 1;
-              imageOpacity = 1;
-              textOpacity = 1;
-            }
-          } else {
-            if (local >= 0 && local <= holdUnitsPerStep) {
-              panelOpacity = 1;
-              imageOpacity = clamp01(local / imageFadeInUnits);
-              textOpacity =
-                local < textFadeInStart ? 0 : clamp01((local - textFadeInStart) / textFadeInUnits);
-            } else if (!isLastStep && timeline > holdEnd && timeline <= segmentEnd) {
-              const fadeOut = 1 - (timeline - holdEnd) / crossfadeUnitsBetweenSteps;
-              panelOpacity = fadeOut;
-              imageOpacity = fadeOut;
-              textOpacity = fadeOut;
-            } else if (isLastStep && local > 0) {
-              panelOpacity = 1;
-              imageOpacity = 1;
-              textOpacity = 1;
-            }
-          }
+          const { panelOpacity, imageOpacity, textOpacity } = getMobileStepOpacities(
+            index,
+            stepCount,
+            timeline,
+            revealProgress,
+            holdUnitsPerStep,
+            crossfadeUnitsBetweenSteps,
+            imageFadeInUnits,
+            textFadeInUnits,
+          );
 
           const translateY = (1 - panelOpacity) * 8;
           const scale = 0.985 + panelOpacity * 0.015;
@@ -325,6 +357,105 @@ function YourPathStepsCrossfadeSection() {
         })}
       </div>
     </PinnedSection>
+  );
+}
+
+/** Laptop / tablet split view — one viewport, five clickable step rows. */
+function YourPathStepsInteractiveSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <section
+      className="relative hidden min-h-[100dvh] overflow-clip bg-arc-cream md:block"
+      aria-label="Your path steps"
+    >
+      <div className="grid min-h-[100dvh] grid-cols-2">
+        <div
+          className="grid min-h-[100dvh] grid-rows-5 bg-arc-cream/95"
+          role="tablist"
+          aria-label="Your path steps"
+        >
+          {PATH_STEPS.map((step, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <button
+                key={step.stepMeta}
+                type="button"
+                id={`path-step-tab-${index}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls="path-step-image-panel"
+                onClick={() => setActiveIndex(index)}
+                className={cn(
+                  "flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity,box-shadow] duration-300 last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-arc-teal/45",
+                  isActive
+                    ? "bg-arc-cream shadow-[inset_3px_0_0_0_var(--color-arc-rose-gold-ink)]"
+                    : "bg-arc-cream/70 opacity-[0.88] hover:bg-arc-cream/90 hover:opacity-100",
+                )}
+              >
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p
+                    className={cn(
+                      "font-serif text-xl leading-none lg:text-2xl",
+                      isActive ? "text-arc-rose-gold-ink" : "text-arc-charcoal/52",
+                    )}
+                  >
+                    {step.numeral} {step.title}
+                  </p>
+                  <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal/48 lg:text-[10px] lg:tracking-[0.16em]">
+                    {step.stepMeta}
+                  </p>
+                </div>
+                <p
+                  className={cn(
+                    "mt-2 font-sans leading-relaxed",
+                    isActive
+                      ? "text-sm text-arc-charcoal/85 lg:text-[0.9375rem] lg:leading-relaxed"
+                      : "line-clamp-2 text-xs text-arc-charcoal/42 lg:text-sm",
+                  )}
+                >
+                  {step.description}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        <div
+          id="path-step-image-panel"
+          role="tabpanel"
+          aria-labelledby={`path-step-tab-${activeIndex}`}
+          className="relative min-h-[100dvh]"
+        >
+          {PATH_STEPS.map((step, index) => (
+            <div
+              key={step.stepMeta}
+              className={cn(
+                "absolute inset-0",
+                reduceMotion
+                  ? index === activeIndex
+                    ? "opacity-100"
+                    : "opacity-0"
+                  : "transition-opacity duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                index === activeIndex ? "opacity-100" : "opacity-0",
+              )}
+              aria-hidden={index !== activeIndex}
+            >
+              <Image
+                src={step.imageSrc}
+                alt={step.imageAlt}
+                fill
+                className="object-cover object-center"
+                sizes="50vw"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -374,6 +505,7 @@ export function YourPathSection() {
   return (
     <>
       <YourPathIntroSection />
+      <YourPathStepsInteractiveSection />
       <YourPathStepsCrossfadeSection />
     </>
   );
