@@ -352,17 +352,31 @@ html.arc-scroll-lock::-webkit-scrollbar {
 
 /** Whole-Body Care slider — light editorial photography + cream nav bar. */
 .arc-slide-nav--light .slide-progress-line {
-  background-color: color-mix(in srgb, var(--arc-charcoal) 14%, transparent);
+  height: 4px;
+  border-radius: 2px;
+  background-color: color-mix(in srgb, var(--arc-charcoal) 32%, var(--arc-cream-deep));
 }
 
 .arc-slide-nav--light .arc-slide-nav-item[data-active="true"] .slide-progress-line,
 .arc-slide-nav--light .arc-slide-nav-item.active .slide-progress-line {
-  background-color: color-mix(in srgb, var(--arc-charcoal) 22%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arc-charcoal) 8%, transparent);
+  background-color: color-mix(in srgb, var(--arc-teal) 38%, var(--arc-cream-deep));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arc-teal) 22%, transparent);
+}
+
+.arc-slide-nav--light .slide-progress-fill {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--arc-teal-muted) 88%, white) 0%,
+    var(--arc-teal) 42%,
+    color-mix(in srgb, var(--arc-teal) 72%, var(--arc-champagne) 28%) 100%
+  );
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--arc-teal) 48%, transparent),
+    0 0 4px color-mix(in srgb, var(--arc-champagne) 35%, transparent);
 }
 
 .arc-slide-nav--light .slide-nav-title.arc-slide-nav-label {
-  color: color-mix(in srgb, var(--arc-charcoal) 82%, transparent);
+  color: color-mix(in srgb, var(--arc-charcoal) 72%, transparent);
   text-shadow: none;
 }
 

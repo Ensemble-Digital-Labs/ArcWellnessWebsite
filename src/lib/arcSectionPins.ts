@@ -21,6 +21,8 @@ export type ArcFullscreenPinOptions = {
   pinDistanceMultiplier?: number;
   /** Skip pin setup (e.g. footer / testimonials on mobile native scroll). */
   disabled?: boolean;
+  /** Override pin type — `fixed` avoids WebGL canvas flicker inside transform-pinned parents. */
+  pinType?: "fixed" | "transform";
 };
 
 /**
@@ -34,6 +36,7 @@ export function useArcFullscreenPin(
   const onProgressRef = useRef<ArcFullscreenPinOptions["onProgress"]>(undefined);
   onProgressRef.current = options?.onProgress;
   const pinDistanceMultiplier = options?.pinDistanceMultiplier ?? 1;
+  const pinType = options?.pinType;
   const disabledRef = useRef(options?.disabled ?? false);
   disabledRef.current = options?.disabled ?? false;
 
@@ -57,11 +60,15 @@ export function useArcFullscreenPin(
       const endDist = () =>
         getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
 
+      const pinOptions = pinType
+        ? { pinType }
+        : arcScrollTriggerPinOptions();
+
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           trigger,
           ...arcScrollTriggerScrollerProps(),
-          ...arcScrollTriggerPinOptions(),
+          ...pinOptions,
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -108,5 +115,5 @@ export function useArcFullscreenPin(
       }
       revert?.();
     };
-  }, [sectionRef, pinDistanceMultiplier]);
+  }, [sectionRef, pinDistanceMultiplier, pinType]);
 }

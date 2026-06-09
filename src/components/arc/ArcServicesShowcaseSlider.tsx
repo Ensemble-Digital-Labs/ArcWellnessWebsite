@@ -54,16 +54,6 @@ const SLIDER_CONFIG = {
 /** Light editorial photography — cream plate, charcoal type, frosted nav. */
 const SHOWCASE_SHELL_CLASS =
   "relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-cream";
-/** Bottom + top scrims — lighten photo behind type; no text-shadow halos. */
-function ShowcaseScrimOverlays() {
-  return (
-    <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
-      <div className="absolute inset-x-0 top-0 h-[40%] bg-gradient-to-b from-arc-cream/68 via-arc-cream/28 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-arc-cream/95 via-arc-cream/55 to-transparent" />
-    </div>
-  );
-}
-
 const SHOWCASE_HEADLINE_CLASS =
   "shrink-0 text-center font-serif text-2xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-3xl lg:text-[2.5rem]";
 /** Transparent glass chip — hugs slide title + description (not full-bleed). */
@@ -82,7 +72,7 @@ const SHOWCASE_CTRL_NUM_CLASS =
 const SHOWCASE_CTRL_TOTAL_CLASS =
   "min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-arc-charcoal/72 md:text-base";
 const SHOWCASE_NAV_CLASS =
-  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-charcoal/10 bg-arc-cream/97 px-2 py-4 shadow-[0_-8px_32px_rgba(44,44,44,0.08)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-teal/28 bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(78,196,176,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
 
 function getEffectIndex(name: string): number {
   const map: Record<string, number> = {
@@ -159,9 +149,8 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
           </div>
         ))}
       </div>
-      <ShowcaseScrimOverlays />
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2 data-scroll-section className={SHOWCASE_HEADLINE_CLASS}>
+        <h2 className={SHOWCASE_HEADLINE_CLASS}>
           Whole-Body Care. Inside and Out.
         </h2>
         <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
@@ -232,8 +221,10 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 }
 
 function WebGLShowcase({ slides, className }: ShowcaseProps) {
+  const [webglReady, setWebglReady] = useState(false);
   const rootRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const posterSrc = slides[0]?.imageSrc;
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -722,6 +713,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         antialias: true,
         alpha: false,
       });
+      renderer.setClearColor(0xf7f4ef, 1);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       const w0 = root.clientWidth;
@@ -800,19 +792,22 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           slideTextures[0].userData.size as THREE.Vector2;
         shaderMaterial.uniforms.uTexture2Size.value =
           slideTextures[1].userData.size as THREE.Vector2;
+        if (disposed) return;
+
         texturesLoaded = true;
         sliderEnabled = true;
         updateShaderUniforms();
         root.classList.add("arc-showcase-loaded");
+        setWebglReady(true);
         safeStartTimer(500);
-      }
 
-      const renderLoop = () => {
-        if (disposed) return;
+        const renderLoop = () => {
+          if (disposed) return;
+          rafId = requestAnimationFrame(renderLoop);
+          if (renderer && scene && camera) renderer.render(scene, camera);
+        };
         rafId = requestAnimationFrame(renderLoop);
-        if (renderer && scene && camera) renderer.render(scene, camera);
-      };
-      rafId = requestAnimationFrame(renderLoop);
+      }
     })().catch(() => {
       /* textures may fail; section still shows copy */
     });
@@ -883,13 +878,26 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
+      {posterSrc ? (
+        <div className="absolute inset-0 z-0" aria-hidden>
+          <Image
+            src={posterSrc}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        </div>
+      ) : null}
       <canvas
         ref={canvasRef}
-        className="webgl-canvas absolute inset-0 block h-full w-full"
+        className={cn(
+          "webgl-canvas absolute inset-0 z-[0] block h-full w-full transition-opacity duration-300 ease-out",
+          webglReady ? "opacity-100" : "opacity-0",
+        )}
         aria-hidden
       />
-      <ShowcaseScrimOverlays />
-
       <div className="pointer-events-auto absolute left-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:left-4 md:left-6">
         <button
           ref={prevBtnRef}
@@ -927,7 +935,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       </div>
 
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2 data-scroll-section className={SHOWCASE_HEADLINE_CLASS}>
+        <h2 className={SHOWCASE_HEADLINE_CLASS}>
           Whole-Body Care. Inside and Out.
         </h2>
         <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
@@ -961,28 +969,14 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
 export function ArcServicesShowcaseSlider({ slides, className }: ShowcaseProps) {
   const [reduced, setReduced] = useState(false);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
-    setReady(true);
     const onChange = () => setReduced(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
-
-  if (!ready) {
-    return (
-      <div
-        className={cn(
-          "h-[100dvh] min-h-[320px] w-full max-w-none animate-pulse rounded-none bg-arc-cream/30",
-          className,
-        )}
-        aria-hidden
-      />
-    );
-  }
 
   if (reduced) {
     return (
