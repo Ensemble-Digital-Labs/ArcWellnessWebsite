@@ -582,7 +582,7 @@ export default function SphereImageGrid({
   /** Thick mint/teal halo like the reference split-layout mock */
   const tileSelectedDark = cn(
     tileSelected,
-    "border-[2.5px] ring-[3px] ring-arc-teal shadow-[0_0_36px_rgba(78,196,176,0.55),0_0_14px_rgba(78,196,176,0.35)]",
+    "border-[2.5px] ring-[3px] ring-arc-teal shadow-[0_0_36px_rgba(131,208,187,0.55),0_0_14px_rgba(131,208,187,0.35)]",
   );
 
   const isTileSelected = (img: ImageData) => {

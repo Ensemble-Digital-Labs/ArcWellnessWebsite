@@ -37,12 +37,12 @@ export const videos = {
 } as const;
 
 export const images = {
-  /** Header wordmark — RGBA PNG (`scripts/make-logo-transparent.cjs` removes cream plate from source art). */
-  logo: "/assets/branding/arc-wellness-logo-v3.png",
-  /** Full-bleed hero background (`ScrollExpandHero` `bgImageSrc`) — open glass doors, reception beyond. */
-  heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.png",
-  /** Scroll-expand hero center frame (`ScrollExpandHero` `mediaSrc`) — mint wall, backlit logo. */
+  /** Header wordmark — HD transparent gold RGBA PNG (`public/assets/branding/`). */
+  logo: "/assets/branding/arc-wellness-logo-transparent-gold.png",
+  /** Full-bleed hero background — scroll-zoom in `ScrollExpandHero` (reception / mint logo wall). */
   heroMedia: "/assets/hero/arc-wellness-reception-mint-logo-wall.png",
+  /** Alternate hero plate — entrance glass doors (not used on homepage hero currently). */
+  heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.png",
   heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.png",
   /**

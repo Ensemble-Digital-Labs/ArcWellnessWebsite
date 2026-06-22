@@ -234,7 +234,7 @@ function ArcTestimonialGlassCard({
       className={cn(
         "relative flex h-full flex-col overflow-hidden rounded-2xl border backdrop-blur-md lg:rounded-3xl",
         isActive
-          ? "border-arc-teal/35 bg-white shadow-[0_24px_70px_rgba(44,44,44,0.18),0_10px_32px_rgba(78,196,176,0.14)] ring-2 ring-arc-teal/22"
+          ? "border-arc-teal/35 bg-white shadow-[0_24px_70px_rgba(44,44,44,0.18),0_10px_32px_rgba(131,208,187,0.14)] ring-2 ring-arc-teal/22"
           : "border-arc-charcoal/20 bg-arc-cream-deep/96 shadow-[0_16px_48px_rgba(44,44,44,0.14)] ring-1 ring-arc-charcoal/12",
         className,
       )}

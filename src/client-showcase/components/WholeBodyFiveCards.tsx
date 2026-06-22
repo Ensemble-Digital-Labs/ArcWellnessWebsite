@@ -200,7 +200,7 @@ export function WholeBodyFiveCards({ introDelaySec = 0 }: Props) {
   const cardRow = (
     <div className="mt-10 lg:mt-12">
       <div className="flex justify-center py-2 lg:py-3" aria-hidden>
-        <span className="size-1.5 rounded-full bg-arc-teal shadow-[0_0_0_5px_rgba(78,196,176,0.22)]" />
+        <span className="size-1.5 rounded-full bg-arc-teal shadow-[0_0_0_5px_rgba(131,208,187,0.22)]" />
       </div>
       <div className="mt-6 grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-8 lg:mt-8 lg:grid-cols-5 lg:gap-0 lg:gap-y-0">
         {wholeBodyCards.map((card, index) => (
@@ -251,7 +251,7 @@ export function WholeBodyFiveCards({ introDelaySec = 0 }: Props) {
           aria-hidden
           variants={headlineReveal}
         >
-          <span className="size-1.5 rounded-full bg-arc-teal shadow-[0_0_0_5px_rgba(78,196,176,0.22)]" />
+          <span className="size-1.5 rounded-full bg-arc-teal shadow-[0_0_0_5px_rgba(131,208,187,0.22)]" />
         </motion.div>
 
         <motion.div

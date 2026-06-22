@@ -62,13 +62,13 @@ export function ArcTextUnderlineCta({
       : accent === "tealBright"
         ? [
             "text-arc-teal hover:text-arc-teal-hover",
-            "[text-shadow:0_1px_2px_rgba(0,0,0,0.22),0_0_32px_rgba(78,196,176,0.45),0_0_1px_rgba(44,44,44,0.12)]",
+            "[text-shadow:0_1px_2px_rgba(0,0,0,0.22),0_0_32px_rgba(131,208,187,0.45),0_0_1px_rgba(44,44,44,0.12)]",
             "focus-visible:ring-arc-teal/50 focus-visible:ring-offset-black/35",
           ]
         : [
             "text-arc-teal-ink hover:text-arc-teal",
             "[text-shadow:0_1px_0_rgba(255,255,255,0.55),0_1px_3px_rgba(44,44,44,0.1)]",
-            "hover:[text-shadow:0_1px_0_rgba(255,255,255,0.72),0_0_22px_rgba(78,196,176,0.38)]",
+            "hover:[text-shadow:0_1px_0_rgba(255,255,255,0.72),0_0_22px_rgba(131,208,187,0.38)]",
             "focus-visible:ring-arc-teal/55 focus-visible:ring-offset-arc-cream/80",
           ];
 

@@ -44,15 +44,12 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
       {header}
       <ArcScrollShell>
         <ScrollExpandHero
-          bgImageSrc={images.heroBg}
-          mediaSrc={images.heroMedia}
-          title="Where Aesthetics, Wellness, and Longevity Converge."
+          bgImageSrc={images.heroMedia}
+          title="Where Wellness, Longevity and Aesthetics Converge."
           intro={
             <>
-              Rooted in vitality, ARC Wellness combines medical expertise with personalized wellness
-              in St. Louis—from non-invasive treatments for energy, pelvic health, and cognitive
-              performance to restorative therapies and lifestyle guidance, designed for strength,
-              clarity, and confidence.
+              Redefining how you look, feel and function through every decade — with intentional,
+              science backed care designed for the life you are building.
             </>
           }
         />

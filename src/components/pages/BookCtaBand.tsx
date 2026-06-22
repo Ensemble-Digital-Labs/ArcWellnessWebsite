@@ -32,7 +32,7 @@ export function BookCtaBand({
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
           <Link
             href="/book"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-arc-teal px-8 py-3 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-white shadow-[0_8px_28px_rgba(78,196,176,0.4)] transition-[filter] hover:brightness-105"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-arc-teal px-8 py-3 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-white shadow-[0_8px_28px_rgba(131,208,187,0.4)] transition-[filter] hover:brightness-105"
           >
             Book consultation
           </Link>

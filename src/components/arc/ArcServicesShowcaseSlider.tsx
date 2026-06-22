@@ -72,7 +72,7 @@ const SHOWCASE_CTRL_NUM_CLASS =
 const SHOWCASE_CTRL_TOTAL_CLASS =
   "min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-arc-charcoal/72 md:text-base";
 const SHOWCASE_NAV_CLASS =
-  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-teal/28 bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(78,196,176,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-teal/28 bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
 
 function getEffectIndex(name: string): number {
   const map: Record<string, number> = {

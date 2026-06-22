@@ -2,7 +2,7 @@
 export const LOGO_DEMO_V1_BASE = "/logodemov1" as const;
 
 /**
- * Alternate wordmark for side-by-side comparison with the main homepage (`images.logo` → v3).
+ * Alternate wordmark for side-by-side comparison with the main homepage (`images.logo` → transparent gold).
  * Swap the path when you add a dedicated demo asset under `public/assets/branding/`.
  */
 export const logoDemoV1 = {

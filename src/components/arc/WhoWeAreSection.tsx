@@ -32,7 +32,7 @@ export function WhoWeAreSection({ imageSrc }: WhoWeAreSectionProps) {
         </div>
         <Link
           href="#book"
-          className="mt-10 inline-block bg-arc-teal px-8 py-3 font-sans text-sm font-bold uppercase tracking-widest text-white shadow-[0_1px_2px_rgba(0,0,0,0.22),0_12px_32px_-8px_rgba(78,196,176,0.5)] transition-[color,background-color,box-shadow] hover:bg-arc-teal-hover hover:shadow-[0_1px_2px_rgba(0,0,0,0.25),0_14px_36px_-8px_rgba(54,157,136,0.45)]"
+          className="mt-10 inline-block bg-arc-teal px-8 py-3 font-sans text-sm font-bold uppercase tracking-widest text-white shadow-[0_1px_2px_rgba(0,0,0,0.22),0_12px_32px_-8px_rgba(131,208,187,0.5)] transition-[color,background-color,box-shadow] hover:bg-arc-teal-hover hover:shadow-[0_1px_2px_rgba(0,0,0,0.25),0_14px_36px_-8px_rgba(107,184,163,0.45)]"
         >
           Book Your Consultation
         </Link>

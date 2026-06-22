@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Brighter signature teal — still calm, not neon */
-  --arc-teal: #4ec4b0;
-  --arc-teal-hover: #369d88;
+  /* Signature branding teal */
+  --arc-teal: #83d0bb;
+  --arc-teal-hover: #6bb8a3;
   /**
    * Dark teal surface token (e.g. stats band `bg-arc-teal-ink`). **Do not use for headline/body type**
    * — use `--arc-charcoal` / `text-white` for serif leads and `text-arc-teal` for eyebrows; rose-gold for script emphasis.
    */
-  --arc-teal-ink: #287a6d;
-  --arc-teal-ink-hover: #1f6056;
-  --arc-teal-muted: #e2f6f2;
+  --arc-teal-ink: #458872;
+  --arc-teal-ink-hover: #3a7566;
+  --arc-teal-muted: #eaf7f3;
+  --arc-teal-glow: rgba(131, 208, 187, 0.45);
   --arc-cream: #f7f4ef;
   --arc-cream-deep: #ebe6dc;
   --arc-charcoal: #2c2c2c;

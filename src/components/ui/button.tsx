@@ -35,8 +35,8 @@ const buttonVariants = cva(
         default: [
           "border-[color:color-mix(in_srgb,var(--arc-teal)_82%,#1a1a1a)] bg-arc-teal text-white",
           "[text-shadow:0_1px_2px_rgba(0,0,0,0.22)]",
-          "shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_16px_40px_-10px_rgba(78,196,176,0.62)]",
-          "hover:border-arc-teal-hover hover:bg-arc-teal-hover hover:shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_20px_44px_-12px_rgba(54,157,136,0.55)]",
+          "shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_16px_40px_-10px_rgba(131,208,187,0.62)]",
+          "hover:border-arc-teal-hover hover:bg-arc-teal-hover hover:shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_20px_44px_-12px_rgba(107,184,163,0.55)]",
           "active:translate-y-px active:shadow-[0_1px_0_rgba(255,255,255,0.12)_inset]",
           "focus-visible:ring-offset-arc-cream",
         ].join(" "),

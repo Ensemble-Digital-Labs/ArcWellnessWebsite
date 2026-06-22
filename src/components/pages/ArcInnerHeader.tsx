@@ -66,7 +66,7 @@ export function ArcInnerHeader() {
         <div className="flex items-center gap-2">
           <Link
             href="/book"
-            className="hidden rounded-full bg-arc-teal px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-white shadow-[0_4px_20px_rgba(78,196,176,0.35)] transition-[filter,transform] hover:brightness-105 sm:inline-flex sm:text-[13px]"
+            className="hidden rounded-full bg-arc-teal px-5 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-white shadow-[0_4px_20px_rgba(131,208,187,0.35)] transition-[filter,transform] hover:brightness-105 sm:inline-flex sm:text-[13px]"
           >
             Book now
           </Link>

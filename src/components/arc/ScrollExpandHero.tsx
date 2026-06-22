@@ -15,31 +15,30 @@ import {
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
-import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
-import { HERO_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { arcGlassCtaClass } from "@/lib/arcGlassCta";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DEFAULT_HERO_TITLE_KEYWORDS = ["Aesthetics", "Wellness", "Longevity"] as const;
+const DEFAULT_HERO_TITLE_KEYWORDS = ["Wellness", "Longevity", "Aesthetics"] as const;
 
 /** Bottom-of-hero sliding ticker — brand phrases (reference: bullet-separated marquee bar). */
 const HERO_KEYWORD_MARQUEE_ITEMS = [
   "Low Energy & Burnout",
-  "Hormonal Imbalance & Weight Gain",
+  "Hormonal Imbalance",
+  "Weight Gain",
   "Poor Sleep & Recovery",
   "Aging Skin & Body Changes",
-  "Brain Fog & Focus Issues",
+  "Brain Fog & Focus",
 ] as const;
 
-/** Playfair all-caps — on `bg-arc-rose-gold` (same token as hero keyword emphasis). */
+/** Playfair all-caps — on `bg-arc-teal` (signature brand bar). */
 const HERO_MARQUEE_LABEL_CLASS =
-  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-arc-charcoal sm:text-base md:text-lg [text-shadow:0_1px_0_rgba(255,255,255,0.42),0_1px_12px_rgba(0,0,0,0.06)]";
+  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base md:text-lg [text-shadow:0_1px_2px_rgba(44,44,44,0.22),0_1px_8px_rgba(0,0,0,0.12)]";
 
 const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   /**
-   * Luminous rose-gold bar (`--arc-rose-gold`, matches hero title keywords) + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
+   * Signature teal bar (`--arc-teal`) + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
    */
   const [marqueeOn, setMarqueeOn] = useState(false);
 
@@ -122,7 +121,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   return (
     <div
       className={cn(
-        "pointer-events-none isolate overflow-hidden border-t border-arc-charcoal/10 bg-arc-rose-gold pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-rose-gold-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-hidden border-t border-white/15 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
         marqueeOn && "opacity-100",
       )}
       aria-hidden
@@ -139,7 +138,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
             {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
               <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
                 <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
-                <span className="select-none font-sans text-sm font-semibold text-arc-charcoal/50 sm:text-base">
+                <span className="select-none font-sans text-sm font-semibold text-white/55 sm:text-base">
                   ·
                 </span>
               </span>
@@ -179,7 +178,7 @@ const HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS = cn(
 const HERO_TITLE_CONNECTOR_CLASS = cn("font-serif font-bold", HERO_READABLE_TYPE);
 
 const HERO_INTRO_TYPE = cn(
-  "text-center font-sans text-sm font-semibold leading-relaxed max-md:mx-auto md:text-left md:text-base [&_strong]:font-bold",
+  "text-center font-sans text-base font-semibold leading-relaxed max-md:mx-auto md:text-left md:text-lg lg:text-xl [&_strong]:font-bold",
   HERO_READABLE_TYPE,
   "[&_strong]:text-arc-teal-ink",
 );
@@ -375,7 +374,7 @@ function HeroIntroOrnamentFrame({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "pointer-events-auto relative isolate w-full max-w-[min(100%,20rem)] sm:max-w-[22rem] md:max-w-[24rem]",
+        "pointer-events-auto relative isolate w-full max-w-[min(100%,22rem)] sm:max-w-[24rem] md:max-w-[27rem]",
       )}
     >
       {/* Two corners only — top-right & bottom-left (mirror of the other pair). */}
@@ -394,8 +393,8 @@ function HeroIntroOrnamentFrame({ children }: { children: ReactNode }) {
 }
 
 type ScrollExpandHeroProps = {
+  /** Full-bleed hero photography — scales with scroll (replaces former center frame + secondary back layer). */
   bgImageSrc: string;
-  mediaSrc: string;
   title: string;
   /** Plain string or rich nodes (e.g. `<strong>` for emphasis). */
   intro: ReactNode;
@@ -409,7 +408,6 @@ type ScrollExpandHeroProps = {
  */
 export function ScrollExpandHero({
   bgImageSrc,
-  mediaSrc,
   title,
   intro,
   textBlend,
@@ -514,22 +512,15 @@ export function ScrollExpandHero({
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [reduceMotion, isMobileState, bgImageSrc, mediaSrc]);
+  }, [reduceMotion, isMobileState, bgImageSrc]);
 
   const progress = reduceMotion ? 1 : mobileLayout ? 0 : scrollProgress;
-  const mediaBaseW = 300;
-  const mediaBaseH = 400;
-  const mediaWidth = mobileLayout ? mediaBaseW : mediaBaseW + progress * 1250;
-  const mediaHeight = mobileLayout ? mediaBaseH : mediaBaseH + progress * 400;
+  /** Full-bleed background zoom — was previously a separate center frame. */
+  const bgScale = mobileLayout ? 1 : 1 + progress * 0.42;
   const textTranslateX = progress * (mobileLayout ? 180 : 150);
   /** Upper headline moves as one unit — avoids “Where” peeling away from the rest with opposite motion. */
   const headlineParallaxX = textTranslateX * 0.22;
-  /**
-   * Media is center-anchored and grows with scroll; intro (top absolute) + title (large mt) were
-   * anchored independently, so one looked like it drifted up and the other down. One shared Y shift
-   * keeps copy + CTAs moving together as the clip expands.
-   */
-  const sharedContentShiftY = (mediaHeight - mediaBaseH) * (mobileLayout ? 0.06 : 0.18);
+  const sharedContentShiftY = progress * (mobileLayout ? 12 : 48);
 
   const firstWord = title.split(" ")[0] ?? "";
   const restOfTitle = title.split(" ").slice(1).join(" ");
@@ -563,40 +554,32 @@ export function ScrollExpandHero({
         ref={heroRef}
         className="relative flex min-h-[100dvh] flex-col items-center justify-start max-md:min-h-[88dvh] max-md:pb-4"
       >
-        <div className="relative flex min-h-[100dvh] w-full flex-col items-center max-md:min-h-full">
-          <div className="absolute inset-0 z-0 h-full">
-            <Image
-              src={HERO_AMBIENT_BG}
-              alt=""
-              fill
-              className="object-cover object-center"
-              sizes="100vw"
-              priority
-            />
+        <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-hidden max-md:min-h-full">
+          <div className="absolute inset-0 z-0 h-full overflow-hidden">
+            <div
+              className="absolute inset-0 will-change-transform"
+              style={{
+                transform: `scale(${bgScale})`,
+                transformOrigin: "center center",
+              }}
+            >
+              <Image
+                src={bgImageSrc}
+                alt=""
+                width={1920}
+                height={1080}
+                className="h-full min-h-[100dvh] w-full max-w-none object-cover object-center"
+                priority
+              />
+            </div>
             <div className="absolute inset-0 bg-black/30" />
           </div>
-
-          <motion.div
-            className="absolute inset-0 z-[1] h-full"
-            initial={false}
-            animate={{ opacity: mobileLayout ? 1 : 1 - progress }}
-            transition={{ duration: 0.1 }}
-          >
-            <Image
-              src={bgImageSrc}
-              alt=""
-              width={1920}
-              height={1080}
-              className="h-full min-h-0 w-full max-w-none object-cover object-center max-md:min-h-[28rem] md:min-h-[100dvh]"
-              priority
-            />
-          </motion.div>
 
           <div
             className={cn(
               "relative z-10 mx-auto flex w-full flex-col items-center justify-start",
               ARC_PAGE_RAIL_MAX,
-              "max-md:pb-28",
+              "max-md:pb-28 md:min-h-[100dvh]",
             )}
           >
             {/* Headline + CTAs — stacked in flow on mobile; absolute on md+ */}
@@ -626,7 +609,7 @@ export function ScrollExpandHero({
                   <span className={heroTitleClosingLineClass}>{restClosing}</span>
                 ) : null}
               </motion.h1>
-              <div className="pointer-events-auto flex w-full max-w-[min(100%,46rem)] flex-col items-stretch gap-2.5 max-md:mx-auto sm:mt-2 sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-4 sm:gap-y-2">
+              <div className="pointer-events-auto flex w-full max-w-[min(100%,46rem)] flex-col gap-2.5 max-md:mx-auto max-md:items-center max-md:justify-center sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2 md:items-start md:justify-start">
                 <Link href="/book" className={cn(HERO_GLASS_CTA_CLASS, "max-md:justify-center")}>
                   Begin your Journey
                 </Link>
@@ -636,58 +619,22 @@ export function ScrollExpandHero({
               </div>
             </div>
 
-            <div className="relative flex w-full flex-col items-center max-md:min-h-0 max-md:gap-4 min-h-[100dvh] justify-center pt-6 md:min-h-[100dvh] md:pt-8">
-              <div
-                className={cn(
-                  "z-0 shrink-0 rounded-2xl max-md:w-[min(92vw,320px)] max-md:aspect-[4/5] max-md:h-auto",
-                  "max-md:relative max-md:mx-auto",
-                  "md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
-                )}
-                style={
-                  mobileLayout
-                    ? {
-                        maxHeight: "min(52vh, 420px)",
-                        boxShadow: "0px 0px 50px rgba(0, 0, 0, 0.35)",
-                      }
-                    : {
-                        width: `${mediaWidth}px`,
-                        height: `${mediaHeight}px`,
-                        maxWidth: "95vw",
-                        maxHeight: "85vh",
-                        boxShadow: "0px 0px 50px rgba(0, 0, 0, 0.35)",
-                      }
-                }
-              >
-                <div className="relative size-full">
-                  <Image
-                    key={mediaSrc}
-                    src={mediaSrc}
-                    alt=""
-                    width={1280}
-                    height={720}
-                    unoptimized
-                    className="size-full rounded-xl object-cover"
-                  />
-                </div>
-              </div>
-
-              <div
-                className={cn(
-                  "relative z-10 flex w-full flex-col px-6",
-                  "max-md:items-center max-md:pb-2",
-                  "md:mt-[min(20vh,156px)] md:items-end md:px-12 lg:px-14",
-                  textBlend ? "mix-blend-difference" : "mix-blend-normal",
-                )}
-                style={
-                  mobileLayout
-                    ? undefined
-                    : { transform: `translate3d(0, ${sharedContentShiftY}px, 0)` }
-                }
-              >
-                <HeroIntroOrnamentFrame>
-                  <p className={HERO_INTRO_TYPE}>{intro}</p>
-                </HeroIntroOrnamentFrame>
-              </div>
+            <div
+              className={cn(
+                "relative flex w-full flex-col",
+                "max-md:items-center max-md:gap-6 max-md:px-6 max-md:pb-2 max-md:pt-2",
+                "md:absolute md:inset-x-0 md:bottom-[calc(11.5rem+env(safe-area-inset-bottom))] md:items-end md:px-12 lg:bottom-[calc(13rem+env(safe-area-inset-bottom))] lg:px-14",
+                textBlend ? "mix-blend-difference" : "mix-blend-normal",
+              )}
+              style={
+                mobileLayout
+                  ? undefined
+                  : { transform: `translate3d(0, ${sharedContentShiftY}px, 0)` }
+              }
+            >
+              <HeroIntroOrnamentFrame>
+                <p className={HERO_INTRO_TYPE}>{intro}</p>
+              </HeroIntroOrnamentFrame>
             </div>
           </div>
 

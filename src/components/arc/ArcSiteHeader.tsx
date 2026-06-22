@@ -74,11 +74,11 @@ const NAV_STACK_CHROME_OPEN = "z-[1004]";
 
 /** Mobile wordmark — explicit height so `h-full` + narrow max-w doesn’t cap size invisibly. */
 const ARC_HEADER_LOGO_LINK_CLASS =
-  "relative z-10 col-start-2 row-start-1 inline-flex w-fit shrink-0 items-center justify-center bg-transparent px-1 max-md:min-h-[8.5rem] max-md:py-1 sm:max-md:min-h-[9rem] md:h-40 md:px-2 lg:h-44 xl:h-48";
+  "relative z-10 col-start-2 row-start-1 inline-flex w-fit shrink-0 items-center justify-center bg-transparent px-1 max-md:min-h-[6rem] max-md:py-1 sm:max-md:min-h-[6.5rem] md:h-28 md:px-2 lg:h-32 xl:h-36";
 const ARC_HEADER_LOGO_IMG_CLASS =
-  "arc-header-logo object-contain object-center max-md:h-[8rem] max-md:w-auto max-md:max-w-[min(88vw,24rem)] sm:max-md:h-[8.5rem] sm:max-md:max-w-[min(90vw,25rem)] md:h-full md:w-auto md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]";
+  "arc-header-logo object-contain object-center max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(88vw,17rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(90vw,18rem)] md:h-full md:w-auto md:max-w-[min(60vw,420px)] lg:max-w-[min(46vw,460px)]";
 const ARC_HEADER_LOGO_MOTION_WRAP_CLASS =
-  "inline-flex max-md:h-[8rem] max-md:w-auto max-md:max-w-[min(88vw,24rem)] sm:max-md:h-[8.5rem] sm:max-md:max-w-[min(90vw,25rem)] md:h-full md:max-w-[min(70vw,600px)] lg:max-w-[min(58vw,680px)]";
+  "inline-flex max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(88vw,17rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(90vw,18rem)] md:h-full md:max-w-[min(60vw,420px)] lg:max-w-[min(46vw,460px)]";
 
 /** Hash anchors for logo-demo routes only (`sectionBasePath` set). */
 const NAV_LINK_DEFS = [

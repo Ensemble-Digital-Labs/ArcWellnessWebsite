@@ -262,7 +262,7 @@ export function ArcMicroStatementSection({
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_65%_at_50%_42%,rgba(78,196,176,0.2),transparent_62%)] transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_65%_at_50%_42%,rgba(131,208,187,0.2),transparent_62%)] transition-opacity duration-300"
             style={{ opacity: 0.28 + bgBreath * 0.4 }}
             aria-hidden
           />

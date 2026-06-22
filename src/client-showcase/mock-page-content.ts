@@ -109,7 +109,7 @@ export const processTimelineSteps = [
 ] as const;
 
 export const heroCopy = {
-  headline: "Where Aesthetics, Wellness, and Longevity Converge.",
+  headline: "Where Wellness, Longevity and Aesthetics Converge.",
   subhead:
     "ARC Wellness pairs functional medicine, advanced aesthetics, and lifestyle coaching into one intentional plan—written for a single patient: you.",
 } as const;
@@ -308,8 +308,9 @@ export const showcaseFaqItems: readonly ShowcaseFaqItem[] = [
 /** Infinite marquee under client-showcase hero — concerns / entry points. */
 export const showcaseConcernMarqueeKeywords = [
   "Low Energy & Burnout",
-  "Hormonal Imbalance & Weight Gain",
+  "Hormonal Imbalance",
+  "Weight Gain",
   "Poor Sleep & Recovery",
   "Aging Skin & Body Changes",
-  "Brain Fog & Focus Issues",
+  "Brain Fog & Focus",
 ] as const;

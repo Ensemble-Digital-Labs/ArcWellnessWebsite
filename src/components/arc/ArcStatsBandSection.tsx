@@ -40,7 +40,7 @@ export function ArcStatsBandSection({
       )}
     >
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(78,196,176,0.22),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(131,208,187,0.22),transparent_55%)]"
         aria-hidden
       />
 
