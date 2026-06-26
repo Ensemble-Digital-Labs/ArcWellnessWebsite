@@ -14,7 +14,7 @@ import {
   WELCOME_GALLERY_FOCAL_INDEX,
 } from "@/content/welcomeGallery";
 import { WELCOME_COPY_STAGE_BG } from "@/content/backgroundDecoration";
-import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
+import { ARC_LIGHT_SECTION_BOTTOM_BLEND_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { IMMERSIVE_COLLAGE_FRAME_CLASSES } from "@/lib/immersiveCollageFrames";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
@@ -447,6 +447,7 @@ function WelcomeImmersiveScrollBody({
     >
       {/* Full-bleed sticky stage — collage uses full viewport (runs under fixed logo); copy carries logo clearance */}
       <div className="sticky top-0 flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-arc-cream">
+        <div aria-hidden className={ARC_LIGHT_SECTION_BOTTOM_BLEND_CLASS} />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 top-2 z-0 overflow-hidden sm:top-2.5 md:top-3">
           <div className="absolute inset-0 flex items-center justify-center origin-center scale-[1.12] sm:scale-[1.22] md:scale-[1.3]">
             {pictures.map(({ src, scale, frameClass, isFocal }, index) => (

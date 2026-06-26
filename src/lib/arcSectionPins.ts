@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -9,26 +9,60 @@ import {
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
+import {
+  currentScrollYForStabilize,
+  stabilizeViewportAfterLayoutShift,
+} from "@/lib/arcScrollLayoutRefresh";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
-import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { whenArcLocomotiveReady } from "@/lib/locomotive";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export type ArcFullscreenPinOptions = {
-  /** 0 at pin start, 1 at pin end — for scrubbed section animations (Locomotive `#main` scroller). */
   onProgress?: (progress: number) => void;
-  /** Scroll distance multiplier for pin duration (1 = one viewport, lower = shorter lock). */
   pinDistanceMultiplier?: number;
-  /** Skip pin setup (e.g. footer / testimonials on mobile native scroll). */
   disabled?: boolean;
-  /** Override pin type — `fixed` avoids WebGL canvas flicker inside transform-pinned parents. */
   pinType?: "fixed" | "transform";
+  stabilizeScrollOnToggle?: boolean;
 };
 
-/**
- * One viewport-height of scroll distance while this section stays pinned (ensemble stack model).
- * Must run **after** Locomotive `scrollerProxy` exists — listens for `arc-locomotive-ready`.
- */
+export function revertAllArcPinTriggers() {
+  ScrollTrigger.getAll().forEach((st) => {
+    if (st.vars?.pin) st.kill(true);
+  });
+}
+
+export function revertPinsForSection(section: HTMLElement | null) {
+  if (!section) return;
+  ScrollTrigger.getAll().forEach((st) => {
+    if (st.trigger === section) st.kill(true);
+  });
+}
+
+function maybeStabilizePathScroll(anchorTopBefore: number | undefined, scrollBefore: number, enabled: boolean) {
+  if (!enabled || anchorTopBefore === undefined) return;
+  const pathAnchor = document.getElementById("path");
+  if (!pathAnchor) return;
+
+  window.setTimeout(() => {
+    stabilizeViewportAfterLayoutShift({
+      anchor: pathAnchor,
+      anchorTopBefore,
+      scrollBefore,
+    });
+  }, 420);
+}
+
+function isPinnedTargetVisible(el: HTMLElement): boolean {
+  let node: HTMLElement | null = el;
+  while (node) {
+    const style = window.getComputedStyle(node);
+    if (style.display === "none" || style.visibility === "hidden") return false;
+    node = node.parentElement;
+  }
+  return el.getClientRects().length > 0;
+}
+
 export function useArcFullscreenPin(
   sectionRef: RefObject<HTMLElement | null>,
   options?: ArcFullscreenPinOptions,
@@ -37,83 +71,112 @@ export function useArcFullscreenPin(
   onProgressRef.current = options?.onProgress;
   const pinDistanceMultiplier = options?.pinDistanceMultiplier ?? 1;
   const pinType = options?.pinType;
-  const disabledRef = useRef(options?.disabled ?? false);
-  disabledRef.current = options?.disabled ?? false;
+  const disabled = options?.disabled ?? false;
+  const stabilizeScrollOnToggle = options?.stabilizeScrollOnToggle ?? false;
+  const revertRef = useRef<(() => void) | null>(null);
+  const prevDisabledRef = useRef<boolean | null>(null);
+
+  const teardownPin = () => {
+    revertPinsForSection(sectionRef.current);
+    revertRef.current?.();
+    revertRef.current = null;
+  };
+
+  const runPinSetup = (shouldStabilize: boolean) => {
+    const trigger = sectionRef.current;
+    if (!trigger) return;
+
+    if (!isPinnedTargetVisible(trigger)) {
+      teardownPin();
+      onProgressRef.current?.(1);
+      return;
+    }
+
+    teardownPin();
+
+    const scroller = getArcScrollTriggerScroller();
+    const endDist = () =>
+      getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
+    const pinOptions = pinType ? { pinType } : arcScrollTriggerPinOptions();
+
+    let created: ScrollTrigger | undefined;
+
+    const ctx = gsap.context(() => {
+      created = ScrollTrigger.create({
+        trigger,
+        ...arcScrollTriggerScrollerProps(),
+        ...pinOptions,
+        start: "top top",
+        end: () => `+=${endDist()}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          onProgressRef.current?.(self.progress);
+        },
+      });
+    }, trigger);
+
+    revertRef.current = () => ctx.revert();
+
+    if (created) {
+      onProgressRef.current?.(created.progress);
+    }
+
+    if (shouldStabilize) {
+      const pathAnchor = document.getElementById("path");
+      maybeStabilizePathScroll(
+        pathAnchor?.getBoundingClientRect().top,
+        currentScrollYForStabilize(),
+        true,
+      );
+    }
+  };
+
+  useLayoutEffect(() => () => teardownPin(), [sectionRef]);
+
+  useLayoutEffect(() => {
+    if (disabled) teardownPin();
+  }, [disabled]);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (prefersReducedMotion()) {
+      onProgressRef.current?.(1);
+      return;
+    }
 
-    let revert: (() => void) | null = null;
+    const disabledChanged =
+      prevDisabledRef.current !== null && prevDisabledRef.current !== disabled;
+    prevDisabledRef.current = disabled;
+
+    if (disabled) {
+      teardownPin();
+      onProgressRef.current?.(1);
+      return;
+    }
+
     let cancelled = false;
 
     const setup = () => {
       if (cancelled) return;
-      const trigger = sectionRef.current;
-      if (!trigger) return;
-
-      if (disabledRef.current) {
-        onProgressRef.current?.(1);
-        return;
-      }
-
-      const scroller = getArcScrollTriggerScroller();
-      const endDist = () =>
-        getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
-
-      const pinOptions = pinType
-        ? { pinType }
-        : arcScrollTriggerPinOptions();
-
-      const ctx = gsap.context(() => {
-        ScrollTrigger.create({
-          trigger,
-          ...arcScrollTriggerScrollerProps(),
-          ...pinOptions,
-          start: "top top",
-          end: () => `+=${endDist()}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            onProgressRef.current?.(self.progress);
-          },
-        });
-      }, trigger);
-
-      revert = () => ctx.revert();
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-      window.setTimeout(() => ScrollTrigger.refresh(), 120);
+      runPinSetup(stabilizeScrollOnToggle && disabledChanged);
     };
 
-    const onReady = () => {
-      queueMicrotask(setup);
-    };
-
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-
-    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
-      onReady();
-    }
+    const unregisterReady = whenArcLocomotiveReady(setup);
 
     const fallback = window.setTimeout(() => {
-      if (!cancelled && revert === null && document.querySelector("#main")) {
+      if (!cancelled && revertRef.current === null && document.querySelector("#main")) {
         setup();
       }
-    }, 1800);
+    }, 2000);
 
     return () => {
       cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      unregisterReady();
       window.clearTimeout(fallback);
-      const trigger = sectionRef.current;
-      if (trigger) {
-        ScrollTrigger.getAll().forEach((st) => {
-          if (st.trigger === trigger) st.kill();
-        });
-      }
-      revert?.();
+      teardownPin();
     };
-  }, [sectionRef, pinDistanceMultiplier, pinType]);
+  }, [sectionRef, pinDistanceMultiplier, pinType, disabled, stabilizeScrollOnToggle]);
 }

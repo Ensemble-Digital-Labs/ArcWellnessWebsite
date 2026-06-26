@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
@@ -13,7 +13,6 @@ import {
   PATH_STEP_IMAGE_SRC,
 } from "@/content/backgroundDecoration";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
-import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
 
 type PathStep = {
@@ -106,14 +105,13 @@ function YourPathIntroSection() {
   const { p, setPinProgress } = usePathPinScrubProgress();
   const headlineMotion = pathPinFadeUp(p, 0.08, 2.35);
   const linkMotion = pathPinFadeUp(p, 0.26, 2.2);
-  const scrollHintMotion = pathPinFadeUp(p, 0.34, 2.05);
 
   return (
     <PinnedSection
       id="path"
       pinDistanceMultiplier={0.35}
       onProgress={setPinProgress}
-      className="relative min-h-[100dvh] overflow-clip bg-arc-teal-muted"
+      className="relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted"
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <Image
@@ -146,33 +144,6 @@ function YourPathIntroSection() {
               Start Your Journey
             </ArcTextUnderlineCta>
           </div>
-        </div>
-      </div>
-
-      <div
-        className="absolute inset-x-0 bottom-0 z-[2] flex min-h-[5.75rem] w-full flex-col items-center justify-center gap-2 bg-gradient-to-b from-arc-teal-muted/45 to-arc-teal-muted/70 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] pt-5 sm:min-h-[6.5rem] sm:gap-2.5 sm:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] sm:pt-6 md:hidden"
-        role="note"
-        style={scrollHintMotion}
-      >
-        <div className="flex max-w-md flex-col items-center gap-2 text-center">
-          <p className="font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.22em] text-arc-charcoal/65 sm:text-[11px] sm:tracking-[0.28em]">
-            <span
-              aria-hidden
-              className="mr-1 inline-block motion-safe:animate-arc-indicator-arrow"
-            >
-              ↓
-            </span>
-            Keep scrolling to follow your path{" "}
-            <span
-              aria-hidden
-              className="ml-1 inline-block motion-safe:animate-arc-indicator-arrow"
-            >
-              ↓
-            </span>
-          </p>
-          <p className="font-sans text-[11px] font-normal leading-relaxed text-arc-charcoal/58 sm:text-xs">
-            Your wellness journey unfolds in the steps below.
-          </p>
         </div>
       </div>
     </PinnedSection>
@@ -296,9 +267,8 @@ function getMobileStepOpacities(
 /** Mobile-only scroll-scrub crossfade (pinned). Laptop uses {@link YourPathStepsInteractiveSection}. */
 const MOBILE_STEP_SEQUENCE_PIN_DISTANCE = 4.2;
 
-function YourPathStepsCrossfadeSection() {
+function YourPathStepsCrossfadeSection({ pinDisabled = false }: { pinDisabled?: boolean }) {
   const { p, setPinProgress } = usePathPinScrubProgress();
-  const isSplitViewport = useMinMd();
   const stepCount = PATH_STEPS.length;
   const introRevealPortion = 0.08;
   const revealProgress = Math.min(1, Math.max(0, p / introRevealPortion));
@@ -316,10 +286,12 @@ function YourPathStepsCrossfadeSection() {
 
   return (
     <PinnedSection
+      data-path-steps-crossfade
       pinDistanceMultiplier={MOBILE_STEP_SEQUENCE_PIN_DISTANCE}
       onProgress={setPinProgress}
-      disabled={isSplitViewport}
-      className="relative min-h-[100dvh] overflow-clip bg-arc-cream md:hidden"
+      disabled={pinDisabled}
+      stabilizeScrollOnToggle
+      className="relative z-30 min-h-[100dvh] overflow-clip bg-arc-cream"
     >
       <div className="relative min-h-[100dvh]">
         {PATH_STEPS.map((step, index) => {
@@ -360,15 +332,60 @@ function YourPathStepsCrossfadeSection() {
   );
 }
 
-/** Laptop / tablet split view — one viewport, five clickable step rows. */
+/** Desktop/tablet step carousel — dwell per step before auto-advance. */
+const PATH_STEP_AUTO_ADVANCE_MS = 5200;
+
 function YourPathStepsInteractiveSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
+  const [inView, setInView] = useState(false);
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry?.isIntersecting ?? false),
+      { threshold: 0.35 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion || autoPaused || !inView) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % PATH_STEPS.length);
+    }, PATH_STEP_AUTO_ADVANCE_MS);
+
+    return () => window.clearInterval(timer);
+  }, [reduceMotion, autoPaused, inView, activeIndex]);
+
+  const pauseAutoAdvance = () => setAutoPaused(true);
+  const resumeAutoAdvance = () => setAutoPaused(false);
+
+  const selectStep = (index: number) => {
+    setActiveIndex(index);
+  };
 
   return (
     <section
-      className="relative hidden min-h-[100dvh] overflow-clip bg-arc-cream md:block"
+      ref={sectionRef}
+      className="relative min-h-[100dvh] overflow-clip bg-arc-cream"
       aria-label="Your path steps"
+      onMouseEnter={pauseAutoAdvance}
+      onMouseLeave={resumeAutoAdvance}
+      onFocusCapture={pauseAutoAdvance}
+      onTouchStart={pauseAutoAdvance}
+      onTouchEnd={() => window.setTimeout(resumeAutoAdvance, 900)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          resumeAutoAdvance();
+        }
+      }}
     >
       <div className="grid min-h-[100dvh] grid-cols-2">
         <div
@@ -386,7 +403,7 @@ function YourPathStepsInteractiveSection() {
                 role="tab"
                 aria-selected={isActive}
                 aria-controls="path-step-image-panel"
-                onClick={() => setActiveIndex(index)}
+                onClick={() => selectStep(index)}
                 className={cn(
                   "flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity,box-shadow] duration-300 last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-arc-teal/45",
@@ -506,7 +523,6 @@ export function YourPathSection() {
     <>
       <YourPathIntroSection />
       <YourPathStepsInteractiveSection />
-      <YourPathStepsCrossfadeSection />
     </>
   );
 }

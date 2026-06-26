@@ -45,11 +45,12 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
       <ArcScrollShell>
         <ScrollExpandHero
           bgImageSrc={images.heroMedia}
-          title="Where Wellness, Longevity and Aesthetics Converge."
+          title="Where Wellness, Longevity & Aesthetics Converge."
+          referenceLayout
           intro={
             <>
-              Redefining how you look, feel and function through every decade — with intentional,
-              science backed care designed for the life you are building.
+              Redefining how you look, feel, and function through every decade with intentional,
+              science-backed care designed for the life you are building.
             </>
           }
         />

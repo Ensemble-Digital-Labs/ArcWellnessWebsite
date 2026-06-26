@@ -16,7 +16,9 @@ import {
   testimonialSphereBaseImages,
 } from "@/content/testimonialSphereBaseImages";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
+import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
+import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
 
 export type ArcTestimonialItem = {
@@ -427,23 +429,26 @@ export function ArcTestimonialsSection({
   const [isSphereInteracting, setIsSphereInteracting] = useState(false);
   const { p: pinProgress, setPinProgress } = usePathPinScrubProgress();
   const staticMotion = { opacity: 1, transform: "none" } satisfies CSSProperties;
+  const desktopPinScrub = useArcDesktopPinScrub();
   const nativeScroll = useStableNativeScroll();
-  const p = nativeScroll ? 1 : pinProgress;
-  const sphereMotion = nativeScroll ? staticMotion : pathPinFadeUp(p, 0.08, 2.35);
-  const hintMotion = nativeScroll ? staticMotion : pathPinFadeUp(p, 0.16, 2.05);
-  const titleMotion = nativeScroll ? staticMotion : pathPinFadeUp(p, 0.08, 2.35);
-  const cardMotion = nativeScroll ? staticMotion : pathPinFadeUp(p, 0.26, 2.2);
+  const isMinMd = useMinMd();
+  const mobileScrollUx = nativeScroll || !isMinMd;
+  const p = desktopPinScrub ? pinProgress : 1;
+  const sphereMotion = desktopPinScrub ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
+  const hintMotion = desktopPinScrub ? pathPinFadeUp(p, 0.16, 2.05) : staticMotion;
+  const titleMotion = desktopPinScrub ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
+  const cardMotion = desktopPinScrub ? pathPinFadeUp(p, 0.26, 2.2) : staticMotion;
 
   const sphereInteractionHint =
     reduceMotion === true
       ? "Tap a portrait to read the testimonials."
-      : nativeScroll
+      : mobileScrollUx
         ? "Swipe up or down to scroll · drag sideways on the sphere to spin · tap a portrait to read."
         : "Spin me with a drag, then tap a portrait to read the testimonials.";
 
   useEffect(() => {
-    if (nativeScroll) setPinProgress(1);
-  }, [nativeScroll, setPinProgress]);
+    if (!desktopPinScrub) setPinProgress(1);
+  }, [desktopPinScrub, setPinProgress]);
 
   const sphereImages: ImageData[] = useMemo(() => {
     const base = testimonialSphereBaseImages;
@@ -515,7 +520,7 @@ export function ArcTestimonialsSection({
       id={id}
       pinDistanceMultiplier={0.55}
       onProgress={setPinProgress}
-      disabled={nativeScroll}
+      disabled={!desktopPinScrub}
       className={cn(
         "relative scroll-mt-28 border-t border-arc-teal/20 p-0",
         "max-md:overflow-visible max-md:pt-20 sm:max-md:pt-24",
@@ -536,7 +541,7 @@ export function ArcTestimonialsSection({
 
       <div className="flex min-h-0 flex-col max-md:overflow-visible md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
         <div
-          data-scroll-section
+          {...(desktopPinScrub ? { "data-scroll-section": true } : {})}
           className="relative z-[1] flex min-h-[52vh] flex-1 items-center justify-center px-2 pb-10 pt-4 sm:min-h-[56vh] sm:pt-6 lg:h-full lg:min-h-0 lg:w-1/2 lg:justify-end lg:py-6 lg:pl-8 lg:pr-3 [@media(max-height:820px)]:lg:py-4 xl:pl-12 xl:pr-5"
         >
           <div
@@ -587,7 +592,7 @@ export function ArcTestimonialsSection({
         </div>
 
         <div
-          data-scroll-section
+          {...(desktopPinScrub ? { "data-scroll-section": true } : {})}
           className="relative z-[1] flex min-h-0 flex-1 flex-col items-center justify-center overflow-visible px-5 py-10 sm:px-8 lg:h-full lg:w-1/2 lg:items-end lg:justify-center lg:px-8 lg:py-6 lg:pt-28 [@media(max-height:820px)]:lg:py-4 [@media(max-height:820px)]:lg:pt-24 xl:px-12 2xl:px-14"
         >
           {selected ? (

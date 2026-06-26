@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { useEffect } from "react";
 
 import {
   InvestCTAActions,
@@ -10,6 +11,7 @@ import {
 } from "@/components/arc/investCtaShared";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { usePathPinScrubProgress } from "@/lib/arcPinReveal";
+import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 
 type InvestCTASectionProps = {
   imageSrc: string;
@@ -29,11 +31,13 @@ function InvestCTAContent({
   supportingLine,
   pin,
   investTopBarOpacity,
+  scrollReveal,
 }: {
   imageSrc: string;
   supportingLine?: string;
   pin: boolean;
   investTopBarOpacity: number;
+  scrollReveal: boolean;
 }) {
   return (
     <>
@@ -43,7 +47,7 @@ function InvestCTAContent({
         topBlendOpacity={investTopBarOpacity}
       />
       <div
-        {...(pin ? { "data-scroll-section": true } : {})}
+        {...(scrollReveal ? { "data-scroll-section": true } : {})}
         className="relative z-10 mx-auto max-w-4xl px-6 text-center"
       >
         <InvestCTAHeadline
@@ -62,31 +66,33 @@ export function InvestCTASection({
   supportingLine,
   pin = true,
 }: InvestCTASectionProps) {
+  const desktopPinScrub = useArcDesktopPinScrub();
+  const pinEnabled = pin && desktopPinScrub;
   const { p, setPinProgress } = usePathPinScrubProgress();
-  const investTopBarOpacity = Math.max(0, 1 - Math.min(1, p / INVEST_PIN_TOP_BLEND_END));
+  const investTopBarOpacity = pinEnabled
+    ? Math.max(0, 1 - Math.min(1, p / INVEST_PIN_TOP_BLEND_END))
+    : 1;
+
+  useEffect(() => {
+    if (!pinEnabled) setPinProgress(1);
+  }, [pinEnabled, setPinProgress]);
 
   const content = (
     <InvestCTAContent
       imageSrc={imageSrc}
       supportingLine={supportingLine}
-      pin={pin}
-      investTopBarOpacity={pin ? investTopBarOpacity : 1}
+      pin={pinEnabled}
+      investTopBarOpacity={investTopBarOpacity}
+      scrollReveal={pinEnabled}
     />
   );
-
-  if (!pin) {
-    return (
-      <section id="book" className={investSectionShellClass}>
-        {content}
-      </section>
-    );
-  }
 
   return (
     <PinnedSection
       id="book"
       pinDistanceMultiplier={0.5}
       onProgress={setPinProgress}
+      disabled={!pinEnabled}
       className={investSectionShellClass}
     >
       {content}

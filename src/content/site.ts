@@ -39,8 +39,8 @@ export const videos = {
 export const images = {
   /** Header wordmark — HD transparent gold RGBA PNG (`public/assets/branding/`). */
   logo: "/assets/branding/arc-wellness-logo-transparent-gold.png",
-  /** Full-bleed hero background — scroll-zoom in `ScrollExpandHero` (reception / mint logo wall). */
-  heroMedia: "/assets/hero/arc-wellness-reception-mint-logo-wall.png",
+  /** Full-bleed hero background — scroll-zoom in `ScrollExpandHero` (sage lobby + gold wall logo, 4K WebP). */
+  heroMedia: "/assets/hero/arc-wellness-lobby-sage-gold-logo-wall-hd.webp",
   /** Alternate hero plate — entrance glass doors (not used on homepage hero currently). */
   heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.png",
   heroCtaSeeHowItWorksPreview: "/assets/hero/hero-cta-see-how-it-works-preview.png",
@@ -69,7 +69,7 @@ export const images = {
     "/assets/sections/whole-body/body-contouring-session.png",
     "/assets/sections/who-we-are/biometric-consultation-room.png",
     "/assets/hero/arc-wellness-lobby-lounge.png",
-    "/assets/hero/arc-wellness-reception-mint-logo-wall.png",
+    "/assets/hero/arc-wellness-lobby-sage-gold-logo-wall-hd.webp",
   ],
   /** Production St. Louis clinic interiors — `public/assets/sections/clinic-interiors/` */
   clinicInteriors: CLINIC_INTERIOR_IMAGES,

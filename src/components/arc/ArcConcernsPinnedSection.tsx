@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { whenArcLocomotiveReady } from "@/lib/locomotive";
 import {
   arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
@@ -12,6 +12,7 @@ import {
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
+import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
@@ -34,9 +35,12 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const panelRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [progress, setProgress] = useState(0);
+  const [pinReady, setPinReady] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const desktopPinScrub = useArcDesktopPinScrub();
   const nativeScroll = useStableNativeScroll();
+  const pinMotionActive = desktopPinScrub && pinReady;
 
   const selectPanel = (idx: number) => {
     setActiveIndex(idx);
@@ -58,8 +62,9 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
   }, []);
 
   useEffect(() => {
-    if (reduceMotion || nativeScroll) {
+    if (reduceMotion || !desktopPinScrub) {
       setProgress(1);
+      setPinReady(false);
       return;
     }
 
@@ -71,12 +76,17 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
       const section = sectionRef.current;
       if (!section) return;
 
+      revert?.();
+      revert = null;
+      setPinReady(false);
+
       const scroller = getArcScrollTriggerScroller();
       const endDist = () =>
         Math.round(getArcScrollViewportHeight(scroller) * 0.92);
 
       const ctx = gsap.context(() => {
-        ScrollTrigger.create({
+        ScrollTrigger.getById("arc-concerns-pin")?.kill(true);
+        const st = ScrollTrigger.create({
           id: "arc-concerns-pin",
           trigger: section,
           ...arcScrollTriggerScrollerProps(),
@@ -90,31 +100,30 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
           invalidateOnRefresh: true,
           onUpdate: (self) => setProgress(self.progress),
         });
+        setProgress(st.progress);
+        setPinReady(true);
       }, section);
 
-      revert = () => ctx.revert();
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-      window.setTimeout(() => ScrollTrigger.refresh(), 120);
+      revert = () => {
+        setPinReady(false);
+        ctx.revert();
+      };
     };
 
-    const onReady = () => queueMicrotask(setup);
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-
-    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
-      onReady();
-    }
+    const unregisterReady = whenArcLocomotiveReady(setup);
 
     const fallback = window.setTimeout(() => {
       if (!cancelled && revert === null) setup();
-    }, 1800);
+    }, 2000);
 
     return () => {
       cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      unregisterReady();
       window.clearTimeout(fallback);
       revert?.();
+      setPinReady(false);
     };
-  }, [reduceMotion, nativeScroll]);
+  }, [reduceMotion, desktopPinScrub]);
 
   useEffect(() => {
     if (!nativeScroll) return;
@@ -148,10 +157,12 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
     return () => carousel.removeEventListener("scroll", syncActiveFromScroll);
   }, [nativeScroll]);
 
-  const p = reduceMotion || nativeScroll ? 1 : progress;
+  const p = reduceMotion || !desktopPinScrub || !pinReady ? 1 : progress;
 
   /** USP bar fades and rises in later in the pin scrub so it reads as a second beat. */
-  const uspReveal = nativeScroll ? 1 : Math.min(1, Math.max(0, (p - 0.28) / 0.52));
+  const uspReveal = pinMotionActive
+    ? Math.min(1, Math.max(0, (p - 0.28) / 0.52))
+    : 1;
 
   return (
     <section
@@ -181,12 +192,12 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
           <div
             className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col max-md:flex-none"
             style={
-              nativeScroll
-                ? undefined
-                : {
+              pinMotionActive
+                ? {
                     opacity: Math.min(1, p * 1.6),
                     transform: `translate3d(0, ${Math.max(0, 26 - p * 26)}px, 0)`,
                   }
+                : undefined
             }
           >
             <div className="shrink-0 text-center">
@@ -316,12 +327,12 @@ export function ArcConcernsPinnedSection({ className }: { className?: string }) 
         <div
           className="mt-6 grid w-full shrink-0 grid-cols-2 border-t-2 border-b-2 border-arc-charcoal will-change-[opacity,transform] md:mt-auto md:grid-cols-4"
           style={
-            nativeScroll
-              ? undefined
-              : {
+            pinMotionActive
+              ? {
                   opacity: uspReveal,
                   transform: `translate3d(0, ${(1 - uspReveal) * 36}px, 0)`,
                 }
+              : undefined
           }
         >
           {USP_ITEMS.map((item, i) => (

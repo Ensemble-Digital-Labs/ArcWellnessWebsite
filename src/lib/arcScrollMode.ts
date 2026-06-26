@@ -1,5 +1,8 @@
 import { prefersReducedMotion } from "@/lib/motionPrefs";
 
+/** Locked on first client measure — must match `useStableNativeScroll` (no flip on resize). */
+let stableNativeScrollMode: boolean | null = null;
+
 /**
  * Use document scroll instead of Locomotive/Lenis inside `#main`.
  * Lenis + locked `html/body` overflow breaks touch scrolling on iOS and mobile previews.
@@ -12,9 +15,24 @@ export function prefersNativeScroll(): boolean {
   return false;
 }
 
+/** First paint / hydration — locks scroll mode for GSAP + `#main` for the session. */
+export function initArcStableScrollMode(): boolean {
+  if (typeof window === "undefined") return false;
+  if (stableNativeScrollMode === null) {
+    stableNativeScrollMode = prefersNativeScroll();
+  }
+  return stableNativeScrollMode;
+}
+
+/** Scroll mode locked at load — do not re-read viewport width on resize. */
+export function getStableNativeScroll(): boolean {
+  if (typeof window === "undefined") return false;
+  return stableNativeScrollMode ?? initArcStableScrollMode();
+}
+
 /** Locomotive scroll container; `undefined` = window/document scroll. */
 export function getArcScrollTriggerScroller(): HTMLElement | undefined {
-  if (prefersNativeScroll()) return undefined;
+  if (getStableNativeScroll()) return undefined;
   return document.querySelector<HTMLElement>("#main") ?? undefined;
 }
 
@@ -41,7 +59,7 @@ export function arcScrollTriggerPinOptions(): { pinType: "fixed" } | Record<stri
  * Re-dispatch on `#main` so speed/easing match normal page scroll.
  */
 export function forwardWheelEventToLenis(event: WheelEvent): void {
-  if (prefersNativeScroll()) return;
+  if (getStableNativeScroll()) return;
   const main = getArcScrollTriggerScroller();
   if (!main) return;
 

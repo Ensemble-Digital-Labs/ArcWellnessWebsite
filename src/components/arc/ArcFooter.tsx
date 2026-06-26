@@ -7,7 +7,7 @@ import { Phone, Star } from "lucide-react";
 import { siteMeta } from "@/content/siteMeta";
 import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
-import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
+import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { useArcFullscreenPin } from "@/lib/arcSectionPins";
@@ -141,9 +141,9 @@ function StarRatingBlock() {
 
 export function ArcFooter() {
   const rootRef = useRef<HTMLElement>(null);
-  const nativeScroll = useStableNativeScroll();
+  const desktopPinScrub = useArcDesktopPinScrub();
 
-  useArcFullscreenPin(rootRef, { disabled: nativeScroll });
+  useArcFullscreenPin(rootRef, { disabled: !desktopPinScrub });
   const year = new Date().getFullYear();
 
   return (

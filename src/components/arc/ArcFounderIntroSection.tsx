@@ -19,7 +19,7 @@ import {
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
 import { FOUNDER_SECTION_AMBIENT_SRC } from "@/content/backgroundDecoration";
-import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
+import { ARC_PINNED_CLEAR_BELOW_LOGO, ARC_LIGHT_SECTION_TOP_BLEND_CLASS } from "@/lib/arc-layout";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
@@ -182,14 +182,7 @@ function FounderImmersiveScrollBody({
         <motion.div
           aria-hidden
           style={{ opacity: topBlendOpacity }}
-          className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 z-[12] h-[min(28vh,11rem)]",
-            /* Neutral charcoal frost — no teal/green tint; blur picks up scene beneath */
-            "bg-gradient-to-b from-arc-charcoal/[0.48] via-arc-charcoal/[0.2] to-transparent",
-            "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
-            "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
-            "mask-image-[linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
-          )}
+          className={ARC_LIGHT_SECTION_TOP_BLEND_CLASS}
         />
 
         <motion.div

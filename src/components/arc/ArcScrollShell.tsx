@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ARC_LOCOMOTIVE_READY_EVENT, useLocomotiveScroll } from "@/lib/locomotive";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
+import { useArcScrollResizeRefresh } from "@/lib/useArcScrollResizeRefresh";
 import { ScrollRevealInit } from "@/components/arc/ScrollRevealInit";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 
@@ -33,6 +34,7 @@ export function ArcScrollShell({ children }: ArcScrollShellProps) {
 
   const locomotiveDisabled = reducedMotion || nativeScroll;
   useLocomotiveScroll(scrollContainerRef, locomotiveDisabled);
+  useArcScrollResizeRefresh(!reducedMotion);
 
   useEffect(() => {
     if (locomotiveDisabled) {

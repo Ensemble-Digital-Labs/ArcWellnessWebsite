@@ -7,16 +7,16 @@ import { memo, useEffect, useLayoutEffect, useRef, useState, type ReactNode } fr
 import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { ARC_LOCOMOTIVE_READY_EVENT, whenArcLocomotiveReady } from "@/lib/locomotive";
 import {
   arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
+import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
-import { arcGlassCtaClass } from "@/lib/arcGlassCta";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +34,10 @@ const HERO_KEYWORD_MARQUEE_ITEMS = [
 
 /** Playfair all-caps — on `bg-arc-teal` (signature brand bar). */
 const HERO_MARQUEE_LABEL_CLASS =
-  "font-serif text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base md:text-lg [text-shadow:0_1px_2px_rgba(44,44,44,0.22),0_1px_8px_rgba(0,0,0,0.12)]";
+  "font-serif text-xs font-semibold uppercase leading-none tracking-[0.14em] text-arc-charcoal sm:text-sm md:text-base";
+
+const HERO_MARQUEE_DOT_CLASS =
+  "select-none font-sans text-xs font-semibold leading-none text-arc-charcoal/45 sm:text-sm";
 
 const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   /**
@@ -121,14 +124,14 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
   return (
     <div
       className={cn(
-        "pointer-events-none isolate overflow-hidden border-t border-white/15 bg-arc-teal pb-[max(0.5rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-x-hidden border-t border-white/15 bg-arc-teal pb-[max(0.375rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
         marqueeOn && "opacity-100",
       )}
       aria-hidden
     >
       <div
         className={cn(
-          "flex items-center gap-8 whitespace-nowrap py-2.5 sm:gap-11 sm:py-3",
+          "flex items-center gap-8 whitespace-nowrap py-2 sm:gap-11 sm:py-2.5",
           marqueeOn && "animate-arc-marquee",
         )}
         style={{ width: "max-content" }}
@@ -138,9 +141,7 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
             {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
               <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
                 <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
-                <span className="select-none font-sans text-sm font-semibold text-white/55 sm:text-base">
-                  ·
-                </span>
+                <span className={HERO_MARQUEE_DOT_CLASS}>·</span>
               </span>
             ))}
           </span>
@@ -151,43 +152,119 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
 });
 
 /**
- * Hero on bright photography — dark fill + light outline reads on sunlit walls and glass;
- * script keywords use larger teal accent so they pop against serif connectors.
+ * Hero on photography — reference layout: left stack (sans connectors + teal script keywords).
  */
-const HERO_READABLE_SHADOW =
-  "[text-shadow:-1px_-1px_0_rgba(255,255,255,0.98),1px_-1px_0_rgba(255,255,255,0.98),-1px_1px_0_rgba(255,255,255,0.98),1px_1px_0_rgba(255,255,255,0.98),0_2px_10px_rgba(255,255,255,0.8),0_3px_14px_rgba(0,0,0,0.32)]";
+const HERO_TYPE_DEPTH =
+  "[text-shadow:0_2px_16px_rgba(0,0,0,0.5),0_1px_3px_rgba(0,0,0,0.35)]";
 
-const HERO_READABLE_TYPE = cn("text-[#141414]", HERO_READABLE_SHADOW);
+/** White halo + stroke — hero Birthstone keywords only (teal fill). */
+const HERO_KEYWORD_WHITE_OUTLINE =
+  "[text-shadow:-1px_-1px_0_rgba(255,255,255,0.98),1px_-1px_0_rgba(255,255,255,0.98),-1px_1px_0_rgba(255,255,255,0.98),1px_1px_0_rgba(255,255,255,0.98),0_2px_10px_rgba(255,255,255,0.75),0_3px_14px_rgba(0,0,0,0.28),0_0_30px_var(--arc-teal-glow)] [-webkit-text-stroke:0.045em_rgba(255,255,255,0.9)] [paint-order:stroke_fill]";
 
 /** Birthstone keywords — large script accent; parent row scales down only when width requires it. */
 const HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS = cn(
   "text-[1.92em] sm:text-[2.14em] md:text-[2.38em] lg:text-[2.62em]",
   "text-arc-teal-ink",
-  HERO_READABLE_SHADOW,
-  "[-webkit-text-stroke:0.045em_rgba(255,255,255,0.9)] [paint-order:stroke_fill]",
+  HERO_KEYWORD_WHITE_OUTLINE,
 );
 
 const HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS = cn(
   "text-[1.84em] sm:text-[2.05em] md:text-[2.28em] lg:text-[2.48em]",
   "text-arc-teal-ink",
-  HERO_READABLE_SHADOW,
-  "[-webkit-text-stroke:0.045em_rgba(255,255,255,0.9)] [paint-order:stroke_fill]",
+  HERO_KEYWORD_WHITE_OUTLINE,
 );
 
-/** Serif connectors + lead/closing — charcoal with light outline. */
-const HERO_TITLE_CONNECTOR_CLASS = cn("font-serif font-bold", HERO_READABLE_TYPE);
+const HERO_REF_CONNECTOR_SHADOW = "[text-shadow:0_1px_8px_rgba(0,0,0,0.32)]";
+
+/** Reference mockup — pixel-matched to client hero comp (Where/Converge ~32px, script ~80px). */
+const HERO_REF_LINE_ALIGN = "max-md:text-center md:text-left";
+
+const HERO_REF_WHERE_CLASS = cn(
+  "block font-sans text-[1.75rem] font-medium leading-none text-arc-cream md:text-[2rem]",
+  HERO_REF_LINE_ALIGN,
+  HERO_REF_CONNECTOR_SHADOW,
+);
+
+const HERO_REF_KEYWORD_LINE_CLASS = cn(
+  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-teal md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
+  HERO_REF_LINE_ALIGN,
+  "[-webkit-text-stroke:0] [paint-order:fill]",
+  "[text-shadow:0_2px_14px_rgba(0,0,0,0.35),0_0_28px_var(--arc-teal-glow)]",
+);
+
+const HERO_REF_CONVERGE_CLASS = cn(
+  "block font-sans text-[1.75rem] font-medium leading-none text-arc-cream md:text-[2rem]",
+  "mt-2 md:mt-2.5",
+  HERO_REF_LINE_ALIGN,
+  HERO_REF_CONNECTOR_SHADOW,
+);
+
+const HERO_REF_INTRO_TYPE = cn(
+  "font-sans text-base font-normal leading-[1.6] text-arc-cream/95 md:text-[1.125rem]",
+  "max-w-[min(100%,21rem)] sm:max-w-[22rem] md:max-w-[min(100%,22.5rem)]",
+  "max-md:mx-auto max-md:text-center md:text-left",
+  HERO_REF_CONNECTOR_SHADOW,
+);
+
+/** Mobile-only panel behind hero copy — keeps photography visible outside the text block. */
+const HERO_REF_MOBILE_TEXT_SCRIM = cn(
+  "max-md:rounded-2xl max-md:border max-md:border-white/10 max-md:bg-black/45",
+  "max-md:px-5 max-md:py-6 max-md:shadow-[0_12px_40px_rgba(0,0,0,0.24)]",
+);
+
+/** Stacked headline — matches reference mockup line breaks. */
+function HeroReferenceHeadline() {
+  return (
+    <>
+      <span className={HERO_REF_WHERE_CLASS}>Where</span>
+      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-1")}>Wellness,</TitleEmphasis>
+      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-0.5")}>Longevity &</TitleEmphasis>
+      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-0.5")}>Aesthetics</TitleEmphasis>
+      <span className={HERO_REF_CONVERGE_CLASS}>Converge.</span>
+    </>
+  );
+}
+
+/** Sans connectors + lead/closing — cream on photography. */
+const HERO_TITLE_CONNECTOR_CLASS = cn(
+  "font-sans font-medium tracking-tight text-arc-cream",
+  HERO_TYPE_DEPTH,
+);
+
+const HERO_REF_CONNECTOR_CLASS = cn(
+  "font-sans font-normal tracking-tight text-arc-cream",
+  HERO_REF_CONNECTOR_SHADOW,
+);
 
 const HERO_INTRO_TYPE = cn(
-  "text-center font-sans text-base font-semibold leading-relaxed max-md:mx-auto md:text-left md:text-lg lg:text-xl [&_strong]:font-bold",
-  HERO_READABLE_TYPE,
-  "[&_strong]:text-arc-teal-ink",
+  "font-sans text-sm font-normal leading-relaxed text-arc-cream/92 sm:text-[0.9375rem] md:text-base md:leading-relaxed lg:text-[1.0625rem] lg:leading-relaxed",
+  "max-w-md md:max-w-lg",
+  HERO_TYPE_DEPTH,
 );
 
-/** Frosted pills on bright hero — dark label for contrast (does not change other sections). */
-const HERO_GLASS_CTA_CLASS = cn(
-  arcGlassCtaClass,
-  "border-arc-charcoal/22 bg-white/62 text-arc-charcoal hover:border-arc-charcoal/38 hover:bg-white/78",
-  "focus-visible:ring-offset-arc-cream/80",
+/** Solid cream pill — primary hero CTA (reference). */
+const HERO_PRIMARY_CTA_CLASS = cn(
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full",
+  "border border-arc-cream/95 bg-arc-cream px-5 py-2.5",
+  "font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-arc-charcoal",
+  "max-md:px-3.5 max-md:py-2 max-md:text-[0.6875rem] max-md:tracking-[0.11em]",
+  "shadow-[0_2px_12px_rgba(0,0,0,0.12)]",
+  "transition-[background-color,border-color,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+  "hover:border-arc-cream-deep hover:bg-arc-cream-deep hover:-translate-y-px",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-cream/85 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
+  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+);
+
+/** Ghost cream outline — secondary hero CTA (reference). */
+const HERO_SECONDARY_CTA_CLASS = cn(
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full",
+  "border border-arc-cream/85 bg-transparent px-5 py-2.5",
+  "font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-arc-cream",
+  "max-md:px-3.5 max-md:py-2 max-md:text-[0.6875rem] max-md:tracking-[0.11em]",
+  "transition-[background-color,border-color,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+  "hover:border-arc-cream hover:bg-white/10 hover:-translate-y-px",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-cream/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
+  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
 );
 
 function escapeRegExp(s: string) {
@@ -196,14 +273,24 @@ function escapeRegExp(s: string) {
 
 /** Keep the full keyword phrase on one line (non-breaking commas / “and”). */
 function lockHeroKeywordPhraseOnOneLine(text: string): string {
-  return text.replace(/,\s+/g, ",\u00a0").replace(/\s+and\s+/gi, "\u00a0and\u00a0");
+  return text
+    .replace(/,\s+/g, ",\u00a0")
+    .replace(/\s+and\s+/gi, "\u00a0and\u00a0")
+    .replace(/\s*&\s*/g, "\u00a0&\u00a0");
 }
 
 /** One-line keyword row — scales down to fit available width (no clip on narrow phones). */
-function HeroKeywordOneLine({ children }: { children: ReactNode }) {
+function HeroKeywordOneLine({
+  children,
+  allowWrap = false,
+}: {
+  children: ReactNode;
+  allowWrap?: boolean;
+}) {
   const lineRef = useRef<HTMLSpanElement>(null);
 
   useLayoutEffect(() => {
+    if (allowWrap) return;
     const line = lineRef.current;
     if (!line) return;
 
@@ -236,12 +323,15 @@ function HeroKeywordOneLine({ children }: { children: ReactNode }) {
       ro.disconnect();
       window.removeEventListener("resize", scheduleFit);
     };
-  }, [children]);
+  }, [children, allowWrap]);
 
   return (
     <span
       ref={lineRef}
-      className="block w-full min-w-0 max-w-full whitespace-nowrap text-center font-serif text-2xl font-bold leading-[1.06] sm:text-3xl md:text-left md:text-[1.85rem] lg:text-4xl"
+      className={cn(
+        "block w-full min-w-0 max-w-full text-center font-sans text-2xl font-medium leading-[1.06] sm:text-3xl md:text-left md:text-[1.85rem] lg:text-4xl",
+        allowWrap ? "whitespace-normal text-balance" : "whitespace-nowrap",
+      )}
     >
       {children}
     </span>
@@ -320,78 +410,6 @@ function splitTitleRestForClosingLine(rest: string): { lead: string; closing: st
   };
 }
 
-/**
- * Ornate frame corner (clip-art / certificate style): double-line L with scroll finials.
- * Dark stroke + light halo — matches hero intro copy on bright photography.
- */
-function HeroIntroCornerOrnament() {
-  return (
-    <svg
-      viewBox="0 0 96 96"
-      className="h-[3.5rem] w-[3.5rem] [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.98))_drop-shadow(0_1px_3px_rgba(255,255,255,0.88))_drop-shadow(0_2px_12px_rgba(0,0,0,0.42))] sm:h-[3.85rem] sm:w-[3.85rem] md:h-[4.25rem] md:w-[4.25rem]"
-      fill="none"
-      aria-hidden
-    >
-      <g className="stroke-[#141414]" strokeLinecap="round" strokeLinejoin="round">
-        {/* Outer L */}
-        <path
-          d="M 14 14 H 62 C 72 14 78 18 80 26 C 82 32 78 38 72 36"
-          strokeWidth={1.85}
-          opacity={0.98}
-        />
-        <path
-          d="M 14 14 V 62 C 14 72 18 78 26 80 C 32 82 38 78 36 72"
-          strokeWidth={1.85}
-          opacity={0.98}
-        />
-        {/* Inner L */}
-        <path d="M 22 22 H 54 C 62 22 66 26 67 32" strokeWidth={1.35} opacity={0.72} />
-        <path d="M 22 22 V 54 C 22 62 26 66 32 67" strokeWidth={1.35} opacity={0.72} />
-        {/* Horizontal finial (scroll nub) */}
-        <path
-          d="M 62 14 C 74 12 82 20 78 30 C 74 38 64 34 60 26"
-          strokeWidth={1.45}
-          opacity={0.92}
-        />
-        {/* Vertical finial */}
-        <path
-          d="M 14 62 C 12 74 20 82 30 78 C 38 74 34 64 26 60"
-          strokeWidth={1.45}
-          opacity={0.92}
-        />
-        {/* Tiny quatrefoil knot at the vertex */}
-        <path
-          d="M 14 11 v 6 M 11 14 h 6 M 12.5 12.5 l 3 3 M 12.5 15.5 l 3 -3"
-          strokeWidth={1.1}
-          opacity={0.78}
-        />
-      </g>
-    </svg>
-  );
-}
-
-function HeroIntroOrnamentFrame({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className={cn(
-        "pointer-events-auto relative isolate w-full max-w-[min(100%,22rem)] sm:max-w-[24rem] md:max-w-[27rem]",
-      )}
-    >
-      {/* Two corners only — top-right & bottom-left (mirror of the other pair). */}
-      <span className="pointer-events-none absolute right-0 top-0 scale-x-[-1]">
-        <HeroIntroCornerOrnament />
-      </span>
-      <span className="pointer-events-none absolute bottom-0 left-0 scale-y-[-1]">
-        <HeroIntroCornerOrnament />
-      </span>
-      {/* Generous inset so flourishes sit clearly away from the copy */}
-      <div className="relative z-10 px-7 pb-9 pt-7 sm:px-9 sm:pb-11 sm:pt-9 md:px-10 md:pb-12 md:pt-10">
-        {children}
-      </div>
-    </div>
-  );
-}
-
 type ScrollExpandHeroProps = {
   /** Full-bleed hero photography — scales with scroll (replaces former center frame + secondary back layer). */
   bgImageSrc: string;
@@ -401,6 +419,10 @@ type ScrollExpandHeroProps = {
   textBlend?: boolean;
   /** Words in the title (after the first line) to render in signature script. Omit to use ARC defaults. */
   titleKeywords?: readonly string[];
+  /** Bottom teal keyword marquee — off on homepage reference layout. */
+  showKeywordMarquee?: boolean;
+  /** Match client reference mockup — cream script, left stack, light overlay. */
+  referenceLayout?: boolean;
 };
 
 /**
@@ -412,33 +434,29 @@ export function ScrollExpandHero({
   intro,
   textBlend,
   titleKeywords = DEFAULT_HERO_TITLE_KEYWORDS,
+  showKeywordMarquee = true,
+  referenceLayout = false,
 }: ScrollExpandHeroProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   /** SSR + first client paint must match — viewport is read only after hydration. */
-  const [isMobileState, setIsMobileState] = useState(false);
   const [hasHydrated, setHasHydrated] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const nativeScroll = useStableNativeScroll();
 
   const heroRef = useRef<HTMLElement | null>(null);
-  const mobileLayout = hasHydrated && isMobileState;
+  /** Locked at load — visual mobile layout uses CSS `max-md:`; avoids pin teardown on resize. */
+  const mobileLayout = hasHydrated && nativeScroll;
 
   useLayoutEffect(() => {
     setHasHydrated(true);
 
-    const mobileMq = window.matchMedia("(max-width: 767px)");
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    const syncMobile = () => setIsMobileState(mobileMq.matches);
     const syncMotion = () => setReduceMotion(motionMq.matches);
 
-    syncMobile();
     syncMotion();
-
-    mobileMq.addEventListener("change", syncMobile);
     motionMq.addEventListener("change", syncMotion);
 
     return () => {
-      mobileMq.removeEventListener("change", syncMobile);
       motionMq.removeEventListener("change", syncMotion);
     };
   }, []);
@@ -446,13 +464,13 @@ export function ScrollExpandHero({
   useEffect(() => {
     if (reduceMotion) {
       setScrollProgress(1);
-    } else if (isMobileState) {
+    } else if (nativeScroll) {
       setScrollProgress(0);
     }
-  }, [reduceMotion, isMobileState]);
+  }, [reduceMotion, nativeScroll]);
 
   useEffect(() => {
-    if (reduceMotion || window.matchMedia("(max-width: 767px)").matches) return;
+    if (reduceMotion || nativeScroll) return;
 
     let revert: (() => void) | null = null;
     let cancelled = false;
@@ -494,25 +512,19 @@ export function ScrollExpandHero({
       window.setTimeout(refreshAllScrollTriggers, 450);
     };
 
-    const onReady = () => queueMicrotask(setup);
-
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-
-    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
-      onReady();
-    }
+    const unregisterReady = whenArcLocomotiveReady(setup);
 
     const fallback = window.setTimeout(() => {
       if (!cancelled && revert === null) setup();
-    }, 1800);
+    }, 2000);
 
     return () => {
       cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      unregisterReady();
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [reduceMotion, isMobileState, bgImageSrc]);
+  }, [reduceMotion, nativeScroll, bgImageSrc]);
 
   const progress = reduceMotion ? 1 : mobileLayout ? 0 : scrollProgress;
   /** Full-bleed background zoom — was previously a separate center frame. */
@@ -529,32 +541,48 @@ export function ScrollExpandHero({
   const restForEmphasis = lockHeroKeywordPhraseOnOneLine(
     restClosing ? restLead : restOfTitle,
   );
-  const restWithEmphasis = emphasizeTitleWords(
-    restForEmphasis,
-    titleKeywords,
-    textBlend ? HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS : HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS,
-    HERO_TITLE_CONNECTOR_CLASS,
-  );
+  const connectorClass = referenceLayout ? HERO_REF_CONNECTOR_CLASS : HERO_TITLE_CONNECTOR_CLASS;
+  const keywordClass = referenceLayout
+    ? HERO_REF_KEYWORD_LINE_CLASS
+    : textBlend
+      ? HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS
+      : HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS;
+  const restWithEmphasis = referenceLayout
+    ? null
+    : emphasizeTitleWords(restForEmphasis, titleKeywords, keywordClass, connectorClass);
 
-  /** Closing line (“Converge.”) — matches lead + connectors for legibility. */
   const heroTitleClosingLineClass = cn(
-    "block w-full max-w-[min(100%,42rem)] text-center font-serif text-2xl font-bold leading-snug sm:max-w-[min(100%,44rem)] sm:text-3xl md:text-left md:text-[1.85rem] md:leading-snug lg:max-w-[min(100%,48rem)] lg:text-4xl lg:leading-snug",
-    HERO_TITLE_CONNECTOR_CLASS,
+    "block w-full max-w-[min(100%,42rem)] text-center font-sans leading-snug sm:max-w-[min(100%,44rem)] md:text-left md:leading-snug lg:max-w-[min(100%,48rem)] lg:leading-snug",
+    referenceLayout
+      ? "text-2xl font-medium sm:text-3xl md:text-[1.75rem] lg:text-[2rem]"
+      : "text-2xl font-semibold sm:text-3xl md:text-[1.85rem] lg:text-4xl",
+    connectorClass,
   );
 
-  /** Lead word — same readable stack as the rest of the headline. */
   const heroLeadWordClass = cn(
-    "block font-serif text-2xl font-bold leading-[1.08] sm:text-3xl md:text-3xl lg:text-4xl",
-    HERO_TITLE_CONNECTOR_CLASS,
+    "block font-sans leading-[1.08]",
+    referenceLayout
+      ? "text-lg font-normal sm:text-xl md:text-[1.25rem]"
+      : "text-xl font-medium sm:text-2xl md:text-[1.65rem] lg:text-[1.75rem]",
+    connectorClass,
   );
 
   return (
     <div className="overflow-x-hidden transition-colors duration-700 ease-in-out">
       <section
         ref={heroRef}
-        className="relative flex min-h-[100dvh] flex-col items-center justify-start max-md:min-h-[88dvh] max-md:pb-4"
+        data-arc-marketing-hero
+        className={cn(
+          "relative flex min-h-[100dvh] flex-col items-center justify-start",
+          !showKeywordMarquee && "max-md:min-h-[88dvh] max-md:pb-4",
+        )}
       >
-        <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-hidden max-md:min-h-full">
+        <div
+          className={cn(
+            "relative flex w-full flex-col items-center overflow-x-hidden",
+            showKeywordMarquee ? "min-h-[100dvh]" : "min-h-[100dvh] max-md:min-h-full overflow-hidden",
+          )}
+        >
           <div className="absolute inset-0 z-0 h-full overflow-hidden">
             <div
               className="absolute inset-0 will-change-transform"
@@ -566,81 +594,123 @@ export function ScrollExpandHero({
               <Image
                 src={bgImageSrc}
                 alt=""
-                width={1920}
-                height={1080}
+                width={3840}
+                height={2160}
+                sizes="100vw"
                 className="h-full min-h-[100dvh] w-full max-w-none object-cover object-center"
                 priority
               />
             </div>
-            <div className="absolute inset-0 bg-black/30" />
+            {referenceLayout ? (
+              <div
+                className="absolute inset-0 hidden bg-gradient-to-r from-black/22 via-black/5 to-transparent md:block"
+                aria-hidden
+              />
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/18 to-black/8" />
+                <div className="absolute inset-0 bg-black/10" />
+              </>
+            )}
           </div>
 
           <div
             className={cn(
-              "relative z-10 mx-auto flex w-full flex-col items-center justify-start",
-              ARC_PAGE_RAIL_MAX,
-              "max-md:pb-28 md:min-h-[100dvh]",
+              "relative z-10 flex w-full items-center",
+              showKeywordMarquee ? "min-h-full flex-1" : "min-h-[100dvh]",
+              referenceLayout
+                ? cn(
+                    "justify-center px-5 pt-[max(4.5rem,env(safe-area-inset-top))] sm:px-8 md:justify-start md:pl-[clamp(2.75rem,10.5vw,9.5rem)] md:pr-10 lg:pl-[clamp(3.5rem,11vw,10rem)] xl:pl-[clamp(4rem,12vw,11rem)]",
+                    showKeywordMarquee
+                      ? "pb-[calc(3.75rem+env(safe-area-inset-bottom))] md:pb-[calc(4rem+env(safe-area-inset-bottom))]"
+                      : "pb-12",
+                  )
+                : cn(
+                    "mx-auto flex-col justify-center",
+                    ARC_PAGE_RAIL_MAX,
+                    "px-6 pt-[max(5.5rem,env(safe-area-inset-top))] md:px-12 lg:px-14",
+                    showKeywordMarquee
+                      ? "pb-[calc(3.75rem+env(safe-area-inset-bottom))]"
+                      : "pb-[max(6.5rem,env(safe-area-inset-bottom))]",
+                  ),
+              textBlend ? "mix-blend-difference" : "mix-blend-normal",
             )}
           >
-            {/* Headline + CTAs — stacked in flow on mobile; absolute on md+ */}
             <div
               className={cn(
-                "z-20 flex w-full flex-col gap-3 px-6",
-                "max-md:relative max-md:shrink-0 max-md:items-center max-md:pt-[7.25rem]",
-                "md:pointer-events-none md:absolute md:inset-x-0 md:top-64 md:gap-7 md:px-12 lg:top-[16.25rem]",
+                "z-20 flex w-full flex-col",
+                referenceLayout
+                  ? "max-w-[min(100%,22rem)] sm:max-w-[24rem] md:max-w-[min(34vw,26rem)] lg:max-w-[min(32vw,24.5rem)]"
+                  : "max-w-xl gap-4 sm:max-w-2xl sm:gap-5 md:max-w-[34rem] md:gap-6 lg:max-w-[36rem]",
+                "max-md:mx-auto max-md:items-center max-md:text-center md:items-start md:text-left",
+                referenceLayout && HERO_REF_MOBILE_TEXT_SCRIM,
+                showKeywordMarquee && referenceLayout && "-translate-y-3 sm:-translate-y-4 md:-translate-y-5",
               )}
-              style={{
-                transform: mobileLayout
+              style={
+                referenceLayout || mobileLayout
                   ? undefined
-                  : `translate3d(0, ${sharedContentShiftY}px, 0)`,
-              }}
+                  : {
+                      transform: `translate3d(${headlineParallaxX * 0.35}px, ${sharedContentShiftY * 0.4}px, 0)`,
+                    }
+              }
             >
               <motion.h1
-                className="pointer-events-auto m-0 flex w-full min-w-0 max-w-full flex-col items-center gap-1.5 text-center sm:max-w-[min(100%,46rem)] sm:gap-2 md:items-start md:gap-2 md:text-left"
+                className={cn(
+                  "pointer-events-auto m-0 flex w-full min-w-0 max-w-full flex-col",
+                  referenceLayout
+                    ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
+                    : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
+                )}
                 style={
-                  mobileLayout
+                  referenceLayout || mobileLayout
                     ? undefined
                     : { transform: `translate3d(${headlineParallaxX}px, 0, 0)` }
                 }
               >
-                <span className={heroLeadWordClass}>{firstWord}</span>
-                <HeroKeywordOneLine>{restWithEmphasis}</HeroKeywordOneLine>
-                {restClosing ? (
-                  <span className={heroTitleClosingLineClass}>{restClosing}</span>
-                ) : null}
+                {referenceLayout ? (
+                  <HeroReferenceHeadline />
+                ) : (
+                  <>
+                    <span className={heroLeadWordClass}>{firstWord}</span>
+                    <HeroKeywordOneLine>{restWithEmphasis}</HeroKeywordOneLine>
+                    {restClosing ? (
+                      <span className={heroTitleClosingLineClass}>{restClosing}</span>
+                    ) : null}
+                  </>
+                )}
               </motion.h1>
-              <div className="pointer-events-auto flex w-full max-w-[min(100%,46rem)] flex-col gap-2.5 max-md:mx-auto max-md:items-center max-md:justify-center sm:mt-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2 md:items-start md:justify-start">
-                <Link href="/book" className={cn(HERO_GLASS_CTA_CLASS, "max-md:justify-center")}>
+
+              <p
+                className={cn(
+                  referenceLayout ? HERO_REF_INTRO_TYPE : HERO_INTRO_TYPE,
+                  "max-md:mx-auto",
+                  referenceLayout && "mt-6 md:mt-7",
+                )}
+              >
+                {intro}
+              </p>
+
+              <div
+                className={cn(
+                  "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                  referenceLayout && "mt-6 md:mt-7",
+                )}
+              >
+                <Link href="/book" className={HERO_PRIMARY_CTA_CLASS}>
                   Begin your Journey
                 </Link>
-                <Link href="#path" className={cn(HERO_GLASS_CTA_CLASS, "max-md:justify-center")}>
+                <Link href="#path" className={HERO_SECONDARY_CTA_CLASS}>
                   See How it Works
                 </Link>
               </div>
             </div>
+          </div>
 
-            <div
-              className={cn(
-                "relative flex w-full flex-col",
-                "max-md:items-center max-md:gap-6 max-md:px-6 max-md:pb-2 max-md:pt-2",
-                "md:absolute md:inset-x-0 md:bottom-[calc(11.5rem+env(safe-area-inset-bottom))] md:items-end md:px-12 lg:bottom-[calc(13rem+env(safe-area-inset-bottom))] lg:px-14",
-                textBlend ? "mix-blend-difference" : "mix-blend-normal",
-              )}
-              style={
-                mobileLayout
-                  ? undefined
-                  : { transform: `translate3d(0, ${sharedContentShiftY}px, 0)` }
-              }
-            >
-              <HeroIntroOrnamentFrame>
-                <p className={HERO_INTRO_TYPE}>{intro}</p>
-              </HeroIntroOrnamentFrame>
+          {showKeywordMarquee ? (
+            <div className="absolute bottom-0 left-0 right-0 z-[30] w-full max-w-none">
+              <HeroKeywordMarquee />
             </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-[30] w-full max-w-none">
-            <HeroKeywordMarquee />
-          </div>
+          ) : null}
         </div>
       </section>
     </div>

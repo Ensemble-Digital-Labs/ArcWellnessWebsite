@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import type Lenis from "lenis";
@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
 import { ARC_PRIMARY_NAV_LINKS, ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
-import { forwardWheelEventToLenis, prefersNativeScroll } from "@/lib/arcScrollMode";
+import { forwardWheelEventToLenis, getStableNativeScroll } from "@/lib/arcScrollMode";
 import {
   ARC_INSIGHTS_HEADER_CHROME_EVENT,
   insightsLogoShouldHide,
@@ -521,9 +521,29 @@ export type ArcSiteHeaderProps = {
   sectionBasePath?: string;
   /** Insights feed — logo home link only near page top so filter tabs stay tappable. */
   logoClickOnlyAtTop?: boolean;
+  /** Homepage hero — hide wordmark until scroll clears the marketing hero (less visual clutter). */
+  hideLogoInHero?: boolean;
 };
 
 const LOGO_HOME_LINK_SCROLL_MAX = 120;
+
+const ARC_MARKETING_HERO_SELECTOR = "[data-arc-marketing-hero]";
+
+function getMarketingHeroScrollEnd(): number {
+  if (typeof document === "undefined") return 800;
+  const hero = document.querySelector(ARC_MARKETING_HERO_SELECTOR);
+  if (!(hero instanceof HTMLElement)) return window.innerHeight;
+
+  const pinSpacer = hero.parentElement?.classList.contains("pin-spacer")
+    ? hero.parentElement
+    : null;
+  const host = pinSpacer ?? hero;
+  return host.offsetTop + host.offsetHeight;
+}
+
+function isInMarketingHeroZone(scrollY: number): boolean {
+  return scrollY < getMarketingHeroScrollEnd() - 24;
+}
 
 function readSiteScrollY(): number {
   const lenis = getLocomotiveLenis();
@@ -532,7 +552,7 @@ function readSiteScrollY(): number {
     if (typeof s === "number") return s;
     if (typeof s?.y === "number") return s.y;
   }
-  if (prefersNativeScroll()) return window.scrollY;
+  if (getStableNativeScroll()) return window.scrollY;
   const main = document.getElementById("main");
   if (main) return main.scrollTop;
   return window.scrollY;
@@ -592,6 +612,7 @@ export function ArcSiteHeader({
   homeHref = "/",
   sectionBasePath,
   logoClickOnlyAtTop = false,
+  hideLogoInHero = false,
 }: ArcSiteHeaderProps = {}) {
   const navLinks =
     sectionBasePath && sectionBasePath !== "/"
@@ -615,7 +636,8 @@ export function ArcSiteHeader({
   const [logoHomeLinkActive, setLogoHomeLinkActive] = useState(true);
   const canHover = useCanHover();
 
-  const logoOpacity = useMotionValue(1);
+  const logoOpacity = useMotionValue(hideLogoInHero ? 0 : 1);
+  const [logoPointerDisabled, setLogoPointerDisabled] = useState(hideLogoInHero);
   /** Fixed-duration fade-in after stop (`null` = not running). */
   const logoFadeInSessionRef = useRef<{ start: number; from: number } | null>(null);
   /** Eased fade-out while scrolling (`null` = idle / fully hidden). */
@@ -629,6 +651,10 @@ export function ArcSiteHeader({
   });
 
   isMenuOpenRef.current = isMenuOpen;
+
+  useMotionValueEvent(logoOpacity, "change", (value) => {
+    setLogoPointerDisabled(value < 0.08);
+  });
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -664,8 +690,6 @@ export function ArcSiteHeader({
   }, [logoClickOnlyAtTop, logoOpacity]);
 
   useEffect(() => {
-    if (reducedMotion) return;
-
     let cancelled = false;
     let raf = 0;
 
@@ -695,18 +719,22 @@ export function ArcSiteHeader({
       }
 
       const lenis = getLocomotiveLenis();
+      const scrollY = lenis ? lenis.animatedScroll : readSiteScrollY();
       let wantHidden = false;
 
-      if (lenis) {
-        wantHidden = logoWantHidden(lenis.animatedScroll, lenis.velocity);
-      } else {
-        const scroll = readSiteScrollY();
-        const frameDelta = scroll - nativeScrollMotionRef.current.y;
-        nativeScrollMotionRef.current.velocity =
-          nativeScrollMotionRef.current.velocity * (1 - LOGO_NATIVE_VELOCITY_BLEND) +
-          frameDelta * LOGO_NATIVE_VELOCITY_BLEND;
-        nativeScrollMotionRef.current.y = scroll;
-        wantHidden = logoWantHidden(scroll, nativeScrollMotionRef.current.velocity);
+      if (hideLogoInHero && isInMarketingHeroZone(scrollY)) {
+        wantHidden = true;
+      } else if (!reducedMotion) {
+        if (lenis) {
+          wantHidden = logoWantHidden(scrollY, lenis.velocity);
+        } else {
+          const frameDelta = scrollY - nativeScrollMotionRef.current.y;
+          nativeScrollMotionRef.current.velocity =
+            nativeScrollMotionRef.current.velocity * (1 - LOGO_NATIVE_VELOCITY_BLEND) +
+            frameDelta * LOGO_NATIVE_VELOCITY_BLEND;
+          nativeScrollMotionRef.current.y = scrollY;
+          wantHidden = logoWantHidden(scrollY, nativeScrollMotionRef.current.velocity);
+        }
       }
 
       applyLogoScrollFade(
@@ -728,7 +756,7 @@ export function ArcSiteHeader({
       cancelled = true;
       cancelAnimationFrame(raf);
     };
-  }, [reducedMotion, logoOpacity, logoClickOnlyAtTop]);
+  }, [reducedMotion, logoOpacity, logoClickOnlyAtTop, hideLogoInHero]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -772,7 +800,7 @@ export function ArcSiteHeader({
   }, [reducedMotion]);
 
   useEffect(() => {
-    if (reducedMotion || prefersNativeScroll()) return;
+    if (reducedMotion || getStableNativeScroll()) return;
     const header = headerChromeRef.current;
     if (!header) return;
 
@@ -787,7 +815,7 @@ export function ArcSiteHeader({
 
   useEffect(() => {
     if (isMenuOpen) {
-      if (prefersNativeScroll()) {
+      if (getStableNativeScroll()) {
         document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
       } else {
@@ -1074,14 +1102,21 @@ export function ArcSiteHeader({
             href={homeHref}
             className={cn(
               ARC_HEADER_LOGO_LINK_CLASS,
-              isMenuOpen || (logoClickOnlyAtTop && !logoHomeLinkActive)
+              isMenuOpen ||
+                logoPointerDisabled ||
+                (logoClickOnlyAtTop && !logoHomeLinkActive)
                 ? "pointer-events-none [&_*]:pointer-events-none"
                 : "pointer-events-auto",
             )}
             aria-label="ARC Wellness home"
-            tabIndex={logoClickOnlyAtTop && !logoHomeLinkActive ? -1 : undefined}
+            tabIndex={
+              logoPointerDisabled || (logoClickOnlyAtTop && !logoHomeLinkActive) ? -1 : undefined
+            }
           >
-            {reducedMotion ? (
+            <motion.div
+              className={ARC_HEADER_LOGO_MOTION_WRAP_CLASS}
+              style={{ opacity: logoOpacity }}
+            >
               <Image
                 src={logoSrc}
                 alt={logoAlt}
@@ -1092,23 +1127,7 @@ export function ArcSiteHeader({
                 unoptimized
                 className={ARC_HEADER_LOGO_IMG_CLASS}
               />
-            ) : (
-              <motion.div
-                className={ARC_HEADER_LOGO_MOTION_WRAP_CLASS}
-                style={{ opacity: logoOpacity }}
-              >
-                <Image
-                  src={logoSrc}
-                  alt={logoAlt}
-                  width={720}
-                  height={240}
-                  priority
-                  placeholder="empty"
-                  unoptimized
-                  className={ARC_HEADER_LOGO_IMG_CLASS}
-                />
-              </motion.div>
-            )}
+            </motion.div>
           </Link>
 
           <button
@@ -1116,7 +1135,12 @@ export function ArcSiteHeader({
             onClick={toggleMenu}
             aria-expanded={isMenuOpen}
             aria-controls="arc-nav-overlay"
-            className="pointer-events-auto relative z-20 col-start-3 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/25 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:gap-3.5 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base"
+            className={cn(
+              "pointer-events-auto relative z-20 col-start-3 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full font-sans text-xs font-semibold uppercase tracking-[0.16em] transition-colors sm:gap-3 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base",
+              hideLogoInHero
+                ? "border border-arc-cream/85 bg-arc-cream/95 px-4 py-2.5 text-arc-charcoal shadow-[0_2px_14px_rgba(0,0,0,0.12)] hover:bg-arc-cream-deep"
+                : "border border-white/40 bg-black/25 px-4 py-2.5 text-white backdrop-blur-md hover:bg-black/40",
+            )}
           >
             {isMenuOpen ? "Close" : "Menu"}
             <svg

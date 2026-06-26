@@ -8,8 +8,38 @@ import { prefersReducedMotion } from "@/lib/motionPrefs";
 
 gsap.registerPlugin(ScrollTrigger);
 
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 /** Fired after Lenis + scrollerProxy + first refresh — pins/scrub must register after this. */
 export const ARC_LOCOMOTIVE_READY_EVENT = "arc-locomotive-ready";
+
+let arcLocomotiveReadyFlag = false;
+
+export function isArcLocomotiveReady(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    arcLocomotiveReadyFlag ||
+    Boolean((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll)
+  );
+}
+
+/** Run after Lenis exists — safe if the ready event already fired (e.g. late-mounting sections). */
+export function whenArcLocomotiveReady(fn: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  if (isArcLocomotiveReady()) {
+    queueMicrotask(fn);
+    return () => {};
+  }
+
+  const handler = () => queueMicrotask(fn);
+  window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, handler as EventListener);
+  return () => window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, handler as EventListener);
+}
+
+function markArcLocomotiveReady() {
+  arcLocomotiveReadyFlag = true;
+}
 
 function getLenisFromScroll(inst: InstanceType<typeof LocomotiveScroll> | null) {
   if (!inst) return undefined;
@@ -132,6 +162,7 @@ export function useLocomotiveScroll(
         window.setTimeout(() => resizeLenisAndRefresh(locomotiveScrollInstance), 1600);
         window.setTimeout(() => ScrollTrigger.refresh(), 800);
 
+        markArcLocomotiveReady();
         window.dispatchEvent(
           new CustomEvent(ARC_LOCOMOTIVE_READY_EVENT, {
             detail: { scrollEl },
@@ -151,6 +182,7 @@ export function useLocomotiveScroll(
       }
       if (typeof window !== "undefined") {
         delete (window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll;
+        arcLocomotiveReadyFlag = false;
       }
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
