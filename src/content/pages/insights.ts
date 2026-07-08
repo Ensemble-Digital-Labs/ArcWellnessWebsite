@@ -24,12 +24,12 @@ export const insightsPage = {
     eyebrow: "Insights",
     title: "Stories &",
     titleEmphasis: "perspectives",
-    body: "Real outcomes, thoughtful education, and the science behind our approach—written for patients who want clarity, not jargon.",
+    body: "Real outcomes, thoughtful education, and the science behind our approach, written for patients who want clarity, not jargon.",
   },
   feed: {
     masthead: "Insights",
     subtitle:
-      "Tracking the ideas that support whole-body wellness—across patient stories, clinical perspective, and everyday care.",
+      "Tracking the ideas that support whole-body wellness, across patient stories, clinical perspective, and everyday care.",
   },
 } as const;
 
@@ -37,12 +37,12 @@ export function insightHref(entry: Pick<InsightEntry, "kind" | "slug">): string 
   return entry.kind === "blog" ? `/blog/${entry.slug}` : `/case-studies/${entry.slug}`;
 }
 
-/** @deprecated Use insightsPage — kept for existing imports */
+/** @deprecated Use insightsPage, kept for existing imports */
 export const caseStudiesPage = {
   seo: insightsPage.seo,
   hero: insightsPage.hero,
   comingSoon: {
     title: "New articles on the way",
-    body: "We’re preparing case studies and blog posts from our clinical team. Check back soon—or book a consult to hear how we personalize care today.",
+    body: "We’re preparing case studies and blog posts from our clinical team. Check back soon, or book a consult to hear how we personalize care today.",
   },
 } as const;

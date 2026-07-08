@@ -4,11 +4,11 @@ import { RETAIL_IMAGES } from "@/content/retailImages";
 
 /** Nav preview thumbs — string paths only (avoids circular import with `@/content/site`). */
 const NAV_PREVIEW = {
-  facialAesthetic: "/assets/sections/whole-body/facial-aesthetic-treatment.png",
-  membershipCohort: "/assets/sections/who-we-are/biometric-consultation-room.png",
+  facialAesthetic: "/assets/sections/whole-body/facial-aesthetic-treatment.webp",
+  membershipCohort: "/assets/sections/who-we-are/biometric-consultation-room.webp",
 } as const;
 
-/** Primary site navigation — header menu on homepage and marketing pages. */
+/** Primary site navigation — @deprecated Use `@/content/navigation` + `ArcNavDrawerMenu`. Kept for treatment thumb previews. */
 export const ARC_PRIMARY_NAV_LINKS = [
   {
     label: "About",

@@ -8,7 +8,7 @@ export const contactPage = {
     eyebrow: "Contact",
     title: "We're Here When",
     titleEmphasis: "You're Ready",
-    body: "Finding support shouldn't feel like another hurdle. At Arc Wellness, we believe the first step toward healing begins with connection—a message, a call, a quiet moment of reaching out. However you choose to begin, we're here to listen with care, respect, and understanding.",
+    body: "Finding support shouldn't feel like another hurdle. At Arc Wellness, we believe the first step toward healing begins with connection, a message, a call, a quiet moment of reaching out. However you choose to begin, we're here to listen with care, respect, and understanding.",
   },
   channels: [
     {
@@ -19,12 +19,12 @@ export const contactPage = {
     {
       id: "email",
       title: "Email",
-      body: "You can reach us by email with a few words about what you're looking for—you don't have to have it all figured out. We'll take it from there.",
+      body: "You can reach us by email with a few words about what you're looking for, you don't have to have it all figured out. We'll take it from there.",
     },
     {
       id: "visit",
       title: "Visit us",
-      body: "Visit our space in person at our St. Louis clinic—designed for calm, privacy, and unhurried conversation.",
+      body: "Visit our space in person at our St. Louis clinic, designed for calm, privacy, and unhurried conversation.",
     },
   ],
   closing: {

@@ -73,7 +73,7 @@ export function ArcDesignHero({ imageSrc }: ArcDesignHeroProps) {
           </div>
         </div>
 
-        {/* Bottom: CTA + studio / video — aligned right */}
+        {/* Bottom: CTA + studio / video, aligned right */}
         <div className="flex w-full min-w-0 justify-end px-4 pb-8 pt-2 sm:px-8 sm:pb-9 sm:pt-3 lg:px-10 lg:pb-10">
           <div className="flex max-w-full flex-wrap items-center justify-end gap-3 sm:gap-4">
             <Link

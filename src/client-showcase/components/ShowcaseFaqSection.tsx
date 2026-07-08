@@ -4,7 +4,7 @@ import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-toke
 import { showcaseFaqHeading as heading, showcaseFaqItems } from "@/client-showcase/mock-page-content";
 
 /**
- * Client-showcase FAQ — native `<details>` accordion, typography aligned with Who we are / testimonials.
+ * Client-showcase FAQ, native `<details>` accordion, typography aligned with Who we are / testimonials.
  */
 export function ShowcaseFaqSection() {
   return (

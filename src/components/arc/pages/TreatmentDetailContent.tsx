@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArcAboutNarrativePinSection } from "@/components/arc/ArcAboutNarrativePinSection";
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
@@ -14,7 +15,7 @@ import {
   splitTreatmentSectionHeading,
   treatmentSectionParagraphs,
 } from "@/content/treatmentDetailHero";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 type TreatmentDetailContentProps = {
@@ -22,6 +23,8 @@ type TreatmentDetailContentProps = {
 };
 
 export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProps) {
+  const sectionCount = treatment.sections.length;
+
   return (
     <>
       <ScrollChapterIntroSection
@@ -35,6 +38,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         body=""
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
         heroCanvasTiles={buildTreatmentHeroCanvasTiles(treatment)}
+        bottomSeam
       />
 
       <ArcAboutNarrativePinSection
@@ -45,6 +49,9 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         storyLines={[treatment.intro]}
         sideImageSrc={treatment.imageSrc}
         sideImageAlt={treatment.imageAlt}
+        headlineEmphasisTone="teal"
+        topSeam
+        bottomSeam
       />
 
       {treatment.highlights?.length ? (
@@ -57,6 +64,12 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
           revealLines
           paragraphs={treatment.highlights}
           variant="cream"
+          headlineEmphasisTone="teal"
+          topSeam
+          compactTop
+          bottomSeam
+          compactBottom={sectionCount > 0}
+          seamVariant="soft"
         />
       ) : null}
 
@@ -65,6 +78,9 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         const { title, titleEmphasis } = splitTreatmentSectionHeading(heading);
         const paragraphs = treatmentSectionParagraphs(section);
         if (!paragraphs.length) return null;
+
+        const isFirst = i === 0;
+        const isLast = i === sectionCount - 1;
 
         return (
           <ArcScrollEditorialSection
@@ -80,6 +96,12 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
             imageAlt={treatment.imageAlt}
             imagePosition={i % 2 === 0 ? "right" : "left"}
             variant="cream"
+            headlineEmphasisTone="teal"
+            topSeam
+            compactTop={!isFirst || Boolean(treatment.highlights?.length)}
+            bottomSeam
+            compactBottom={!isLast}
+            seamVariant="soft"
           />
         );
       })}
@@ -87,17 +109,25 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
       {treatment.faqs?.length ? (
         <ArcFaqSection
           id="treatment-faq"
-          className="border-t-0"
           categories={{ treatment: treatment.title }}
           faqByCategory={{ treatment: treatment.faqs }}
+          topSeam
+          bottomSeam
         />
       ) : null}
 
-      <section className="bg-arc-cream px-6 py-12 sm:px-10 md:px-12">
-        <div className={cn("mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
+      <section
+        className={cn(
+          "relative bg-arc-cream px-6 py-12 sm:px-10 md:px-12",
+          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
+        )}
+      >
+        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
+        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+        <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
           <Link
             href="/treatments"
-            className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-rose-gold-ink transition-colors hover:text-arc-rose-gold-ink-hover"
+            className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
           >
             ← All treatments
           </Link>
@@ -107,6 +137,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
       <InvestCTASection
         imageSrc={treatment.imageSrc}
         supportingLine={homeInvestSupport}
+        topSeam
       />
     </>
   );

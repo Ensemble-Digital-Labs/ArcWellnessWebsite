@@ -50,19 +50,19 @@ export const SERVICES_SHOWCASE_SLIDES: readonly ServicesShowcaseSlide[] = [
   {
     title: "Your rhythm",
     description:
-      "A patient journey built around listening first—then tailoring the plan to you.",
+      "A patient journey built around listening first, then tailoring the plan to you.",
     imageSrc: EDITORIAL_SPA_IMAGES[3],
   },
   {
     title: "Elevated environment",
     description:
-      "Textures, light, and calm detail—so the experience feels as considered as the outcomes.",
+      "Textures, light, and calm detail, so the experience feels as considered as the outcomes.",
     imageSrc: EDITORIAL_SPA_IMAGES[4],
   },
   {
     title: "Confidence in the details",
     description:
-      "From consultation to follow-up—consistent standards and warmth at every touchpoint.",
+      "From consultation to follow-up, consistent standards and warmth at every touchpoint.",
     imageSrc: PATIENT_EXPERIENCE_IMAGES[0],
   },
 ];

@@ -50,13 +50,13 @@ export const treatmentsHub = {
   seo: {
     title: "Overview | Arc Wellness",
     description:
-      "Discover science-backed treatments designed to elevate your health, enhance your body, and restore your mind—all under one roof.",
+      "Discover science-backed treatments designed to elevate your health, enhance your body, and restore your mind, all under one roof.",
   },
   hero: {
     eyebrow: "Restoration Begins Here",
     title: "Tech-Driven",
     titleEmphasis: "Body Treatments",
-    body: "Discover a range of science-backed treatments designed to elevate your health, enhance your body, and restore your mind—all under one roof. Restore balance, strength, and clarity through FDA-cleared, non-invasive treatments designed to help you function at your best.",
+    body: "Discover a range of science-backed treatments designed to elevate your health, enhance your body, and restore your mind, all under one roof. Restore balance, strength, and clarity through FDA-cleared, non-invasive treatments designed to help you function at your best.",
   },
   pinExplorer: {
     title: "our modalities",
@@ -81,23 +81,23 @@ export const allTreatments: readonly TreatmentPage[] = [
     imageSrc: img.heroMedia,
     imageAlt: "ARC Wellness reception",
     intro:
-      "Discover a range of science-backed treatments designed to elevate your health, enhance your body, and restore your mind—all under one roof.",
+      "Discover a range of science-backed treatments designed to elevate your health, enhance your body, and restore your mind, all under one roof.",
     sections: [
       {
         heading: "Tech-Driven Body Treatments",
         body: "Restore balance, strength, and clarity through our FDA-cleared, non-invasive treatments designed to help you function at your best. Each treatment works with your body to create measurable change you can see and feel.",
         bullets: [
-          "ExoMind — Calm the mind, sharpen focus, and bring mental clarity back into rhythm through advanced neurostimulation.",
-          "EmSella — Strengthen your foundation with a comfortable, chair-based therapy that restores pelvic health and core stability.",
-          "EmSculpt Neo — Tone muscle, reduce fat, and rebuild confidence with powerful, non-invasive body contouring technology.",
+          "ExoMind: Calm the mind, sharpen focus, and bring mental clarity back into rhythm through advanced neurostimulation.",
+          "EmSella: Strengthen your foundation with a comfortable, chair-based therapy that restores pelvic health and core stability.",
+          "EmSculpt Neo: Tone muscle, reduce fat, and rebuild confidence with powerful, non-invasive body contouring technology.",
         ],
       },
       {
         heading: "Foundational Therapies",
         body: "Support your body's natural healing processes through targeted therapies that replenish, repair, and restore vitality at the cellular level.",
         bullets: [
-          "Nutrient — Rehydrate, refuel, and recover faster with customized infusions that nourish your body where it matters most.",
-          "Peptide — Encourage regeneration and balance with therapeutic peptides that enhance metabolism, repair, and longevity.",
+          "Nutrient: Rehydrate, refuel, and recover faster with customized infusions that nourish your body where it matters most.",
+          "Peptide: Encourage regeneration and balance with therapeutic peptides that enhance metabolism, repair, and longevity.",
         ],
       },
       {
@@ -118,7 +118,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       "ExoMind is an advanced neuromodulation treatment designed to gently recalibrate how the brain communicates with itself. Using precise Transcranial Magnetic Stimulation (TMS), it delivers measured magnetic pulses that activate key neural pathways and support healthier brain function.",
     highlights: [
       "Mental clarity without relying on medications",
-      "Sessions under 30 minutes — walk in, walk out",
+      "Sessions under 30 minutes, walk in, walk out",
       "Supports ADHD, OCD, and depression symptoms",
     ],
     sections: [
@@ -136,7 +136,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         heading: "Calm Your Cravings, Ease Your Pain",
-        body: "ExoMind's influence extends beyond mood. By gently stimulating areas of the brain linked to reward, mood, and decision-making, it helps reduce the neurological noise that often drives cravings or emotional eating. The same gentle recalibration supports how the brain perceives and manages pain—helping you experience both mental calm and physical relief.",
+        body: "ExoMind's influence extends beyond mood. By gently stimulating areas of the brain linked to reward, mood, and decision-making, it helps reduce the neurological noise that often drives cravings or emotional eating. The same gentle recalibration supports how the brain perceives and manages pain, helping you experience both mental calm and physical relief.",
       },
       {
         heading: "Honest Stories From Our Clients",
@@ -236,7 +236,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         heading: "Postpartum and post-prostate recovery",
-        body: "Not only for general wellness—it's a trusted solution for postpartum and post-prostate recovery too.",
+        body: "Not only for general wellness, it's a trusted solution for postpartum and post-prostate recovery too.",
       },
     ],
     faqs: [
@@ -244,7 +244,7 @@ export const allTreatments: readonly TreatmentPage[] = [
         id: "what",
         question: "What is Emsella?",
         answer:
-          "Emsella is a non-invasive treatment that uses high-intensity focused electromagnetic (HIFEM) technology to stimulate pelvic floor muscles. Each session delivers thousands of powerful contractions—similar to doing Kegel exercises—helping strengthen the muscles that support bladder control, sexual health, and core stability.",
+          "Emsella is a non-invasive treatment that uses high-intensity focused electromagnetic (HIFEM) technology to stimulate pelvic floor muscles. Each session delivers thousands of powerful contractions, similar to doing Kegel exercises, helping strengthen the muscles that support bladder control, sexual health, and core stability.",
       },
       {
         id: "who",
@@ -317,8 +317,8 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "How it works",
         bullets: [
-          "HIFEM Technology — Delivers powerful, supramaximal muscle contractions to strengthen and tone targeted muscles.",
-          "Radiofrequency Heating — Gently heats fat cells, helping the body eliminate them permanently while supporting muscle definition.",
+          "HIFEM Technology: Delivers powerful, supramaximal muscle contractions to strengthen and tone targeted muscles.",
+          "Radiofrequency Heating: Gently heats fat cells, helping the body eliminate them permanently while supporting muscle definition.",
         ],
       },
       {
@@ -381,7 +381,7 @@ export const allTreatments: readonly TreatmentPage[] = [
         id: "exercise",
         question: "How does EmSculpt Neo compare to traditional exercise?",
         answer:
-          "One 30-minute EmSculpt Neo session is equivalent to doing 20,000 crunches or squats, while also delivering targeted fat reduction—something no workout can do alone.",
+          "One 30-minute EmSculpt Neo session is equivalent to doing 20,000 crunches or squats, while also delivering targeted fat reduction, something no workout can do alone.",
       },
       {
         id: "insurance",
@@ -400,7 +400,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
     imageAlt: "EmFace facial treatment with BTL console at ARC Wellness",
     intro:
-      "EMFACE is the first and only non-invasive procedure that simultaneously treats facial skin and muscles to lift, tone, and reduce wrinkles—all without needles or downtime.",
+      "EMFACE is the first and only non-invasive procedure that simultaneously treats facial skin and muscles to lift, tone, and reduce wrinkles, all without needles or downtime.",
     sections: [
       {
         heading: "How It Works",
@@ -409,11 +409,11 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "Key Benefits",
         bullets: [
-          "Natural Lift — Average of 23% more lift in targeted areas",
-          "Wrinkle Reduction — Up to 37% reduction in fine lines and wrinkles",
-          "Improved Muscle Tone — Approximately 30% increase in resting muscle tone",
-          "No Needles & No Pain — Often compared to a warm facial massage",
-          "Zero Downtime — Return to daily activities immediately after your lunchtime lift",
+          "Natural Lift: Average of 23% more lift in targeted areas",
+          "Wrinkle Reduction: Up to 37% reduction in fine lines and wrinkles",
+          "Improved Muscle Tone: Approximately 30% increase in resting muscle tone",
+          "No Needles & No Pain: Often compared to a warm facial massage",
+          "Zero Downtime: Return to daily activities immediately after your lunchtime lift",
         ],
       },
       {
@@ -422,7 +422,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         heading: "Is EMFACE Right for You?",
-        body: "EMFACE is suitable for almost anyone seeking a non-surgical alternative to a facelift or a preventative anti-aging strategy—especially those who want to avoid needles, seek natural-looking results, and cannot afford recovery time.",
+        body: "EMFACE is suitable for almost anyone seeking a non-surgical alternative to a facelift or a preventative anti-aging strategy, especially those who want to avoid needles, seek natural-looking results, and cannot afford recovery time.",
       },
     ],
   },
@@ -440,21 +440,21 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "Key Benefits & Proven Results",
         bullets: [
-          "Natural Hyaluronic Acid Boost — Increases skin HA levels by up to 224% without needles or fillers",
-          "Skin Quality Improvement — Boosts collagen by 47% and elastin by 50%",
+          "Natural Hyaluronic Acid Boost: Increases skin HA levels by up to 224% without needles or fillers",
+          "Skin Quality Improvement: Boosts collagen by 47% and elastin by 50%",
         ],
       },
       {
         heading: "Key Treatment Options",
         bullets: [
-          "Exion Fractional RF (Microneedling) — Targets acne scars, deep wrinkles, and stretch marks with less pain than standard microneedling",
-          "Exion Face — Needle-free treatment for delicate areas like the eyes and forehead",
-          "Exion Clear RF — Clears active acne and improves skin clarity without harsh medications",
+          "Exion Fractional RF (Microneedling): Targets acne scars, deep wrinkles, and stretch marks with less pain than standard microneedling",
+          "Exion Face: Needle-free treatment for delicate areas like the eyes and forehead",
+          "Exion Clear RF: Clears active acne and improves skin clarity without harsh medications",
         ],
       },
       {
         heading: "Who Benefits Most from EXION?",
-        body: "Anyone looking to improve skin quality without the downtime of surgery or the filler look—especially those reversing signs of aging, seeking natural hydration, diminishing acne scars, or preferring a comfortable microneedling experience.",
+        body: "Anyone looking to improve skin quality without the downtime of surgery or the filler look, especially those reversing signs of aging, seeking natural hydration, diminishing acne scars, or preferring a comfortable microneedling experience.",
       },
     ],
   },
@@ -472,10 +472,10 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "Key Benefits",
         bullets: [
-          "Long-Lasting Results — Results last an average of 6 months, with some patients maintaining smooth skin for up to 9 months",
-          "Faster Onset — Many patients see visible improvements within just 1–2 days",
-          "Fewer Appointments — Most patients only need two treatments per year",
-          "Natural-Looking Refresh — Refreshed, youthful appearance while maintaining natural facial expressions",
+          "Long-Lasting Results: Results last an average of 6 months, with some patients maintaining smooth skin for up to 9 months",
+          "Faster Onset: Many patients see visible improvements within just 1–2 days",
+          "Fewer Appointments: Most patients only need two treatments per year",
+          "Natural-Looking Refresh: Refreshed, youthful appearance while maintaining natural facial expressions",
         ],
       },
       {
@@ -485,9 +485,9 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "What to Expect During Treatment",
         bullets: [
-          "Quick Procedure — A typical session takes only 15–30 minutes",
-          "Minimal Discomfort — Injections with a very fine needle; ice or numbing cream available",
-          "No Downtime — Return to normal daily activities immediately",
+          "Quick Procedure: A typical session takes only 15–30 minutes",
+          "Minimal Discomfort: Injections with a very fine needle; ice or numbing cream available",
+          "No Downtime: Return to normal daily activities immediately",
         ],
       },
     ],
@@ -506,18 +506,18 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "Why Choose RHA®?",
         bullets: [
-          "Designed for Movement — Adapts to your facial expressions for a natural look at rest or in motion",
-          "Cleaner Formula — Preserves the natural structure of hyaluronic acid, similar to the HA in your skin",
-          "Impressive Longevity — Clinically proven results that last up to 15 months",
+          "Designed for Movement: Adapts to your facial expressions for a natural look at rest or in motion",
+          "Cleaner Formula: Preserves the natural structure of hyaluronic acid, similar to the HA in your skin",
+          "Impressive Longevity: Clinically proven results that last up to 15 months",
         ],
       },
       {
         heading: "Meet the Collection",
         bullets: [
-          "RHA Redensity — Delicate areas and fine smoker's lines around the mouth",
-          "RHA 2 — Moderate dynamic wrinkles around lips and forehead",
-          "RHA 3 — Moderate-to-severe folds including nasolabial and marionette lines",
-          "RHA 4 — Deep support and volume for cheeks, jawline, and severe folds",
+          "RHA Redensity: Delicate areas and fine smoker's lines around the mouth",
+          "RHA 2: Moderate dynamic wrinkles around lips and forehead",
+          "RHA 3: Moderate-to-severe folds including nasolabial and marionette lines",
+          "RHA 4: Deep support and volume for cheeks, jawline, and severe folds",
         ],
       },
       {
@@ -544,24 +544,24 @@ export const allTreatments: readonly TreatmentPage[] = [
       {
         heading: "The KNESKO Difference",
         bullets: [
-          "GEMCLINICAL® Technology — Precious gemstones stabilize active ingredients for deeper delivery",
-          "Collagen Hydrogel Material — Holds up to 10x more nutrients than traditional sheet masks",
-          "Reiki-Charged Rituals — Every mask is charged with healing Reiki energy",
-          "Clean Beauty — Non-toxic, paraben-free, cruelty-free, and biodegradable",
+          "GEMCLINICAL® Technology: Precious gemstones stabilize active ingredients for deeper delivery",
+          "Collagen Hydrogel Material: Holds up to 10x more nutrients than traditional sheet masks",
+          "Reiki-Charged Rituals: Every mask is charged with healing Reiki energy",
+          "Clean Beauty: Non-toxic, paraben-free, cruelty-free, and biodegradable",
         ],
       },
       {
         heading: "Our KNESKO Collection",
         bullets: [
-          "Green Jade Calm — soothes inflammation and reduces redness",
-          "Diamond Radiance — brightens and boosts luminosity",
-          "Rose Quartz Antioxidant — protects against environmental stress",
-          "Nano Gold Repair — promotes healing and revitalises tired, ageing skin",
+          "Green Jade Calm, soothes inflammation and reduces redness",
+          "Diamond Radiance, brightens and boosts luminosity",
+          "Rose Quartz Antioxidant, protects against environmental stress",
+          "Nano Gold Repair, promotes healing and revitalises tired, ageing skin",
         ],
       },
       {
         heading: "How to Use the Ritual",
-        body: "Cleanse skin, apply the mask for 15–30 minutes while reciting the included mantra, then massage remaining serum into skin, neck, and arms—never wash it off.",
+        body: "Cleanse skin, apply the mask for 15–30 minutes while reciting the included mantra, then massage remaining serum into skin, neck, and arms, never wash it off.",
       },
     ],
   },
@@ -574,7 +574,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     imageSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
     imageAlt: CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom,
     intro:
-      "Nutrient Therapy delivers fluids, vitamins, antioxidants, and amino acids directly into the bloodstream to support hydration, nutrient balance, and overall physiological function—especially helpful when the body needs support for recovery, resilience, or restoration.",
+      "Nutrient Therapy delivers fluids, vitamins, antioxidants, and amino acids directly into the bloodstream to support hydration, nutrient balance, and overall physiological function, especially helpful when the body needs support for recovery, resilience, or restoration.",
     highlights: [
       "Intravenous infusions for deeper hydration and systemic support",
       "Targeted intramuscular injections for quick supplementation",
@@ -585,19 +585,19 @@ export const allTreatments: readonly TreatmentPage[] = [
         heading: "Our IV Infusion Options",
         body: "Each plan is tailored to your health goals, lifestyle, and medical history.",
         bullets: [
-          "Arc Restore — Foundational infusion for rehydration, steady energy, immune resilience, and recovery",
-          "Glutathione — Detox and immune support",
-          "ALA (Alpha Lipoic Acid) — Inflammation and metabolic support",
-          "NAD+ — Cellular and cognitive performance support",
+          "Arc Restore: Foundational infusion for rehydration, steady energy, immune resilience, and recovery",
+          "Glutathione: Detox and immune support",
+          "ALA (Alpha Lipoic Acid): Inflammation and metabolic support",
+          "NAD+, Cellular and cognitive performance support",
         ],
       },
       {
         heading: "Vitamin & Metabolic Support Injections",
         bullets: [
-          "B12 Energy Shot — Energy, focus, metabolism, and nervous system health",
-          "Vitamin D3 Boost — Immunity, mood regulation, and bone health",
-          "MICC Injection — Fat metabolism, liver function, and energy",
-          "Power MICC — Enhanced lipotropic formula for metabolic support",
+          "B12 Energy Shot: Energy, focus, metabolism, and nervous system health",
+          "Vitamin D3 Boost: Immunity, mood regulation, and bone health",
+          "MICC Injection: Fat metabolism, liver function, and energy",
+          "Power MICC: Enhanced lipotropic formula for metabolic support",
         ],
       },
     ],
@@ -650,11 +650,11 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         heading: "GLOW",
-        body: "For collagen stimulation, cellular renewal, and overall skin and hair vitality. Delivered through a subcutaneous injection — $195.",
+        body: "For collagen stimulation, cellular renewal, and overall skin and hair vitality. Delivered through a subcutaneous injection, $195.",
       },
       {
         heading: "Wolverine",
-        body: "For faster healing, reduced inflammation, and optimal recovery. Delivered through a subcutaneous injection — $175.",
+        body: "For faster healing, reduced inflammation, and optimal recovery. Delivered through a subcutaneous injection, $175.",
       },
       {
         heading: "Who Thrives with Peptides?",
@@ -696,7 +696,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     imageSrc: RETAIL_IMAGES.arcSupplementShelvingUnits,
     imageAlt: "ARC Wellness supplement shelving",
     intro:
-      "Supplements can be powerful, but only when they're chosen carefully, dosed correctly, and aligned with the body's real needs. At Arc Wellness, supplements are supportive tools within a broader, physician-guided wellness plan—not generic retail products.",
+      "Supplements can be powerful, but only when they're chosen carefully, dosed correctly, and aligned with the body's real needs. At Arc Wellness, supplements are supportive tools within a broader, physician-guided wellness plan, not generic retail products.",
     sections: [
       {
         heading: "Who Benefits Most from Supplement Support?",
@@ -711,7 +711,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         heading: "Core Supplement Offerings",
-        body: "Clinically backed, pharmaceutical-grade formulations available exclusively through licensed medical providers—including Foundation, Gut Reset, Women's Longevity, and Brain Health protocols.",
+        body: "Clinically backed, pharmaceutical-grade formulations available exclusively through licensed medical providers, including Foundation, Gut Reset, Women's Longevity, and Brain Health protocols.",
       },
     ],
     faqs: [

@@ -22,7 +22,7 @@ export const showcasePathSteps = [
     description:
       "A conversation, not an intake. We ask about your sleep, your work, your weeks. Patterns surface before any test does.",
     imageSrc: PATH_STEP_IMAGE_SRC.listen,
-    imageAlt: "Listen — first step of the ARC wellness journey",
+    imageAlt: "Listen, first step of the ARC wellness journey",
     contentOnLeft: false,
   },
   {
@@ -30,9 +30,9 @@ export const showcasePathSteps = [
     title: "Measure",
     stepMeta: "STEP 02 · TWO VISITS",
     description:
-      "Comprehensive panels, body composition, cognitive assessments. We capture the numbers that matter — and the ones most clinics miss.",
+      "Comprehensive panels, body composition, cognitive assessments. We capture the numbers that matter, and the ones most clinics miss.",
     imageSrc: PATH_STEP_IMAGE_SRC.measure,
-    imageAlt: "Measure — assessments and diagnostics",
+    imageAlt: "Measure, assessments and diagnostics",
     contentOnLeft: true,
   },
   {
@@ -40,9 +40,9 @@ export const showcasePathSteps = [
     title: "Author",
     stepMeta: "STEP 03 · ONE WEEK",
     description:
-      "Your team meets — without you in the room — and writes a plan in five chapters: surface, shape, foundation, mind, and the long view.",
+      "Your team meets, without you in the room, and writes a plan in five chapters: surface, shape, foundation, mind, and the long view.",
     imageSrc: PATH_STEP_IMAGE_SRC.author,
-    imageAlt: "Author — your personalized care plan",
+    imageAlt: "Author, your personalized care plan",
     contentOnLeft: false,
   },
   {
@@ -50,9 +50,9 @@ export const showcasePathSteps = [
     title: "Practice",
     stepMeta: "STEP 04 · ONGOING",
     description:
-      "We meet monthly. Treatments, coaching, refinements — kept small enough to actually do, long enough to actually work.",
+      "We meet monthly. Treatments, coaching, refinements, kept small enough to actually do, long enough to actually work.",
     imageSrc: PATH_STEP_IMAGE_SRC.practice,
-    imageAlt: "Practice — ongoing care and coaching",
+    imageAlt: "Practice, ongoing care and coaching",
     contentOnLeft: true,
   },
   {
@@ -62,7 +62,7 @@ export const showcasePathSteps = [
     description:
       "Every quarter we re-measure and rewrite. The plan ages with you, in pencil, never in stone.",
     imageSrc: PATH_STEP_IMAGE_SRC.revise,
-    imageAlt: "Revise — seasonal plan updates",
+    imageAlt: "Revise, seasonal plan updates",
     contentOnLeft: false,
   },
 ] as const;

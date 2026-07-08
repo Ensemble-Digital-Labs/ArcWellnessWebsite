@@ -89,6 +89,9 @@ export function stabilizeViewportAfterLayoutShift(options: {
 }) {
   const { anchor, anchorTopBefore, scrollBefore = currentScrollY() } = options;
 
+  /** Pin spacers on first paint look like a layout shift — do not scroll away from the hero. */
+  if (scrollBefore < 96) return;
+
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       const delta = anchor.getBoundingClientRect().top - anchorTopBefore;
@@ -176,15 +179,20 @@ export function refreshNativeScrollPinLayout(options?: {
     options?.anchorTopBefore ?? pathAnchor?.getBoundingClientRect().top;
   const scrollBefore = options?.scrollBefore ?? currentScrollY();
 
-  ScrollTrigger.refresh(true);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
+      clampScrollToDocument();
 
-  if (pathAnchor && anchorTopBefore !== undefined) {
-    stabilizeViewportAfterLayoutShift({
-      anchor: pathAnchor,
-      anchorTopBefore,
-      scrollBefore,
+      if (pathAnchor && anchorTopBefore !== undefined) {
+        stabilizeViewportAfterLayoutShift({
+          anchor: pathAnchor,
+          anchorTopBefore,
+          scrollBefore,
+        });
+      }
     });
-  }
+  });
 }
 
 /**

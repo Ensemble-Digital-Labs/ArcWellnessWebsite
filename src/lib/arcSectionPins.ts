@@ -6,8 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   arcScrollTriggerPinOptions,
   arcScrollTriggerScrollerProps,
+  getArcPinScrollDistance,
   getArcScrollTriggerScroller,
-  getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
 import {
   currentScrollYForStabilize,
@@ -95,8 +95,7 @@ export function useArcFullscreenPin(
     teardownPin();
 
     const scroller = getArcScrollTriggerScroller();
-    const endDist = () =>
-      getArcScrollViewportHeight(scroller) * Math.max(0.2, pinDistanceMultiplier);
+    const endDist = () => getArcPinScrollDistance(pinDistanceMultiplier, scroller);
     const pinOptions = pinType ? { pinType } : arcScrollTriggerPinOptions();
 
     let created: ScrollTrigger | undefined;

@@ -10,8 +10,12 @@ import type Lenis from "lenis";
 import { cn } from "@/lib/utils";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { images } from "@/content/site";
+import { ArcNavDrawerMenu } from "@/components/arc/ArcNavDrawerMenu";
+import { ArcNavDrawerBookCta } from "@/components/arc/ArcNavDrawerBookCta";
+import { ArcNavDrawerTopBar } from "@/components/arc/ArcNavDrawerTopBar";
 import { ARC_PRIMARY_NAV_LINKS, ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
 import { forwardWheelEventToLenis, getStableNativeScroll } from "@/lib/arcScrollMode";
+import { ARC_HEADER_CHROME_RESET_EVENT } from "@/lib/arcHeaderChromeRecovery";
 import {
   ARC_INSIGHTS_HEADER_CHROME_EVENT,
   insightsLogoShouldHide,
@@ -22,7 +26,7 @@ import {
 
 /**
  * Logo fades out while the page is moving (past a small top offset). It fades back in with a fixed
- * eased duration when you’re near the top **or** scroll has settled — no translate bobbing, opacity-only.
+ * eased duration when you’re near the top **or** scroll has settled, no translate bobbing, opacity-only.
  */
 const LOGO_SHOW_BELOW_SCROLL_Y = 48;
 /** Treat Lenis as “stopped” when |velocity| is below this (logo can show while moving if above threshold). */
@@ -32,7 +36,7 @@ const LOGO_VELOCITY_STOP_EPS = 0.022;
  * (Per-frame lerp toward 1 near y≈0 used to read as an instant snap.)
  */
 const LOGO_FADE_IN_DURATION_MS = 540;
-/** Fade-out while scrolling — eased over time so it doesn’t “pop” off. */
+/** Fade-out while scrolling, eased over time so it doesn’t “pop” off. */
 const LOGO_FADE_OUT_DURATION_MS = 480;
 /** Match Lenis: velocity is px per animation frame (`animatedScroll - lastScroll`). */
 const LOGO_NATIVE_VELOCITY_BLEND = 0.35;
@@ -64,21 +68,21 @@ function getLocomotiveLenis(): Lenis | null {
 /** Top inset for scroll content when a solid header bar pushes the page down. */
 export const SITE_HEADER_OFFSET = "0";
 
-/** Overlay / drawer / chrome — high enough to sit above pinned sections and modals below full-screen lightboxes. */
+/** Overlay / drawer / chrome, high enough to sit above pinned sections and modals below full-screen lightboxes. */
 const NAV_STACK_OVERLAY = "z-[1000]";
 const NAV_STACK_DRAWER = "z-[1001]";
 const NAV_STACK_CHROME = "z-[1002]";
-/** Drawer + chrome while menu is open — chrome (logo, close) stays above the drawer. */
+/** Drawer + chrome while menu is open, chrome (logo, close) stays above the drawer. */
 const NAV_STACK_DRAWER_OPEN = "z-[1003]";
 const NAV_STACK_CHROME_OPEN = "z-[1004]";
 
-/** Mobile wordmark — explicit height so `h-full` + narrow max-w doesn’t cap size invisibly. */
+/** Mobile wordmark, explicit height so `h-full` + narrow max-w doesn’t cap size invisibly. */
 const ARC_HEADER_LOGO_LINK_CLASS =
-  "relative z-10 col-start-2 row-start-1 inline-flex w-fit shrink-0 items-center justify-center bg-transparent px-1 max-md:min-h-[6rem] max-md:py-1 sm:max-md:min-h-[6.5rem] md:h-28 md:px-2 lg:h-32 xl:h-36";
+  "relative z-10 col-start-1 row-start-1 inline-flex w-fit shrink-0 items-center justify-start bg-transparent px-0 max-md:min-h-[6rem] max-md:py-1 sm:max-md:min-h-[6.5rem] md:h-28 md:pr-2 lg:h-32 xl:h-36";
 const ARC_HEADER_LOGO_IMG_CLASS =
-  "arc-header-logo object-contain object-center max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(88vw,17rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(90vw,18rem)] md:h-full md:w-auto md:max-w-[min(60vw,420px)] lg:max-w-[min(46vw,460px)]";
+  "arc-header-logo object-contain object-left max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(72vw,15rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(76vw,16rem)] md:h-full md:w-auto md:max-w-[min(42vw,320px)] lg:max-w-[min(36vw,360px)]";
 const ARC_HEADER_LOGO_MOTION_WRAP_CLASS =
-  "inline-flex max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(88vw,17rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(90vw,18rem)] md:h-full md:max-w-[min(60vw,420px)] lg:max-w-[min(46vw,460px)]";
+  "inline-flex max-md:h-[5.5rem] max-md:w-auto max-md:max-w-[min(72vw,15rem)] sm:max-md:h-[6rem] sm:max-md:max-w-[min(76vw,16rem)] md:h-full md:max-w-[min(42vw,320px)] lg:max-w-[min(36vw,360px)]";
 
 /** Hash anchors for logo-demo routes only (`sectionBasePath` set). */
 const NAV_LINK_DEFS = [
@@ -147,7 +151,7 @@ const navLinkPreviewVariants = {
   },
 };
 
-/** Circular preview for treatment sub-links — pops in beside the label on hover. */
+/** Circular preview for treatment sub-links, pops in beside the label on hover. */
 const navTreatmentPreviewVariants = {
   initial: { scale: 0.72, rotate: "-8deg", opacity: 0 },
   hover: {
@@ -158,7 +162,7 @@ const navTreatmentPreviewVariants = {
   },
 };
 
-/** Mobile nav links — full-width tap target; touch uses CSS :active, not pointer-hover JS. */
+/** Mobile nav links, full-width tap target; touch uses CSS :active, not pointer-hover JS. */
 const ARC_NAV_LINK_ROW_CLASS =
   "group relative flex w-full min-h-[52px] touch-manipulation items-center justify-between gap-4 overflow-visible border-b py-3 font-serif text-3xl font-semibold tracking-tight transition-colors duration-300 sm:min-h-[56px] sm:py-4 sm:text-4xl";
 
@@ -299,7 +303,7 @@ function ArcNavMenuLinkRow({
   reducedMotion: boolean;
   closeMenu: () => void;
   assignRef: (el: HTMLAnchorElement | null) => void;
-  /** When true, omit outer `<li>` — parent list item wraps this row (e.g. Treatments + sub-list). */
+  /** When true, omit outer `<li>`, parent list item wraps this row (e.g. Treatments + sub-list). */
   nested?: boolean;
   canHover: boolean;
 }) {
@@ -509,7 +513,7 @@ function ArcNavTreatmentsSeeMore({
 }
 
 /**
- * Centered logo + fullscreen slide-in menu (GSAP), ARC palette and section anchors.
+ * Left-aligned logo + fullscreen slide-in menu (GSAP), ARC palette and section anchors.
  * Inspired by a Webflow-style overlay; uses standard GSAP easing (no CustomEase).
  */
 export type ArcSiteHeaderProps = {
@@ -517,11 +521,11 @@ export type ArcSiteHeaderProps = {
   logoSrc?: string;
   logoAlt?: string;
   homeHref?: string;
-  /** e.g. `/logodemov1`, `/logodemov2`, `/logodemov3` — scope fullscreen menu links to this route’s section IDs. */
+  /** e.g. `/logodemov1`, `/logodemov2`, `/logodemov3`, scope fullscreen menu links to this route’s section IDs. */
   sectionBasePath?: string;
-  /** Insights feed — logo home link only near page top so filter tabs stay tappable. */
+  /** Insights feed, logo home link only near page top so filter tabs stay tappable. */
   logoClickOnlyAtTop?: boolean;
-  /** Homepage hero — hide wordmark until scroll clears the marketing hero (less visual clutter). */
+  /** Homepage hero, hide wordmark until scroll clears the marketing hero (less visual clutter). */
   hideLogoInHero?: boolean;
 };
 
@@ -628,8 +632,10 @@ export function ArcSiteHeader({
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
-  const menuLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const menuLinksRef = useRef<(HTMLElement | null)[]>([]);
   const wasMenuOpened = useRef(false);
+  const [mobileNavReady, setMobileNavReady] = useState(false);
+  const [menuEverOpened, setMenuEverOpened] = useState(false);
   const isMenuOpenRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -786,17 +792,29 @@ export function ArcSiteHeader({
   }, [logoClickOnlyAtTop]);
 
   useLayoutEffect(() => {
-    if (reducedMotion) return;
     const overlay = overlayRef.current;
     const menu = menuRef.current;
     const backdrop = backdropRef.current;
     if (!overlay || !menu || !backdrop) return;
     const strips = backdrop.querySelectorAll<HTMLElement>(".arc-nav-backdrop-strip");
     const links = menuLinksRef.current.filter(Boolean);
+    const bookCta = menu.querySelector<HTMLElement>(".arc-nav-menu-book-cta");
+    if (bookCta) gsap.set(bookCta, { clearProps: "transform,opacity" });
+
+    if (reducedMotion) {
+      gsap.set(overlay, { autoAlpha: 0, pointerEvents: "none" });
+      gsap.set(menu, { xPercent: 100 });
+      gsap.set(strips, { xPercent: 101 });
+      if (links.length) gsap.set(links, { yPercent: 40, opacity: 0, rotate: 0 });
+      setMobileNavReady(true);
+      return;
+    }
+
     gsap.set(overlay, { autoAlpha: 0, pointerEvents: "none" });
     gsap.set(menu, { xPercent: 100 });
     gsap.set(strips, { xPercent: 101 });
     if (links.length) gsap.set(links, { yPercent: 110, opacity: 0, rotate: 6 });
+    setMobileNavReady(true);
   }, [reducedMotion]);
 
   useEffect(() => {
@@ -812,6 +830,35 @@ export function ArcSiteHeader({
     header.addEventListener("wheel", onWheel, { capture: true, passive: true });
     return () => header.removeEventListener("wheel", onWheel, { capture: true });
   }, [reducedMotion]);
+
+  useEffect(() => {
+    const onChromeReset = () => {
+      setIsMenuOpen(false);
+      isMenuOpenRef.current = false;
+
+      const overlay = overlayRef.current;
+      const menu = menuRef.current;
+      const backdrop = backdropRef.current;
+      if (!overlay || !menu || !backdrop) return;
+
+      const strips = backdrop.querySelectorAll<HTMLElement>(".arc-nav-backdrop-strip");
+      const links = menuLinksRef.current.filter(Boolean);
+
+      gsap.killTweensOf([overlay, menu, ...strips, ...links]);
+      gsap.set(overlay, { autoAlpha: 0, pointerEvents: "none" });
+      gsap.set(menu, { xPercent: 100 });
+      gsap.set(strips, { xPercent: 101 });
+      if (links.length) gsap.set(links, { yPercent: 0, opacity: 1, rotate: 0 });
+
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      const main = document.getElementById("main");
+      if (main) main.style.overflow = "";
+    };
+
+    window.addEventListener(ARC_HEADER_CHROME_RESET_EVENT, onChromeReset as EventListener);
+    return () => window.removeEventListener(ARC_HEADER_CHROME_RESET_EVENT, onChromeReset as EventListener);
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -909,6 +956,7 @@ export function ArcSiteHeader({
 
     if (isMenuOpen) {
       wasMenuOpened.current = true;
+      setMenuEverOpened(true);
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.set(overlay, { pointerEvents: "auto" })
         .fromTo(overlay, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35 }, 0)
@@ -949,13 +997,20 @@ export function ArcSiteHeader({
 
   const toggleMenu = () => setIsMenuOpen((v) => !v);
   const closeMenu = () => setIsMenuOpen(false);
+  const navShellHidden =
+    !mobileNavReady || (!isMenuOpen && !menuEverOpened);
 
   return (
     <div ref={containerRef}>
       <div
         ref={overlayRef}
         id="arc-nav-overlay"
-        className={cn("fixed inset-0 bg-black/55", NAV_STACK_OVERLAY)}
+        hidden={navShellHidden}
+        className={cn(
+          "fixed inset-0 bg-black/55",
+          NAV_STACK_OVERLAY,
+          !isMenuOpen && "pointer-events-none",
+        )}
         aria-hidden={!isMenuOpen}
         onClick={(e) => {
           if (e.target === e.currentTarget) closeMenu();
@@ -964,6 +1019,8 @@ export function ArcSiteHeader({
 
       <nav
         ref={menuRef}
+        id="arc-nav-mobile-drawer"
+        hidden={navShellHidden}
         inert={!isMenuOpen}
         className={cn(
           "fixed inset-y-0 right-0 flex max-h-[100dvh] w-full max-w-[min(100vw,28rem)] flex-col bg-arc-cream text-arc-charcoal shadow-[-12px_0_40px_rgba(0,0,0,0.12)] sm:max-w-[min(100vw,32rem)]",
@@ -1034,40 +1091,14 @@ export function ArcSiteHeader({
           </div>
         </div>
 
-        <div className="arc-scroll-subtle relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-8 pb-12 pt-40 max-md:touch-pan-y max-md:pt-[9.75rem] sm:px-10 sm:pt-44">
-          <ul className="flex flex-col gap-2">
-            {navLinks.map((item, i) => {
-              const isTreatmentsHub =
-                !sectionBasePath && item.href === "/treatments";
+        <ArcNavDrawerTopBar>
+          <ArcNavDrawerBookCta closeMenu={closeMenu} />
+        </ArcNavDrawerTopBar>
 
-              if (isTreatmentsHub) {
-                return (
-                  <li
-                    key={item.href}
-                    className="arc-nav-menu-item flex flex-col"
-                    data-shape={item.shape}
-                  >
-                    <ArcNavMenuLinkRow
-                      item={item}
-                      reducedMotion={reducedMotion}
-                      closeMenu={closeMenu}
-                      canHover={canHover}
-                      nested
-                      assignRef={(el) => {
-                        menuLinksRef.current[i] = el;
-                      }}
-                    />
-                    <ArcNavTreatmentsSeeMore
-                      reducedMotion={reducedMotion}
-                      closeMenu={closeMenu}
-                      menuOpen={isMenuOpen}
-                      canHover={canHover}
-                    />
-                  </li>
-                );
-              }
-
-              return (
+        <div className="arc-scroll-subtle relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-8 pb-12 pt-2 max-md:touch-pan-y sm:px-10 sm:pt-4">
+          {sectionBasePath && sectionBasePath !== "/" ? (
+            <ul className="flex flex-col gap-2">
+              {navLinks.map((item, i) => (
                 <ArcNavMenuLinkRow
                   key={item.href}
                   item={item}
@@ -1078,9 +1109,19 @@ export function ArcSiteHeader({
                     menuLinksRef.current[i] = el;
                   }}
                 />
-              );
-            })}
-          </ul>
+              ))}
+            </ul>
+          ) : (
+            <ArcNavDrawerMenu
+              closeMenu={closeMenu}
+              reducedMotion={reducedMotion}
+              menuOpen={isMenuOpen}
+              canHover={canHover}
+              registerTopLinkRef={(index, el) => {
+                menuLinksRef.current[index] = el;
+              }}
+            />
+          )}
         </div>
       </nav>
 
@@ -1093,11 +1134,10 @@ export function ArcSiteHeader({
       >
         <div
           className={cn(
-            "pointer-events-none relative mx-auto grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 px-3 sm:gap-x-3 sm:px-4 md:px-6 lg:px-10",
+            "pointer-events-none relative mx-auto grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 px-3 sm:gap-x-3 sm:px-4 md:px-6 lg:px-10",
             ARC_PAGE_RAIL_MAX,
           )}
         >
-          <div className="pointer-events-none min-w-0" aria-hidden />
           <Link
             href={homeHref}
             className={cn(
@@ -1136,10 +1176,7 @@ export function ArcSiteHeader({
             aria-expanded={isMenuOpen}
             aria-controls="arc-nav-overlay"
             className={cn(
-              "pointer-events-auto relative z-20 col-start-3 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full font-sans text-xs font-semibold uppercase tracking-[0.16em] transition-colors sm:gap-3 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base",
-              hideLogoInHero
-                ? "border border-arc-cream/85 bg-arc-cream/95 px-4 py-2.5 text-arc-charcoal shadow-[0_2px_14px_rgba(0,0,0,0.12)] hover:bg-arc-cream-deep"
-                : "border border-white/40 bg-black/25 px-4 py-2.5 text-white backdrop-blur-md hover:bg-black/40",
+              "pointer-events-auto relative z-20 col-start-2 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/25 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:gap-3 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base",
             )}
           >
             {isMenuOpen ? "Close" : "Menu"}

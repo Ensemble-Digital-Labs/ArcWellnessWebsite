@@ -1,4 +1,4 @@
-/** Inline SVGs — lucide dropped some brand icons in recent versions. */
+/** Inline SVGs, lucide dropped some brand icons in recent versions. */
 
 export function IconInstagram({ className }: { className?: string }) {
   return (

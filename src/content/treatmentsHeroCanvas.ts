@@ -2,7 +2,7 @@ import type { ArcChapterHeroCanvasTile } from "@/components/arc/ArcChapterHeroIm
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
 /**
- * Treatments hub hero — triangular canvas (same layout as About):
+ * Treatments hub hero, triangular canvas (same layout as About):
  *        [Emface top]
  * [ExoMind]         [EmSella]
  */

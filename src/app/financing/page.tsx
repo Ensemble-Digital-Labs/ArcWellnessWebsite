@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { ArcMarketingShell } from "@/components/arc/ArcMarketingShell";
-import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
-import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
+import { FinancingPageContent } from "@/components/arc/pages/FinancingPageContent";
 import { financingPage } from "@/content/pages/financing";
-import { RETAIL_IMAGES } from "@/content/retailImages";
-import { homeInvestSupport } from "@/content/homepage";
-import { images } from "@/content/site";
 
 export const metadata: Metadata = {
   title: financingPage.seo.title,
@@ -14,25 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function FinancingPage() {
-  const { hero, options } = financingPage;
-
   return (
     <ArcMarketingShell>
-      <ScrollChapterIntroSection
-        headline={`${hero.title} ${hero.titleEmphasis}`}
-        body={hero.body}
-        imageSrc={RETAIL_IMAGES.patientFiFinancingBrochure}
-        ctaHref="/book"
-        ctaLabel="Book consultation"
-      />
-      <ArcScrollEditorialSection
-        title="Flexible payment paths"
-        paragraphs={options.map((o) => `${o.title}: ${o.body}`)}
-        imageSrc={images.whoWeAre}
-        imageAlt="Consultation"
-        pinned
-      />
-      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
+      <FinancingPageContent />
     </ArcMarketingShell>
   );
 }

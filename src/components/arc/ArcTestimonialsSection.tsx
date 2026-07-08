@@ -7,6 +7,7 @@ import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 
 import { Star } from "lucide-react";
 
 import { PinnedSection } from "@/components/arc/PinnedSection";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import SphereImageGrid, {
   type ImageData,
 } from "@/components/ui/img-sphere";
@@ -19,6 +20,7 @@ import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { useMinMd } from "@/lib/useMinMd";
+import { ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS, ARC_HOME_TESTIMONIALS_TOP_SEAM_SOFT_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 export type ArcTestimonialItem = {
@@ -35,6 +37,12 @@ type ArcTestimonialsSectionProps = {
   id?: string;
   className?: string;
   items: readonly ArcTestimonialItem[];
+  /** Full-screen pin scrub, off by default to shorten homepage scroll. */
+  pin?: boolean;
+  /** Soft cream feather from path steps above. */
+  topSeam?: boolean;
+  /** Soft cream exit into invest CTA. */
+  bottomSeam?: boolean;
 };
 
 type CarouselSlot = "prev" | "active" | "next" | "offLeft" | "offRight";
@@ -114,7 +122,7 @@ const carouselSlotLayoutDefault: Record<
   },
 };
 
-/** Tighter stage — side cards pushed outward and clipped on short / narrow laptops. */
+/** Tighter stage, side cards pushed outward and clipped on short / narrow laptops. */
 const carouselSlotLayoutCompact: typeof carouselSlotLayoutDefault = {
   offLeft: {
     x: "-240%",
@@ -419,6 +427,9 @@ export function ArcTestimonialsSection({
   id = "testimonials",
   className,
   items,
+  pin = false,
+  topSeam = false,
+  bottomSeam = false,
 }: ArcTestimonialsSectionProps) {
   const sphereHintId = useId();
   const reduceMotion = useReducedMotion();
@@ -433,11 +444,12 @@ export function ArcTestimonialsSection({
   const nativeScroll = useStableNativeScroll();
   const isMinMd = useMinMd();
   const mobileScrollUx = nativeScroll || !isMinMd;
-  const p = desktopPinScrub ? pinProgress : 1;
-  const sphereMotion = desktopPinScrub ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
-  const hintMotion = desktopPinScrub ? pathPinFadeUp(p, 0.16, 2.05) : staticMotion;
-  const titleMotion = desktopPinScrub ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
-  const cardMotion = desktopPinScrub ? pathPinFadeUp(p, 0.26, 2.2) : staticMotion;
+  const pinEnabled = pin && desktopPinScrub;
+  const p = pinEnabled ? pinProgress : 1;
+  const sphereMotion = pinEnabled ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
+  const hintMotion = pinEnabled ? pathPinFadeUp(p, 0.16, 2.05) : staticMotion;
+  const titleMotion = pinEnabled ? pathPinFadeUp(p, 0.08, 2.35) : staticMotion;
+  const cardMotion = pinEnabled ? pathPinFadeUp(p, 0.26, 2.2) : staticMotion;
 
   const sphereInteractionHint =
     reduceMotion === true
@@ -447,8 +459,8 @@ export function ArcTestimonialsSection({
         : "Spin me with a drag, then tap a portrait to read the testimonials.";
 
   useEffect(() => {
-    if (!desktopPinScrub) setPinProgress(1);
-  }, [desktopPinScrub, setPinProgress]);
+    if (!pinEnabled) setPinProgress(1);
+  }, [pinEnabled, setPinProgress]);
 
   const sphereImages: ImageData[] = useMemo(() => {
     const base = testimonialSphereBaseImages;
@@ -520,10 +532,11 @@ export function ArcTestimonialsSection({
       id={id}
       pinDistanceMultiplier={0.55}
       onProgress={setPinProgress}
-      disabled={!desktopPinScrub}
+      disabled={!pinEnabled}
       className={cn(
-        "relative scroll-mt-28 border-t border-arc-teal/20 p-0",
-        "max-md:overflow-visible max-md:pt-20 sm:max-md:pt-24",
+        "relative scroll-mt-28 p-0",
+        !topSeam && "border-t border-arc-teal/20",
+        "max-md:overflow-hidden max-md:pt-20 sm:max-md:pt-24",
         "md:h-[100dvh] md:max-h-[100dvh] md:min-h-0 md:overflow-hidden",
         className,
       )}
@@ -539,9 +552,19 @@ export function ArcTestimonialsSection({
         <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/35 via-arc-cream/18 to-arc-cream/28" />
       </div>
 
-      <div className="flex min-h-0 flex-col max-md:overflow-visible md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
+      {topSeam ? (
+        <ArcSectionSeamBlend
+          edge="top"
+          tone="cream"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_TESTIMONIALS_TOP_SEAM_SOFT_CLASS}
+        />
+      ) : null}
+
+      <div className="flex min-h-0 flex-col max-md:overflow-hidden md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
         <div
-          {...(desktopPinScrub ? { "data-scroll-section": true } : {})}
+          {...(pinEnabled ? { "data-scroll-section": true } : {})}
           className="relative z-[1] flex min-h-[52vh] flex-1 items-center justify-center px-2 pb-10 pt-4 sm:min-h-[56vh] sm:pt-6 lg:h-full lg:min-h-0 lg:w-1/2 lg:justify-end lg:py-6 lg:pl-8 lg:pr-3 [@media(max-height:820px)]:lg:py-4 xl:pl-12 xl:pr-5"
         >
           <div
@@ -592,7 +615,7 @@ export function ArcTestimonialsSection({
         </div>
 
         <div
-          {...(desktopPinScrub ? { "data-scroll-section": true } : {})}
+          {...(pinEnabled ? { "data-scroll-section": true } : {})}
           className="relative z-[1] flex min-h-0 flex-1 flex-col items-center justify-center overflow-visible px-5 py-10 sm:px-8 lg:h-full lg:w-1/2 lg:items-end lg:justify-center lg:px-8 lg:py-6 lg:pt-28 [@media(max-height:820px)]:lg:py-4 [@media(max-height:820px)]:lg:pt-24 xl:px-12 2xl:px-14"
         >
           {selected ? (
@@ -631,6 +654,16 @@ export function ArcTestimonialsSection({
           ) : null}
         </div>
       </div>
+
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          tone="cream"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS}
+        />
+      ) : null}
     </PinnedSection>
   );
 }

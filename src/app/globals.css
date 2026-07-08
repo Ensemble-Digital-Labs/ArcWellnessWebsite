@@ -151,15 +151,25 @@ html.arc-scroll-lock::-webkit-scrollbar {
 }
 
 /**
- * Header wordmark over photography — subtle color tuning only (no backdrop).
+ * Header wordmark — subtle edge for legibility without a visible light plate.
  */
 .arc-header-logo {
-  filter: brightness(1.14) contrast(1.08) saturate(1.02);
+  filter:
+    drop-shadow(0 0 1px rgba(44, 44, 44, 0.45))
+    drop-shadow(0 1px 3px rgba(44, 44, 44, 0.22))
+    brightness(1.1)
+    contrast(1.1)
+    saturate(1.02);
 }
 
 @media (prefers-contrast: more) {
   .arc-header-logo {
-    filter: brightness(1.18) contrast(1.12) saturate(1.04);
+    filter:
+      drop-shadow(0 0 1.5px rgba(44, 44, 44, 0.62))
+      drop-shadow(0 2px 5px rgba(44, 44, 44, 0.3))
+      brightness(1.12)
+      contrast(1.14)
+      saturate(1.04);
   }
 }
 
@@ -167,6 +177,12 @@ html.arc-scroll-lock::-webkit-scrollbar {
 .arc-bg-shape .arc-shape-el {
   opacity: 0;
   transform-origin: center center;
+}
+
+/* Fullscreen menu — stay out of layout until GSAP closed state + first user open (prevents refresh flash). */
+#arc-nav-overlay[hidden],
+#arc-nav-mobile-drawer[hidden] {
+  display: none !important;
 }
 
 /**
@@ -381,7 +397,7 @@ html.arc-scroll-lock::-webkit-scrollbar {
 
 /**
  * Your Path — immersive steps: shared soft-teal ambient art with distinct gradient + focal shift per step.
- * Asset: `public/assets/decoration/background/path-step-ambient.png`
+ * Asset: `public/assets/decoration/background/path-intro-ambient.webp`
  */
 .path-step-bg-1 {
   background-color: var(--arc-teal-muted);
@@ -392,7 +408,7 @@ html.arc-scroll-lock::-webkit-scrollbar {
       rgba(236, 248, 244, 0.38) 48%,
       rgba(198, 232, 223, 0.36) 100%
     ),
-    url("/assets/decoration/background/path-step-ambient.png");
+    url("/assets/decoration/background/path-intro-ambient.webp");
   background-size: cover;
   background-position: 18% 8%;
   background-repeat: no-repeat;
@@ -407,7 +423,7 @@ html.arc-scroll-lock::-webkit-scrollbar {
       rgba(214, 238, 230, 0.36) 52%,
       rgba(150, 210, 195, 0.34) 100%
     ),
-    url("/assets/decoration/background/path-step-ambient.png");
+    url("/assets/decoration/background/path-intro-ambient.webp");
   background-size: cover;
   background-position: 50% 42%;
   background-repeat: no-repeat;
@@ -422,7 +438,7 @@ html.arc-scroll-lock::-webkit-scrollbar {
       rgba(140, 205, 190, 0.48) 48%,
       rgba(72, 160, 142, 0.4) 100%
     ),
-    url("/assets/decoration/background/path-step-ambient.png");
+    url("/assets/decoration/background/path-intro-ambient.webp");
   background-size: cover;
   background-position: 82% 72%;
   background-repeat: no-repeat;

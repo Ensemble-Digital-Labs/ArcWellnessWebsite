@@ -95,7 +95,7 @@ function ValueCard({ card }: { card: Card }) {
 }
 
 /**
- * Dark value band after the concern marquee — blur/lift stagger. Stagger must live on a motion
+ * Dark value band after the concern marquee, blur/lift stagger. Stagger must live on a motion
  * node whose *direct* children are motion nodes (no plain wrapper div in between).
  */
 export function ShowcaseScienceBeautyBand() {

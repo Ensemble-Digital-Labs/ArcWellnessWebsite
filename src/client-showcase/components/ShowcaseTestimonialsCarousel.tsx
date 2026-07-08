@@ -207,7 +207,7 @@ function TestimonialCard({
               sizes="400px"
             />
           </div>
-          {/* Dark scrim only for type legibility — no cream / white wash over the ambient plate */}
+          {/* Dark scrim only for type legibility, no cream / white wash over the ambient plate */}
           <div
             className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/15 to-black/55"
             aria-hidden
@@ -351,7 +351,7 @@ type Props = {
   testimonials: readonly ShowcaseTestimonialItem[];
 };
 
-/** Horizontal testimonial carousel + expandable cards — aligned to ARC showcase tokens. */
+/** Horizontal testimonial carousel + expandable cards, aligned to ARC showcase tokens. */
 export function ShowcaseTestimonialsCarousel({ testimonials }: Props) {
   return <Carousel items={testimonials} initialScroll={0} />;
 }

@@ -24,6 +24,7 @@ export function TreatmentsPageContent() {
         introMode="visible-on-load"
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
         heroCanvasTiles={TREATMENTS_HERO_CANVAS_TILES}
+        bottomSeam
       />
 
       <ArcTreatmentsRuledGrid
@@ -32,9 +33,15 @@ export function TreatmentsPageContent() {
         titleEmphasis={ruledGrid.titleEmphasis}
         subtitle={ruledGrid.subtitle}
         treatments={allTreatments}
+        topSeam
+        bottomSeam
       />
 
-      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
+      <InvestCTASection
+        imageSrc={images.heroMedia}
+        supportingLine={homeInvestSupport}
+        topSeam
+      />
     </>
   );
 }

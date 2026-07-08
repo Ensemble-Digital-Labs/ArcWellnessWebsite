@@ -26,7 +26,7 @@ const PREVIEW_W = 160;
 const PREVIEW_H = 96;
 const GAP = 0;
 const LERP = 0.16;
-/** Editorial tilt — negative = CCW, reads “lifted card” next to right-aligned type */
+/** Editorial tilt, negative = CCW, reads “lifted card” next to right-aligned type */
 const ROTATE_DEG = -5;
 const VIEWPORT_EDGE_PAD = 12;
 

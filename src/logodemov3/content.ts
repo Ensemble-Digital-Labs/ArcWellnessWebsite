@@ -6,7 +6,7 @@ export const LOGO_DEMO_V3_BASE = "/logodemov3" as const;
  */
 export const logoDemoV3 = {
   basePath: LOGO_DEMO_V3_BASE,
-  logoSrc: "/assets/branding/arc-wellness-logo-v4.png",
+  logoSrc: "/assets/branding/arc-wellness-logo-v4.webp",
   logoAlt: "ARC Wellness",
 } as const;
 

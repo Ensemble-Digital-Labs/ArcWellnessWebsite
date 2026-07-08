@@ -18,7 +18,7 @@ export function ProcessTimelineDesign() {
       className="relative scroll-mt-36 overflow-hidden border-t border-white/10 py-16 sm:py-20 lg:py-28"
       style={{ backgroundColor: showcaseDesign.pillarForest }}
     >
-      {/* Soft plate from main site path intro — reads as depth on forest */}
+      {/* Soft plate from main site path intro, reads as depth on forest */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.22] mix-blend-soft-light sm:opacity-[0.28]" aria-hidden>
         <Image
           src={PATH_SECTION_INTRO_BACKGROUND_SRC}

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 const ROTATE_INTERVAL_MS_A = 3800;
 const ROTATE_INTERVAL_MS_B = 4600;
 
-/** Crossfade length — keep < min(ROTATE_*) so slides don’t stack transitions. */
+/** Crossfade length, keep < min(ROTATE_*) so slides don’t stack transitions. */
 const CROSSFADE_DURATION_SEC = 1.05;
 const CROSSFADE_EASE: [number, number, number, number] = [0.33, 0, 0.2, 1];
 
@@ -40,7 +40,7 @@ const mosaicItemReduced: Variants = {
   visible: { opacity: 1 },
 };
 
-/** Masonry-style regions — 2-column grid (reference layout). */
+/** Masonry-style regions, 2-column grid (reference layout). */
 const areaClasses = [
   "col-start-2 col-end-3 row-start-1 row-end-3",
   "col-start-1 col-end-2 row-start-2 row-end-4",
@@ -171,7 +171,7 @@ function RotatingMosaicCell({
         {reduceMotion || slides.length <= 1 ? (
           <Image
             src={current.imageSrc}
-            alt={`${current.title} — ARC Wellness`}
+            alt={`${current.title} , ARC Wellness`}
             fill
             className="object-cover"
             sizes="(min-width: 1024px) 300px, 42vw"
@@ -195,7 +195,7 @@ function RotatingMosaicCell({
               >
                 <Image
                   src={slide.imageSrc}
-                  alt={`${slide.title} — ARC Wellness`}
+                  alt={`${slide.title} , ARC Wellness`}
                   fill
                   className="object-cover"
                   sizes="(min-width: 1024px) 300px, 42vw"
@@ -311,7 +311,7 @@ export function FounderGalleryMosaic({
       >
         <Image
           src={static2.imageSrc}
-          alt={`${static2.title} — ARC Wellness`}
+          alt={`${static2.title} , ARC Wellness`}
           fill
           className="object-cover"
           sizes="(min-width: 1024px) 300px, 42vw"

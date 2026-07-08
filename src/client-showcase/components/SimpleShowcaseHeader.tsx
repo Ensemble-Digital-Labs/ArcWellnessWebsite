@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { images } from "@/content/site";
 import { CLIENT_SHOWCASE_BASE } from "@/client-showcase/content";
 
-/** Primary CTA — deep green reads close to many clinical / spa brand headers. */
+/** Primary CTA, deep green reads close to many clinical / spa brand headers. */
 const HEADER_ACCENT = "#1B3022";
 
 const MAIN_NAV = [
@@ -33,7 +33,7 @@ export function SimpleShowcaseHeader() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Tier 1 — utility strip (Vida-style: phone, email, book, portal) */}
+      {/* Tier 1, utility strip (Vida-style: phone, email, book, portal) */}
       <div className="border-b border-arc-charcoal/10 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-1 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans text-xs text-arc-charcoal/80 sm:text-[13px]">
@@ -65,7 +65,7 @@ export function SimpleShowcaseHeader() {
         </div>
       </div>
 
-      {/* Tier 2 — logo + primary navigation */}
+      {/* Tier 2, logo + primary navigation */}
       <div className="border-b border-arc-charcoal/10 bg-arc-cream/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8 lg:py-4">
           <Link

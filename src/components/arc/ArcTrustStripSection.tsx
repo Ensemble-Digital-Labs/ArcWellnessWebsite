@@ -7,7 +7,7 @@ type ArcTrustStripSectionProps = {
 };
 
 /**
- * Single-row **proof strip** — no logos required yet; concentrated trust language.
+ * Single-row **proof strip**, no logos required yet; concentrated trust language.
  */
 export function ArcTrustStripSection({ id, className, items }: ArcTrustStripSectionProps) {
   return (

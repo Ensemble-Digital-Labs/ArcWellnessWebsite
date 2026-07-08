@@ -9,16 +9,17 @@ import { ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
 import {
   ARC_EDITORIAL_BODY_CLASS,
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
+  arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,8 +48,7 @@ function useVoobanImageReveal(imageWrapRef: React.RefObject<HTMLDivElement | nul
             duration: 1.1,
             ease: ARC_VOOBAN_EASE,
             scrollTrigger: {
-              trigger: el,
-              ...arcScrollTriggerScrollerProps(),
+              trigger: el, ...arcScrollTriggerScrollerProps(),
               start: "top 88%",
               toggleActions: "play none none none",
               once: true,
@@ -93,13 +93,26 @@ type ArcScrollEditorialSectionProps = {
   revealLines?: boolean;
   /** Scale image on hover */
   imageHoverExpand?: boolean;
-  /** `stacked` — serif title on line 1, script emphasis on line 2 (e.g. Our Mission + subtitle). */
-  /** `split` — About-style inline serif + script on one line (treatment detail sections). */
+  /** `stacked`, serif title on line 1, script emphasis on line 2 (e.g. Our Mission + subtitle). */
+  /** `split`, About-style inline serif + script on one line (treatment detail sections). */
   headlineLayout?: "inline" | "stacked" | "split";
   /** Larger serif body copy (mission / vision blocks). */
   bodyTypography?: "default" | "editorial";
   /** Optional sign-off block below body (founder note). */
   signature?: { signoff: string; role: string };
+  headlineEmphasisTone?: "rose" | "teal";
+  /** Soft feather at section top (About page seams). */
+  topSeam?: boolean;
+  /** Soft feather at section bottom (About page seams). */
+  bottomSeam?: boolean;
+  /** Seam tone — `muted` for teal-muted editorial bands. */
+  seamTone?: "cream" | "muted";
+  /** Tighter top padding when continuing the same surface as the section above. */
+  compactTop?: boolean;
+  /** Tighter bottom padding when the next section shares the same surface. */
+  compactBottom?: boolean;
+  /** Seam gradient style — `soft` avoids backdrop blur on editorial handoffs. */
+  seamVariant?: "default" | "soft";
 };
 
 const DEFAULT_BODY_LINE_CLASS =
@@ -115,6 +128,7 @@ function EditorialBody({
   bodyTypography = "default",
   signature,
   hasAdjacentImage = false,
+  headlineEmphasisTone = "teal",
 }: Pick<
   ArcScrollEditorialSectionProps,
   | "title"
@@ -125,9 +139,11 @@ function EditorialBody({
   | "headlineLayout"
   | "bodyTypography"
   | "signature"
+  | "headlineEmphasisTone"
 > & {
   hasAdjacentImage?: boolean;
 }) {
+  const emphasisClass = arcHeadlineEmphasisClass(headlineEmphasisTone);
   const stackedHeadline = headlineLayout === "stacked" && titleEmphasis;
   const splitHeadline = headlineLayout === "split";
   const bodyLineClass =
@@ -165,7 +181,7 @@ function EditorialBody({
               {titleEmphasis ? (
                 <TitleEmphasis
                   className={cn(
-                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    emphasisClass,
                     "inline shrink-0 align-baseline leading-none",
                   )}
                 >
@@ -180,7 +196,7 @@ function EditorialBody({
                 <TitleEmphasis
                   key={`${line}-${index}`}
                   className={cn(
-                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                    emphasisClass,
                     "block w-max max-w-full leading-none",
                     index === 0 ? "mt-3 sm:mt-3.5" : "mt-1 sm:mt-1.5",
                   )}
@@ -192,7 +208,12 @@ function EditorialBody({
           ) : titleEmphasis ? (
             <>
               {title}{" "}
-              <TitleEmphasis className="text-[1.2em] leading-[1.04] text-arc-rose-gold-ink sm:text-[1.28em]">
+              <TitleEmphasis
+                className={cn(
+                  emphasisClass,
+                  "text-[1.2em] leading-[1.04] sm:text-[1.28em]",
+                )}
+              >
                 {titleEmphasis}
               </TitleEmphasis>
             </>
@@ -223,7 +244,7 @@ function EditorialBody({
       {signature ? (
         <footer className="mt-10 border-t border-arc-charcoal/10 pt-8 sm:mt-12 sm:pt-10">
           <p className="font-serif text-[clamp(1.125rem,2.2vw,1.4rem)] font-semibold tracking-tight text-arc-charcoal">
-            — {signature.signoff}
+            {signature.signoff}
           </p>
           <p className="mt-2 font-serif text-[clamp(1rem,1.9vw,1.125rem)] font-medium leading-[1.4] text-arc-charcoal/72">
             {signature.role}
@@ -258,15 +279,32 @@ export function ArcScrollEditorialSection({
   headlineLayout = "inline",
   bodyTypography = "default",
   signature,
+  headlineEmphasisTone = "teal",
+  topSeam = false,
+  bottomSeam = false,
+  seamTone,
+  compactTop = false,
+  compactBottom = false,
+  seamVariant = "default",
 }: ArcScrollEditorialSectionProps) {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   useVoobanImageReveal(imageWrapRef, Boolean(imageSrc) && !pinned);
   const bg = variant === "muted" ? "bg-arc-teal-muted/30" : "bg-arc-cream";
+  const resolvedSeamTone = seamTone ?? (variant === "muted" ? "muted" : "cream");
 
   const inner = (
     <div
       className={cn(
-        "flex flex-col gap-10 px-6 py-16 sm:px-10 sm:py-20 md:flex-row md:items-center md:gap-14 md:px-12 lg:mx-auto lg:py-24",
+        "relative z-10 flex flex-col gap-10 px-6 sm:px-10 md:flex-row md:items-center md:gap-14 md:px-12 lg:mx-auto",
+        topSeam && !compactTop
+          ? "pb-16 pt-8 sm:pb-20 sm:pt-10 lg:pb-24 lg:pt-12"
+          : compactTop && compactBottom
+            ? "py-10 sm:py-12 lg:py-14"
+            : compactTop
+              ? "pb-16 pt-10 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-14"
+              : compactBottom
+                ? "pb-10 pt-16 sm:pb-12 sm:pt-20 lg:pb-14 lg:pt-24"
+                : "py-16 sm:py-20 lg:py-24",
         ARC_PAGE_RAIL_MAX,
         imagePosition === "left" && imageSrc ? "md:flex-row-reverse" : "",
       )}
@@ -303,21 +341,62 @@ export function ArcScrollEditorialSection({
         bodyTypography={bodyTypography}
         signature={signature}
         hasAdjacentImage={Boolean(imageSrc)}
+        headlineEmphasisTone={headlineEmphasisTone}
       />
     </div>
   );
 
   if (pinned) {
     return (
-      <PinnedSection id={id} pinDistanceMultiplier={0.85} className={cn(bg, className)}>
-        <div className="flex min-h-[100dvh] flex-col justify-center">{inner}</div>
+      <PinnedSection id={id} pinDistanceMultiplier={0.85} className={cn("relative overflow-hidden", bg, className)}>
+        {topSeam ? (
+          <ArcSectionSeamBlend
+            edge="top"
+            tone={resolvedSeamTone}
+            variant={seamVariant}
+            scope="background"
+          />
+        ) : null}
+        <div className="relative z-10 flex min-h-[100dvh] flex-col justify-center">{inner}</div>
+        {bottomSeam ? (
+          <ArcSectionSeamBlend
+            edge="bottom"
+            tone={resolvedSeamTone}
+            variant={seamVariant}
+            scope="background"
+          />
+        ) : null}
       </PinnedSection>
     );
   }
 
   return (
-    <section id={id} className={cn(bg, className)}>
+    <section
+      id={id}
+      className={cn(
+        "relative overflow-hidden",
+        bg,
+        topSeam && seamVariant === "soft" && ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
+        className,
+      )}
+    >
+      {topSeam ? (
+        <ArcSectionSeamBlend
+          edge="top"
+          tone={resolvedSeamTone}
+          variant={seamVariant}
+          scope="background"
+        />
+      ) : null}
       {inner}
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          tone={resolvedSeamTone}
+          variant={seamVariant}
+          scope="background"
+        />
+      ) : null}
     </section>
   );
 }

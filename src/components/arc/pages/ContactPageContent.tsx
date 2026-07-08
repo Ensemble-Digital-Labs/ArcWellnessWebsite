@@ -1,54 +1,48 @@
 "use client";
 
 import { Mail, MapPin, Phone } from "lucide-react";
+import { ArcMarketingChapterHero } from "@/components/arc/ArcMarketingChapterHero";
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
-import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { ContactForm } from "@/components/pages/ContactForm";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { contactPage } from "@/content/pages/contact";
 import { liveSiteFaqs } from "@/content/pages/shared";
 import { homeInvestSupport } from "@/content/homepage";
+import { CONTACT_HERO_CANVAS_TILES } from "@/content/marketingHeroCanvas";
 import { images } from "@/content/site";
 import { siteMeta } from "@/content/siteMeta";
+import { ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
+import { cn } from "@/lib/utils";
 
 export function ContactPageContent() {
-  const { hero, channels, closing } = contactPage;
+  const { hero, closing } = contactPage;
 
   return (
     <>
-      <ScrollChapterIntroSection
+      <ArcMarketingChapterHero
         id="contact-hero"
-        headline={`${hero.title} ${hero.titleEmphasis}`}
-        body={hero.body}
-        imageSrc={images.heroMedia}
-        floatingMedia={{
-          src: images.heroBg,
-          alt: "ARC Wellness exterior at sunset",
-        }}
-        ctaHref={`tel:${siteMeta.phoneTel}`}
-        ctaLabel={`Call ${siteMeta.phone}`}
+        headline={hero.title}
+        headlineEmphasis={hero.titleEmphasis}
+        heroCanvasTiles={CONTACT_HERO_CANVAS_TILES}
+        bottomSeam
       />
 
-      <ArcScrollEditorialSection
-        id="visit"
-        title="St. Louis clinic"
-        paragraphs={[
-          `${siteMeta.address.line1}, ${siteMeta.address.line2}`,
-          siteMeta.hours[0] ?? "",
-          channels.find((c) => c.id === "phone")?.body ?? "",
-        ]}
-        imageSrc={images.heroBg}
-        imageAlt="ARC Wellness exterior"
-        pinned
-        cta={{ href: siteMeta.bookingUrl, label: "Book online" }}
-      />
-
-      <section className="bg-arc-teal-muted/25 px-6 py-16 sm:px-10 sm:py-20 md:px-12">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+      <section
+        className={cn(
+          "relative bg-arc-cream px-6 py-16 sm:px-10 sm:py-20 md:px-12",
+          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
+        )}
+      >
+        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
+        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+        <div className="relative z-10 mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
           <div data-scroll-section>
             <h2 className="font-serif text-3xl font-semibold text-arc-charcoal sm:text-4xl">Reach out your way</h2>
+            <p className="mt-4 max-w-xl font-serif text-base leading-relaxed text-arc-charcoal/88 sm:text-lg">
+              {hero.body}
+            </p>
             <ul className="mt-8 space-y-6">
               <li className="flex gap-4">
                 <Phone className="mt-0.5 size-5 shrink-0 text-arc-charcoal" aria-hidden />
@@ -80,7 +74,7 @@ export function ContactPageContent() {
                 </div>
               </li>
             </ul>
-            <blockquote className="mt-10 border-l-2 border-arc-rose-gold-ink/50 pl-5">
+            <blockquote className="mt-10 border-l-2 border-arc-teal-ink/50 pl-5">
               <p className="font-serif text-xl italic text-arc-charcoal">{closing.quote}</p>
               <p className="mt-2 font-sans text-sm text-arc-charcoal/65">{closing.line}</p>
             </blockquote>
@@ -102,9 +96,11 @@ export function ContactPageContent() {
         id="faq"
         categories={{ general: "Getting started" }}
         faqByCategory={{ general: liveSiteFaqs }}
+        topSeam
+        bottomSeam
       />
 
-      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} topSeam />
     </>
   );
 }

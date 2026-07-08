@@ -21,14 +21,14 @@ import { WholeBodyFiveCards } from "@/client-showcase/components/WholeBodyFiveCa
 export function ClientShowcaseHome() {
   return (
     <div id="showcase-top" className="min-h-[100dvh] bg-white">
-      {/* Header must not sit inside `motion.div` — that breaks `position: sticky` for the nav */}
+      {/* Header must not sit inside `motion.div`, that breaks `position: sticky` for the nav */}
       <ArcDesignHeader />
       <ShowcaseSectionReveal delayIndex={1}>
         <ArcDesignHero imageSrc={editorialHeroImage} />
       </ShowcaseSectionReveal>
       <ShowcaseConcernMarquee />
       <ShowcaseScienceBeautyBand />
-      {/* Who we are: inner column reveals (see WhoWeAreRevealGrid) — avoids one fade on a very tall IO target */}
+      {/* Who we are: inner column reveals (see WhoWeAreRevealGrid), avoids one fade on a very tall IO target */}
       <WhoWeAreDesign imageSrc={images.whoWeAre} />
       {/* Staggered blur-lift on heading + cards (see WholeBodyFiveCards) */}
       <WholeBodyFiveCards introDelaySec={0.45} />

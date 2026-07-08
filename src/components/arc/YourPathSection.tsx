@@ -4,6 +4,7 @@ import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
   TitleEmphasis,
@@ -13,7 +14,14 @@ import {
   PATH_STEP_IMAGE_SRC,
 } from "@/content/backgroundDecoration";
 import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
+import {
+  ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_TOP_SEAM_SOFT_CLASS,
+} from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import { siteMeta } from "@/content/siteMeta";
 
 type PathStep = {
   numeral: string;
@@ -27,53 +35,53 @@ type PathStep = {
 
 const PATH_STEPS: PathStep[] = [
   {
-    numeral: "I.",
+    numeral: "01",
     title: "Listen",
     stepMeta: "STEP 01 · 90 MINUTES",
     description:
       "A conversation, not an intake. We ask about your sleep, your work, your weeks. Patterns surface before any test does.",
     imageSrc: PATH_STEP_IMAGE_SRC.listen,
-    imageAlt: "Listen — first step of the ARC wellness journey",
+    imageAlt: "Listen, first step of the ARC wellness journey",
     contentOnLeft: false,
   },
   {
-    numeral: "II.",
+    numeral: "02",
     title: "Measure",
     stepMeta: "STEP 02 · TWO VISITS",
     description:
-      "Comprehensive panels, body composition, cognitive assessments. We capture the numbers that matter — and the ones most clinics miss.",
+      "Comprehensive panels, body composition, cognitive assessments. We capture the numbers that matter, and the ones most clinics miss.",
     imageSrc: PATH_STEP_IMAGE_SRC.measure,
-    imageAlt: "Measure — assessments and diagnostics",
+    imageAlt: "Measure, assessments and diagnostics",
     contentOnLeft: true,
   },
   {
-    numeral: "III.",
+    numeral: "03",
     title: "Author",
     stepMeta: "STEP 03 · ONE WEEK",
     description:
-      "Your team meets — without you in the room — and writes a plan in five chapters: surface, shape, foundation, mind, and the long view.",
+      "Your team meets, without you in the room, and writes a plan in five chapters: surface, shape, foundation, mind, and the long view.",
     imageSrc: PATH_STEP_IMAGE_SRC.author,
-    imageAlt: "Author — your personalized care plan",
+    imageAlt: "Author, your personalized care plan",
     contentOnLeft: false,
   },
   {
-    numeral: "IV.",
+    numeral: "04",
     title: "Practice",
     stepMeta: "STEP 04 · ONGOING",
     description:
-      "We meet monthly. Treatments, coaching, refinements — kept small enough to actually do, long enough to actually work.",
+      "We meet monthly. Treatments, coaching, refinements, kept small enough to actually do, long enough to actually work.",
     imageSrc: PATH_STEP_IMAGE_SRC.practice,
-    imageAlt: "Practice — ongoing care and coaching",
+    imageAlt: "Practice, ongoing care and coaching",
     contentOnLeft: true,
   },
   {
-    numeral: "V.",
+    numeral: "05",
     title: "Revise",
     stepMeta: "STEP 05 · EACH SEASON",
     description:
       "Every quarter we re-measure and rewrite. The plan ages with you, in pencil, never in stone.",
     imageSrc: PATH_STEP_IMAGE_SRC.revise,
-    imageAlt: "Revise — seasonal plan updates",
+    imageAlt: "Revise, seasonal plan updates",
     contentOnLeft: false,
   },
 ];
@@ -101,16 +109,34 @@ function YourPathHeadlineTitle() {
   );
 }
 
-function YourPathIntroSection() {
-  const { p, setPinProgress } = usePathPinScrubProgress();
-  const headlineMotion = pathPinFadeUp(p, 0.08, 2.35);
-  const linkMotion = pathPinFadeUp(p, 0.26, 2.2);
+function YourPathIntroSection({
+  lead,
+  ctaHref,
+  ctaLabel,
+  topSeam = false,
+  bottomSeam = false,
+}: {
+  lead: string;
+  ctaHref: string;
+  ctaLabel: string;
+  topSeam?: boolean;
+  bottomSeam?: boolean;
+}) {
+  const { setPinProgress } = usePathPinScrubProgress();
+  const staticMotion = { opacity: 1, transform: "none" } satisfies CSSProperties;
+  const headlineMotion = staticMotion;
+  const linkMotion = staticMotion;
+
+  useEffect(() => {
+    setPinProgress(1);
+  }, [setPinProgress]);
 
   return (
     <PinnedSection
       id="path"
       pinDistanceMultiplier={0.35}
       onProgress={setPinProgress}
+      disabled
       className="relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted"
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
@@ -123,6 +149,16 @@ function YourPathIntroSection() {
         />
       </div>
 
+      {topSeam ? (
+        <ArcSectionSeamBlend
+          edge="top"
+          tone="muted"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_PATH_TOP_SEAM_SOFT_CLASS}
+        />
+      ) : null}
+
       <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pb-16 md:pt-36 lg:pt-40">
         <div
           data-scroll-section
@@ -134,18 +170,34 @@ function YourPathIntroSection() {
           >
             <YourPathHeadlineTitle />
           </h2>
+          <p
+            className="mb-4 font-sans text-base leading-relaxed text-arc-charcoal/82 sm:text-lg"
+            style={headlineMotion}
+          >
+            {lead}
+          </p>
           <div style={linkMotion}>
             <ArcTextUnderlineCta
-              href="/book"
+              href={ctaHref}
               accent="teal"
               centered
               className="mt-1"
             >
-              Start Your Journey
+              {ctaLabel}
             </ArcTextUnderlineCta>
           </div>
         </div>
       </div>
+
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          tone="muted"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS}
+        />
+      ) : null}
     </PinnedSection>
   );
 }
@@ -191,8 +243,11 @@ function YourPathStepPanel({
           ].join(" ")}
         >
           <div className="w-full max-w-xl text-left" style={textStyle}>
-            <p className="mb-3 font-serif text-3xl leading-none text-arc-rose-gold-ink sm:text-4xl">
-              {step.numeral} {step.title}
+            <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.28em] text-arc-teal-ink">
+              {step.numeral}
+            </p>
+            <p className="mb-3 font-serif text-3xl leading-none text-arc-charcoal sm:text-4xl">
+              {step.title}
             </p>
             <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-arc-charcoal/60 sm:text-[0.8rem]">
               {step.stepMeta}
@@ -332,10 +387,16 @@ function YourPathStepsCrossfadeSection({ pinDisabled = false }: { pinDisabled?: 
   );
 }
 
-/** Desktop/tablet step carousel — dwell per step before auto-advance. */
+/** Desktop/tablet step carousel, dwell per step before auto-advance. */
 const PATH_STEP_AUTO_ADVANCE_MS = 5200;
 
-function YourPathStepsInteractiveSection() {
+function YourPathStepsInteractiveSection({
+  topSeam = false,
+  bottomSeam = false,
+}: {
+  topSeam?: boolean;
+  bottomSeam?: boolean;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoPaused, setAutoPaused] = useState(false);
   const [inView, setInView] = useState(false);
@@ -387,6 +448,15 @@ function YourPathStepsInteractiveSection() {
         }
       }}
     >
+      {topSeam ? (
+        <ArcSectionSeamBlend
+          edge="top"
+          tone="cream"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS}
+        />
+      ) : null}
       <div className="grid min-h-[100dvh] grid-cols-2">
         <div
           className="grid min-h-[100dvh] grid-rows-5 bg-arc-cream/95"
@@ -408,18 +478,26 @@ function YourPathStepsInteractiveSection() {
                   "flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity,box-shadow] duration-300 last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-arc-teal/45",
                   isActive
-                    ? "bg-arc-cream shadow-[inset_3px_0_0_0_var(--color-arc-rose-gold-ink)]"
+                    ? "bg-arc-cream shadow-[inset_3px_0_0_0_var(--color-arc-teal)]"
                     : "bg-arc-cream/70 opacity-[0.88] hover:bg-arc-cream/90 hover:opacity-100",
                 )}
               >
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <p
                     className={cn(
-                      "font-serif text-xl leading-none lg:text-2xl",
-                      isActive ? "text-arc-rose-gold-ink" : "text-arc-charcoal/52",
+                      "font-sans text-[10px] font-semibold uppercase tracking-[0.22em] lg:text-[11px]",
+                      isActive ? "text-arc-teal-ink" : "text-arc-charcoal/45",
                     )}
                   >
-                    {step.numeral} {step.title}
+                    {step.numeral}
+                  </p>
+                  <p
+                    className={cn(
+                      "font-serif text-xl leading-none lg:text-2xl",
+                      isActive ? "text-arc-charcoal" : "text-arc-charcoal/52",
+                    )}
+                  >
+                    {step.title}
                   </p>
                   <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal/48 lg:text-[10px] lg:tracking-[0.16em]">
                     {step.stepMeta}
@@ -472,6 +550,15 @@ function YourPathStepsInteractiveSection() {
           ))}
         </div>
       </div>
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          tone="cream"
+          variant="soft"
+          scope="background"
+          className={ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS}
+        />
+      ) : null}
     </section>
   );
 }
@@ -518,11 +605,35 @@ export function YourPathStepsLegacyCrossfadeSection() {
   );
 }
 
-export function YourPathSection() {
+export function YourPathSection({
+  intro,
+  topSeam = false,
+  stepsSeam = false,
+  bottomSeam = false,
+}: {
+  intro?: { lead: string; ctaHref: string; ctaLabel: string };
+  topSeam?: boolean;
+  /** Soft handoff between path intro marble and step carousel. */
+  stepsSeam?: boolean;
+  /** Soft cream exit into testimonials. */
+  bottomSeam?: boolean;
+}) {
+  const pathIntro = intro ?? {
+    lead: "Your story starts here.",
+    ctaHref: siteMeta.bookingUrl,
+    ctaLabel: "Let's begin",
+  };
+
   return (
     <>
-      <YourPathIntroSection />
-      <YourPathStepsInteractiveSection />
+      <YourPathIntroSection
+        lead={pathIntro.lead}
+        ctaHref={pathIntro.ctaHref}
+        ctaLabel={pathIntro.ctaLabel}
+        topSeam={topSeam}
+        bottomSeam={stepsSeam}
+      />
+      <YourPathStepsInteractiveSection topSeam={stepsSeam} bottomSeam={bottomSeam} />
     </>
   );
 }

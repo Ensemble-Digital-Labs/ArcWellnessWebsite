@@ -6,7 +6,7 @@ import {
 } from "@/client-showcase/mock-page-content";
 
 /**
- * Client-showcase testimonials — horizontal carousel + expandable cards (`ShowcaseTestimonialsCarousel`).
+ * Client-showcase testimonials, horizontal carousel + expandable cards (`ShowcaseTestimonialsCarousel`).
  */
 export function ShowcaseTestimonialsSection() {
   return (

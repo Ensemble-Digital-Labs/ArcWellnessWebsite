@@ -1,4 +1,4 @@
-/** Production contact & booking — source: arcwellness.net */
+/** Production contact & booking, source: arcwellness.net */
 export const siteMeta = {
   brand: "Arc Wellness",
   tagline: "Elevated care. Extraordinary results. A life well-lived.",
@@ -21,11 +21,12 @@ export const siteMeta = {
 } as const;
 
 export const primaryNav = [
-  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Treatments", href: "/treatments" },
-  { label: "Arc Aesthetics", href: "/aesthetics" },
-  { label: "Arc Programs", href: "/programs" },
+  { label: "Services", href: "/treatments" },
+  { label: "Conditions", href: "/conditions" },
+  { label: "Start Here", href: "/start-here" },
+  { label: "Arc Library", href: "/case-studies" },
   { label: "Financing", href: "/financing" },
+  { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/contact" },
 ] as const;

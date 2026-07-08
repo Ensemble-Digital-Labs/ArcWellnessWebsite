@@ -4,7 +4,7 @@ import { showcaseInternalHref } from "@/client-showcase/content";
 const STEPS = [
   {
     title: "Listen first",
-    body: "A real conversation about your life, patterns, and priorities—before tests or treatments.",
+    body: "A real conversation about your life, patterns, and priorities, before tests or treatments.",
   },
   {
     title: "Measure what matters",
@@ -12,7 +12,7 @@ const STEPS = [
   },
   {
     title: "Partner over time",
-    body: "Monthly rhythm, small adjustments, and honest follow-through—not a rushed discharge.",
+    body: "Monthly rhythm, small adjustments, and honest follow-through, not a rushed discharge.",
   },
 ] as const;
 

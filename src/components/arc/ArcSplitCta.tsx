@@ -35,7 +35,7 @@ type ArcSplitCtaProps = {
 };
 
 /**
- * Split pill + icon disc — **quiet** interactions: no scale games, no icon spins.
+ * Split pill + icon disc, **quiet** interactions: no scale games, no icon spins.
  * Hover deepens the graphite surface, lifts shadow slightly, and softens the accent (ARC teal / cream).
  */
 export function ArcSplitCta({

@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { homeInvestSupport } from "@/content/homepage";
 import { type InsightEntry, type InsightKind } from "@/content/pages/insights";
 import { images } from "@/content/site";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { siteMeta } from "@/content/siteMeta";
+import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 type InsightDetailContentProps = {
@@ -22,8 +24,6 @@ function backLabel(kind: InsightKind): string {
 }
 
 export function InsightDetailContent({ entry }: InsightDetailContentProps) {
-  const kindLabel = entry.kind === "blog" ? "Blog" : "Case study";
-
   return (
     <>
       <ScrollChapterIntroSection
@@ -31,12 +31,20 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
         headline={entry.title}
         body={entry.excerpt}
         imageSrc={entry.imageSrc}
-        ctaHref="/book"
+        ctaHref={siteMeta.bookingUrl}
         ctaLabel="Book a consultation"
+        bottomSeam
       />
 
-      <section className="bg-arc-cream px-6 py-14 sm:px-10 md:px-12 md:py-20">
-        <div className={cn("mx-auto w-full max-w-3xl", ARC_PAGE_RAIL_MAX)}>
+      <section
+        className={cn(
+          "relative bg-arc-cream px-6 py-14 sm:px-10 md:px-12 md:py-20",
+          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
+        )}
+      >
+        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
+        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+        <div className={cn("relative z-10 mx-auto w-full max-w-3xl", ARC_PAGE_RAIL_MAX)}>
           <div className="space-y-6">
             {entry.body.map((paragraph) => (
               <p
@@ -58,7 +66,7 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
         </div>
       </section>
 
-      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} />
+      <InvestCTASection imageSrc={images.heroMedia} supportingLine={homeInvestSupport} topSeam />
     </>
   );
 }

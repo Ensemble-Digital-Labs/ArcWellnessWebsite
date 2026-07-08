@@ -1,4 +1,4 @@
-/** Re-exports — canonical insights content lives in `insights.ts`. */
+/** Re-exports, canonical insights content lives in `insights.ts`. */
 export {
   caseStudiesPage,
   insightHref,

@@ -18,7 +18,7 @@ Real **ARC Wellness St. Louis** space — client drops at repo root are renamed 
 | `plant-bonsai-window-sill.png` | Window sill detail — bonsai, towels |
 | *(hero)* `arc-wellness-exterior-sunset.png` | Exterior arrival — mapped in `clinicInteriorImages.heroExteriorSunset` |
 | *(hero)* `arc-wellness-reception-interior.png` | Reception hero angle |
-| *(hero)* `arc-wellness-reception-entrance.png` | Reception entrance |
+| *(hero)* `arc_wellness_mint_wall_hero_HD_4K_web.webp` | Homepage scroll hero (`images.heroMedia`) |
 | *(hero)* `arc-wellness-lobby-lounge.png` | Lobby lounge |
 
 **Also in gallery:** treatment-room and retail stills from `medicalSpaServiceImages.ts` and `retailImages.ts` (see `aboutPage.clinicTour.slides`).

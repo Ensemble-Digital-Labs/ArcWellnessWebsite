@@ -8,7 +8,7 @@ type ArcVoobanHeadlineProps = {
   scrollProgress: number;
   className?: string;
   as?: "h1" | "h2" | "span";
-  /** `inline` — sits beside script emphasis on one baseline (no top-aligned mask boxes). */
+  /** `inline`, sits beside script emphasis on one baseline (no top-aligned mask boxes). */
   variant?: "block" | "inline";
 };
 

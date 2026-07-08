@@ -20,6 +20,7 @@ import {
 } from "@/lib/arcInsightsHeaderSync";
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 
 type InsightFilter = "all" | InsightKind;
 
@@ -29,7 +30,7 @@ const TAB_LABELS: Record<InsightFilter, string> = {
   "case-study": "Case studies",
 };
 
-/** Per-column top offset — middle column drops for HLK-style canvas rhythm. */
+/** Per-column top offset, middle column drops for HLK-style canvas rhythm. */
 const CANVAS_COLUMN_OFFSET = [
   "pt-0",
   "pt-0 sm:pt-[4.5rem] lg:pt-[7.5rem] xl:pt-[9rem]",
@@ -271,9 +272,11 @@ function InsightsFilterPanel({
 export function ArcInsightsFeedSection({
   id = "insights-feed",
   entries,
+  bottomSeam = false,
 }: {
   id?: string;
   entries: readonly InsightEntry[];
+  bottomSeam?: boolean;
 }) {
   const { feed } = insightsPage;
   const pathname = usePathname();
@@ -360,7 +363,7 @@ export function ArcInsightsFeedSection({
       id={id}
       className="relative isolate scroll-mt-28 bg-black"
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden pb-2 sm:pb-3">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <Image
             src={INSIGHTS_FEED_AMBIENT_SRC}
@@ -371,6 +374,10 @@ export function ArcInsightsFeedSection({
             sizes="100vw"
             priority
           />
+          <div
+            className="absolute inset-x-0 bottom-0 z-[1] h-[min(7vh,3.25rem)] bg-gradient-to-t from-white from-50% via-white/55 via-85% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_22%,transparent_100%)]"
+            aria-hidden
+          />
         </div>
 
         <div
@@ -380,7 +387,7 @@ export function ArcInsightsFeedSection({
           )}
         >
           <div className="mx-auto w-full max-w-[min(100%,1440px)]">
-            <header className="border-b border-arc-charcoal/10 pb-10 text-center sm:pb-12 md:pb-14">
+            <header className="pb-10 text-center sm:pb-12 md:pb-14">
               <h1
                 ref={mastheadTitleRef}
                 id="insights-masthead-title"
@@ -449,6 +456,15 @@ export function ArcInsightsFeedSection({
           </div>
         </div>
       </div>
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          tone="cream"
+          variant="soft"
+          scope="background"
+          className="z-20"
+        />
+      ) : null}
     </section>
   );
 }

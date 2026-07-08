@@ -10,30 +10,30 @@ const FOUNDER_HERO_AMBIENT_SRC = BACKGROUND_DECORATION_IMAGES[1]!;
 
 /** Opening beat: full-bleed ambient only (no portrait, no hero type, minimal grade). */
 const AMBIENT_ONLY_END = 0.005;
-/** Phase 2 — portrait + grade + type ramp in (longer = less rush into phase 3). */
+/** Phase 2, portrait + grade + type ramp in (longer = less rush into phase 3). */
 const HERO_REVEAL_BLEND = 0.26;
 
-/** End of opening hero reveal — used for top frosted blend strip in `ArcFounderIntroSection`. */
+/** End of opening hero reveal, used for top frosted blend strip in `ArcFounderIntroSection`. */
 export const FOUNDER_HERO_REVEAL_END = AMBIENT_ONLY_END + HERO_REVEAL_BLEND;
 
-/** Phase 2b — zoom / parallax completes; hero layer stays **fully opaque** until `HERO_LAYER_FADE_START`. */
+/** Phase 2b, zoom / parallax completes; hero layer stays **fully opaque** until `HERO_LAYER_FADE_START`. */
 const HERO_SCALE_END = 0.5;
 
 /**
- * Phase 3 handoff — editorial layer stays at opacity 1 until here, then fades out while detail copy
+ * Phase 3 handoff, editorial layer stays at opacity 1 until here, then fades out while detail copy
  * fades in (see `FOUNDER_COPY_FADE_IN_*`). Fixes accidental dimming from progress 0 that shortened phase 2.
  */
 const HERO_LAYER_FADE_START = 0.58;
 const HERO_LAYER_FADE_END = 0.78;
 
-/** Detail copy scrub — keep after hero reveal + hold; import in `ArcFounderIntroSection`. */
+/** Detail copy scrub, keep after hero reveal + hold; import in `ArcFounderIntroSection`. */
 export const FOUNDER_COPY_FADE_IN_START = 0.62;
 export const FOUNDER_COPY_FADE_IN_END = 0.86;
 
 const textPositionClass =
   "pointer-events-none absolute inset-x-0 bottom-0 z-20 pl-14 pr-5 pb-10 pt-28 sm:pl-24 sm:pr-9 sm:pb-12 sm:pt-32 md:pl-32 md:pr-12 md:pb-16 lg:pl-44 lg:pr-16 lg:pb-[4.5rem]";
 
-/** Ambient plate — fills the stage behind the figure. */
+/** Ambient plate, fills the stage behind the figure. */
 function AmbientField({
   motionStyle,
 }: {
@@ -49,7 +49,7 @@ function AmbientField({
         sizes="100vw"
         priority
       />
-      {/* Light vignette only — ambient art stays sharp. */}
+      {/* Light vignette only, ambient art stays sharp. */}
       <div
         className="absolute inset-0 bg-[radial-gradient(ellipse_85%_70%_at_50%_45%,transparent_0%,rgba(0,0,0,0.08)_100%)]"
         aria-hidden
@@ -80,7 +80,7 @@ function AmbientField({
 const physicianFigureShellClass =
   "pointer-events-none absolute inset-0 z-[1] flex items-end justify-center sm:justify-end sm:pr-[1%] md:pr-[4%] lg:pr-[6%]";
 
-/** Sharp physician figure — anchored right / lower-third so type stays open on the left. */
+/** Sharp physician figure, anchored right / lower-third so type stays open on the left. */
 function PhysicianFigure({
   mainSrc,
   mainAlt,
@@ -181,8 +181,7 @@ function HeroInteriorStatic(props: FounderEditorialHeroSharedProps) {
 }
 
 function HeroInteriorMotion({
-  progress,
-  ...props
+  progress, ...props
 }: FounderEditorialHeroSharedProps & { progress: MotionValue<number> }) {
   const { mainSrc, mainAlt, className: _omit, ...copy } = props;
 
@@ -246,8 +245,7 @@ function HeroInteriorMotion({
 /** Full-bleed editorial hero (no outer mat / frame). */
 export function FounderEditorialHeroLayer({
   progress,
-  className,
-  ...rest
+  className, ...rest
 }: FounderEditorialHeroSharedProps & {
   progress: MotionValue<number>;
 }) {
@@ -272,8 +270,7 @@ export function FounderEditorialHeroLayer({
 
 /** Static hero for reduced-motion layouts. */
 export function FounderEditorialHeroStatic({
-  className,
-  ...rest
+  className, ...rest
 }: FounderEditorialHeroSharedProps) {
   return (
     <div

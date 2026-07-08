@@ -54,7 +54,7 @@ function headlineAfterNode(headlineAfter: string) {
 }
 
 /**
- * Minimal block: **catchphrase** (serif + one Birthstone emphasis) + **one USP line** — no body wall.
+ * Minimal block: **catchphrase** (serif + one Birthstone emphasis) + **one USP line**, no body wall.
  * Optional **`pinnedScrollMotion`**: one locked viewport with scrubbed reveal (ensemble `#main` scroller).
  */
 export function ArcMicroStatementSection({
@@ -113,8 +113,7 @@ export function ArcMicroStatementSection({
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           id: "arc-micro-statement-pin",
-          trigger: section,
-          ...arcScrollTriggerScrollerProps(),
+          trigger: section, ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -126,7 +125,7 @@ export function ArcMicroStatementSection({
             setProgress(self.progress);
           },
           // Pinned sections use `position: fixed`; IntersectionObserver with `root: #main`
-          // often reports not intersecting while pinned — drive playback from scroll lifecycle instead.
+          // often reports not intersecting while pinned, drive playback from scroll lifecycle instead.
           onEnter: playVideo,
           onEnterBack: playVideo,
           onLeave: pauseVideo,

@@ -16,13 +16,20 @@ import {
 } from "@/lib/arcScrollMode";
 import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import { homeHeroSecondaryCta } from "@/content/homepage";
+import { siteMeta } from "@/content/siteMeta";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import {
+  heroPrimaryCtaClass,
+  heroSecondaryCtaClass,
+} from "@/lib/heroCtaStyles";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_HERO_TITLE_KEYWORDS = ["Wellness", "Longevity", "Aesthetics"] as const;
 
-/** Bottom-of-hero sliding ticker — brand phrases (reference: bullet-separated marquee bar). */
+/** Bottom-of-hero sliding ticker, brand phrases (reference: bullet-separated marquee bar). */
 const HERO_KEYWORD_MARQUEE_ITEMS = [
   "Low Energy & Burnout",
   "Hormonal Imbalance",
@@ -32,14 +39,19 @@ const HERO_KEYWORD_MARQUEE_ITEMS = [
   "Brain Fog & Focus",
 ] as const;
 
-/** Playfair all-caps — on `bg-arc-teal` (signature brand bar). */
+/** Playfair all-caps, on cream or teal hero ticker bar. */
 const HERO_MARQUEE_LABEL_CLASS =
-  "font-serif text-xs font-semibold uppercase leading-none tracking-[0.14em] text-arc-charcoal sm:text-sm md:text-base";
+  "font-serif text-xs font-semibold uppercase leading-none tracking-[0.14em] sm:text-sm md:text-base";
 
 const HERO_MARQUEE_DOT_CLASS =
-  "select-none font-sans text-xs font-semibold leading-none text-arc-charcoal/45 sm:text-sm";
+  "select-none font-sans text-xs font-semibold leading-none sm:text-sm";
 
-const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
+const HeroKeywordMarquee = memo(function HeroKeywordMarquee({
+  variant = "teal",
+}: {
+  /** `cream` on reference hero (client: ticker matches cream headline on mint wall). */
+  variant?: "teal" | "cream";
+}) {
   /**
    * Signature teal bar (`--arc-teal`) + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
    */
@@ -121,10 +133,15 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
     };
   }, []);
 
+  const isCream = variant === "cream";
+
   return (
     <div
       className={cn(
-        "pointer-events-none isolate overflow-x-hidden border-t border-white/15 bg-arc-teal pb-[max(0.375rem,env(safe-area-inset-bottom))] opacity-0 shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-x-hidden pb-[max(0.375rem,env(safe-area-inset-bottom))] opacity-0 transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        isCream
+          ? "border-t border-arc-cream/40 bg-arc-cream shadow-[0_-8px_28px_rgba(44,44,44,0.08)]"
+          : "border-t border-white/15 bg-arc-teal shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)]",
         marqueeOn && "opacity-100",
       )}
       aria-hidden
@@ -140,8 +157,22 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
           <span key={dup} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
             {HERO_KEYWORD_MARQUEE_ITEMS.map((label) => (
               <span key={`${dup}-${label}`} className="inline-flex shrink-0 items-center gap-8 sm:gap-11">
-                <span className={HERO_MARQUEE_LABEL_CLASS}>{label}</span>
-                <span className={HERO_MARQUEE_DOT_CLASS}>·</span>
+                <span
+                  className={cn(
+                    HERO_MARQUEE_LABEL_CLASS,
+                    isCream ? "text-arc-charcoal/88" : "text-arc-charcoal",
+                  )}
+                >
+                  {label}
+                </span>
+                <span
+                  className={cn(
+                    HERO_MARQUEE_DOT_CLASS,
+                    isCream ? "text-arc-charcoal/40" : "text-arc-charcoal/45",
+                  )}
+                >
+                  ·
+                </span>
               </span>
             ))}
           </span>
@@ -152,16 +183,16 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee() {
 });
 
 /**
- * Hero on photography — reference layout: left stack (sans connectors + teal script keywords).
+ * Hero on photography, reference layout: left stack (sans connectors + teal script keywords).
  */
 const HERO_TYPE_DEPTH =
   "[text-shadow:0_2px_16px_rgba(0,0,0,0.5),0_1px_3px_rgba(0,0,0,0.35)]";
 
-/** White halo + stroke — hero Birthstone keywords only (teal fill). */
+/** White halo + stroke, hero Birthstone keywords only (teal fill). */
 const HERO_KEYWORD_WHITE_OUTLINE =
   "[text-shadow:-1px_-1px_0_rgba(255,255,255,0.98),1px_-1px_0_rgba(255,255,255,0.98),-1px_1px_0_rgba(255,255,255,0.98),1px_1px_0_rgba(255,255,255,0.98),0_2px_10px_rgba(255,255,255,0.75),0_3px_14px_rgba(0,0,0,0.28),0_0_30px_var(--arc-teal-glow)] [-webkit-text-stroke:0.045em_rgba(255,255,255,0.9)] [paint-order:stroke_fill]";
 
-/** Birthstone keywords — large script accent; parent row scales down only when width requires it. */
+/** Birthstone keywords, large script accent; parent row scales down only when width requires it. */
 const HERO_TITLE_KEYWORD_AS_LINE_BODY_CLASS = cn(
   "text-[1.92em] sm:text-[2.14em] md:text-[2.38em] lg:text-[2.62em]",
   "text-arc-teal-ink",
@@ -176,7 +207,7 @@ const HERO_TITLE_KEYWORD_BLEND_AS_LINE_BODY_CLASS = cn(
 
 const HERO_REF_CONNECTOR_SHADOW = "[text-shadow:0_1px_8px_rgba(0,0,0,0.32)]";
 
-/** Reference mockup — pixel-matched to client hero comp (Where/Converge ~32px, script ~80px). */
+/** Reference mockup, pixel-matched to client hero comp (Where/Converge ~32px, script ~80px). */
 const HERO_REF_LINE_ALIGN = "max-md:text-center md:text-left";
 
 const HERO_REF_WHERE_CLASS = cn(
@@ -186,10 +217,9 @@ const HERO_REF_WHERE_CLASS = cn(
 );
 
 const HERO_REF_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-teal md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
+  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
   HERO_REF_LINE_ALIGN,
-  "[-webkit-text-stroke:0] [paint-order:fill]",
-  "[text-shadow:0_2px_14px_rgba(0,0,0,0.35),0_0_28px_var(--arc-teal-glow)]",
+  HERO_REF_CONNECTOR_SHADOW,
 );
 
 const HERO_REF_CONVERGE_CLASS = cn(
@@ -206,13 +236,13 @@ const HERO_REF_INTRO_TYPE = cn(
   HERO_REF_CONNECTOR_SHADOW,
 );
 
-/** Mobile-only panel behind hero copy — keeps photography visible outside the text block. */
+/** Mobile-only panel behind hero copy, keeps photography visible outside the text block. */
 const HERO_REF_MOBILE_TEXT_SCRIM = cn(
   "max-md:rounded-2xl max-md:border max-md:border-white/10 max-md:bg-black/45",
   "max-md:px-5 max-md:py-6 max-md:shadow-[0_12px_40px_rgba(0,0,0,0.24)]",
 );
 
-/** Stacked headline — matches reference mockup line breaks. */
+/** Stacked headline, matches reference mockup line breaks. */
 function HeroReferenceHeadline() {
   return (
     <>
@@ -225,7 +255,7 @@ function HeroReferenceHeadline() {
   );
 }
 
-/** Sans connectors + lead/closing — cream on photography. */
+/** Sans connectors + lead/closing, cream on photography. */
 const HERO_TITLE_CONNECTOR_CLASS = cn(
   "font-sans font-medium tracking-tight text-arc-cream",
   HERO_TYPE_DEPTH,
@@ -242,31 +272,6 @@ const HERO_INTRO_TYPE = cn(
   HERO_TYPE_DEPTH,
 );
 
-/** Solid cream pill — primary hero CTA (reference). */
-const HERO_PRIMARY_CTA_CLASS = cn(
-  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full",
-  "border border-arc-cream/95 bg-arc-cream px-5 py-2.5",
-  "font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-arc-charcoal",
-  "max-md:px-3.5 max-md:py-2 max-md:text-[0.6875rem] max-md:tracking-[0.11em]",
-  "shadow-[0_2px_12px_rgba(0,0,0,0.12)]",
-  "transition-[background-color,border-color,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
-  "hover:border-arc-cream-deep hover:bg-arc-cream-deep hover:-translate-y-px",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-cream/85 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
-  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-);
-
-/** Ghost cream outline — secondary hero CTA (reference). */
-const HERO_SECONDARY_CTA_CLASS = cn(
-  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full",
-  "border border-arc-cream/85 bg-transparent px-5 py-2.5",
-  "font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-arc-cream",
-  "max-md:px-3.5 max-md:py-2 max-md:text-[0.6875rem] max-md:tracking-[0.11em]",
-  "transition-[background-color,border-color,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
-  "hover:border-arc-cream hover:bg-white/10 hover:-translate-y-px",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-cream/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black/25",
-  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-);
-
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -279,7 +284,7 @@ function lockHeroKeywordPhraseOnOneLine(text: string): string {
     .replace(/\s*&\s*/g, "\u00a0&\u00a0");
 }
 
-/** One-line keyword row — scales down to fit available width (no clip on narrow phones). */
+/** One-line keyword row, scales down to fit available width (no clip on narrow phones). */
 function HeroKeywordOneLine({
   children,
   allowWrap = false,
@@ -411,7 +416,7 @@ function splitTitleRestForClosingLine(rest: string): { lead: string; closing: st
 }
 
 type ScrollExpandHeroProps = {
-  /** Full-bleed hero photography — scales with scroll (replaces former center frame + secondary back layer). */
+  /** Full-bleed hero photography, scales with scroll (replaces former center frame + secondary back layer). */
   bgImageSrc: string;
   title: string;
   /** Plain string or rich nodes (e.g. `<strong>` for emphasis). */
@@ -419,9 +424,9 @@ type ScrollExpandHeroProps = {
   textBlend?: boolean;
   /** Words in the title (after the first line) to render in signature script. Omit to use ARC defaults. */
   titleKeywords?: readonly string[];
-  /** Bottom teal keyword marquee — off on homepage reference layout. */
+  /** Bottom teal keyword marquee, off on homepage reference layout. */
   showKeywordMarquee?: boolean;
-  /** Match client reference mockup — cream script, left stack, light overlay. */
+  /** Match client reference mockup, cream script, left stack, light overlay. */
   referenceLayout?: boolean;
 };
 
@@ -438,13 +443,13 @@ export function ScrollExpandHero({
   referenceLayout = false,
 }: ScrollExpandHeroProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
-  /** SSR + first client paint must match — viewport is read only after hydration. */
+  /** SSR + first client paint must match, viewport is read only after hydration. */
   const [hasHydrated, setHasHydrated] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const nativeScroll = useStableNativeScroll();
 
   const heroRef = useRef<HTMLElement | null>(null);
-  /** Locked at load — visual mobile layout uses CSS `max-md:`; avoids pin teardown on resize. */
+  /** Locked at load, visual mobile layout uses CSS `max-md:`; avoids pin teardown on resize. */
   const mobileLayout = hasHydrated && nativeScroll;
 
   useLayoutEffect(() => {
@@ -489,9 +494,7 @@ export function ScrollExpandHero({
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
-          trigger: hero,
-          ...arcScrollTriggerScrollerProps(),
-          ...arcScrollTriggerPinOptions(),
+          trigger: hero, ...arcScrollTriggerScrollerProps(), ...arcScrollTriggerPinOptions(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -527,10 +530,10 @@ export function ScrollExpandHero({
   }, [reduceMotion, nativeScroll, bgImageSrc]);
 
   const progress = reduceMotion ? 1 : mobileLayout ? 0 : scrollProgress;
-  /** Full-bleed background zoom — was previously a separate center frame. */
+  /** Full-bleed background zoom, was previously a separate center frame. */
   const bgScale = mobileLayout ? 1 : 1 + progress * 0.42;
   const textTranslateX = progress * (mobileLayout ? 180 : 150);
-  /** Upper headline moves as one unit — avoids “Where” peeling away from the rest with opposite motion. */
+  /** Upper headline moves as one unit, avoids “Where” peeling away from the rest with opposite motion. */
   const headlineParallaxX = textTranslateX * 0.22;
   const sharedContentShiftY = progress * (mobileLayout ? 12 : 48);
 
@@ -696,11 +699,15 @@ export function ScrollExpandHero({
                   referenceLayout && "mt-6 md:mt-7",
                 )}
               >
-                <Link href="/book" className={HERO_PRIMARY_CTA_CLASS}>
+                <Link
+                  href={siteMeta.bookingUrl}
+                  className={heroPrimaryCtaClass}
+                  {...bookingLinkExternalProps(siteMeta.bookingUrl)}
+                >
                   Begin your Journey
                 </Link>
-                <Link href="#path" className={HERO_SECONDARY_CTA_CLASS}>
-                  See How it Works
+                <Link href={homeHeroSecondaryCta.href} className={heroSecondaryCtaClass}>
+                  {homeHeroSecondaryCta.label}
                 </Link>
               </div>
             </div>
@@ -708,7 +715,7 @@ export function ScrollExpandHero({
 
           {showKeywordMarquee ? (
             <div className="absolute bottom-0 left-0 right-0 z-[30] w-full max-w-none">
-              <HeroKeywordMarquee />
+              <HeroKeywordMarquee variant={referenceLayout ? "cream" : "teal"} />
             </div>
           ) : null}
         </div>

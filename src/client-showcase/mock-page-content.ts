@@ -5,7 +5,7 @@ import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
 import { images } from "@/content/site";
 
 export type WholeBodyCardData = {
-  /** e.g. `01 / Skin & Surface` — mono label above the image */
+  /** e.g. `01 / Skin & Surface`, mono label above the image */
   pillarLabel: string;
   title: string;
   bullets: readonly string[];
@@ -37,7 +37,7 @@ export const wholeBodyCards: readonly WholeBodyCardData[] = [
     pillarLabel: "02 / Internal Health",
     title: "Internal Health",
     bullets: ["Hormones", "Energy", "Metabolism"],
-    quote: "Vitality you can feel—not guess.",
+    quote: "Vitality you can feel, not guess.",
     imageSrc: EDITORIAL_SPA_IMAGES[1],
   },
   {
@@ -79,7 +79,7 @@ export const processTimelineSteps = [
   {
     step: 1,
     title: "Consultation",
-    description: "We listen first—goals, history, and the pace that fits your life.",
+    description: "We listen first, goals, history, and the pace that fits your life.",
     Icon: Calendar,
   },
   {
@@ -103,7 +103,7 @@ export const processTimelineSteps = [
   {
     step: 5,
     title: "Ongoing Support",
-    description: "Continuity—not a one-off visit. We stay in the story with you.",
+    description: "Continuity, not a one-off visit. We stay in the story with you.",
     Icon: Headphones,
   },
 ] as const;
@@ -111,7 +111,7 @@ export const processTimelineSteps = [
 export const heroCopy = {
   headline: "Where Wellness, Longevity and Aesthetics Converge.",
   subhead:
-    "ARC Wellness pairs functional medicine, advanced aesthetics, and lifestyle coaching into one intentional plan—written for a single patient: you.",
+    "ARC Wellness pairs functional medicine, advanced aesthetics, and lifestyle coaching into one intentional plan, written for a single patient: you.",
 } as const;
 
 /** Editorial hero (Arcwell-style): grid overlay, corner mastheads, quote, pill CTA + studio line. */
@@ -123,27 +123,27 @@ export const editorialHeroCopy = {
   headlineLead: "A quieter way to age ",
   headlineItalic: "beautifully",
   headlineTrail: ", on purpose.",
-  body: "ARC Wellness is a clinical sanctuary in the Presidio — pairing functional medicine, advanced aesthetics, and lifestyle coaching into a single, decade-by-decade plan written for one patient: you.",
+  body: "ARC Wellness is a clinical sanctuary in the Presidio, pairing functional medicine, advanced aesthetics, and lifestyle coaching into a single, decade-by-decade plan written for one patient: you.",
   ctaLabel: "Begin your arc",
   videoLine: "Inside the studio",
   videoDuration: "2:14",
 } as const;
 
-/** Full-bleed editorial hero — exterior / dusk architecture reads closer to reference art. */
+/** Full-bleed editorial hero, exterior / dusk architecture reads closer to reference art. */
 export const editorialHeroImage = images.heroBg;
 
 export const whoWeAreCopy = {
-  /** Section theme — affordability & fineness (client showcase About / #about). */
+  /** Section theme, affordability & fineness (client showcase About / #about). */
   eyebrow: "Balance of affordability & fineness",
   /** Alternating segments: even = plain, odd = rose-gold ink emphasis. Leading `\n` = line break (use `whitespace-pre-line` on h2). */
   headlineParts: ["Wellness,\nMade ", "Personal", "."] as const,
   paragraphs: [
-    "We believe the finest care shouldn’t come with a cost that holds you back. Our approach pairs medical-grade treatments — peptides, infusions, curated supplements — with pricing designed for real, lasting wellness.",
+    "We believe the finest care shouldn’t come with a cost that holds you back. Our approach pairs medical-grade treatments, peptides, infusions, curated supplements, with pricing designed for real, lasting wellness.",
     "Indulgent, yes. Exclusive? Never. This is self-care that honors both who you are and who you’re becoming.",
   ],
 } as const;
 
-/** Hero photography — reception / glass entry matches mock. */
+/** Hero photography, reception / glass entry matches mock. */
 export const mockHeroImage = images.heroMedia;
 
 /** Full-bleed membership cohort band (`SplitPrefooterCTA`, `#book`). */
@@ -163,7 +163,7 @@ export const showcaseMembershipBandCopy = {
 } as const;
 
 /**
- * Dark band below concern marquee, above Who we are — science + beauty headline + three value cards.
+ * Dark band below concern marquee, above Who we are, science + beauty headline + three value cards.
  */
 export const showcaseScienceBeautyBand = {
   eyebrow: "Medical aesthetics & wellness",
@@ -172,7 +172,7 @@ export const showcaseScienceBeautyBand = {
   headlineEmphasis: "lasting",
   headlineAfter: " beauty.",
   subhead:
-    "Exceptional wellness, designed for you — not for the few. Peptides, IV therapy, and curated supplements with transparent options so long-term care stays sustainable.",
+    "Exceptional wellness, designed for you, not for the few. Peptides, IV therapy, and curated supplements with transparent options so long-term care stays sustainable.",
   primaryCta: "Book a consultation",
   secondaryLabel: "View our programs",
   cards: [
@@ -181,7 +181,7 @@ export const showcaseScienceBeautyBand = {
       titleLead: "Doctor",
       titleTrail: "Led",
       description:
-        "Physician judgment at every decision — calibrated to your goals, your timeline, and what you can sustain.",
+        "Physician judgment at every decision, calibrated to your goals, your timeline, and what you can sustain.",
     },
     {
       index: "02",
@@ -195,12 +195,12 @@ export const showcaseScienceBeautyBand = {
       titleLead: "Data",
       titleTrail: "Driven",
       description:
-        "Labs, baselines, and follow-up that make progress visible — so adjustments are informed, not guessed.",
+        "Labs, baselines, and follow-up that make progress visible, so adjustments are informed, not guessed.",
     },
   ],
 } as const;
 
-/** Patient quotes — client-showcase `#testimonials` (subset of tone from main `homeTestimonials`). */
+/** Patient quotes, client-showcase `#testimonials` (subset of tone from main `homeTestimonials`). */
 export type ShowcaseTestimonialItem = {
   id: string;
   quote: string;
@@ -216,7 +216,7 @@ export const showcaseTestimonials: readonly ShowcaseTestimonialItem[] = [
     attribution: "Sarah M.",
     context: "Aesthetic consultation",
     quote:
-      "I wanted subtle refinement, not a different face. The plan was honest, unhurried, and the outcome still looks like me—just rested.",
+      "I wanted subtle refinement, not a different face. The plan was honest, unhurried, and the outcome still looks like me, just rested.",
     imageSrc: images.services[0],
     imageAlt: "Patient portrait",
   },
@@ -243,7 +243,7 @@ export const showcaseTestimonials: readonly ShowcaseTestimonialItem[] = [
     attribution: "Priya N.",
     context: "Skin health",
     quote:
-      "They never oversell. If something isn’t right for my skin or my season of life, they say so—and the alternatives still feel elevated.",
+      "They never oversell. If something isn’t right for my skin or my season of life, they say so, and the alternatives still feel elevated.",
     imageSrc: images.services[3],
     imageAlt: "Patient portrait",
   },
@@ -256,10 +256,10 @@ export const showcaseTestimonialsHeading = {
     "Real words from people mapping aesthetics, vitality, and longevity in one continuous plan.",
 } as const;
 
-/** Full-bleed plate on collapsed carousel cards (`ShowcaseTestimonialsCarousel`) — no cream overlay on top. */
+/** Full-bleed plate on collapsed carousel cards (`ShowcaseTestimonialsCarousel`), no cream overlay on top. */
 export const showcaseTestimonialCardAmbient = BACKGROUND_DECORATION_IMAGES[0];
 
-/** FAQ — concise entries aligned with main-site `#faq` themes (edit with legal/clinical approval). */
+/** FAQ, concise entries aligned with main-site `#faq` themes (edit with legal/clinical approval). */
 export type ShowcaseFaqItem = {
   id: string;
   question: string;
@@ -269,7 +269,7 @@ export type ShowcaseFaqItem = {
 export const showcaseFaqHeading = {
   eyebrow: "Questions",
   title: "Answers, plainly.",
-  supporting: "A few things patients ask before they book—clear timelines, clear expectations.",
+  supporting: "A few things patients ask before they book, clear timelines, clear expectations.",
 } as const;
 
 export const showcaseFaqItems: readonly ShowcaseFaqItem[] = [
@@ -277,13 +277,13 @@ export const showcaseFaqItems: readonly ShowcaseFaqItem[] = [
     id: "faq-first-visit",
     question: "What happens at the first visit?",
     answer:
-      "We begin with a conversation about your goals, history, and day-to-day life. When it helps, we map next steps—labs, imaging, or treatment options—so you leave with clarity, not a generic checklist.",
+      "We begin with a conversation about your goals, history, and day-to-day life. When it helps, we map next steps, labs, imaging, or treatment options, so you leave with clarity, not a generic checklist.",
   },
   {
     id: "faq-one-plan",
     question: "Can aesthetics and functional medicine be one plan?",
     answer:
-      "Yes—that is how ARC is structured. Skin, vitality, and longevity are reviewed together so recommendations stay coherent and proportional to what you want.",
+      "Yes, that is how ARC is structured. Skin, vitality, and longevity are reviewed together so recommendations stay coherent and proportional to what you want.",
   },
   {
     id: "faq-book",
@@ -305,7 +305,7 @@ export const showcaseFaqItems: readonly ShowcaseFaqItem[] = [
   },
 ] as const;
 
-/** Infinite marquee under client-showcase hero — concerns / entry points. */
+/** Infinite marquee under client-showcase hero, concerns / entry points. */
 export const showcaseConcernMarqueeKeywords = [
   "Low Energy & Burnout",
   "Hormonal Imbalance",

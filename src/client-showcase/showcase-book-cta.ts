@@ -5,7 +5,7 @@ const shell =
   "inline-flex w-fit shrink-0 items-center justify-center rounded-md border-2 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors";
 
 /**
- * Primary book/consultation CTA — outlined rose-gold (matches `ShowcaseScienceBeautyBand`).
+ * Primary book/consultation CTA, outlined rose-gold (matches `ShowcaseScienceBeautyBand`).
  * - `dark`: photo / `#0a0a0a` / main nav on ambient image
  * - `light`: cream, white, utility bar
  */

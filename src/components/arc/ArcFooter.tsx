@@ -2,17 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
 import { Phone, Star } from "lucide-react";
 import { siteMeta } from "@/content/siteMeta";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { ARC_SECTION_SEAM_TOP } from "@/lib/arc-layout";
-import { useArcDesktopPinScrub } from "@/lib/useArcDesktopPinScrub";
 import { cn } from "@/lib/utils";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
-import { useArcFullscreenPin } from "@/lib/arcSectionPins";
 
-/** Footer ambient plate — same asset family as site decoration (`public/assets/decoration/background/`). */
+/** Footer ambient plate, same asset family as site decoration (`public/assets/decoration/background/`). */
 
 const footerEyebrowClass =
   "font-sans text-xs font-semibold uppercase tracking-[0.28em] text-arc-charcoal/55 sm:text-[0.8125rem]";
@@ -55,7 +53,7 @@ const footerLinks = {
   ],
   Patients: [
     { label: "Financing", href: "/financing" },
-    { label: "Book online", href: "/book" },
+    { label: "Book online", href: siteMeta.bookingUrl },
   ],
   Visit: [
     { label: "St. Louis clinic", href: "/contact" },
@@ -140,15 +138,10 @@ function StarRatingBlock() {
 }
 
 export function ArcFooter() {
-  const rootRef = useRef<HTMLElement>(null);
-  const desktopPinScrub = useArcDesktopPinScrub();
-
-  useArcFullscreenPin(rootRef, { disabled: !desktopPinScrub });
   const year = new Date().getFullYear();
 
   return (
     <footer
-      ref={rootRef}
       id="contact"
       className={cn(ARC_SECTION_SEAM_TOP, "relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream")}
     >
@@ -179,7 +172,7 @@ export function ArcFooter() {
         </div>
 
         <div className="relative z-[1] mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 pt-24 md:px-10 md:pt-32 lg:px-12 lg:pt-36">
-          {/* Tier 1 — address | brand | contact */}
+          {/* Tier 1, address | brand | contact */}
           <div className="grid gap-14 md:grid-cols-3 md:items-start md:gap-10 lg:gap-14">
             <div className="order-2 flex flex-col gap-1.5 text-center md:order-1 md:text-left">
               <span className={footerEyebrowClass}>Visit</span>
@@ -191,7 +184,7 @@ export function ArcFooter() {
 
             <div className="order-1 flex flex-col items-center justify-center text-center md:order-2">
               <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-arc-charcoal/88 sm:text-xl md:text-2xl md:leading-relaxed">
-                Elevated care, extraordinary results — a life well-lived.
+                Elevated care, extraordinary results, and a life well-lived.
               </p>
             </div>
 
@@ -229,7 +222,11 @@ export function ArcFooter() {
                 <ul className="space-y-2.5 font-sans text-sm leading-snug md:text-base">
                   {items.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className={footerLinkClass}>
+                      <Link
+                        href={item.href}
+                        className={footerLinkClass}
+                        {...bookingLinkExternalProps(item.href)}
+                      >
                         {item.label}
                       </Link>
                     </li>
@@ -242,7 +239,7 @@ export function ArcFooter() {
           <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-arc-charcoal/14 to-transparent md:my-8" aria-hidden />
         </div>
 
-        {/* Tier 2 — full-width rail: rating flush left, social/legal centered, CTA flush right */}
+        {/* Tier 2, full-width rail: rating flush left, social/legal centered, CTA flush right */}
         <div className="relative z-[1] w-full px-5 pb-14 pt-2 sm:px-8 md:px-12 md:pb-16 lg:px-16 xl:px-20">
           <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center md:gap-6 lg:gap-10">
             <div className="flex justify-start">
@@ -293,7 +290,8 @@ export function ArcFooter() {
             <div className="flex flex-col items-center text-center md:items-end md:justify-self-end md:text-right">
               <p className={footerEyebrowClass}>New patients</p>
               <Link
-                href="/book"
+                href={siteMeta.bookingUrl}
+                {...bookingLinkExternalProps(siteMeta.bookingUrl)}
                 className="mt-4 inline-block font-serif text-xl italic text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80 sm:text-2xl md:text-[1.75rem]"
               >
                 Schedule your consultation

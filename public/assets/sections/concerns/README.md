@@ -1,17 +1,23 @@
 # Concerns section assets
 
-Pinned “Crafted by your concern” panels + full-bleed section plate.
+Pinned “Because every story is different.” aspiration cards + full-bleed section plate.
 
-| File | Role |
+| File | Card |
 |------|------|
-| `concerns-section-background.png` | Full-bleed section plate (cream marble / botanical shadow) |
-| `concern-low-energy-burnout.png` | Panel — low energy & burnout |
-| `concern-hormonal-imbalance-weight-gain.png` | Panel — hormonal imbalance & weight |
-| `concern-poor-sleep-recovery.png` | Panel — poor sleep & recovery |
-| `concern-aging-skin-body-changes.png` | Panel — aging skin & body changes |
-| `concern-brain-fog-focus-issues.png` | Panel — brain fog & focus |
-| `concern-*--previous.png` | Prior darker panel art (rollback only) |
+| `concerns-section-background.webp` | Full-bleed section plate |
+| `concern-wake-refreshed.webp` | Wake refreshed. |
+| `concern-think-clearly.webp` | Think clearly. |
+| `concern-move-freely.webp` | Move freely. |
+| `concern-feel-confident.webp` | Feel confident. |
+| `concern-live-fully.webp` | Live fully. |
+| `concern-age-with-purpose.webp` | Age with purpose. |
+
+**Jul 2026 client lifestyle set:** PNG masters live here under the names above; each has a matching `.webp` for production. Drop new masters in this folder (not repo root), then run `npm run assets:webp`.
+
+Legacy problem-state panels (`concern-low-energy-burnout.png`, etc.) and `concern-*--previous.*` are rollback only. **Site code uses `.webp`.**
 
 **Code:** `src/content/concernsSection.ts` → `CONCERN_PANELS`, `CONCERNS_SECTION_BG`.
 
-**URL pattern:** `/assets/sections/concerns/<filename>`
+**URL pattern:** `/assets/sections/concerns/<filename>.webp`
+
+After adding PNG masters, run `npm run assets:webp`.

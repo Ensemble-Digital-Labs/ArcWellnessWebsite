@@ -10,7 +10,7 @@ Files here are served by Next.js from the **site root URL** `/assets/...`.
 | `sections/` | **Homepage + section art** — see [`sections/README.md`](./sections/README.md); includes **`medical-spa-services/`**, **`patient-experience/`**, **`editorial-spa/`**, etc. |
 | `location/st-louis/` | STL mood imagery — **`labeled/`** vs **`unlabeled/`** — see [`location/st-louis/README.md`](./location/st-louis/README.md); **`stlouisDecoration.ts`** exports both arrays + combined list |
 | `decoration/background/` | **Non–St. Louis** ambient / abstract background decoration—see [`decoration/background/README.md`](./decoration/background/README.md); paths in **`src/content/backgroundDecoration.ts`** |
-| `branding/` | Logos, marks, icons you export as PNG/SVG |
+| `branding/` | Logos, marks, icons you export as **SVG** or WebP (raster) |
 | `misc/` | Anything that doesn’t fit above |
 | `videos/hero/` | Full-bleed or ambient hero video loops |
 | `videos/environment/` | Space / room / facility b-roll |
@@ -55,7 +55,7 @@ Tell the assistant (or drop files and ask to **analyze** them). Useful checks:
 
 - Resolution vs. layout (hero vs. card grid)
 - Aspect ratio and cropping
-- File size / WebP vs. JPEG
+- File size / **WebP** for all raster assets under `public/assets/` (run `npm run assets:webp` after adding PNG/JPEG masters)
 - Alt text and SEO naming
 
 You can also keep a copy of design references under `design/reference/` (outside `public/`) if those files should **not** be published.

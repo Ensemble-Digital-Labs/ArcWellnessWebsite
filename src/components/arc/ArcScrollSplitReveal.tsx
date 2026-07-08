@@ -19,7 +19,7 @@ type ArcScrollSplitRevealProps = {
 };
 
 /**
- * Vooban slideInUp — masked lines, blur + translate, scroll or pin-scrub driven.
+ * Vooban slideInUp, masked lines, blur + translate, scroll or pin-scrub driven.
  */
 export function ArcScrollSplitReveal({
   id,

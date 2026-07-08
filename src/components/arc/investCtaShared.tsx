@@ -3,127 +3,149 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
-import { arcGlassCtaClass } from "@/lib/arcGlassCta";
+import { siteMeta } from "@/content/siteMeta";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
+import { heroPrimaryCtaClass } from "@/lib/heroCtaStyles";
 import { cn } from "@/lib/utils";
 
-/** Luminous rose-gold on dark photography (does not use cream-surface ink). */
-export const investHeadlineEmphasisClass = cn(
-  "font-title-emphasis tracking-tight not-italic text-arc-rose-gold",
-  "text-[1.62em] sm:text-[1.7em] md:text-[1.78em] lg:text-[1.86em] xl:text-[1.92em]",
-  "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_0_40px_var(--arc-rose-gold-glow),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]",
+export type InvestCTASignoff = {
+  preamble: string;
+  name: string;
+};
+
+export const investSectionShellClass = cn(
+  "relative isolate scroll-mt-28 overflow-hidden",
+  "flex min-h-[100dvh] min-h-[100svh] items-center justify-center",
+  "px-0 py-8",
+  "pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(5rem,env(safe-area-inset-top))]",
+  "sm:py-14",
+  "xl:min-h-[min(100dvh,56rem)] xl:py-16",
 );
 
-export const investReserveGlassClass = cn(
-  arcGlassCtaClass,
-  "font-sans text-sm font-medium normal-case tracking-normal sm:text-[0.9375rem]",
+/** Readable panel on phone/tablet, cream type on mint wall needs a surface. */
+export const investMobilePanelClass = cn(
+  "w-full max-w-lg rounded-2xl",
+  "bg-arc-charcoal/78 px-6 py-7",
+  "sm:px-8 sm:py-9",
 );
 
-export const investMemberSolidClass = cn(
-  "inline-flex items-center justify-center gap-2 rounded-full",
-  "border border-white/20 bg-[#bc6c5c] px-6 py-3",
-  "font-sans text-sm font-medium text-white sm:text-[0.9375rem]",
-  "shadow-[0_8px_28px_rgba(0,0,0,0.22)]",
-  "transition-[background-color,border-color,transform] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
-  "hover:border-white/30 hover:bg-[#a85d52] hover:-translate-y-px",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black/45",
-  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-);
+export const investCopyBlockClass = "relative w-full max-w-full";
 
-export const investSectionShellClass =
-  "relative flex min-h-[100dvh] scroll-mt-28 items-center justify-center overflow-hidden";
-
-/** Same gradient / blur / mask as founder intro top blend (dark photo + charcoal grade). */
-export const investPinnedTopBlendLayerClass = cn(
-  "pointer-events-none absolute inset-x-0 top-0 z-[8] h-[min(28vh,11rem)]",
-  "bg-gradient-to-b from-arc-charcoal/[0.48] via-arc-charcoal/[0.2] to-transparent",
-  "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
-  "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
-  "mask-image-[linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]",
+/** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
+const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
+  "block font-title-emphasis text-[clamp(2.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(2.5rem,7.2vw,6.35rem)]",
+  "[text-shadow:0_1px_8px_rgba(0,0,0,0.32)]",
 );
 
 export function InvestCTAHeadline({
-  supportingLine,
   headlineMotion,
-  supportingMotion,
+  className,
 }: {
-  supportingLine?: string;
   headlineMotion?: CSSProperties;
-  supportingMotion?: CSSProperties;
+  className?: string;
 }) {
   return (
-    <>
-      <h2
-        className={cn(
-          "font-serif text-3xl font-semibold leading-snug text-[#f7f4ef] drop-shadow md:text-4xl lg:text-5xl",
-          supportingLine ? "mb-6 md:mb-7" : "mb-10 md:mb-12",
-        )}
-        style={headlineMotion}
-      >
-        Invest in{" "}
-        <TitleEmphasis className={investHeadlineEmphasisClass}>You</TitleEmphasis>.{" "}
-        <TitleEmphasis className={investHeadlineEmphasisClass}>Live</TitleEmphasis>{" "}
-        Fully.{" "}
-        <TitleEmphasis className={investHeadlineEmphasisClass}>Age</TitleEmphasis>{" "}
-        Intentionally.
-      </h2>
-      {supportingLine ? (
-        <p
-          className="mx-auto mb-10 max-w-2xl font-sans text-sm leading-relaxed text-[#f7f4ef]/88 md:mb-12 md:text-base"
-          style={supportingMotion}
-        >
-          {supportingLine}
-        </p>
-      ) : null}
-    </>
+    <h2
+      className={cn("relative", className)}
+      style={headlineMotion}
+    >
+      <TitleEmphasis className={INVEST_CTA_KEYWORD_LINE_CLASS}>Invest in You.</TitleEmphasis>
+      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+        Live Fully.
+      </TitleEmphasis>
+      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+        Age Intentionally.
+      </TitleEmphasis>
+    </h2>
   );
 }
 
-export function InvestCTAActions({ motionStyle }: { motionStyle?: CSSProperties }) {
+export function InvestCTAActions({
+  motionStyle,
+  ctaLabel = "Reserve your Consultation",
+  ctaHref = siteMeta.bookingUrl,
+  className,
+}: {
+  motionStyle?: CSSProperties;
+  ctaLabel?: string;
+  ctaHref?: string;
+  className?: string;
+}) {
   return (
-    <div
-      className="mx-auto flex w-full max-w-lg flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4"
-      style={motionStyle}
-    >
-      <Link href="/book" className={cn(investReserveGlassClass, "w-full sm:w-auto")}>
-        Reserve a call
-      </Link>
-      <Link href="/book" className={cn(investMemberSolidClass, "w-full sm:w-auto")}>
-        <span>Become a member</span>
-        <span aria-hidden className="text-base leading-none">
-          →
-        </span>
+    <div className={cn("mt-6 sm:mt-7 xl:mt-8", className)} style={motionStyle}>
+      <Link
+        href={ctaHref}
+        className={cn(heroPrimaryCtaClass, "w-full justify-center sm:w-auto")}
+        {...bookingLinkExternalProps(ctaHref)}
+      >
+        {ctaLabel}
       </Link>
     </div>
   );
 }
 
-export function InvestCTABackdrop({
-  imageSrc,
-  showTopBlend,
-  topBlendOpacity = 1,
+export function InvestCTASignoffBlock({
+  signoff,
+  motionStyle,
+  stacked = false,
+  centered = false,
 }: {
-  imageSrc: string;
-  showTopBlend?: boolean;
-  topBlendOpacity?: number;
+  signoff: InvestCTASignoff;
+  motionStyle?: CSSProperties;
+  stacked?: boolean;
+  centered?: boolean;
 }) {
+  return (
+    <div
+      className={cn(
+        stacked ? (centered ? "text-center" : "text-left") : "text-right",
+      )}
+      style={motionStyle}
+    >
+      <p
+        className={cn(
+          "font-title-emphasis leading-[1.2] text-arc-cream",
+          "[text-shadow:0_2px_20px_rgba(0,0,0,0.4)]",
+          stacked
+            ? "text-[clamp(1.25rem,4.8vw,1.55rem)]"
+            : "text-[clamp(1.5rem,3.2vw,2.65rem)]",
+        )}
+      >
+        {signoff.preamble}
+      </p>
+      <p
+        className={cn(
+          "mt-1 font-title-emphasis leading-none text-arc-cream",
+          stacked
+            ? "text-[clamp(1.4rem,5.2vw,1.7rem)]"
+            : "text-[clamp(1.7rem,3.5vw,2.85rem)]",
+        )}
+      >
+        {signoff.name}
+      </p>
+    </div>
+  );
+}
+
+export function InvestCTABackdrop({ imageSrc }: { imageSrc: string }) {
   return (
     <>
       <Image
         src={imageSrc}
         alt=""
         fill
-        className="object-cover"
+        className="object-cover object-[center_40%] xl:object-center"
         sizes="100vw"
         priority={false}
       />
-      <div className="absolute inset-0 bg-arc-charcoal/45" />
-      {showTopBlend ? (
-        <div
-          aria-hidden
-          style={{ opacity: topBlendOpacity }}
-          className={investPinnedTopBlendLayerClass}
-        />
-      ) : null}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-black/28 via-black/10 to-black/35 xl:hidden"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 hidden bg-gradient-to-r from-black/22 via-black/5 to-black/22 xl:block"
+      />
     </>
   );
 }

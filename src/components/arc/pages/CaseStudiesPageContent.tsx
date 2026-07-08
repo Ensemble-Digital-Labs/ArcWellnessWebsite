@@ -10,7 +10,7 @@ import { updateInsightsHeaderChrome } from "@/lib/arcInsightsHeaderSync";
 
 const INSIGHTS_CTA_SECTION_ID = "book";
 
-/** Insights hub — HLK-style feed (masthead, underline tabs, image grid). */
+/** Insights hub: HLK-style feed (masthead, underline tabs, image grid). */
 export function CaseStudiesPageContent({ entries }: { entries: readonly InsightEntry[] }) {
   useEffect(() => {
     let raf = 0;
@@ -34,10 +34,11 @@ export function CaseStudiesPageContent({ entries }: { entries: readonly InsightE
 
   return (
     <>
-      <ArcInsightsFeedSection id="case-studies" entries={entries} />
+      <ArcInsightsFeedSection id="case-studies" entries={entries} bottomSeam />
       <InvestCTASection
         imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
+        topSeam
       />
     </>
   );

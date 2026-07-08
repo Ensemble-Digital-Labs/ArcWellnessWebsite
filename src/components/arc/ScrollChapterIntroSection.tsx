@@ -10,12 +10,13 @@ import {
   type ArcChapterHeroCanvasTile,
 } from "@/components/arc/ArcChapterHeroImageCanvas";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
 import {
   ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS,
-  ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS,
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   TitleEmphasis,
+  arcHeadlineEmphasisClass,
+  arcHeadlineTaglineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { ArcVoobanHeadline } from "@/components/arc/ArcVoobanHeadline";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
@@ -39,27 +40,27 @@ type ScrollChapterIntroSectionProps = {
   id?: string;
   className?: string;
   headline?: string;
-  /** Handwriting emphasis (Birthstone) — paired with `headline` for serif + script split. */
+  /** Handwriting emphasis (Birthstone), paired with `headline` for serif + script split. */
   headlineEmphasis?: string;
   body: string;
   /** Photography plate for `split-photo` layout only. */
   imageSrc?: string;
-  /** `ambient-full` — marble/ambient edge-to-edge; no rear photo or floating inset. */
+  /** `ambient-full`, marble/ambient edge-to-edge; no rear photo or floating inset. */
   layout?: "split-photo" | "ambient-full";
-  /** Vooban-style overlapping still — offsets into the hero photo column */
+  /** Vooban-style overlapping still, offsets into the hero photo column */
   floatingMedia?: ScrollChapterFloatingMedia;
   ctaHref?: string;
   ctaLabel?: string;
   /**
-   * `visible-on-load` — copy readable at scroll progress 0 (scroll still adds motion).
-   * `scroll-reveal` — fades in from zero as user scrolls (can feel empty on first paint).
+   * `visible-on-load`, copy readable at scroll progress 0 (scroll still adds motion).
+   * `scroll-reveal`, fades in from zero as user scrolls (can feel empty on first paint).
    */
   introMode?: "visible-on-load" | "scroll-reveal";
   /** `pin-scrub` locks the viewport while scroll drives motion; `enter-once` plays in on arrival. */
   motion?: "pin-scrub" | "enter-once";
   /**
-   * `wide` — more of the photo visible (less scale/inset); good for clinic interiors.
-   * `cinematic` — tighter crop + Ken Burns for pinned homepage-style chapters.
+   * `wide`, more of the photo visible (less scale/inset); good for clinic interiors.
+   * `cinematic`, tighter crop + Ken Burns for pinned homepage-style chapters.
    */
   backgroundFrame?: "wide" | "cinematic";
   /** Tailwind `object-*` position for the background still (e.g. `object-[40%_50%]`). */
@@ -68,15 +69,19 @@ type ScrollChapterIntroSectionProps = {
   copyColumnAmbients?: readonly string[];
   /** Floating clinic stills on the right for `ambient-full` heroes. */
   heroCanvasTiles?: readonly ArcChapterHeroCanvasTile[];
-  /** `compact` — smaller script line for long taglines (treatment detail heroes). */
+  /** `compact`, smaller script line for long taglines (treatment detail heroes). */
   headlineEmphasisSize?: "default" | "compact";
-  /** Override copy color logic — default auto-detects from `-light` ambient paths. */
+  /** Override copy color logic, default auto-detects from `-light` ambient paths. */
   copyTone?: "light" | "dark";
+  /** Script emphasis on light plates — teal matches About; rose on dark photography. */
+  headlineEmphasisTone?: "rose" | "teal";
+  /** Soft cream feather at section bottom (About page seams). */
+  bottomSeam?: boolean;
 };
 
 /**
  * Second “chapter” after hero: **pin + scrub** on `#main` (locked viewport while scrolling)
- * so progress drives gradient, image pan/scale, and copy motion — split layout uses left
+ * so progress drives gradient, image pan/scale, and copy motion, split layout uses left
  * copy column and right photography (header logo stays top-left site-wide).
  */
 export function ScrollChapterIntroSection({
@@ -98,6 +103,8 @@ export function ScrollChapterIntroSection({
   layout = "split-photo",
   headlineEmphasisSize = "default",
   copyTone,
+  headlineEmphasisTone,
+  bottomSeam = false,
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -142,8 +149,7 @@ export function ScrollChapterIntroSection({
           Math.round(getArcScrollViewportHeight(scroller) * 1.12);
 
         ScrollTrigger.create({
-          trigger: section,
-          ...arcScrollTriggerScrollerProps(),
+          trigger: section, ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -246,6 +252,8 @@ export function ScrollChapterIntroSection({
         : ambientFullBleed
           ? !ambientsIncludeLightPlate && ambientCount === 0
           : ambientCount > 0 && !ambientsIncludeLightPlate;
+  const resolvedEmphasisTone = headlineEmphasisTone ?? (onDarkCopy ? "rose" : "teal");
+  const lightPlateEmphasisClass = arcHeadlineEmphasisClass(resolvedEmphasisTone);
   const singleTileHero = Boolean(heroCanvasTiles?.length === 1);
 
   const ambientLayerOpacity = (index: number) => {
@@ -290,6 +298,12 @@ export function ScrollChapterIntroSection({
               style={{ opacity: ambientLayerOpacity(index) }}
             />
           ))}
+          {bottomSeam ? (
+            <div
+              className="absolute inset-x-0 bottom-0 z-[1] h-[min(30vh,13rem)] bg-gradient-to-t from-arc-cream from-20% via-arc-cream/92 via-45% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_55%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_55%,transparent_100%)]"
+              aria-hidden
+            />
+          ) : null}
         </div>
       ) : null}
 
@@ -468,8 +482,8 @@ export function ScrollChapterIntroSection({
                           ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
                           : "text-[1.42em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)]"
                         : compactEmphasis
-                          ? ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS
-                          : ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                          ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
+                          : lightPlateEmphasisClass,
                     )}
                   >
                     {headlineEmphasis}
@@ -490,7 +504,7 @@ export function ScrollChapterIntroSection({
                         "inline align-baseline leading-none tracking-tight",
                         onDarkCopy
                           ? "text-[1.35em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)] sm:text-[1.42em] md:text-[1.5em]"
-                          : ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
+                          : lightPlateEmphasisClass,
                       )}
                     >
                       {headlineEmphasis}
@@ -600,6 +614,15 @@ export function ScrollChapterIntroSection({
           </>
         ) : null}
       </div>
+
+      {bottomSeam ? (
+        <ArcSectionSeamBlend
+          edge="bottom"
+          scope="background"
+          variant={ambientFullBleed ? "soft" : "default"}
+          tone="cream"
+        />
+      ) : null}
     </section>
   );
 }

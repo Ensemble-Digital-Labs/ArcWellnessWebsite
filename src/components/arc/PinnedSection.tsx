@@ -11,11 +11,11 @@ type PinnedSectionProps = {
   /** Marker for path-step pin coordination (mobile flash guard). */
   "data-path-steps-crossfade"?: boolean;
   pinDistanceMultiplier?: number;
-  /** 0 at pin start, 1 at pin end — for scroll-scrubbed animations while pinned. */
+  /** 0 at pin start, 1 at pin end, for scroll-scrubbed animations while pinned. */
   onProgress?: ArcFullscreenPinOptions["onProgress"];
   /** Skip pin setup (e.g. footer / testimonials on mobile native scroll). */
   disabled?: boolean;
-  /** `fixed` for WebGL-heavy sections — avoids canvas flicker on transform pin. */
+  /** `fixed` for WebGL-heavy sections, avoids canvas flicker on transform pin. */
   pinType?: ArcFullscreenPinOptions["pinType"];
   /** Keep scroll steady when this pin toggles (path steps on breakpoint resize). */
   stabilizeScrollOnToggle?: boolean;

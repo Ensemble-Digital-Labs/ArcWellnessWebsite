@@ -2,10 +2,10 @@ import { EDITORIAL_SPA_IMAGES } from "@/content/editorialSpaImages";
 import { PATIENT_EXPERIENCE_IMAGES } from "@/content/patientExperienceImages";
 import { images } from "@/content/site";
 
-/** Immersive collage — tile-specific ambient mood art (`public/assets/decoration/background/`). */
-const AMBIENT_COLL_TILE_0 = "/assets/decoration/background/ambient-05.png";
-const AMBIENT_COLL_TILE_3 = "/assets/decoration/background/ambient-07.png";
-const AMBIENT_COLL_TILE_6 = "/assets/decoration/background/ambient-08.png";
+/** Immersive collage, tile-specific ambient mood art (`public/assets/decoration/background/`). */
+const AMBIENT_COLL_TILE_0 = "/assets/decoration/background/ambient-05.webp";
+const AMBIENT_COLL_TILE_3 = "/assets/decoration/background/ambient-07.webp";
+const AMBIENT_COLL_TILE_6 = "/assets/decoration/background/ambient-08.webp";
 
 /**
  * Deduplicate while preserving first-seen order (lobby/reception may appear in multiple buckets).
@@ -23,32 +23,30 @@ function dedupePaths(paths: readonly string[]): string[] {
 }
 
 /**
- * **About / immersive scroll** collage — reorder or swap paths here; the component uses the
+ * **About / immersive scroll** collage, reorder or swap paths here; the component uses the
  * **first entries** to fill its fixed tile count (7 slots), then cycles if the list is shorter.
  *
  * Pulls from editorial spa, hero/section photography, services strip, and founder portrait.
  */
 export const WELCOME_GALLERY_IMAGE_SRCS: readonly string[] = dedupePaths([
-  ...EDITORIAL_SPA_IMAGES,
-  ...PATIENT_EXPERIENCE_IMAGES,
+  ...EDITORIAL_SPA_IMAGES, ...PATIENT_EXPERIENCE_IMAGES,
   images.heroMedia,
   images.heroBg,
   images.whoWeAre,
   images.investBanner,
-  images.founderPortrait,
-  ...images.services,
+  images.founderPortrait, ...images.services,
 ]);
 
-/** Which tile (0–6) matches the reference “middle” slot — strong scroll zoom targets this frame. */
+/** Which tile (0–6) matches the reference “middle” slot, strong scroll zoom targets this frame. */
 export const WELCOME_GALLERY_FOCAL_INDEX = 0;
 
-/** Focal tile (index **0**) for scroll zoom — `ambient-05`. */
+/** Focal tile (index **0**) for scroll zoom, `ambient-05`. */
 export const WELCOME_GALLERY_FOCAL_SRC = AMBIENT_COLL_TILE_0;
 
-/** Collage tile **3** — `ambient-07`. */
+/** Collage tile **3**, `ambient-07`. */
 export const WELCOME_GALLERY_SLOT_3_SRC = AMBIENT_COLL_TILE_3;
 
-/** Collage tile **6** — `ambient-08`. */
+/** Collage tile **6**, `ambient-08`. */
 export const WELCOME_GALLERY_SLOT_6_SRC = AMBIENT_COLL_TILE_6;
 
 /**

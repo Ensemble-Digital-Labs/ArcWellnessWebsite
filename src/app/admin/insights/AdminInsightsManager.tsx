@@ -50,7 +50,7 @@ function emptyDraft(kind: InsightKind = "blog"): Draft {
       month: "short",
       year: "numeric",
     }).format(new Date()),
-    imageSrc: "/assets/sections/clinic-interiors/consultation-lounge-seating.png",
+    imageSrc: "/assets/sections/clinic-interiors/consultation-lounge-seating.webp",
     imageAlt: "",
     bodyText: "",
   };
@@ -206,6 +206,12 @@ export function AdminInsightsManager({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/review"
+            className="rounded-full border border-arc-charcoal/15 bg-white px-4 py-2 text-sm font-medium hover:border-arc-teal/30"
+          >
+            Client review
+          </Link>
           <button
             type="button"
             onClick={() => startNew("blog")}

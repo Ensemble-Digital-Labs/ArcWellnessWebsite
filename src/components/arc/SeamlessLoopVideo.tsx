@@ -28,7 +28,7 @@ type SeamlessLoopVideoProps = {
 
 /**
  * Two stacked `<video>` elements with the same source: as one clip nears its end, the other
- * starts from 0 and opacity crossfades over — avoids the visible seam from native `loop`.
+ * starts from 0 and opacity crossfades over, avoids the visible seam from native `loop`.
  */
 export const SeamlessLoopVideo = forwardRef<SeamlessLoopVideoHandle, SeamlessLoopVideoProps>(
   function SeamlessLoopVideo(

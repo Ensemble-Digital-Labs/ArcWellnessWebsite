@@ -19,7 +19,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/programs`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/financing`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/contact`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/book`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/case-studies`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },

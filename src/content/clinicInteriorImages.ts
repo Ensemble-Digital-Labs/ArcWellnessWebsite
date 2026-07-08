@@ -3,27 +3,26 @@
  * Files live under `public/assets/sections/clinic-interiors/`.
  */
 export const CLINIC_INTERIOR_IMAGES = {
-  consultationLounge: "/assets/sections/clinic-interiors/consultation-lounge-seating.png",
-  hallwayAccentSeating: "/assets/sections/clinic-interiors/hallway-accent-seating-view.png",
-  ivTherapyReclinerRoom: "/assets/sections/clinic-interiors/iv-therapy-recliner-room.png",
-  receptionBacklitLogoWall: "/assets/sections/clinic-interiors/reception-backlit-logo-wall.png",
+  consultationLounge: "/assets/sections/clinic-interiors/consultation-lounge-seating.webp",
+  hallwayAccentSeating: "/assets/sections/clinic-interiors/hallway-accent-seating-view.webp",
+  ivTherapyReclinerRoom: "/assets/sections/clinic-interiors/iv-therapy-recliner-room.webp",
+  receptionBacklitLogoWall: "/assets/sections/clinic-interiors/reception-backlit-logo-wall.webp",
   /** Stand-in until `reception-green-wall-console-doorway.png` is added to `public/`. */
   receptionGreenWallConsoleDoorway:
-    "/assets/sections/clinic-interiors/reception-green-wall-salt-lamp-doorway.png",
+    "/assets/sections/clinic-interiors/reception-green-wall-salt-lamp-doorway.webp",
   receptionGreenWallSaltLampDoorway:
-    "/assets/sections/clinic-interiors/reception-green-wall-salt-lamp-doorway.png",
-  hallwayDaxxifyBannerWaveArt: "/assets/sections/clinic-interiors/hallway-daxxify-banner-wave-art.png",
+    "/assets/sections/clinic-interiors/reception-green-wall-salt-lamp-doorway.webp",
+  hallwayDaxxifyBannerWaveArt: "/assets/sections/clinic-interiors/hallway-daxxify-banner-wave-art.webp",
   retailKneskoSkinProductDisplay:
-    "/assets/sections/clinic-interiors/retail-knesko-skin-product-display.png",
-  receptionFacadeWideSeating: "/assets/sections/clinic-interiors/reception-facade-wide-seating.png",
-  lobbyReceptionDeskProducts: "/assets/sections/clinic-interiors/lobby-reception-desk-products.png",
-  waitingRoomArmchairGoldArt: "/assets/sections/clinic-interiors/waiting-room-armchair-gold-art.png",
-  plantBonsaiWindowSill: "/assets/sections/clinic-interiors/plant-bonsai-window-sill.png",
-  /** Hero / architecture — same production photography family as homepage. */
-  heroExteriorSunset: "/assets/hero/arc-wellness-exterior-sunset.png",
-  heroReceptionInterior: "/assets/hero/arc-wellness-reception-interior.png",
-  heroReceptionEntrance: "/assets/hero/arc-wellness-reception-entrance.png",
-  heroLobbyLounge: "/assets/hero/arc-wellness-lobby-lounge.png",
+    "/assets/sections/clinic-interiors/retail-knesko-skin-product-display.webp",
+  receptionFacadeWideSeating: "/assets/sections/clinic-interiors/reception-facade-wide-seating.webp",
+  lobbyReceptionDeskProducts: "/assets/sections/clinic-interiors/lobby-reception-desk-products.webp",
+  waitingRoomArmchairGoldArt: "/assets/sections/clinic-interiors/waiting-room-armchair-gold-art.webp",
+  plantBonsaiWindowSill: "/assets/sections/clinic-interiors/plant-bonsai-window-sill.webp",
+  /** Hero / architecture, same production photography family as homepage. */
+  heroExteriorSunset: "/assets/hero/arc-wellness-exterior-sunset.webp",
+  heroReceptionInterior: "/assets/hero/arc-wellness-reception-interior.webp",
+  heroLobbyLounge: "/assets/hero/arc-wellness-lobby-lounge.webp",
 } as const;
 
 export const CLINIC_INTERIOR_IMAGE_LIST = Object.values(CLINIC_INTERIOR_IMAGES);
@@ -60,8 +59,6 @@ export const CLINIC_INTERIOR_ALT = {
     "ARC Wellness exterior at sunset with illuminated signage and landscaping",
   heroReceptionInterior:
     "ARC Wellness reception interior with green accent wall and warm lighting",
-  heroReceptionEntrance:
-    "ARC Wellness reception entrance with seating and welcoming console",
   heroLobbyLounge:
     "ARC Wellness lobby lounge with comfortable seating and natural light",
 } as const;

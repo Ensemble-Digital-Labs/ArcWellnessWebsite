@@ -1,7 +1,7 @@
 import type { ImageData, SphereImageGridProps } from "@/components/ui/img-sphere";
 
 /**
- * Same Unsplash set as the reference **DemoOne** — duplicated to fill the sphere.
+ * Same Unsplash set as the reference **DemoOne**, duplicated to fill the sphere.
  * Swap URLs for on-brand assets when ready.
  */
 const BASE_IMAGES: Omit<ImageData, "id">[] = [
@@ -93,8 +93,7 @@ function buildDemoSphereImages(): ImageData[] {
     const baseIndex = i % BASE_IMAGES.length;
     const baseImage = BASE_IMAGES[baseIndex]!;
     out.push({
-      id: `sphere-demo-${i + 1}`,
-      ...baseImage,
+      id: `sphere-demo-${i + 1}`, ...baseImage,
       alt: `${baseImage.alt} (${Math.floor(i / BASE_IMAGES.length) + 1})`,
     });
   }

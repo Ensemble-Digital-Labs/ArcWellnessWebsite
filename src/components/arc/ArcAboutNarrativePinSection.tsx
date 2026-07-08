@@ -6,12 +6,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
 import { ArcScrollRevealMask, ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
 import {
   ARC_EDITORIAL_BODY_CLASS,
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
+  arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
@@ -37,6 +38,11 @@ type ArcAboutNarrativePinSectionProps = {
   ctaLabel?: string;
   /** `pin-scrub` locks viewport; `enter-once` reveals lines automatically when scrolled into view. */
   motion?: "pin-scrub" | "enter-once";
+  headlineEmphasisTone?: "rose" | "teal";
+  /** Soft cream feather at section top — overlaps previous band (About page seams). */
+  topSeam?: boolean;
+  /** Soft cream feather at section bottom — eases into next band (About page seams). */
+  bottomSeam?: boolean;
 };
 
 function useStorySideImageReveal(
@@ -65,8 +71,7 @@ function useStorySideImageReveal(
             duration: 1.15,
             ease: ARC_VOOBAN_EASE,
             scrollTrigger: {
-              trigger: imageRef.current,
-              ...arcScrollTriggerScrollerProps(),
+              trigger: imageRef.current, ...arcScrollTriggerScrollerProps(),
               start: "top 90%",
               once: true,
             },
@@ -113,7 +118,7 @@ function StorySideImage({
   objectClass: string;
 }) {
   return (
-    <div ref={imageRef} className={cn(storySideImageFrameClass, aspectClass)}>
+    <div ref={imageRef} className={cn(storySideImageFrameClass, aspectClass, "w-full")}>
       <Image
         src={src}
         alt={alt}
@@ -133,7 +138,7 @@ function StorySideImage({
 }
 
 /**
- * Pinned about narrative — scroll scrubs line-by-line text reveal (Vooban-style).
+ * Pinned about narrative, scroll scrubs line-by-line text reveal (Vooban-style).
  */
 export function ArcAboutNarrativePinSection({
   id,
@@ -145,6 +150,9 @@ export function ArcAboutNarrativePinSection({
   ctaHref,
   ctaLabel,
   motion = "enter-once",
+  headlineEmphasisTone = "teal",
+  topSeam = false,
+  bottomSeam = false,
 }: ArcAboutNarrativePinSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const sideImageMobileRef = useRef<HTMLDivElement>(null);
@@ -190,8 +198,7 @@ export function ArcAboutNarrativePinSection({
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
-          trigger: section,
-          ...arcScrollTriggerScrollerProps(),
+          trigger: section, ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
@@ -241,9 +248,14 @@ export function ArcAboutNarrativePinSection({
       id={id}
       className={cn(
         "relative flex flex-col overflow-hidden bg-arc-cream",
-        pinScrub ? "min-h-[100dvh]" : "py-20 sm:py-24",
+        pinScrub
+          ? "min-h-[100dvh]"
+          : topSeam
+            ? "py-20 sm:py-24"
+            : "border-t border-arc-charcoal/8 py-20 sm:py-24",
       )}
     >
+      {topSeam ? <ArcSectionSeamBlend edge="top" scope="background" /> : null}
       {pinScrub ? (
         <ArcPinProgressRail
           progress={p}
@@ -256,30 +268,25 @@ export function ArcAboutNarrativePinSection({
           "relative z-10 mx-auto w-full px-6 sm:px-10 md:px-12",
           pinScrub ? "min-h-[100dvh] py-20" : "py-0",
           sideImageSrc
-            ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] lg:items-start lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)] xl:gap-16"
+            ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)] lg:items-stretch lg:gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] xl:gap-14"
             : "flex flex-col justify-center",
           ARC_PAGE_RAIL_MAX,
         )}
       >
         <div className="min-w-0">
           <div style={headerMotion}>
-            <ArcScrollRevealMask className="overflow-x-clip overflow-y-visible pb-[0.12em]">
+            <ArcScrollRevealMask className="overflow-visible pb-[0.12em]">
               <h2
                 className={cn(
-                  "max-w-full text-arc-charcoal",
-                  sideImageSrc
-                    ? "flex flex-col items-start gap-0 lg:inline-flex lg:max-w-none lg:flex-row lg:flex-wrap lg:items-baseline lg:gap-x-[0.28em] lg:flex-nowrap"
-                    : "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap",
+                  "max-w-full text-balance text-arc-charcoal",
                   ARC_SPLIT_HEADLINE_SERIF_CLASS,
                 )}
               >
-                <span className="shrink-0">{title}</span>
+                <span className="block">{title}</span>
                 <TitleEmphasis
                   className={cn(
-                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
-                    sideImageSrc
-                      ? "mt-1 block shrink-0 leading-[1.04] lg:mt-0 lg:inline lg:align-baseline lg:leading-none"
-                      : "inline shrink-0 align-baseline leading-none",
+                    arcHeadlineEmphasisClass(headlineEmphasisTone),
+                    "mt-2 block max-w-full text-balance leading-[1.06] sm:leading-[1.04]",
                   )}
                 >
                   {titleEmphasis}
@@ -319,18 +326,20 @@ export function ArcAboutNarrativePinSection({
         </div>
 
         {sideImageSrc ? (
-          <aside className="hidden min-w-0 lg:block lg:sticky lg:top-[16vh] lg:pt-1 xl:top-24">
+          <aside className="hidden min-w-0 lg:flex lg:sticky lg:top-[14vh] lg:self-start xl:top-20">
             <StorySideImage
               src={sideImageSrc}
               alt={sideImageAlt}
               imageRef={sideImageDesktopRef}
-              aspectClass="aspect-[4/5]"
+              aspectClass="aspect-[4/5] min-h-[22rem] w-full lg:min-h-[26rem] xl:min-h-[28rem]"
               sizes="(min-width: 1024px) 26vw, 0px"
               objectClass="object-cover object-[50%_42%] lg:object-[48%_38%]"
             />
           </aside>
         ) : null}
       </div>
+
+      {bottomSeam ? <ArcSectionSeamBlend edge="bottom" scope="background" /> : null}
     </section>
   );
 }

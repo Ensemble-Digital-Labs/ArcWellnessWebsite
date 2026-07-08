@@ -17,7 +17,7 @@ import { FOOTER_AMBIENT_BG as SERVICES_AMBIENT_BG } from "@/content/backgroundDe
 const EASE = [0.33, 0, 0.2, 1] as const;
 const VIEWPORT = { once: true as const, amount: 0.1, margin: "0px 0px 14% 0px" } as const;
 
-/** Ambient plate — same family as main site (`public/assets/decoration/background/`). */
+/** Ambient plate, same family as main site (`public/assets/decoration/background/`). */
 
 function ServicesAmbientBackdrop() {
   return (

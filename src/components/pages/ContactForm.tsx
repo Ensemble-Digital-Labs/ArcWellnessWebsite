@@ -59,7 +59,7 @@ export function ContactForm() {
           required
           rows={5}
           className={cn(inputClass, "resize-y min-h-[8rem]")}
-          placeholder="A few words is enough—we’ll take it from there."
+          placeholder="A few words is enough, we’ll take it from there."
         />
       </label>
       <button
@@ -70,7 +70,7 @@ export function ContactForm() {
       </button>
       {submitted ? (
         <p className="font-sans text-sm text-arc-charcoal" role="status">
-          Opening your email app—if it didn’t open, write us at {siteMeta.email}.
+          Opening your email app, if it didn’t open, write us at {siteMeta.email}.
         </p>
       ) : null}
     </form>

@@ -1,32 +1,51 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Serif half of split headlines (inline or stacked) — larger on mobile than body copy.
+ * Serif half of split headlines (inline or stacked), larger on mobile than body copy.
  * e.g. “The Arc Toward”, “Designed for calm”, “Our Mission”, “The values that shape”.
  */
 export const ARC_SPLIT_HEADLINE_SERIF_CLASS =
   "font-serif font-semibold tracking-tight text-[clamp(2.15rem,10.5vw,3.25rem)] leading-[1.1] sm:leading-[1.18] lg:text-[clamp(1.65rem,5.2vw,3.25rem)]";
 
-/** Alias — stacked Mission / Vision / Values / Founder use the same scale. */
+/** Alias, stacked Mission / Vision / Values / Founder use the same scale. */
 export const ARC_STACKED_HEADLINE_SERIF_CLASS = ARC_SPLIT_HEADLINE_SERIF_CLASS;
 
 /**
  * Serif + script split headlines on cream / light panels.
- * Birthstone emphasis should read at roughly the same visual weight as the serif half —
- * scale ~**1.45em → 1.66em** relative to the parent `<h2>` (not ~1.12em).
+ * Birthstone emphasis should read at roughly the same visual weight as the serif half, * scale ~**1.45em → 1.66em** relative to the parent `<h2>` (not ~1.12em).
  */
 export const ARC_HEADLINE_TITLE_EMPHASIS_CLASS =
   "text-[1.45em] leading-[1.01] text-arc-rose-gold-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 
-/** Compact hero tagline (treatment detail) on light plates — color only; size stays on parent `text-[0.52em]` stack. */
+/** Teal script emphasis on cream panels (About page, no rose-gold). */
+export const ARC_HEADLINE_TITLE_EMPHASIS_TEAL_CLASS =
+  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+
+export function arcHeadlineEmphasisClass(tone: "rose" | "teal" = "rose") {
+  return tone === "teal" ? ARC_HEADLINE_TITLE_EMPHASIS_TEAL_CLASS : ARC_HEADLINE_TITLE_EMPHASIS_CLASS;
+}
+
+/** Compact hero tagline (treatment detail) on light plates, color only; size stays on parent `text-[0.52em]` stack. */
 export const ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS =
   "text-arc-rose-gold-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 
-/** Compact hero tagline on dark photography — color + glow only. */
+export const ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_TEAL_CLASS =
+  "text-arc-teal-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+
+export function arcHeadlineTaglineEmphasisClass(tone: "rose" | "teal", onDark: boolean) {
+  if (onDark) {
+    return ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS;
+  }
+  return tone === "teal"
+    ? ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_TEAL_CLASS
+    : ARC_HEADLINE_TAGLINE_EMPHASIS_LIGHT_CLASS;
+}
+
+/** Compact hero tagline on dark photography, color + glow only. */
 export const ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS =
   "text-arc-rose-gold [text-shadow:0_2px_16px_rgba(0,0,0,0.38),0_0_24px_var(--arc-rose-gold-glow)]";
 
-/** Same ~1.45em → 1.66em scale on charcoal / photography — rose-gold + soft glow. */
+/** Same ~1.45em → 1.66em scale on charcoal / photography, rose-gold + soft glow. */
 export const ARC_HEADLINE_TITLE_EMPHASIS_DARK_CLASS =
   "text-[1.45em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)] sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em]";
 

@@ -5,6 +5,8 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 
 export type ArcFaqItem = {
   id: string;
@@ -17,6 +19,8 @@ type ArcFaqSectionProps = {
   className?: string;
   categories: Readonly<Record<string, string>>;
   faqByCategory: Readonly<Record<string, readonly ArcFaqItem[]>>;
+  topSeam?: boolean;
+  bottomSeam?: boolean;
 };
 
 function ArcFaqAccordionRow({
@@ -97,6 +101,8 @@ export function ArcFaqSection({
   className,
   categories,
   faqByCategory,
+  topSeam = false,
+  bottomSeam = false,
 }: ArcFaqSectionProps) {
   const reduceMotion = useReducedMotion();
   const categoryKeys = Object.keys(categories);
@@ -110,13 +116,21 @@ export function ArcFaqSection({
     <section
       id={id}
       className={cn(
-        "relative min-h-[100dvh] scroll-mt-32 border-t border-arc-teal/15 bg-arc-cream sm:scroll-mt-40 md:scroll-mt-44 lg:scroll-mt-52",
+        "relative min-h-[100dvh] scroll-mt-32 bg-arc-cream sm:scroll-mt-40 md:scroll-mt-44 lg:scroll-mt-52",
+        !topSeam && "border-t border-arc-teal/15",
+        topSeam && ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
         className,
       )}
     >
+      {topSeam ? (
+        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
+      ) : null}
+      {bottomSeam ? (
+        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+      ) : null}
       <div
         data-scroll-section
-        className="relative mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]"
+        className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]"
       >
         <header className="mb-10 shrink-0 text-left lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 xl:top-52">
           <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">

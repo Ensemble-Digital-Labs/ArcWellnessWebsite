@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 
 type ArcStandardCtaProps = {
   href: string;
@@ -19,6 +20,7 @@ export function ArcStandardCta({ href, children, className, style }: ArcStandard
   return (
     <Link
       href={href}
+      {...bookingLinkExternalProps(href)}
       className={cn(
         "group inline-flex items-center gap-2.5 font-sans text-sm font-bold uppercase tracking-[0.22em]",
         "text-arc-charcoal transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-arc-teal",

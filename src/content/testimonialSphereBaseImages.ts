@@ -1,5 +1,5 @@
 /**
- * Unsplash sources for the testimonial **SphereImageGrid** — duplicated to fill the sphere.
+ * Unsplash sources for the testimonial **SphereImageGrid**, duplicated to fill the sphere.
  * Replace with on-brand photography when available.
  */
 export const testimonialSphereBaseImages = [

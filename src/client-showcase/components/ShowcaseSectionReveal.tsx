@@ -11,8 +11,8 @@ type Props = {
   className?: string;
   delayIndex?: number;
   /**
-   * `stickySafe` — opacity only (no transform/filter on wrapper) so `position: sticky` in the header works.
-   * `rich` — opacity + soft lift + blur-to-sharp, similar to premium agency scroll reveals (e.g. Influx-style blocks).
+   * `stickySafe`, opacity only (no transform/filter on wrapper) so `position: sticky` in the header works.
+   * `rich`, opacity + soft lift + blur-to-sharp, similar to premium agency scroll reveals (e.g. Influx-style blocks).
    */
   mode?: ShowcaseRevealMode;
 };

@@ -15,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 export type ArcChapterHeroCanvasTile = {
   src: string;
   alt: string;
-  /** Absolute layout only — omit when using the default grid (no overlap). */
+  /** Absolute layout only, omit when using the default grid (no overlap). */
   placement?: string;
   widthClass?: string;
   /** Per-column offset in grid layout (e.g. `md:mt-6`). */
@@ -37,7 +37,7 @@ type ArcChapterHeroImageCanvasProps = {
   /** Section element that owns scroll range (e.g. `#about-hero`). */
   scrollTriggerRootRef: React.RefObject<HTMLElement | null>;
   reduceMotion?: boolean;
-  /** `enter-once` — fly + fade into place on load; `scroll-scrub` — tied to scroll progress. */
+  /** `enter-once`, fly + fade into place on load; `scroll-scrub`, tied to scroll progress. */
   animation?: ArcChapterHeroCanvasAnimation;
   className?: string;
 };
@@ -101,7 +101,7 @@ function useCanvasTilesHiddenUntilAnimate(
 
 const CANVAS_TILE_HIDDEN_CLASS = "opacity-0 motion-reduce:opacity-100";
 
-/** Keep tiles visible after enter-once — GSAP inline opacity can lose to Tailwind `opacity-0`. */
+/** Keep tiles visible after enter-once: GSAP inline opacity can lose to Tailwind `opacity-0`. */
 function lockCanvasTilesVisible(elements: HTMLElement[]) {
   elements.forEach((el) => {
     el.classList.remove("opacity-0");
@@ -123,8 +123,7 @@ function bindHeroCanvasViewportEnter(
   };
 
   ScrollTrigger.create({
-    trigger: root,
-    ...arcScrollTriggerScrollerProps(),
+    trigger: root, ...arcScrollTriggerScrollerProps(),
     start,
     once: true,
     onEnter: run,
@@ -228,8 +227,7 @@ function useHeroCanvasTimeline(
         });
 
         ScrollTrigger.create({
-          trigger: root,
-          ...arcScrollTriggerScrollerProps(),
+          trigger: root, ...arcScrollTriggerScrollerProps(),
           start: "top 92%",
           end: () => `+=${Math.round(root.offsetHeight * 0.92)}`,
           scrub: 0.85,
@@ -263,7 +261,7 @@ function useHeroCanvasTimeline(
 }
 
 /**
- * Right-side canvas for ambient-full chapter heroes — GSAP timeline scrubbed
+ * Right-side canvas for ambient-full chapter heroes: GSAP timeline scrubbed
  * as the section enters and moves through the viewport.
  */
 export function ArcChapterHeroImageCanvas({
@@ -383,7 +381,7 @@ export function ArcChapterHeroImageCanvas({
   );
 }
 
-/** Staggered strip — same scroll timeline, tighter layout. */
+/** Staggered strip, same scroll timeline, tighter layout. */
 export function ArcChapterHeroImageCanvasMobile({
   tiles,
   scrollTriggerRootRef,
@@ -497,8 +495,7 @@ export function ArcChapterHeroImageCanvasMobile({
         });
 
         ScrollTrigger.create({
-          trigger: root,
-          ...arcScrollTriggerScrollerProps(),
+          trigger: root, ...arcScrollTriggerScrollerProps(),
           start: "top 94%",
           end: () => `+=${Math.round(root.offsetHeight * 0.75)}`,
           scrub: 0.8,

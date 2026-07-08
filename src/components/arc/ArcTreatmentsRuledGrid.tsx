@@ -13,11 +13,12 @@ import {
 import { ArrowRight } from "lucide-react";
 import {
   ARC_EDITORIAL_BODY_CLASS,
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
+  arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import type { TreatmentPage } from "@/content/pages/treatments";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,10 @@ type ArcTreatmentsRuledGridProps = {
   titleEmphasis?: string;
   subtitle?: string;
   treatments: readonly TreatmentPage[];
+  /** Accent for script headings + row labels — teal matches About. */
+  accentTone?: "rose" | "teal";
+  topSeam?: boolean;
+  bottomSeam?: boolean;
   className?: string;
 };
 
@@ -105,13 +110,17 @@ function useCanHover() {
 function TreatmentInteractiveRow({
   treatment,
   index,
+  accentTone,
 }: {
   treatment: TreatmentPage;
   index: number;
+  accentTone: "rose" | "teal";
 }) {
   const reducedMotion = useReducedMotion();
   const canHover = useCanHover();
   const showInteractivePreview = canHover && !reducedMotion;
+  const accentInk = accentTone === "teal" ? "text-arc-teal-ink" : "text-arc-rose-gold-ink";
+  const accentBright = accentTone === "teal" ? "text-arc-teal" : "text-arc-rose-gold";
 
   const [hovered, setHovered] = useState(false);
   const px = useMotionValue(0);
@@ -191,8 +200,16 @@ function TreatmentInteractiveRow({
           className={cn(
             "relative z-10 shrink-0 font-serif text-[clamp(2.75rem,7vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:pt-0.5",
             showInteractivePreview && hovered
-              ? "text-arc-rose-gold [text-shadow:0_1px_12px_rgba(0,0,0,0.4)]"
-              : "text-arc-charcoal/22 group-hover:text-arc-rose-gold-ink/40",
+              ? cn(
+                  accentBright,
+                  "[text-shadow:0_1px_12px_rgba(0,0,0,0.4)]",
+                )
+              : cn(
+                  "text-arc-charcoal/22",
+                  accentTone === "teal"
+                    ? "group-hover:text-arc-teal-ink/40"
+                    : "group-hover:text-arc-rose-gold-ink/40",
+                ),
           )}
           aria-hidden
         >
@@ -211,8 +228,8 @@ function TreatmentInteractiveRow({
                 className={cn(
                   "font-sans text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors duration-300",
                   hovered
-                    ? "text-arc-rose-gold [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]"
-                    : "text-arc-rose-gold-ink",
+                    ? cn(accentBright, "[text-shadow:0_1px_10px_rgba(0,0,0,0.35)]")
+                    : accentInk,
                 )}
               >
                 {treatment.categoryLabel}
@@ -254,7 +271,7 @@ function TreatmentInteractiveRow({
                 <ArrowRight
                   className={cn(
                     "size-6 transition-colors duration-300 md:size-7",
-                    hovered ? "text-white" : "text-arc-rose-gold-ink",
+                    hovered ? "text-white" : accentInk,
                   )}
                   strokeWidth={1.75}
                 />
@@ -264,10 +281,15 @@ function TreatmentInteractiveRow({
         ) : (
           <>
             <div className="relative z-10 min-w-0 flex-1">
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-arc-rose-gold-ink">
+              <p className={cn("font-sans text-[10px] font-semibold uppercase tracking-[0.22em]", accentInk)}>
                 {treatment.categoryLabel}
               </p>
-              <h3 className="mt-1.5 break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-rose-gold-ink">
+              <h3
+                className={cn(
+                  "mt-1.5 break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
+                  accentTone === "teal" ? "group-hover:text-arc-teal-ink" : "group-hover:text-arc-rose-gold-ink",
+                )}
+              >
                 {treatment.title}
               </h3>
               <p
@@ -280,7 +302,12 @@ function TreatmentInteractiveRow({
               </p>
             </div>
 
-            <span className="relative z-10 inline-flex shrink-0 items-center gap-2 self-start font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-arc-rose-gold-ink sm:self-center">
+            <span
+              className={cn(
+                "relative z-10 inline-flex shrink-0 items-center gap-2 self-start font-sans text-[11px] font-semibold uppercase tracking-[0.18em] sm:self-center",
+                accentInk,
+              )}
+            >
               View
               <ArrowRight
                 className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none"
@@ -295,7 +322,7 @@ function TreatmentInteractiveRow({
 }
 
 /**
- * Treatment index — same text system as About values / mission (stacked serif + script, editorial body, ruled rows).
+ * Treatment index, same text system as About values / mission (stacked serif + script, editorial body, ruled rows).
  */
 export function ArcTreatmentsRuledGrid({
   id,
@@ -303,16 +330,29 @@ export function ArcTreatmentsRuledGrid({
   titleEmphasis,
   subtitle,
   treatments,
+  accentTone = "teal",
+  topSeam = false,
+  bottomSeam = false,
   className,
 }: ArcTreatmentsRuledGridProps) {
   const rows = treatments.filter((t) => t.slug !== "overview");
+  const emphasisClass = arcHeadlineEmphasisClass(accentTone);
 
   return (
     <section
       id={id}
-      className={cn("bg-arc-cream px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24 lg:py-28", className)}
+      className={cn(
+        "relative bg-arc-cream px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24 lg:py-28",
+        className,
+      )}
     >
-      <div className={cn("mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
+      {topSeam ? (
+        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
+      ) : null}
+      {bottomSeam ? (
+        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+      ) : null}
+      <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
         <div className="min-w-0 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-10 xl:grid-cols-[minmax(0,38rem)_minmax(0,1fr)] xl:gap-16">
           <header
             data-scroll-section
@@ -326,13 +366,13 @@ export function ArcTreatmentsRuledGrid({
                 )}
               >
                 <TitleEmphasis
-                  className={cn(ARC_HEADLINE_TITLE_EMPHASIS_CLASS, "shrink-0 leading-none")}
+                  className={cn(emphasisClass, "shrink-0 leading-none")}
                 >
                   {title}
                 </TitleEmphasis>
                 {titleEmphasis ? (
                   <TitleEmphasis
-                    className={cn(ARC_HEADLINE_TITLE_EMPHASIS_CLASS, "shrink-0 leading-none")}
+                    className={cn(emphasisClass, "shrink-0 leading-none")}
                   >
                     {titleEmphasis}
                   </TitleEmphasis>
@@ -348,7 +388,7 @@ export function ArcTreatmentsRuledGrid({
 
           <ul className="min-w-0 border-t border-arc-charcoal/12">
             {rows.map((t, idx) => (
-              <TreatmentInteractiveRow key={t.slug} treatment={t} index={idx} />
+              <TreatmentInteractiveRow key={t.slug} treatment={t} index={idx} accentTone={accentTone} />
             ))}
           </ul>
         </div>

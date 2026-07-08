@@ -76,7 +76,10 @@ function ClinicGalleryTile({
         src={slide.src}
         alt={slide.alt}
         fill
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]"
+        className={cn(
+          "object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
+          slide.objectPosition ?? "object-center",
+        )}
         sizes="(max-width: 768px) 72vw, 280px"
         draggable={false}
       />
@@ -200,9 +203,11 @@ export function ClinicGalleryDraggableGrid({
 export function ClinicGalleryStaticGrid({
   slides,
   className,
+  initialSlideIndex = 0,
 }: {
   slides: readonly ClinicCarouselSlide[];
   className?: string;
+  initialSlideIndex?: number;
 }) {
   return (
     <div
@@ -211,9 +216,15 @@ export function ClinicGalleryStaticGrid({
         className,
       )}
     >
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {slides.map((slide) => (
-          <ClinicGalleryTile key={slide.src} slide={slide} className="w-full" />
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+        {slides.map((slide, index) => (
+          <div
+            key={slide.src}
+            id={index === initialSlideIndex ? "clinic-gallery-focus" : undefined}
+            className={cn(index === initialSlideIndex && "scroll-mt-24")}
+          >
+            <ClinicGalleryTile slide={slide} className="w-full even:mt-0" />
+          </div>
         ))}
       </div>
     </div>

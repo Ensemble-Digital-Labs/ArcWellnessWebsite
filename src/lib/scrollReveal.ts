@@ -3,6 +3,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { enforceArcScrollTopAfterLayout } from "@/lib/arcScrollTopGuard";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
 import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
 
@@ -51,6 +52,7 @@ export function initArcScrollReveal() {
   });
 
   ScrollTrigger.refresh();
+  enforceArcScrollTopAfterLayout();
 
   const viewportH = window.innerHeight || 800;
   sections.forEach((section) => {

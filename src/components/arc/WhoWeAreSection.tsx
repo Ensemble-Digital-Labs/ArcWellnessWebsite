@@ -18,7 +18,7 @@ export function WhoWeAreSection({ imageSrc }: WhoWeAreSectionProps) {
         </h2>
         <div className="space-y-5 font-sans text-sm leading-relaxed text-arc-charcoal/90 md:text-base">
           <p>
-            ARC Wellness brings together aesthetics, wellness, and longevity under one roof—so
+            ARC Wellness brings together aesthetics, wellness, and longevity under one roof, so
             you can feel confident in your skin and supported in your health for the long term.
           </p>
           <p>

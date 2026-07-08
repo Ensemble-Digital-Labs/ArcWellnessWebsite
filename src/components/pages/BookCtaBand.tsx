@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteMeta } from "@/content/siteMeta";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { cn } from "@/lib/utils";
 
 type BookCtaBandProps = {
@@ -10,7 +11,7 @@ type BookCtaBandProps = {
 
 export function BookCtaBand({
   title = "Ready to begin?",
-  body = "Schedule a free consultation—we’ll map aesthetics, vitality, and longevity in one cohesive plan.",
+  body = "Schedule a free consultation, we’ll map aesthetics, vitality, and longevity in one cohesive plan.",
   className,
 }: BookCtaBandProps) {
   return (
@@ -31,7 +32,8 @@ export function BookCtaBand({
         <p className="mt-4 font-sans text-base leading-relaxed text-arc-charcoal/75 sm:text-lg">{body}</p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
           <Link
-            href="/book"
+            href={siteMeta.bookingUrl}
+            {...bookingLinkExternalProps(siteMeta.bookingUrl)}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-arc-teal px-8 py-3 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-white shadow-[0_8px_28px_rgba(131,208,187,0.4)] transition-[filter] hover:brightness-105"
           >
             Book consultation

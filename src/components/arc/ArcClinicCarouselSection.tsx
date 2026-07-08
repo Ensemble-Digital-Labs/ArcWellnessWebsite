@@ -26,6 +26,8 @@ export type ClinicCarouselSlide = {
   alt: string;
   label: string;
   caption?: string;
+  /** Tailwind object-position utility for crops (e.g. `object-[30%_center]`). */
+  objectPosition?: string;
 };
 
 type ArcClinicCarouselSectionProps = {

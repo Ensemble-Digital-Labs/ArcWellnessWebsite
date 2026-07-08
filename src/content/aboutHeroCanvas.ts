@@ -2,7 +2,7 @@ import type { ArcChapterHeroCanvasTile } from "@/components/arc/ArcChapterHeroIm
 import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 
 /**
- * About hero — triangular canvas (no overlap):
+ * About hero, triangular canvas (no overlap):
  *        [img1 top]
  * [img2]     [img3]
  */

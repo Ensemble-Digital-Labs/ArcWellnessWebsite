@@ -20,8 +20,28 @@
 # stray local copy (only build artifacts; real app lives at repo root)
 /arc-wellness/
 
-# local design reference tool — extract DESIGN.md from sites you like; not part of ARC
+# ── Local dev / design tooling (not deployed to Netlify) ─────────────────────
 /extraction tool/
+/learning/
+/local-envdev/
+/scripts/
+/design/
+/documents/
+/.cursor/
+/.vscode/
+
+# Agent IDE hints (not part of the site build)
+AGENTS.md
+CLAUDE.md
+
+# Client review & planning spreadsheets
+*.xlsx
+*.xls
+
+# Salterra / nav experiments — not used in production site
+/public/assets/branding/arc-nav-*
+/public/assets/branding/salterra-*
+/public/assets/branding/arc-nav-wiggle*
 
 # Source video files — often >100MB; GitHub rejects. Keep locally, use Git LFS, or host on CDN.
 /public/assets/videos/**/*.mov

@@ -1,15 +1,16 @@
 /**
- * Homepage narrative blocks — concentrated copy (see `documents/homepage-section-model-reference.md`).
+ * Homepage narrative blocks, concentrated copy (see `documents/homepage-section-model-reference.md`).
  */
 
 import { images } from "@/content/site";
+import { siteMeta } from "@/content/siteMeta";
 
 export const homeMicro1 = {
   headlineBefore: "Intentional care,",
   headlineEmphasis: "every step",
   headlineAfter: "",
   uspLine:
-    "Aesthetics, wellness, and longevity—designed as one continuous journey in St. Louis.",
+    "Aesthetics, wellness, and longevity, designed as one continuous journey in St. Louis.",
   linkHref: "/#about",
   linkLabel: "Explore the practice",
 } as const;
@@ -19,40 +20,39 @@ export const homeFounder = {
   headline: "Dr. Danish Jabbar",
   headlineEmphasisWord: "Dr. Danish",
   headlineEmphasisWord2: "Jabbar",
-  /** Editorial hero — reference-style bottom-left type (sans lead + large italic name). */
-  heroMeetLead: "Meet Dr.",
-  heroNameItalic: "Danish Jabbar",
   roleTitle: "Founder & lead physician",
-  intro:
-    "Dr. Jabbar founded ARC Wellness to deliver physician-led care that treats aesthetics and whole-body wellness as one plan. He brings hospital-seasoned judgment to every consult—so recommendations stay honest, proportionate, and aligned with how you actually live.",
-  deliverablesHeading: "What he delivers",
-  deliverables: [
-    "Natural-looking aesthetic outcomes—refinement without an “overdone” look",
-    "Integrated planning across skin, vitality, and longevity goals you name as priorities",
-    "Evidence-informed protocols and transparent options, including when the best advice is to wait or do less",
-    "Ongoing partnership: follow-up, adjustment, and accountability—not a one-off visit",
+  letterParagraphs: [
+    "Medicine gave me the privilege of caring for people. Experience taught me that good medicine is about more than treating disease.",
+    "For more than 20 years, I've cared for patients through many stages of life. I'm proud of the medicine I've practiced, but I've also seen its limitations. Too many people were surviving instead of thriving. They deserved more than another prescription or another referral. They deserved the time to ask questions, the opportunity to look deeper, and the freedom to explore every option that could improve how they lived, not just how long they lived.",
+    "That led me to ask a simple question: What if healthcare looked different?",
+    "What if we had the time to truly understand the whole person? What if we could connect the pieces instead of treating them one at a time? What if we could use every tool available, not just prescriptions, to help people feel better, function better, and live better?",
+    "Those questions became the foundation for Arc.",
   ] as const,
-  /** `#founder` mosaic — founder folder photography only (`images.founderPortrait` + `images.founderGallery`). */
-  accordionPanels: [
-    { title: "Physician-led", imageSrc: images.founderPortrait },
-    { title: "In practice", imageSrc: images.founderGallery[0] },
-    { title: "With patients", imageSrc: images.founderGallery[1] },
-    { title: "Approach", imageSrc: images.founderGallery[2] },
-    { title: "Partnership", imageSrc: images.founderGallery[3] },
-  ] as const,
+  closingLine: "Medicine saved lives. I wanted to help people truly live them.",
 } as const;
 
 export const homeWelcome = {
-  headline: "Wellness. Made Personal",
+  headline: "Wellness. Made Personal.",
   headlineEmphasisWord: "Made Personal",
-  paragraph1:
-    "We believe the finest care shouldn't come with a cost that holds you back. Our approach pairs medical-grade treatments (peptides, infusions, curated supplements) with pricing designed for real, lasting wellness.",
-  paragraph2:
-    "Indulgent, yes. Exclusive? Never. This is self-care that honors both who you are and who you're becoming.",
-  proofLead: "Rooted in St. Louis.",
-  proofRest: "Concierge continuity from first consult through long-term follow-up.",
-  ctaHref: "/#services",
-  ctaLabel: "See our pillars of care",
+  paragraphs: [
+    "Personalized care starts long before your first treatment.",
+    "It starts with understanding.",
+    "Before recommendations are made, we take the time to understand your health, your goals, your lifestyle, and the life you're building. From there, your Blueprint begins to take shape, a thoughtful plan designed specifically for you and refined as your health evolves.",
+    "Because every recommendation should have a purpose.",
+    "And every person deserves a Blueprint.",
+  ],
+} as const;
+
+export const homePathIntro = {
+  lead: "Your story starts here.",
+  ctaLabel: "Let's begin",
+  ctaHref: siteMeta.bookingUrl,
+} as const;
+
+/** Hero secondary CTA — full page route (no in-page `#path` scroll). */
+export const homeHeroSecondaryCta = {
+  label: "See How it Works",
+  href: "/about",
 } as const;
 
 export const homeTrustStrip = {
@@ -67,16 +67,23 @@ export const homeMicro2 = {
   eyebrow: "Why ARC",
   headlineBefore: "Results",
   headlineEmphasis: "you can feel",
-  headlineAfter: "—without losing yourself.",
+  headlineAfter: "without losing yourself.",
   uspLine: "Natural-looking refinement, measurable wellness markers, and a team that respects your timeline.",
-  linkHref: "/#path",
-  linkLabel: "View your path",
+  linkHref: "/about",
+  linkLabel: "Our approach",
 } as const;
 
 export const homeInvestSupport =
   "Reserve a private consult to map aesthetics, vitality, and longevity goals in one cohesive plan.";
 
-/** FAQ category labels for `#faq` tabs — keys must match `homeFaqByCategory`. */
+export const homeInvestCtaLabel = "Reserve your Consultation";
+
+export const homeInvestSignoff = {
+  preamble: "We look forward to meeting you",
+  name: "Dr. Jabbar",
+} as const;
+
+/** FAQ category labels for `#faq` tabs, keys must match `homeFaqByCategory`. */
 export const homeFaqCategories = {
   general: "Getting started",
   booking: "Scheduling & results",
@@ -91,20 +98,20 @@ export type HomeFaqItem = {
   answer: string;
 };
 
-/** FAQ entries grouped by tab — edit copy with final legal/clinical approval. */
+/** FAQ entries grouped by tab, edit copy with final legal/clinical approval. */
 export const homeFaqByCategory: Record<HomeFaqCategory, readonly HomeFaqItem[]> = {
   general: [
     {
       id: "first-visit",
       question: "What happens at the first visit?",
       answer:
-        "We begin with a conversation about your goals, history, and day-to-day life. When it helps, we map next steps—labs, imaging, or treatment options—so you leave with clarity, not a generic checklist.",
+        "We begin with a conversation about your goals, history, and day-to-day life. When it helps, we map next steps, labs, imaging, or treatment options, so you leave with clarity, not a generic checklist.",
     },
     {
       id: "combine-care",
       question: "Can aesthetics and functional medicine be one plan?",
       answer:
-        "Yes—that is how ARC is structured. Skin, vitality, and longevity are reviewed together so recommendations stay coherent and proportional to what you want.",
+        "Yes, that is how ARC is structured. Skin, vitality, and longevity are reviewed together so recommendations stay coherent and proportional to what you want.",
     },
   ],
   booking: [
@@ -131,7 +138,7 @@ export const homeFaqByCategory: Record<HomeFaqCategory, readonly HomeFaqItem[]> 
   ],
 };
 
-/** Portrait pool for the 3D sphere — swap for approved photography. */
+/** Portrait pool for the 3D sphere, swap for approved photography. */
 const testimonialPortraitPool = [
   images.services[0],
   images.services[1],
@@ -144,13 +151,13 @@ const testimonialPortraitPool = [
   images.founderPortrait,
 ] as const;
 
-/** Dummy copy — replace with real patient stories when available. */
+/** Dummy copy, replace with real patient stories when available. */
 const testimonialCopyRows = [
   {
     attribution: "Sarah M.",
     context: "Aesthetic consultation",
     quote:
-      "I wanted subtle refinement, not a different face. The plan was honest, unhurried, and the outcome still looks like me—just rested.",
+      "I wanted subtle refinement, not a different face. The plan was honest, unhurried, and the outcome still looks like me, just rested.",
   },
   {
     attribution: "James R.",
@@ -168,7 +175,7 @@ const testimonialCopyRows = [
     attribution: "Priya N.",
     context: "Skin health",
     quote:
-      "They never oversell. If something isn’t right for my skin or my season of life, they say so—and the alternatives still feel elevated.",
+      "They never oversell. If something isn’t right for my skin or my season of life, they say so, and the alternatives still feel elevated.",
   },
   {
     attribution: "Daniel T.",
@@ -180,7 +187,7 @@ const testimonialCopyRows = [
     attribution: "Olivia H.",
     context: "Injectables",
     quote:
-      "Natural movement was non-negotiable for me. The approach was conservative in the best way—I look refreshed, not ‘done.’",
+      "Natural movement was non-negotiable for me. The approach was conservative in the best way:I look refreshed, not ‘done.’",
   },
   {
     attribution: "Marcus W.",
@@ -198,7 +205,7 @@ const testimonialCopyRows = [
     attribution: "Chris L.",
     context: "Men’s aesthetics",
     quote:
-      "No judgment, no hype—just straightforward guidance. The team treats this like healthcare with an eye for detail.",
+      "No judgment, no hype, just straightforward guidance. The team treats this like healthcare with an eye for detail.",
   },
   {
     attribution: "Nina P.",
@@ -222,7 +229,7 @@ const testimonialCopyRows = [
     attribution: "Riley B.",
     context: "Consultation only",
     quote:
-      "Even when I wasn’t ready to book, the consult was worth it—clear options, no pressure, real education.",
+      "Even when I wasn’t ready to book, the consult was worth it, clear options, no pressure, real education.",
   },
   {
     attribution: "Casey D.",
@@ -234,7 +241,7 @@ const testimonialCopyRows = [
     attribution: "Morgan A.",
     context: "Combination plan",
     quote:
-      "Skin, energy, and confidence were treated as one story—not three separate upsells.",
+      "Skin, energy, and confidence were treated as one story, not three separate upsells.",
   },
   {
     attribution: "Alexis V.",
@@ -246,19 +253,19 @@ const testimonialCopyRows = [
     attribution: "Quinn E.",
     context: "Sensitive skin",
     quote:
-      "They listened to my history and built from there. No cookie-cutter protocol—just thoughtful steps.",
+      "They listened to my history and built from there. No cookie-cutter protocol, just thoughtful steps.",
   },
   {
     attribution: "Jamie C.",
     context: "Referral",
     quote:
-      "A friend sent me here after years of ‘maybe later.’ I wish I’d come sooner—the tone of care is different.",
+      "A friend sent me here after years of ‘maybe later.’ I wish I’d come sooner, the tone of care is different.",
   },
   {
     attribution: "Reese T.",
     context: "Microneedling",
     quote:
-      "Healing was explained in plain language. I knew what to expect day by day—no mystery, no anxiety spiral.",
+      "Healing was explained in plain language. I knew what to expect day by day, no mystery, no anxiety spiral.",
   },
   {
     attribution: "Blake M.",
@@ -276,7 +283,7 @@ const testimonialCopyRows = [
     attribution: "Drew P.",
     context: "Peels & tone",
     quote:
-      "Progress was incremental in the best way—my skin looks brighter without looking ‘treated.’",
+      "Progress was incremental in the best way, my skin looks brighter without looking ‘treated.’",
   },
   {
     attribution: "Harper G.",
@@ -294,7 +301,7 @@ const testimonialCopyRows = [
     attribution: "Cameron Y.",
     context: "Athlete",
     quote:
-      "Recovery guidance respected my training schedule. Nothing reckless—just smart timing.",
+      "Recovery guidance respected my training schedule. Nothing reckless, just smart timing.",
   },
   {
     attribution: "Sidney F.",
@@ -306,7 +313,7 @@ const testimonialCopyRows = [
     attribution: "Rowan I.",
     context: "Minimalist goals",
     quote:
-      "I asked for the smallest effective steps. They didn’t treat that like a compromise—just a design constraint.",
+      "I asked for the smallest effective steps. They didn’t treat that like a compromise, just a design constraint.",
   },
   {
     attribution: "Parker O.",
@@ -318,7 +325,7 @@ const testimonialCopyRows = [
     attribution: "Sage U.",
     context: "Confidence",
     quote:
-      "It’s not vanity—it’s alignment. They never made me feel silly for caring about how I present.",
+      "It’s not vanity, it’s alignment. They never made me feel silly for caring about how I present.",
   },
   {
     attribution: "Lane H.",
@@ -337,7 +344,7 @@ const testimonialCopyRows = [
 export const homeTestimonials = testimonialCopyRows.map((row, i) => ({
   id: `testimonial-${String(i + 1).padStart(2, "0")}`,
   imageSrc: testimonialPortraitPool[i % testimonialPortraitPool.length],
-  imageAlt: `ARC Wellness patient — ${row.attribution}`,
+  imageAlt: `ARC Wellness patient, ${row.attribution}`,
   quote: row.quote,
   attribution: row.attribution,
   context: row.context,

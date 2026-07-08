@@ -3,15 +3,15 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** Reserved — Tibbixel SVG path (frame disabled; asset kept for easy restore). */
+/** Reserved: Tibbixel SVG path (frame disabled; asset kept for easy restore). */
 export const TIBBIXEL_COPY_FRAME_SVG =
   "/assets/decoration/micro-statement-tibbixel-frame.svg";
 
 type ArcTibbixelCopyFrameProps = {
   children: ReactNode;
-  /** Unused while frame art is off — kept so callers don’t need churn when restoring. */
+  /** Unused while frame art is off, kept so callers don’t need churn when restoring. */
   ornamentMotion?: CSSProperties;
-  /** Outer wrapper — width / alignment (e.g. `max-w-*`, `text-center`). */
+  /** Outer wrapper, width / alignment (e.g. `max-w-*`, `text-center`). */
   className?: string;
   /** Extra classes on the inner copy stack (padding overrides). */
   innerClassName?: string;
@@ -20,7 +20,7 @@ type ArcTibbixelCopyFrameProps = {
 };
 
 /**
- * Copy wrapper only — Tibbixel SVG ornament is currently disabled site-wide.
+ * Copy wrapper only: Tibbixel SVG ornament is currently disabled site-wide.
  * Inner padding matches the previous framed layout so type rhythm stays stable.
  */
 export function ArcTibbixelCopyFrame({

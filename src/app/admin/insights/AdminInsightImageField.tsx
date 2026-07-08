@@ -64,7 +64,7 @@ export function AdminInsightImageField({
         <div>
           <p className="text-sm font-medium text-arc-charcoal">Feature image</p>
           <p className="mt-1 text-xs text-arc-charcoal/50">
-            JPG, PNG, WebP, or GIF — max 5 MB. Shown on the Insights grid and detail page.
+            JPG, PNG, WebP, or GIF, max 5 MB. Shown on the Insights grid and detail page.
           </p>
         </div>
         <button

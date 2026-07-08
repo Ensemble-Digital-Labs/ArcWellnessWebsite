@@ -6,125 +6,78 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
 import { ClinicGalleryOverlay } from "@/components/arc/clinic-gallery/ClinicGalleryOverlay";
+import { ClinicSpacePreviewSlideshow } from "@/components/arc/clinic-gallery/ClinicSpacePreviewSlideshow";
 import {
-  ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
+  arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 
 gsap.registerPlugin(ScrollTrigger);
+
+function ClinicGalleryHandArrow({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 88 52"
+      className={cn("shrink-0 text-arc-teal-ink", className)}
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M6 32C16 14 34 8 52 16C64 22 70 24 78 20"
+        stroke="currentColor"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M70 12L80 20L72 28"
+        stroke="currentColor"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 type ArcClinicSpaceTeaserSectionProps = {
   id?: string;
   title: string;
   titleEmphasis?: string;
+  previewIntro?: string;
   slides: readonly ClinicCarouselSlide[];
-  ctaPrimary?: string;
-  ctaSecondary?: string;
   className?: string;
+  headlineEmphasisTone?: "rose" | "teal";
+  /** Soft cream feather at section top (About page seams). */
+  topSeam?: boolean;
+  /** Soft cream exit into the next section (gallery → mission). */
+  bottomSeam?: boolean;
 };
-
-/** Large concentric arcs anchored bottom-right — only the upper-left quadrant shows (Cardinal-style bleed). */
-function ClinicCornerArcCta({
-  label,
-  ctaPrimary,
-  ctaSecondary,
-  motionStyle,
-  buttonRef,
-  onClick,
-}: {
-  label: string;
-  ctaPrimary: string;
-  ctaSecondary: string;
-  motionStyle: React.CSSProperties;
-  buttonRef: React.RefObject<HTMLButtonElement | null>;
-  onClick: () => void;
-}) {
-  return (
-    <div
-      className="pointer-events-auto absolute bottom-0 right-0 z-20 size-[min(70vw,20rem)] sm:size-[min(68vw,30rem)] md:size-[min(52vw,36rem)]"
-      style={motionStyle}
-    >
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={onClick}
-        aria-label={label}
-        className={cn(
-          "group relative block size-full cursor-pointer overflow-visible text-left",
-          "transition-transform duration-500 ease-out",
-          "hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/90",
-        )}
-      >
-        <svg
-          viewBox="0 0 400 400"
-          className="pointer-events-none absolute bottom-0 right-0 size-[200%] origin-bottom-right"
-          aria-hidden
-          focusable="false"
-        >
-          <circle
-            cx="400"
-            cy="400"
-            r="330"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="32"
-            className="text-arc-teal/35 transition-colors duration-300 group-hover:text-arc-teal/50"
-          />
-          <circle
-            cx="400"
-            cy="400"
-            r="252"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="26"
-            className="text-arc-teal-ink/55 transition-colors duration-300 group-hover:text-arc-teal-ink/75"
-          />
-          <circle
-            cx="400"
-            cy="400"
-            r="194"
-            className="fill-arc-teal-muted/55 transition-[fill] duration-300 group-hover:fill-arc-teal-muted/72"
-          />
-        </svg>
-
-        {/* Sit in the visible ring band — upper-left quadrant of the corner arcs */}
-        <span className="pointer-events-none absolute left-[50%] top-[62%] z-10 flex w-[min(15rem,62%)] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 text-center sm:top-[64%] sm:w-[min(16.5rem,58%)] sm:gap-2.5 md:top-[65%] lg:w-[min(18rem,55%)]">
-          <span className="font-sans text-[clamp(0.8125rem,2.4vw,1rem)] font-bold uppercase tracking-[0.2em] text-arc-charcoal transition-colors duration-300 group-hover:text-arc-teal-ink">
-            {ctaPrimary}
-          </span>
-          {ctaSecondary ? (
-            <span className="font-serif text-[clamp(1.45rem,4.8vw,2.25rem)] italic leading-[1.12] text-arc-teal-ink transition-colors duration-300 group-hover:text-arc-teal">
-              {ctaSecondary}
-            </span>
-          ) : null}
-        </span>
-      </button>
-    </div>
-  );
-}
 
 export function ArcClinicSpaceTeaserSection({
   id,
   title,
   titleEmphasis,
+  previewIntro,
   slides,
-  ctaPrimary = "Click here",
-  ctaSecondary = "to see our space",
   className,
+  headlineEmphasisTone = "teal",
+  topSeam = false,
+  bottomSeam = false,
 }: ArcClinicSpaceTeaserSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const galleryReturnFocusRef = useRef<HTMLButtonElement>(null);
   const [progress, setProgress] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const openButtonRef = useRef<HTMLButtonElement>(null);
-  const ctaAriaLabel = ctaSecondary ? `${ctaPrimary} ${ctaSecondary}` : ctaPrimary;
+  const [previewIndex, setPreviewIndex] = useState(0);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -174,16 +127,18 @@ export function ArcClinicSpaceTeaserSection({
     opacity: Math.min(1, 0.7 + p * 0.3),
     transform: `translate3d(0, ${22 - p * 22}px, 0)`,
   };
-  const buttonReveal = Math.min(1, Math.max(0, (p - 0.28) / 0.72));
-  const buttonMotion = {
-    opacity: buttonReveal,
-    transform: `translate3d(0, ${24 - buttonReveal * 24}px, 0) scale(${0.92 + buttonReveal * 0.08})`,
+  const introReveal = Math.min(1, Math.max(0, (p - 0.15) / 0.85));
+  const introMotion = {
+    opacity: introReveal,
+    transform: `translate3d(0, ${14 - introReveal * 14}px, 0)`,
   };
 
   const handleCloseGallery = () => {
     setGalleryOpen(false);
-    requestAnimationFrame(() => openButtonRef.current?.focus());
+    requestAnimationFrame(() => galleryReturnFocusRef.current?.focus());
   };
+
+  const openGallery = () => setGalleryOpen(true);
 
   return (
     <>
@@ -191,11 +146,13 @@ export function ArcClinicSpaceTeaserSection({
         ref={sectionRef}
         id={id}
         className={cn(
-          "relative overflow-hidden bg-arc-cream py-20 text-arc-charcoal sm:py-24 md:py-28",
+          "relative overflow-hidden bg-arc-teal-muted/25 py-20 text-arc-charcoal sm:py-24 md:py-28",
+          !topSeam && "border-t border-arc-charcoal/8",
           className,
         )}
       >
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
+        {topSeam ? <ArcSectionSeamBlend edge="top" scope="background" /> : null}
+        <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
           <Image
             src={CLINIC_SPACE_TEASER_AMBIENT_SRC}
             alt=""
@@ -203,41 +160,66 @@ export function ArcClinicSpaceTeaserSection({
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-arc-cream/28" />
+          <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/55 via-arc-cream/35 to-arc-cream/70" />
+          {bottomSeam ? (
+            <div
+              className="absolute inset-x-0 bottom-0 z-[2] h-[min(22vh,10rem)] bg-gradient-to-t from-arc-cream via-arc-cream/75 to-transparent"
+              aria-hidden
+            />
+          ) : null}
         </div>
 
-        <ClinicCornerArcCta
-          label={ctaAriaLabel}
-          ctaPrimary={ctaPrimary}
-          ctaSecondary={ctaSecondary}
-          motionStyle={buttonMotion}
-          buttonRef={openButtonRef}
-          onClick={() => setGalleryOpen(true)}
-        />
+        <div className={cn("relative z-10 mx-auto px-6 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-x-10 xl:gap-x-14">
+            <div className="lg:col-span-5 lg:self-center">
+              <h2
+                className={cn(
+                  "max-w-xl pb-[0.14em] text-arc-charcoal will-change-transform",
+                  ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                )}
+                style={titleMotion}
+              >
+                <span className="block text-arc-charcoal">{title}</span>
+                {titleEmphasis ? (
+                  <TitleEmphasis
+                    className={cn(
+                      arcHeadlineEmphasisClass(headlineEmphasisTone),
+                      "mt-1 block leading-[1.04] sm:mt-1.5",
+                    )}
+                  >
+                    {titleEmphasis}
+                  </TitleEmphasis>
+                ) : null}
+              </h2>
 
-        <div className={cn("pointer-events-none relative z-30 mx-auto px-6 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
-          <div className="relative max-w-3xl pb-[min(42vw,11.5rem)] sm:max-w-2xl sm:pb-[min(36vw,12rem)] md:max-w-[min(100%,34rem)] md:pb-20 lg:pb-16">
-            <h2
-              className={cn(
-                "pointer-events-auto max-w-none pb-[0.14em] text-arc-charcoal will-change-transform",
-                ARC_SPLIT_HEADLINE_SERIF_CLASS,
-              )}
-              style={titleMotion}
-            >
-              <span className="block text-arc-charcoal">{title}</span>
-              {titleEmphasis ? (
-                <TitleEmphasis
-                  className={cn(
-                    ARC_HEADLINE_TITLE_EMPHASIS_CLASS,
-                    "mt-1 block leading-[1.04] sm:mt-1.5",
-                  )}
-                >
-                  {titleEmphasis}
-                </TitleEmphasis>
+              {previewIntro ? (
+                <div className="mt-6 sm:mt-8 lg:flex lg:w-full lg:justify-end" style={introMotion}>
+                  <div className="flex max-w-md flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:items-center lg:gap-3 xl:gap-4">
+                    <p className="text-center font-title-emphasis text-[1.35rem] leading-snug tracking-tight text-arc-teal-ink sm:text-[1.45rem] lg:text-right">
+                      {previewIntro}
+                    </p>
+                    <ClinicGalleryHandArrow className="h-10 w-14 rotate-90 lg:h-11 lg:w-[5.25rem] lg:rotate-0 lg:translate-x-1 xl:w-24 xl:translate-x-2" />
+                  </div>
+                </div>
               ) : null}
-            </h2>
+            </div>
+
+            <div className="lg:col-span-7">
+              <ClinicSpacePreviewSlideshow
+                slides={slides}
+                activeIndex={previewIndex}
+                onActiveIndexChange={setPreviewIndex}
+                onOpenGallery={openGallery}
+                reduceMotion={reduceMotion}
+                galleryReturnFocusRef={galleryReturnFocusRef}
+              />
+            </div>
           </div>
         </div>
+
+        {bottomSeam ? (
+          <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
+        ) : null}
       </section>
 
       <ClinicGalleryOverlay
@@ -245,6 +227,7 @@ export function ArcClinicSpaceTeaserSection({
         onClose={handleCloseGallery}
         slides={slides}
         reduceMotion={reduceMotion}
+        initialSlideIndex={previewIndex}
       />
     </>
   );

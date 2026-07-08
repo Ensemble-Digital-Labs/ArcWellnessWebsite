@@ -115,7 +115,7 @@ export function SimpleFooter() {
 
             <div className="order-1 flex flex-col items-center justify-center text-center md:order-2">
               <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-[#f7f4ef]/92 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)] sm:text-xl md:text-2xl md:leading-relaxed">
-                Elevated care, extraordinary results — a life well-lived.
+                Elevated care, extraordinary results, a life well-lived.
               </p>
             </div>
 
@@ -240,7 +240,7 @@ export function SimpleFooter() {
 
             <p className="order-1 flex-1 text-center font-sans text-[10px] leading-relaxed text-white/78 sm:order-2 sm:text-[11px] md:px-4">
               ARC Wellness is committed to digital accessibility and to providing an inclusive experience for every guest.
-              If you have difficulty using this site or need assistance, please contact us — we will be glad to help.
+              If you have difficulty using this site or need assistance, please contact us, we will be glad to help.
             </p>
 
             <Link

@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
 import {
-  ClinicGalleryDraggableGrid,
   ClinicGalleryStaticGrid,
 } from "@/components/arc/clinic-gallery/ClinicGalleryDraggableGrid";
 import { prefersNativeScroll } from "@/lib/arcScrollMode";
@@ -17,6 +16,7 @@ type ClinicGalleryOverlayProps = {
   onClose: () => void;
   slides: readonly ClinicCarouselSlide[];
   reduceMotion: boolean;
+  initialSlideIndex?: number;
 };
 
 export function ClinicGalleryOverlay({
@@ -24,6 +24,7 @@ export function ClinicGalleryOverlay({
   onClose,
   slides,
   reduceMotion,
+  initialSlideIndex = 0,
 }: ClinicGalleryOverlayProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -36,6 +37,19 @@ export function ClinicGalleryOverlay({
     if (!open) return;
 
     closeRef.current?.focus();
+
+    const scrollToFocus = () => {
+      document.getElementById("clinic-gallery-focus")?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "center",
+      });
+    };
+
+    let scrollTimer: number | undefined;
+    const scrollFrame = window.requestAnimationFrame(() => {
+      scrollToFocus();
+      scrollTimer = window.setTimeout(scrollToFocus, 120);
+    });
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -52,13 +66,15 @@ export function ClinicGalleryOverlay({
     }
 
     return () => {
+      window.cancelAnimationFrame(scrollFrame);
+      if (scrollTimer) window.clearTimeout(scrollTimer);
       window.removeEventListener("keydown", onKey);
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       const main = document.getElementById("main");
       if (main) main.style.overflow = "";
     };
-  }, [open, onClose]);
+  }, [open, onClose, reduceMotion, initialSlideIndex]);
 
   if (!mounted) return null;
 
@@ -82,7 +98,7 @@ export function ClinicGalleryOverlay({
                 id="clinic-gallery-exit-hint"
                 className="font-sans text-sm text-white/55 sm:text-[0.9375rem]"
               >
-                Drag to explore · Hover each photo for its story · Press Esc or close to exit
+                Scroll to explore our space · Hover each photo for its story · Press Esc or close to exit
               </p>
             </div>
             <motion.button
@@ -104,11 +120,7 @@ export function ClinicGalleryOverlay({
             </motion.button>
           </header>
 
-          {reduceMotion ? (
-            <ClinicGalleryStaticGrid slides={slides} />
-          ) : (
-            <ClinicGalleryDraggableGrid slides={slides} variant="masonry" />
-          )}
+          <ClinicGalleryStaticGrid slides={slides} initialSlideIndex={initialSlideIndex} />
         </motion.div>
       ) : null}
     </AnimatePresence>,

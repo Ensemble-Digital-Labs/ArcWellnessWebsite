@@ -37,8 +37,28 @@ export function getArcScrollTriggerScroller(): HTMLElement | undefined {
 }
 
 export function getArcScrollViewportHeight(scroller?: HTMLElement | null): number {
-  if (scroller) return scroller.clientHeight || window.innerHeight || 720;
-  return window.innerHeight || 720;
+  const visual =
+    typeof window !== "undefined" ? window.visualViewport?.height : undefined;
+  const windowH =
+    typeof window !== "undefined" ? window.innerHeight || 720 : 720;
+  const base = Math.round(visual ?? windowH);
+
+  if (scroller) {
+    const scrollerH = scroller.clientHeight;
+    return Math.max(520, scrollerH || base);
+  }
+
+  return Math.max(520, base);
+}
+
+/** Pin scrub length — scales with viewport height (floored so short laptops still scroll). */
+export function getArcPinScrollDistance(
+  multiplier: number,
+  scroller?: HTMLElement | null,
+): number {
+  return Math.round(
+    getArcScrollViewportHeight(scroller) * Math.max(0.2, multiplier),
+  );
 }
 
 /** Pass into ScrollTrigger.create when a custom scroller is required. */

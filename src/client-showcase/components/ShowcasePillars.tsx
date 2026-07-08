@@ -10,7 +10,7 @@ export function ShowcasePillars() {
             Elevating your care
           </h2>
           <p className="mt-4 font-sans text-base leading-relaxed text-arc-charcoal/78">
-            At ARC Wellness, we treat the whole person—clinical judgment, aesthetics, and lifestyle—so your plan stays
+            At ARC Wellness, we treat the whole person, clinical judgment, aesthetics, and lifestyle, so your plan stays
             coherent visit after visit.
           </p>
         </div>
@@ -29,7 +29,7 @@ export function ShowcasePillars() {
               </li>
               <li className="flex gap-2">
                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-arc-teal" aria-hidden />
-                Honest consults—when the best advice is to wait, do less, or sequence differently
+                Honest consults, when the best advice is to wait, do less, or sequence differently
               </li>
               <li className="flex gap-2">
                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-arc-teal" aria-hidden />
@@ -41,7 +41,7 @@ export function ShowcasePillars() {
           <div className="rounded-2xl border border-arc-charcoal/10 bg-white p-6 shadow-sm sm:p-8">
             <h3 className="font-serif text-xl font-semibold text-arc-charcoal sm:text-2xl">Integrated wellness &amp; longevity</h3>
             <p className="mt-3 font-sans text-sm leading-relaxed text-arc-charcoal/75">
-              Functional-style depth where it helps—labs, vitality, stress load, and habits—paired with a plan you can
+              Functional-style depth where it helps, labs, vitality, stress load, and habits, paired with a plan you can
               actually sustain.
             </p>
             <ul className="mt-6 space-y-3 font-sans text-sm leading-relaxed text-arc-charcoal/85">
@@ -51,7 +51,7 @@ export function ShowcasePillars() {
               </li>
               <li className="flex gap-2">
                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-arc-teal" aria-hidden />
-                Coaching and continuity—not a one-off visit or generic checklist
+                Coaching and continuity, not a one-off visit or generic checklist
               </li>
               <li className="flex gap-2">
                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-arc-teal" aria-hidden />

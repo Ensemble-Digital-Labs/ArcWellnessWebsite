@@ -26,6 +26,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/book",
+        destination: "https://booking.mangomint.com/892312",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -11,13 +11,10 @@ import { ABOUT_HERO_CANVAS_TILES } from "@/content/aboutHeroCanvas";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
 import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { aboutPage } from "@/content/pages/about";
-import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 
 export function AboutPageContent() {
-  const { hero, clinicTour, mission, vision, values, founder } = aboutPage;
-
-  const storyLines = hero.paragraphs;
+  const { hero, clinicTour, mission, vision, values, founder, investSupport } = aboutPage;
 
   return (
     <>
@@ -31,6 +28,7 @@ export function AboutPageContent() {
         introMode="visible-on-load"
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
         heroCanvasTiles={ABOUT_HERO_CANVAS_TILES}
+        bottomSeam
       />
 
       <ArcAboutNarrativePinSection
@@ -38,18 +36,23 @@ export function AboutPageContent() {
         motion="enter-once"
         title={hero.title}
         titleEmphasis={hero.titleEmphasis}
-        storyLines={storyLines}
+        storyLines={hero.paragraphs}
         sideImageSrc={hero.storySideImage}
         sideImageAlt={hero.storySideImageAlt}
+        headlineEmphasisTone="teal"
+        topSeam
+        bottomSeam
       />
 
       <ArcClinicSpaceTeaserSection
         id="about-clinic"
         title={clinicTour.title}
         titleEmphasis={clinicTour.titleEmphasis}
-        ctaPrimary={clinicTour.ctaPrimary}
-        ctaSecondary={clinicTour.ctaSecondary}
+        previewIntro={clinicTour.previewIntro}
         slides={clinicTour.slides}
+        headlineEmphasisTone="teal"
+        topSeam
+        bottomSeam
       />
 
       <ArcScrollEditorialSection
@@ -61,7 +64,13 @@ export function AboutPageContent() {
         paragraphs={[mission.body]}
         imageSrc={CLINIC_INTERIOR_IMAGES.consultationLounge}
         imageAlt={CLINIC_INTERIOR_ALT.consultationLounge}
+        variant="cream"
+        headlineEmphasisTone="teal"
         revealLines
+        topSeam
+        seamTone="cream"
+        seamVariant="soft"
+        compactBottom
       />
 
       <ArcScrollEditorialSection
@@ -74,7 +83,11 @@ export function AboutPageContent() {
         imageSrc={CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom}
         imageAlt={CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom}
         imagePosition="left"
+        variant="cream"
+        headlineEmphasisTone="teal"
         revealLines
+        compactTop
+        compactBottom
       />
 
       <ArcValuesRevealSection
@@ -83,6 +96,11 @@ export function AboutPageContent() {
         titleEmphasis={values.titleEmphasis}
         intro={values.intro}
         items={values.items}
+        accentTone="teal"
+        marbleAmbient
+        topSeam
+        compactTop
+        bottomSeam
       />
 
       <ArcFounderNoteSection
@@ -95,11 +113,17 @@ export function AboutPageContent() {
         role={founder.role}
         imageSrc={images.founderPortrait}
         imageAlt="Dr. Danish Jabbar, Founder & Medical Director"
+        headlineEmphasisTone="teal"
+        topSeam
+        compactTop
+        bottomSeam
+        compactBottom
       />
 
       <InvestCTASection
         imageSrc={images.heroMedia}
-        supportingLine={homeInvestSupport}
+        supportingLine={investSupport}
+        topSeam
       />
     </>
   );

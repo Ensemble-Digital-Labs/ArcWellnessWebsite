@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { cn } from "@/lib/utils";
 
 type ArcTextUnderlineCtaProps = {
@@ -12,11 +13,11 @@ type ArcTextUnderlineCtaProps = {
   /** Center label + branding trail (welcome / micro statement on cream). */
   centered?: boolean;
   /**
-   * - **`teal`** — darker ink teal for cream / light grey backgrounds (default).
-   * - **`tealBright`** — signature vivid teal for dark photography or heavy overlays (e.g. hero).
-   * - **`champagne`** — gold on dark photography.
-   * - **`roseGoldInk`** — rose-gold ink on cream / light surfaces.
-   * - **`roseGoldBright`** — luminous rose-gold on dark photography.
+   * - **`teal`**, darker ink teal for cream / light grey backgrounds (default).
+   * - **`tealBright`**, signature vivid teal for dark photography or heavy overlays (e.g. hero).
+   * - **`champagne`**, gold on dark photography.
+   * - **`roseGoldInk`**, rose-gold ink on cream / light surfaces.
+   * - **`roseGoldBright`**, luminous rose-gold on dark photography.
    */
   accent?: "teal" | "tealBright" | "champagne" | "roseGoldInk" | "roseGoldBright";
 };
@@ -75,6 +76,7 @@ export function ArcTextUnderlineCta({
   return (
     <Link
       href={href}
+      {...bookingLinkExternalProps(href)}
       className={cn(
         "group inline-flex max-w-full flex-col items-stretch outline-none",
         centered && "mx-auto w-full max-w-[min(100%,22rem)] sm:max-w-md",

@@ -35,12 +35,20 @@ export function SimpleConcerns() {
                 key={panel.title}
                 className="flex flex-col overflow-hidden rounded-2xl border border-arc-charcoal/10 bg-white/80 shadow-sm backdrop-blur-sm"
               >
-                <div className="relative aspect-[16/10] w-full">
+                <div className="relative aspect-[4/5] w-full overflow-hidden">
                   <Image src={panel.image} alt="" fill className="object-cover object-center" sizes="(min-width: 1024px) 33vw, 50vw" />
                 </div>
-                <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
-                  <h3 className="font-serif text-lg font-semibold text-arc-charcoal">{panel.title}</h3>
-                  <p className="font-sans text-sm leading-relaxed text-arc-charcoal/78">{panel.blurb}</p>
+                <div className="flex flex-1 flex-col px-4 pb-4 pt-0 sm:px-5 sm:pb-5">
+                  <div
+                    className="h-px w-full bg-gradient-to-r from-arc-teal/70 via-arc-charcoal/15 to-transparent"
+                    aria-hidden
+                  />
+                  <div className="border-t border-arc-charcoal/8 pt-3 sm:pt-3.5">
+                    <h3 className="font-serif text-lg font-semibold text-arc-charcoal">{panel.title}</h3>
+                    {"tagline" in panel && panel.tagline ? (
+                      <p className="mt-1.5 font-sans text-sm leading-relaxed text-arc-charcoal/72">{panel.tagline}</p>
+                    ) : null}
+                  </div>
                 </div>
               </li>
             ))}

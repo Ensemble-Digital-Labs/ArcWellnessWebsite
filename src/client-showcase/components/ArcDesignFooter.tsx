@@ -40,7 +40,7 @@ export function ArcDesignFooter() {
               Elevated care for{" "}
               <span className={showcaseRoseClass.ink}>aesthetics</span>,{" "}
               <span className={showcaseRoseClass.ink}>wellness</span>, and{" "}
-              <span className={showcaseRoseClass.ink}>longevity</span>—rooted in intention and continuity.
+              <span className={showcaseRoseClass.ink}>longevity</span>, rooted in intention and continuity.
             </p>
           </div>
 

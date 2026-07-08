@@ -4,6 +4,7 @@ import { Phone } from "lucide-react";
 import { images } from "@/content/site";
 import { FOOTER_AMBIENT_BG } from "@/content/backgroundDecoration";
 import { siteMeta } from "@/content/siteMeta";
+import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 import { cn } from "@/lib/utils";
 
@@ -17,9 +18,9 @@ const footerLinks = {
   Visit: [
     { label: "Contact", href: "/contact" },
     { label: "Financing", href: "/financing" },
-    { label: "Book online", href: "/book" },
+    { label: "Book online", href: siteMeta.bookingUrl },
   ],
-} as const;
+};
 
 const linkClass =
   "text-white/85 underline decoration-transparent underline-offset-[3px] transition-colors hover:text-arc-teal hover:decoration-arc-teal/40";
@@ -61,7 +62,11 @@ export function ArcSimpleFooter() {
               <ul className="space-y-2.5 font-sans text-sm">
                 {items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className={linkClass}>
+                    <Link
+                      href={item.href}
+                      className={linkClass}
+                      {...bookingLinkExternalProps(item.href)}
+                    >
                       {item.label}
                     </Link>
                   </li>

@@ -51,12 +51,12 @@ const SLIDER_CONFIG = {
   },
 };
 
-/** Light editorial photography — cream plate, charcoal type, frosted nav. */
+/** Light editorial photography, cream plate, charcoal type, frosted nav. */
 const SHOWCASE_SHELL_CLASS =
   "relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-cream";
 const SHOWCASE_HEADLINE_CLASS =
   "shrink-0 text-center font-serif text-2xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-3xl lg:text-[2.5rem]";
-/** Transparent glass chip — hugs slide title + description (not full-bleed). */
+/** Transparent glass chip, hugs slide title + description (not full-bleed). */
 const SHOWCASE_SLIDE_GLASS_CLASS =
   "inline-flex w-fit max-w-[min(calc(100vw-3rem),34rem)] flex-col items-center gap-2 rounded-2xl border border-white/50 bg-white/30 px-5 py-4 text-center shadow-[0_12px_40px_rgba(44,44,44,0.1)] ring-1 ring-arc-charcoal/10 backdrop-blur-xl supports-[backdrop-filter]:bg-white/22 sm:gap-2.5 sm:px-7 sm:py-5";
 const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
@@ -258,15 +258,26 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     let texturesLoaded = false;
     let sliderEnabled = false;
     let progressAnimation: ReturnType<typeof setInterval> | null = null;
-    /** Browser timer id — avoid `NodeJS.Timeout` union from Node typings */
+    /** Browser timer id, avoid `NodeJS.Timeout` union from Node typings */
     let autoSlideTimer: number | null = null;
     let rafId = 0;
+    let isInView = true;
 
     const gsapCtx = gsap.context(() => {}, root);
 
     const SLIDE_DURATION = () => SLIDER_CONFIG.settings.autoSlideSpeed;
     const PROGRESS_UPDATE_INTERVAL = 50;
     const TRANSITION_DURATION = () => SLIDER_CONFIG.settings.transitionDuration;
+
+    function renderLoop() {
+      if (disposed) return;
+      if (!isInView) {
+        rafId = 0;
+        return;
+      }
+      rafId = requestAnimationFrame(renderLoop);
+      if (renderer && scene && camera) renderer.render(scene, camera);
+    }
 
     const loadImageTexture = (src: string) =>
       new Promise<THREE.Texture>((resolve, reject) => {
@@ -645,6 +656,26 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       else if (!isTransitioning) safeStartTimer();
     };
 
+    const viewportObserver = new IntersectionObserver(
+      (entries) => {
+        isInView = entries.some((entry) => entry.isIntersecting);
+        if (!isInView) {
+          stopAutoSlideTimer();
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+          return;
+        }
+        if (texturesLoaded && !disposed && !rafId) {
+          rafId = requestAnimationFrame(renderLoop);
+        }
+        if (!isTransitioning) safeStartTimer(300);
+      },
+      { threshold: 0.01, rootMargin: "120px" },
+    );
+    viewportObserver.observe(root);
+
     const createSlidesNavigation = () => {
       navEl.innerHTML = "";
       slideList.forEach((slide, i) => {
@@ -800,12 +831,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         root.classList.add("arc-showcase-loaded");
         setWebglReady(true);
         safeStartTimer(500);
-
-        const renderLoop = () => {
-          if (disposed) return;
-          rafId = requestAnimationFrame(renderLoop);
-          if (renderer && scene && camera) renderer.render(scene, camera);
-        };
         rafId = requestAnimationFrame(renderLoop);
       }
     })().catch(() => {
@@ -848,6 +873,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
     return () => {
       disposed = true;
+      viewportObserver.disconnect();
       prevEl?.removeEventListener("click", onPrev);
       nextEl?.removeEventListener("click", onNext);
       cancelAnimationFrame(rafId);
