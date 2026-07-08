@@ -15,6 +15,9 @@ import {
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
+import { captureArcPageScrollY } from "@/lib/arcScrollPosition";
+import { lockArcPageScrollForModal } from "@/lib/arcModalScrollLock";
+import { releaseArcScrollTopGuard } from "@/lib/arcScrollTopGuard";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
@@ -77,7 +80,9 @@ export function ArcClinicSpaceTeaserSection({
   const [progress, setProgress] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
   const [previewIndex, setPreviewIndex] = useState(0);
+  const unlockPageScrollRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -135,10 +140,22 @@ export function ArcClinicSpaceTeaserSection({
 
   const handleCloseGallery = () => {
     setGalleryOpen(false);
-    requestAnimationFrame(() => galleryReturnFocusRef.current?.focus());
+    unlockPageScrollRef.current?.();
+    unlockPageScrollRef.current = null;
+    requestAnimationFrame(() =>
+      galleryReturnFocusRef.current?.focus({ preventScroll: true }),
+    );
   };
 
-  const openGallery = () => setGalleryOpen(true);
+  const openGallery = () => {
+    if (galleryOpen) return;
+    const scrollY = captureArcPageScrollY();
+    releaseArcScrollTopGuard();
+    unlockPageScrollRef.current?.();
+    unlockPageScrollRef.current = lockArcPageScrollForModal(scrollY);
+    setGalleryInitialIndex(previewIndex);
+    setGalleryOpen(true);
+  };
 
   return (
     <>
@@ -146,7 +163,10 @@ export function ArcClinicSpaceTeaserSection({
         ref={sectionRef}
         id={id}
         className={cn(
-          "relative overflow-hidden bg-arc-teal-muted/25 py-20 text-arc-charcoal sm:py-24 md:py-28",
+          "relative overflow-visible bg-arc-teal-muted/25 pt-20 text-arc-charcoal sm:pt-24 md:pt-28",
+          bottomSeam
+            ? "pb-24 max-lg:pb-[calc(6rem+env(safe-area-inset-bottom,0px))] sm:pb-24 md:pb-28"
+            : "pb-20 sm:pb-24 md:pb-28",
           !topSeam && "border-t border-arc-charcoal/8",
           className,
         )}
@@ -163,15 +183,15 @@ export function ArcClinicSpaceTeaserSection({
           <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/55 via-arc-cream/35 to-arc-cream/70" />
           {bottomSeam ? (
             <div
-              className="absolute inset-x-0 bottom-0 z-[2] h-[min(22vh,10rem)] bg-gradient-to-t from-arc-cream via-arc-cream/75 to-transparent"
+              className="absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-arc-cream via-arc-cream/75 to-transparent max-lg:h-16 lg:h-[min(22vh,10rem)]"
               aria-hidden
             />
           ) : null}
         </div>
 
-        <div className={cn("relative z-10 mx-auto px-6 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-x-10 xl:gap-x-14">
-            <div className="lg:col-span-5 lg:self-center">
+        <div className={cn("relative z-10 mx-auto max-lg:px-4 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
+          <div className="flex flex-col items-center gap-10 max-lg:gap-12 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-10 xl:gap-x-14">
+            <div className="w-full max-w-md text-center lg:col-span-5 lg:max-w-xl lg:text-left lg:self-center">
               <h2
                 className={cn(
                   "max-w-xl pb-[0.14em] text-arc-charcoal will-change-transform",
@@ -204,7 +224,7 @@ export function ArcClinicSpaceTeaserSection({
               ) : null}
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="relative z-10 w-full max-w-[min(100%,22rem)] sm:max-w-md lg:col-span-7 lg:max-w-none">
               <ClinicSpacePreviewSlideshow
                 slides={slides}
                 activeIndex={previewIndex}
@@ -212,6 +232,7 @@ export function ArcClinicSpaceTeaserSection({
                 onOpenGallery={openGallery}
                 reduceMotion={reduceMotion}
                 galleryReturnFocusRef={galleryReturnFocusRef}
+                pauseAutoAdvance={galleryOpen}
               />
             </div>
           </div>
@@ -227,7 +248,7 @@ export function ArcClinicSpaceTeaserSection({
         onClose={handleCloseGallery}
         slides={slides}
         reduceMotion={reduceMotion}
-        initialSlideIndex={previewIndex}
+        initialSlideIndex={galleryInitialIndex}
       />
     </>
   );

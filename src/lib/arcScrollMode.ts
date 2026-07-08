@@ -5,14 +5,11 @@ let stableNativeScrollMode: boolean | null = null;
 
 /**
  * Use document scroll instead of Locomotive/Lenis inside `#main`.
- * Lenis + locked `html/body` overflow breaks touch scrolling on iOS and mobile previews.
+ * Only for prefers-reduced-motion — phones use the same Lenis `#main` path as laptop.
  */
 export function prefersNativeScroll(): boolean {
   if (typeof window === "undefined") return false;
-  if (prefersReducedMotion()) return true;
-  if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) return true;
-  if (window.matchMedia("(max-width: 767px)").matches) return true;
-  return false;
+  return prefersReducedMotion();
 }
 
 /** First paint / hydration — locks scroll mode for GSAP + `#main` for the session. */
@@ -30,9 +27,10 @@ export function getStableNativeScroll(): boolean {
   return stableNativeScrollMode ?? initArcStableScrollMode();
 }
 
-/** Locomotive scroll container; `undefined` = window/document scroll. */
+/** Lenis `#main` on desktop; `document.documentElement` when native proxy is active. */
 export function getArcScrollTriggerScroller(): HTMLElement | undefined {
-  if (getStableNativeScroll()) return undefined;
+  if (typeof document === "undefined") return undefined;
+  if (getStableNativeScroll()) return document.documentElement;
   return document.querySelector<HTMLElement>("#main") ?? undefined;
 }
 
@@ -69,9 +67,11 @@ export function arcScrollTriggerScrollerProps():
   return scroller ? { scroller } : {};
 }
 
-/** Pin options when scroll runs on the document (mobile native path). */
+/** Pin options — fixed pins on document scroll; transform pins inside Lenis `#main`. */
 export function arcScrollTriggerPinOptions(): { pinType: "fixed" } | Record<string, never> {
-  return getArcScrollTriggerScroller() ? {} : { pinType: "fixed" };
+  if (getStableNativeScroll()) return { pinType: "fixed" };
+  const scroller = document.querySelector<HTMLElement>("#main");
+  return scroller ? {} : { pinType: "fixed" };
 }
 
 /**

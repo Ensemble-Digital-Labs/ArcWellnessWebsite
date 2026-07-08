@@ -4,6 +4,8 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
+import { prefersTouchPointer } from "@/lib/arcTouchDevice";
+import { useArcHorizontalSwipeNavigate } from "@/lib/useArcHorizontalSwipeNavigate";
 import { cn } from "@/lib/utils";
 
 const AUTO_ADVANCE_MS = 5500;
@@ -16,6 +18,8 @@ type ClinicSpacePreviewSlideshowProps = {
   reduceMotion: boolean;
   className?: string;
   galleryReturnFocusRef?: RefObject<HTMLButtonElement | null>;
+  /** Pause slideshow timer while fullscreen gallery is open. */
+  pauseAutoAdvance?: boolean;
 };
 
 function slideTitle(label: string) {
@@ -30,9 +34,13 @@ export function ClinicSpacePreviewSlideshow({
   reduceMotion,
   className,
   galleryReturnFocusRef,
+  pauseAutoAdvance = false,
 }: ClinicSpacePreviewSlideshowProps) {
   const thumbStripRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const suppressPreviewClickRef = useRef(false);
   const [paused, setPaused] = useState(false);
+  const touchUx = prefersTouchPointer();
   const count = slides.length;
   const slide = slides[activeIndex];
 
@@ -47,11 +55,27 @@ export function ClinicSpacePreviewSlideshow({
   const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
   const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
+  const openGalleryFromPreview = useCallback(() => {
+    onOpenGallery();
+  }, [onOpenGallery]);
+
+  const openGalleryFromTouchTap = useCallback(() => {
+    suppressPreviewClickRef.current = true;
+    onOpenGallery();
+  }, [onOpenGallery]);
+
+  useArcHorizontalSwipeNavigate(previewRef, {
+    enabled: count > 1,
+    onSwipeLeft: goNext,
+    onSwipeRight: goPrev,
+    onTap: touchUx ? openGalleryFromTouchTap : undefined,
+  });
+
   useEffect(() => {
-    if (reduceMotion || paused || count <= 1) return;
+    if (reduceMotion || paused || pauseAutoAdvance || count <= 1) return;
     const timer = window.setInterval(() => goNext(), AUTO_ADVANCE_MS);
     return () => window.clearInterval(timer);
-  }, [activeIndex, count, goNext, paused, reduceMotion]);
+  }, [activeIndex, count, goNext, paused, pauseAutoAdvance, reduceMotion]);
 
   useEffect(() => {
     const strip = thumbStripRef.current;
@@ -60,7 +84,7 @@ export function ClinicSpacePreviewSlideshow({
     const target = thumb.offsetLeft - (strip.clientWidth - thumb.offsetWidth) / 2;
     strip.scrollTo({
       left: Math.max(0, target),
-      behavior: reduceMotion ? "auto" : "smooth",
+      behavior: "auto",
     });
   }, [activeIndex, reduceMotion]);
 
@@ -71,18 +95,8 @@ export function ClinicSpacePreviewSlideshow({
   const fadeMs = reduceMotion ? 0 : 450;
 
   return (
-    <div
-      className={cn("w-full", className)}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setPaused(false);
-        }
-      }}
-    >
-      <div className="mb-4 flex h-7 items-center justify-start">
+    <div className={cn("mx-auto w-full max-lg:pb-4", className)}>
+      <div className="mb-4 flex h-7 items-center justify-center lg:justify-start">
         <button
           ref={galleryReturnFocusRef}
           type="button"
@@ -100,17 +114,39 @@ export function ClinicSpacePreviewSlideshow({
         />
       </div>
 
-      <div className="group relative mt-4">
-        <button
-          type="button"
-          onClick={onOpenGallery}
+      <div className="group relative mt-4 max-lg:mx-auto max-lg:max-w-full">
+        <div
+          ref={previewRef}
+          role="button"
+          tabIndex={0}
+          data-arc-swipe-nav
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+              setPaused(false);
+            }
+          }}
+          onClick={() => {
+            if (suppressPreviewClickRef.current) {
+              suppressPreviewClickRef.current = false;
+              return;
+            }
+            if (!touchUx) openGalleryFromPreview();
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openGalleryFromPreview();
+            }
+          }}
           className={cn(
-            "relative block aspect-[3/2] w-full overflow-hidden rounded-sm bg-arc-charcoal/5",
+            "relative block aspect-[3/2] w-full cursor-pointer overflow-hidden rounded-xl bg-arc-charcoal/5 touch-pan-y max-lg:rounded-2xl",
             "shadow-[0_16px_40px_rgba(44,44,44,0.1)]",
-            "transition-shadow duration-300 hover:shadow-[0_20px_48px_rgba(44,44,44,0.14)]",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/90",
           )}
-          aria-label={`${slide.label}. Open full gallery.`}
+          aria-label={`${slide.label}. Swipe for more photos or tap to open full gallery.`}
         >
           {slides.map((item, index) => {
             const isActive = index === activeIndex;
@@ -170,7 +206,7 @@ export function ClinicSpacePreviewSlideshow({
               })}
             </div>
           </div>
-        </button>
+        </div>
 
         {count > 1 ? (
           <>
@@ -211,40 +247,49 @@ export function ClinicSpacePreviewSlideshow({
       </div>
 
       {count > 1 ? (
-        <div
-          ref={thumbStripRef}
-          className="mt-4 flex h-14 gap-2 overflow-x-auto overscroll-x-contain sm:h-16 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          role="group"
-          aria-label="Choose a clinic photo"
-        >
-          {slides.map((item, index) => {
-            const isActive = index === activeIndex;
-            return (
-              <button
-                key={item.src}
-                type="button"
-                data-thumb-index={index}
-                onClick={() => goTo(index)}
-                className={cn(
-                  "relative h-full w-[3.25rem] shrink-0 overflow-hidden rounded-sm border transition-[border-color,opacity] duration-300 sm:w-16",
-                  isActive
-                    ? "border-arc-teal ring-2 ring-arc-teal/25"
-                    : "border-arc-charcoal/12 opacity-65 hover:border-arc-teal/30 hover:opacity-100",
-                )}
-                aria-label={item.label}
-                aria-current={isActive ? "true" : undefined}
-              >
-                <Image
-                  src={item.src}
-                  alt=""
-                  fill
-                  className={cn("object-cover", item.objectPosition ?? "object-center")}
-                  sizes="64px"
-                  draggable={false}
-                />
-              </button>
-            );
-          })}
+        <div className="mt-5 max-lg:mt-6 max-lg:pb-2">
+          {/* Outer shell stays overflow-visible; inner strip owns horizontal scroll only. */}
+          <div className="overflow-visible px-0.5 pb-1 pt-1">
+            <div
+              ref={thumbStripRef}
+              className="flex flex-nowrap items-center justify-center gap-2.5 overflow-x-auto overscroll-x-contain px-1 py-3 lg:justify-start [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              role="group"
+              aria-label="Choose a clinic photo"
+            >
+              {slides.map((item, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <button
+                    key={item.src}
+                    type="button"
+                    data-thumb-index={index}
+                    onClick={() => goTo(index)}
+                    className={cn(
+                      "relative size-[3.25rem] shrink-0 overflow-hidden rounded-md border sm:size-16",
+                      "transition-[border-color,opacity] duration-300",
+                      isActive
+                        ? "border-2 border-arc-teal opacity-100 lg:border lg:ring-2 lg:ring-arc-teal/25"
+                        : "border border-arc-charcoal/12 opacity-65 hover:border-arc-teal/30 hover:opacity-100",
+                    )}
+                    aria-label={item.label}
+                    aria-current={isActive ? "true" : undefined}
+                  >
+                    <Image
+                      src={item.src}
+                      alt=""
+                      fill
+                      className={cn("object-cover", item.objectPosition ?? "object-center")}
+                      sizes="64px"
+                      draggable={false}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <p className="sr-only" aria-live="polite">
+            {`Showing clinic photo ${activeIndex + 1} of ${count}`}
+          </p>
         </div>
       ) : null}
     </div>

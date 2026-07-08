@@ -1,64 +1,134 @@
-"use client";
-
-import { gsap } from "gsap";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { enforceArcScrollTopAfterLayout } from "@/lib/arcScrollTopGuard";
-import { prefersReducedMotion } from "@/lib/motionPrefs";
-import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
+import { isArcModalScrollLockActive } from "@/lib/arcModalScrollLockState";
+import { ARC_VOOBAN_DURATION, ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const REVEAL_START = "top 88%";
+const REVEAL_HIDDEN = { autoAlpha: 0, y: 48, filter: "blur(4px)" } as const;
+const REVEAL_SHOWN = { autoAlpha: 1, y: 0, filter: "blur(0px)" } as const;
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function revealDone(el: HTMLElement) {
+  return el.dataset.arcRevealDone === "1";
+}
+
+function markRevealDone(el: HTMLElement) {
+  el.dataset.arcRevealDone = "1";
+}
+
+/** Snap a section to its revealed state and stop any in-flight reveal tween. */
+export function finishArcScrollReveal(el: HTMLElement) {
+  gsap.killTweensOf(el, "opacity,y,filter,autoAlpha");
+  gsap.set(el, REVEAL_SHOWN);
+  markRevealDone(el);
+}
+
 /**
- * Ensemble-style scroll reveal: `[data-scroll-section]` fades/slides in on enter (single long scroll, not CSS snap).
- * Call after Locomotive + scrollerProxy (`arc-locomotive-ready`).
+ * After layout/scroll refresh, keep already-revealed sections visible without
+ * pre-flashing content that still needs to animate in.
+ */
+export function reconcileArcScrollReveals(root: ParentNode = document) {
+  if (prefersReducedMotion()) return;
+
+  const sections = gsap.utils.toArray<HTMLElement>("[data-scroll-section]", root);
+  const vh = window.innerHeight || 800;
+
+  sections.forEach((el) => {
+    if (revealDone(el)) return;
+
+    const rect = el.getBoundingClientRect();
+
+    // Scrolled past — stay visible (no reverse hide).
+    if (rect.bottom < -24) {
+      finishArcScrollReveal(el);
+      return;
+    }
+
+    const st = ScrollTrigger.getAll().find((t) => t.trigger === el);
+    if (st && st.progress >= 1) {
+      finishArcScrollReveal(el);
+      return;
+    }
+
+    // Trigger zone active — let the enter tween run.
+    if (st?.isActive) return;
+
+    const revealPlaying = gsap.getTweensOf(el, true).some(
+      (t) => t.vars.scrollTrigger && (t.isActive() || t.progress() > 0),
+    );
+
+    // Fast scroll skipped onEnter — snap only when well inside the viewport.
+    if (!revealPlaying && rect.top < vh * 0.55 && rect.bottom > vh * 0.1) {
+      finishArcScrollReveal(el);
+    }
+  });
+}
+
+function killRevealTriggers() {
+  ScrollTrigger.getAll().forEach((trigger) => {
+    const target = trigger.trigger as HTMLElement | undefined;
+    if (target?.hasAttribute?.("data-scroll-section")) {
+      trigger.kill();
+    }
+  });
+}
+
+/**
+ * Ensemble-style scroll reveal: `[data-scroll-section]` fades/slides in on enter.
  */
 export function initArcScrollReveal() {
   if (prefersReducedMotion()) return;
 
-  ScrollTrigger.getAll().forEach((t) => {
-    const tr = t.trigger as HTMLElement | undefined;
-    if (tr?.hasAttribute?.("data-scroll-section")) {
-      t.kill();
-    }
-  });
+  killRevealTriggers();
 
-  const sections = document.querySelectorAll("[data-scroll-section]");
+  const sections = gsap.utils.toArray<HTMLElement>("[data-scroll-section]");
   if (!sections.length) return;
 
-  sections.forEach((section, i) => {
-    const el = section as HTMLElement;
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 52, filter: "blur(6px)" },
-      {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 0.95,
-        ease: ARC_VOOBAN_EASE,
-        delay: Math.min(i * 0.06, 0.28),
-        overwrite: "auto",
-        scrollTrigger: {
-          trigger: el,
-          ...arcScrollTriggerScrollerProps(),
-          start: "top 94%",
-          end: "top 45%",
-          toggleActions: "play none none none",
-          once: true,
-        },
+  sections.forEach((el) => {
+    delete el.dataset.arcRevealDone;
+    gsap.set(el, REVEAL_HIDDEN);
+  });
+
+  sections.forEach((el) => {
+    gsap.to(el, {
+      ...REVEAL_SHOWN,
+      duration: ARC_VOOBAN_DURATION.reveal,
+      ease: ARC_VOOBAN_EASE,
+      overwrite: "auto",
+      onComplete: () => markRevealDone(el),
+      scrollTrigger: {
+        trigger: el,
+        ...arcScrollTriggerScrollerProps(),
+        start: REVEAL_START,
+        toggleActions: "play none none none",
+        once: true,
+        invalidateOnRefresh: true,
       },
-    );
+    });
   });
 
   ScrollTrigger.refresh();
-  enforceArcScrollTopAfterLayout();
+  reconcileArcScrollReveals();
+  if (!isArcModalScrollLockActive()) {
+    enforceArcScrollTopAfterLayout();
+  }
 
-  const viewportH = window.innerHeight || 800;
-  sections.forEach((section) => {
-    const rect = section.getBoundingClientRect();
-    if (rect.top < viewportH * 1.2) {
-      gsap.set(section, { opacity: 1, y: 0, filter: "blur(0px)" });
-    }
-  });
+  // Long fallback: only unstick sections that never revealed after scroll settles.
+  window.setTimeout(() => {
+    sections.forEach((el) => {
+      if (revealDone(el)) return;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      if (rect.top < vh * 0.92 && rect.bottom > 0) {
+        finishArcScrollReveal(el);
+      }
+    });
+  }, 3200);
 }

@@ -18,8 +18,11 @@ import {
   ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS,
+  ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS,
   ARC_HOME_PATH_TOP_SEAM_SOFT_CLASS,
 } from "@/lib/arc-layout";
+import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
 import { siteMeta } from "@/content/siteMeta";
 
@@ -390,6 +393,47 @@ function YourPathStepsCrossfadeSection({ pinDisabled = false }: { pinDisabled?: 
 /** Desktop/tablet step carousel, dwell per step before auto-advance. */
 const PATH_STEP_AUTO_ADVANCE_MS = 5200;
 
+/** Mobile: full-width stacked steps — every step expanded with text then image. */
+function YourPathStepsMobileExpanded() {
+  return (
+    <div aria-label="Your path steps">
+      {PATH_STEPS.map((step, index) => (
+        <article
+          key={step.stepMeta}
+          className="border-b border-arc-charcoal/10 bg-arc-cream last:border-b-0"
+        >
+          <div className="flex w-full flex-col px-5 py-6 sm:px-8 sm:py-7">
+            <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-arc-teal-ink">
+              {step.numeral}
+            </p>
+            <p className="mb-2 font-serif text-[1.75rem] leading-none text-arc-charcoal sm:text-3xl">
+              {step.title}
+            </p>
+            <p className="mb-4 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/52">
+              {step.stepMeta}
+            </p>
+            <p className="font-sans text-base leading-relaxed text-arc-charcoal/85">
+              {step.description}
+            </p>
+          </div>
+
+          <div className="relative aspect-[4/3] w-full bg-arc-charcoal/5 sm:aspect-[3/2]">
+            <div aria-hidden className={ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS} />
+            <Image
+              src={step.imageSrc}
+              alt={step.imageAlt}
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority={index === 0}
+            />
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function YourPathStepsInteractiveSection({
   topSeam = false,
   bottomSeam = false,
@@ -401,6 +445,7 @@ function YourPathStepsInteractiveSection({
   const [autoPaused, setAutoPaused] = useState(false);
   const [inView, setInView] = useState(false);
   const reduceMotion = useReducedMotion();
+  const isMinMd = useMinMd();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -416,14 +461,14 @@ function YourPathStepsInteractiveSection({
   }, []);
 
   useEffect(() => {
-    if (reduceMotion || autoPaused || !inView) return;
+    if (reduceMotion || autoPaused || !inView || !isMinMd) return;
 
     const timer = window.setInterval(() => {
       setActiveIndex((index) => (index + 1) % PATH_STEPS.length);
     }, PATH_STEP_AUTO_ADVANCE_MS);
 
     return () => window.clearInterval(timer);
-  }, [reduceMotion, autoPaused, inView, activeIndex]);
+  }, [reduceMotion, autoPaused, inView, isMinMd, activeIndex]);
 
   const pauseAutoAdvance = () => setAutoPaused(true);
   const resumeAutoAdvance = () => setAutoPaused(false);
@@ -435,7 +480,7 @@ function YourPathStepsInteractiveSection({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100dvh] overflow-clip bg-arc-cream"
+      className="relative overflow-clip bg-arc-cream md:min-h-[100dvh]"
       aria-label="Your path steps"
       onMouseEnter={pauseAutoAdvance}
       onMouseLeave={resumeAutoAdvance}
@@ -457,6 +502,8 @@ function YourPathStepsInteractiveSection({
           className={ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS}
         />
       ) : null}
+
+      {isMinMd ? (
       <div className="grid min-h-[100dvh] grid-cols-2">
         <div
           className="grid min-h-[100dvh] grid-rows-5 bg-arc-cream/95"
@@ -524,6 +571,10 @@ function YourPathStepsInteractiveSection({
           aria-labelledby={`path-step-tab-${activeIndex}`}
           className="relative min-h-[100dvh]"
         >
+          <div
+            aria-hidden
+            className={ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS}
+          />
           {PATH_STEPS.map((step, index) => (
             <div
               key={step.stepMeta}
@@ -550,6 +601,9 @@ function YourPathStepsInteractiveSection({
           ))}
         </div>
       </div>
+      ) : (
+        <YourPathStepsMobileExpanded />
+      )}
       {bottomSeam ? (
         <ArcSectionSeamBlend
           edge="bottom"

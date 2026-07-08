@@ -1,26 +1,25 @@
 "use client";
 
 import { useEffect } from "react";
-import { getStableNativeScroll } from "@/lib/arcScrollMode";
 import {
   currentScrollYForStabilize,
   refreshDesktopScrollPinLayout,
-  refreshNativeScrollPinLayout,
 } from "@/lib/arcScrollLayoutRefresh";
 import { releaseArcScrollTopGuard } from "@/lib/arcScrollTopGuard";
+import { prefersTouchPointer } from "@/lib/arcTouchDevice";
 
 const RESIZE_DEBOUNCE_MS = 480;
 
 /**
- * Keeps scroll layout in sync when the viewport changes.
- * Desktop Lenis: remeasure Lenis + GSAP pin spacers (debounced).
- * Mobile native: remeasure pin spacers + anchor `#path`.
+ * Keeps scroll layout in sync when the viewport changes (Lenis + GSAP pin spacers).
  */
 export function useArcScrollResizeRefresh(enabled = true) {
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return;
 
     let timer: number | undefined;
+
+    const touch = prefersTouchPointer();
 
     const onResize = () => {
       releaseArcScrollTopGuard();
@@ -31,15 +30,6 @@ export function useArcScrollResizeRefresh(enabled = true) {
 
       window.clearTimeout(timer);
       timer = window.setTimeout(() => {
-        if (getStableNativeScroll()) {
-          refreshNativeScrollPinLayout({
-            anchor: pathAnchor,
-            anchorTopBefore,
-            scrollBefore,
-          });
-          return;
-        }
-
         refreshDesktopScrollPinLayout({
           anchor: pathAnchor,
           anchorTopBefore,
@@ -49,11 +39,16 @@ export function useArcScrollResizeRefresh(enabled = true) {
     };
 
     window.addEventListener("resize", onResize, { passive: true });
-    window.visualViewport?.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+
+    if (!touch) {
+      window.visualViewport?.addEventListener("resize", onResize);
+    }
 
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
       window.visualViewport?.removeEventListener("resize", onResize);
     };
   }, [enabled]);

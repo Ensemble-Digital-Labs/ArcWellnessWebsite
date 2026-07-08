@@ -10,11 +10,15 @@ import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_HOME_WELLNESS_TOP_SEAM_SOFT_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
-import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
+import { whenArcLocomotiveReady } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const WELCOME_SCROLL_TRACK_CLASS =
+  "relative scroll-mt-28 overflow-anchor-none bg-arc-cream pt-0 max-md:h-[150svh] md:h-[180vh]";
 
 /** Backdrop zoom completes in the first ~half of progress; remaining scroll holds readable Blueprint copy. */
 const BACKDROP_ZOOM_END = 0.52;
@@ -300,10 +304,11 @@ function WelcomeBackdropScrollBody({
 
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
-          trigger: section, ...arcScrollTriggerScrollerProps(),
+          trigger: section,
+          ...arcScrollTriggerScrollerProps(),
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.65,
+          scrub: arcScrollScrubLag(),
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             progress.set(self.progress);
@@ -318,17 +323,14 @@ function WelcomeBackdropScrollBody({
     };
 
     const onReady = () => queueMicrotask(setup);
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
-      onReady();
-    }
+    const unregisterReady = whenArcLocomotiveReady(onReady);
     const fallback = window.setTimeout(() => {
       if (!cancelled && revert === null) setup();
     }, 1800);
 
     return () => {
       cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
+      unregisterReady();
       window.clearTimeout(fallback);
       revert?.();
     };
@@ -338,7 +340,7 @@ function WelcomeBackdropScrollBody({
     <section
       ref={sectionRef}
       id={id}
-      className={cn("relative h-[180vh] scroll-mt-28 bg-arc-cream pt-0", className)}
+      className={cn(WELCOME_SCROLL_TRACK_CLASS, "touch-pan-y", className)}
     >
       <div className="sticky top-0 flex h-[100dvh] max-h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-arc-cream">
         {topSeam ? (
@@ -392,7 +394,10 @@ function WelcomeBackdropScrollBody({
             headline={headline}
             headlineEmphasisWord={headlineEmphasisWord}
             paragraphs={paragraphs}
-            style={{ opacity: opacityCopy, scale: copyScale }}
+            style={{
+              opacity: opacityCopy,
+              scale: copyScale,
+            }}
           />
         </div>
       </div>

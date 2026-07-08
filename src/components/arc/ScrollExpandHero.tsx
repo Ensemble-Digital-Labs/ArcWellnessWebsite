@@ -14,7 +14,8 @@ import {
   getArcScrollTriggerScroller,
   getArcScrollViewportHeight,
 } from "@/lib/arcScrollMode";
-import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
+import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
+import { resizeArcScrollViewport } from "@/lib/arcScrollLayoutRefresh";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { homeHeroSecondaryCta } from "@/content/homepage";
 import { siteMeta } from "@/content/siteMeta";
@@ -52,9 +53,8 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee({
   /** `cream` on reference hero (client: ticker matches cream headline on mint wall). */
   variant?: "teal" | "cream";
 }) {
-  /**
-   * Signature teal bar (`--arc-teal`) + copy render immediately; horizontal motion waits until fonts + locomotive + ScrollTrigger settle.
-   */
+  /** Bar visible on first paint; motion after fonts + scroll proxy settle. */
+  const [marqueeVisible] = useState(true);
   const [marqueeOn, setMarqueeOn] = useState(false);
 
   useEffect(() => {
@@ -70,10 +70,9 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee({
       });
     };
 
-    /** Past locomotive’s deferred `ScrollTrigger.refresh` / resize bursts (~400–1600ms after init). */
-    const scheduleAfterScrollStable = () => {
+    const scheduleAfterScrollStable = (delayMs: number) => {
       window.clearTimeout(stableTimer);
-      stableTimer = window.setTimeout(enableMotion, 1400);
+      stableTimer = window.setTimeout(enableMotion, delayMs);
     };
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -84,52 +83,26 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee({
       };
     }
 
-    let fontsReady = false;
-    let scrollReady = false;
-
-    const tryScheduleMarquee = () => {
-      if (cancelled || !fontsReady || !scrollReady) return;
-      scheduleAfterScrollStable();
+    const onScrollReady = () => {
+      void document.fonts.ready.then(() => {
+        if (!cancelled) scheduleAfterScrollStable(1400);
+      });
     };
 
-    let locoHandled = false;
-    const onLocomotiveReady = () => {
-      if (locoHandled) return;
-      locoHandled = true;
-      scrollReady = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
-      tryScheduleMarquee();
-    };
-
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
+    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onScrollReady as EventListener);
     if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
-      queueMicrotask(onLocomotiveReady);
+      queueMicrotask(onScrollReady);
     }
 
-    void document.fonts.ready.then(() => {
-      if (cancelled) return;
-      fontsReady = true;
-      tryScheduleMarquee();
-    });
-
-    /** Locomotive mounts ~450ms in; if the ready event is missed, assume scroll proxy is up after this window. */
-    const locoFallback = window.setTimeout(() => {
-      if (!cancelled && !locoHandled) onLocomotiveReady();
-    }, 3200);
-
-    const absoluteFallback = window.setTimeout(() => {
-      if (cancelled) return;
-      if (!fontsReady) fontsReady = true;
-      if (!scrollReady) scrollReady = true;
-      tryScheduleMarquee();
+    const fallback = window.setTimeout(() => {
+      if (!cancelled) enableMotion();
     }, 7200);
 
     return () => {
       cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onLocomotiveReady as EventListener);
+      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onScrollReady as EventListener);
       window.clearTimeout(stableTimer);
-      window.clearTimeout(locoFallback);
-      window.clearTimeout(absoluteFallback);
+      window.clearTimeout(fallback);
     };
   }, []);
 
@@ -137,18 +110,19 @@ const HeroKeywordMarquee = memo(function HeroKeywordMarquee({
 
   return (
     <div
+      data-arc-hero-marquee
       className={cn(
-        "pointer-events-none isolate overflow-x-hidden pb-[max(0.375rem,env(safe-area-inset-bottom))] opacity-0 transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
+        "pointer-events-none isolate overflow-x-hidden pb-[max(0.375rem,env(safe-area-inset-bottom))] transition-opacity duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-opacity [transform:translateZ(0)]",
         isCream
           ? "border-t border-arc-cream/40 bg-arc-cream shadow-[0_-8px_28px_rgba(44,44,44,0.08)]"
           : "border-t border-white/15 bg-arc-teal shadow-[0_-10px_36px_rgba(44,44,44,0.12),0_-2px_24px_var(--arc-teal-glow)]",
-        marqueeOn && "opacity-100",
+        marqueeVisible ? "opacity-100" : "opacity-0",
       )}
       aria-hidden
     >
       <div
         className={cn(
-          "flex items-center gap-8 whitespace-nowrap py-2 sm:gap-11 sm:py-2.5",
+          "arc-marquee-track flex items-center gap-8 whitespace-nowrap py-2 sm:gap-11 sm:py-2.5",
           marqueeOn && "animate-arc-marquee",
         )}
         style={{ width: "max-content" }}
@@ -442,19 +416,14 @@ export function ScrollExpandHero({
   showKeywordMarquee = true,
   referenceLayout = false,
 }: ScrollExpandHeroProps) {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  /** SSR + first client paint must match, viewport is read only after hydration. */
-  const [hasHydrated, setHasHydrated] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
-  const nativeScroll = useStableNativeScroll();
 
   const heroRef = useRef<HTMLElement | null>(null);
-  /** Locked at load, visual mobile layout uses CSS `max-md:`; avoids pin teardown on resize. */
-  const mobileLayout = hasHydrated && nativeScroll;
+  const heroBgRef = useRef<HTMLDivElement | null>(null);
+  const heroScrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const heroImageReadyRef = useRef(false);
 
   useLayoutEffect(() => {
-    setHasHydrated(true);
-
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const syncMotion = () => setReduceMotion(motionMq.matches);
 
@@ -466,22 +435,32 @@ export function ScrollExpandHero({
     };
   }, []);
 
-  useEffect(() => {
-    if (reduceMotion) {
-      setScrollProgress(1);
-    } else if (nativeScroll) {
-      setScrollProgress(0);
-    }
-  }, [reduceMotion, nativeScroll]);
+  useLayoutEffect(() => {
+    const bg = heroBgRef.current;
+    if (!bg) return;
+    bg.style.transformOrigin = "center center";
+    bg.style.transform = reduceMotion ? "scale(1.42)" : "scale(1)";
+  }, [reduceMotion]);
 
   useEffect(() => {
-    if (reduceMotion || nativeScroll) return;
+    if (reduceMotion) return;
 
     let revert: (() => void) | null = null;
     let cancelled = false;
+    heroImageReadyRef.current = false;
 
-    const refreshAllScrollTriggers = () => {
-      ScrollTrigger.refresh();
+    const applyHeroProgress = (p: number) => {
+      const scale = 1 + p * 0.42;
+      if (heroBgRef.current) {
+        heroBgRef.current.style.transform = `scale(${scale})`;
+      }
+    };
+
+    const refreshHeroScrollTrigger = () => {
+      const st = heroScrollTriggerRef.current;
+      if (!st) return;
+      st.refresh();
+      applyHeroProgress(st.progress);
     };
 
     const setup = () => {
@@ -492,50 +471,83 @@ export function ScrollExpandHero({
       const scroller = getArcScrollTriggerScroller();
       const endDist = () => getArcScrollViewportHeight(scroller);
 
+      let heroTrigger: ScrollTrigger | undefined;
+
       const ctx = gsap.context(() => {
-        ScrollTrigger.create({
-          trigger: hero, ...arcScrollTriggerScrollerProps(), ...arcScrollTriggerPinOptions(),
+        heroTrigger = ScrollTrigger.create({
+          trigger: hero,
+          ...arcScrollTriggerScrollerProps(),
+          ...arcScrollTriggerPinOptions(),
           start: "top top",
           end: () => `+=${endDist()}`,
           pin: true,
           pinSpacing: true,
-          scrub: 1,
+          scrub: arcScrollScrubLag(),
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            setScrollProgress(self.progress);
-          },
+          onUpdate: (self) => applyHeroProgress(self.progress),
         });
       }, hero);
 
-      revert = () => ctx.revert();
-      requestAnimationFrame(refreshAllScrollTriggers);
-      window.setTimeout(refreshAllScrollTriggers, 120);
-      /** Hero pin must exist before downstream pinned sections (concerns → welcome) measure scroll distance. */
-      window.setTimeout(refreshAllScrollTriggers, 450);
+      heroScrollTriggerRef.current = heroTrigger ?? null;
+
+      revert = () => {
+        heroScrollTriggerRef.current = null;
+        ctx.revert();
+      };
+      applyHeroProgress(0);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => refreshHeroScrollTrigger());
+      });
     };
 
     const unregisterReady = whenArcLocomotiveReady(setup);
-
     const fallback = window.setTimeout(() => {
       if (!cancelled && revert === null) setup();
     }, 2000);
+
+    let resizeTimer: number | undefined;
+    const onLayoutChange = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (cancelled || !heroScrollTriggerRef.current) return;
+        resizeArcScrollViewport();
+        refreshHeroScrollTrigger();
+      }, 100);
+    };
+
+    const main = document.getElementById("main");
+    const resizeObserver =
+      main && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(onLayoutChange)
+        : null;
+    if (main && resizeObserver) resizeObserver.observe(main);
+    window.addEventListener("resize", onLayoutChange, { passive: true });
+    window.visualViewport?.addEventListener("resize", onLayoutChange);
 
     return () => {
       cancelled = true;
       unregisterReady();
       window.clearTimeout(fallback);
+      window.clearTimeout(resizeTimer);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", onLayoutChange);
+      window.visualViewport?.removeEventListener("resize", onLayoutChange);
       revert?.();
     };
-  }, [reduceMotion, nativeScroll, bgImageSrc]);
+  }, [reduceMotion, bgImageSrc]);
 
-  const progress = reduceMotion ? 1 : mobileLayout ? 0 : scrollProgress;
-  /** Full-bleed background zoom, was previously a separate center frame. */
-  const bgScale = mobileLayout ? 1 : 1 + progress * 0.42;
-  const textTranslateX = progress * (mobileLayout ? 180 : 150);
-  /** Upper headline moves as one unit, avoids “Where” peeling away from the rest with opposite motion. */
-  const headlineParallaxX = textTranslateX * 0.22;
-  const sharedContentShiftY = progress * (mobileLayout ? 12 : 48);
+  const handleHeroImageReady = () => {
+    if (heroImageReadyRef.current) return;
+    heroImageReadyRef.current = true;
+    const st = heroScrollTriggerRef.current;
+    if (!st) return;
+    st.refresh();
+    const bg = heroBgRef.current;
+    if (bg) {
+      bg.style.transform = `scale(${1 + st.progress * 0.42})`;
+    }
+  };
 
   const firstWord = title.split(" ")[0] ?? "";
   const restOfTitle = title.split(" ").slice(1).join(" ");
@@ -576,32 +588,30 @@ export function ScrollExpandHero({
         ref={heroRef}
         data-arc-marketing-hero
         className={cn(
-          "relative flex min-h-[100dvh] flex-col items-center justify-start",
-          !showKeywordMarquee && "max-md:min-h-[88dvh] max-md:pb-4",
+          "relative flex h-[100dvh] min-h-[100dvh] flex-col items-center justify-start",
+          !showKeywordMarquee && "max-md:h-auto max-md:min-h-[88dvh] max-md:pb-4",
         )}
       >
         <div
           className={cn(
-            "relative flex w-full flex-col items-center overflow-x-hidden",
-            showKeywordMarquee ? "min-h-[100dvh]" : "min-h-[100dvh] max-md:min-h-full overflow-hidden",
+            "relative flex h-full min-h-0 w-full flex-col items-center overflow-hidden",
+            showKeywordMarquee ? "" : "max-md:min-h-full",
           )}
         >
-          <div className="absolute inset-0 z-0 h-full overflow-hidden">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <div
-              className="absolute inset-0 will-change-transform"
-              style={{
-                transform: `scale(${bgScale})`,
-                transformOrigin: "center center",
-              }}
+              ref={heroBgRef}
+              data-arc-hero-bg
+              className="absolute inset-0 h-full w-full will-change-transform"
             >
               <Image
                 src={bgImageSrc}
                 alt=""
-                width={3840}
-                height={2160}
+                fill
                 sizes="100vw"
-                className="h-full min-h-[100dvh] w-full max-w-none object-cover object-center"
+                className="object-cover object-center"
                 priority
+                onLoadingComplete={handleHeroImageReady}
               />
             </div>
             {referenceLayout ? (
@@ -619,8 +629,8 @@ export function ScrollExpandHero({
 
           <div
             className={cn(
-              "relative z-10 flex w-full items-center",
-              showKeywordMarquee ? "min-h-full flex-1" : "min-h-[100dvh]",
+              "relative z-10 flex h-full min-h-0 w-full items-center",
+              showKeywordMarquee ? "flex-1" : "min-h-[100dvh]",
               referenceLayout
                 ? cn(
                     "justify-center px-5 pt-[max(4.5rem,env(safe-area-inset-top))] sm:px-8 md:justify-start md:pl-[clamp(2.75rem,10.5vw,9.5rem)] md:pr-10 lg:pl-[clamp(3.5rem,11vw,10rem)] xl:pl-[clamp(4rem,12vw,11rem)]",
@@ -649,13 +659,6 @@ export function ScrollExpandHero({
                 referenceLayout && HERO_REF_MOBILE_TEXT_SCRIM,
                 showKeywordMarquee && referenceLayout && "-translate-y-3 sm:-translate-y-4 md:-translate-y-5",
               )}
-              style={
-                referenceLayout || mobileLayout
-                  ? undefined
-                  : {
-                      transform: `translate3d(${headlineParallaxX * 0.35}px, ${sharedContentShiftY * 0.4}px, 0)`,
-                    }
-              }
             >
               <motion.h1
                 className={cn(
@@ -664,11 +667,6 @@ export function ScrollExpandHero({
                     ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
                     : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
                 )}
-                style={
-                  referenceLayout || mobileLayout
-                    ? undefined
-                    : { transform: `translate3d(${headlineParallaxX}px, 0, 0)` }
-                }
               >
                 {referenceLayout ? (
                   <HeroReferenceHeadline />

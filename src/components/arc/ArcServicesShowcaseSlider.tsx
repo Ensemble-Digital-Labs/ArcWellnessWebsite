@@ -67,10 +67,6 @@ const SHOWCASE_SLIDE_DESC_CLASS =
   "mx-auto max-w-md font-sans text-sm leading-relaxed text-arc-charcoal sm:text-[0.9375rem] md:leading-relaxed";
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
-const SHOWCASE_CTRL_NUM_CLASS =
-  "min-w-[1.75ch] font-sans text-sm font-medium tabular-nums tracking-[0.2em] text-arc-charcoal md:text-base";
-const SHOWCASE_CTRL_TOTAL_CLASS =
-  "min-w-[1.75ch] font-sans text-sm tabular-nums tracking-[0.2em] text-arc-charcoal/72 md:text-base";
 const SHOWCASE_NAV_CLASS =
   "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-teal/28 bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
 
@@ -161,7 +157,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         </div>
       </div>
 
-      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:left-4 md:left-6">
+      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
         <button
           type="button"
           className={SHOWCASE_CTRL_BTN_CLASS}
@@ -172,12 +168,9 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         >
           <ChevronLeft className="size-5" strokeWidth={1.5} />
         </button>
-        <span id="slideNumber" className={SHOWCASE_CTRL_NUM_CLASS}>
-          {String(index + 1).padStart(2, "0")}
-        </span>
       </div>
 
-      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:right-4 md:right-6">
+      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
         <button
           type="button"
           className={SHOWCASE_CTRL_BTN_CLASS}
@@ -186,9 +179,6 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         >
           <ChevronRight className="size-5" strokeWidth={1.5} />
         </button>
-        <span id="slideTotal" className={SHOWCASE_CTRL_TOTAL_CLASS}>
-          {String(slides.length).padStart(2, "0")}
-        </span>
       </div>
 
       <nav
@@ -228,8 +218,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const slideNumberRef = useRef<HTMLSpanElement>(null);
-  const slideTotalRef = useRef<HTMLSpanElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -332,18 +320,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       u.uTimeshiftChromatic.value = s.timeshiftChromatic;
       u.uTimeshiftTurbulence.value = s.timeshiftTurbulence;
       u.uEffectType.value = getEffectIndex(s.currentEffect);
-    };
-
-    const updateCounter = (idx: number) => {
-      if (slideNumberRef.current) {
-        slideNumberRef.current.textContent = String(idx + 1).padStart(2, "0");
-      }
-      if (slideTotalRef.current) {
-        slideTotalRef.current.textContent = String(slideList.length).padStart(
-          2,
-          "0",
-        );
-      }
     };
 
     const updateNavigationState = (idx: number) => {
@@ -586,7 +562,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       updateContent(targetIndex);
 
       currentSlideIndex = targetIndex;
-      updateCounter(currentSlideIndex);
       updateNavigationState(currentSlideIndex);
 
       gsap.fromTo(
@@ -703,7 +678,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     };
 
     createSlidesNavigation();
-    updateCounter(0);
 
     titleEl.innerHTML = splitTextForTitle(slideList[0].title);
     descEl.textContent = slideList[0].description;
@@ -924,7 +898,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         )}
         aria-hidden
       />
-      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:left-4 md:left-6">
+      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
         <button
           ref={prevBtnRef}
           type="button"
@@ -933,16 +907,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         >
           <ChevronLeft className="size-5" strokeWidth={1.5} />
         </button>
-        <span
-          id="slideNumber"
-          ref={slideNumberRef}
-          className={SHOWCASE_CTRL_NUM_CLASS}
-        >
-          01
-        </span>
       </div>
 
-      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 sm:right-4 md:right-6">
+      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
         <button
           ref={nextBtnRef}
           type="button"
@@ -951,13 +918,6 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         >
           <ChevronRight className="size-5" strokeWidth={1.5} />
         </button>
-        <span
-          id="slideTotal"
-          ref={slideTotalRef}
-          className={SHOWCASE_CTRL_TOTAL_CLASS}
-        >
-          {String(slides.length).padStart(2, "0")}
-        </span>
       </div>
 
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">

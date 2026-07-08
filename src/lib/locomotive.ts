@@ -1,11 +1,14 @@
 "use client";
 
 import LocomotiveScroll from "locomotive-scroll";
-import { useEffect, type RefObject } from "react";
+import { useLayoutEffect, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getStableNativeScroll } from "@/lib/arcScrollMode";
+import { markArcUserScrolling } from "@/lib/arcNativeScrollInteraction";
+import { prefersTouchPointer } from "@/lib/arcTouchDevice";
 import { enforceArcScrollTopAfterLayout } from "@/lib/arcScrollTopGuard";
+import { isArcModalScrollLockActive } from "@/lib/arcModalScrollLockState";
 import { prefersReducedMotion } from "@/lib/motionPrefs";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -48,6 +51,17 @@ function markArcLocomotiveReady() {
   arcLocomotiveReadyFlag = true;
 }
 
+/** Native-scroll path + Lenis mount — pins/scrub listen for this (sets ready flag + event). */
+export function signalArcLocomotiveReady(detail?: { scrollEl?: HTMLElement | null }) {
+  if (typeof window === "undefined") return;
+  markArcLocomotiveReady();
+  window.dispatchEvent(
+    new CustomEvent(ARC_LOCOMOTIVE_READY_EVENT, {
+      detail: detail ?? { scrollEl: null },
+    }),
+  );
+}
+
 function getLenisFromScroll(inst: InstanceType<typeof LocomotiveScroll> | null) {
   if (!inst) return undefined;
   const withAlt = inst as InstanceType<typeof LocomotiveScroll> & {
@@ -77,7 +91,9 @@ function resizeLenisAndRefresh(inst: InstanceType<typeof LocomotiveScroll> | nul
     }
   }
   ScrollTrigger.refresh();
-  enforceArcScrollTopAfterLayout();
+  if (!isArcModalScrollLockActive()) {
+    enforceArcScrollTopAfterLayout();
+  }
 }
 
 function ensureScrollerProxy(scrollEl: HTMLElement) {
@@ -113,7 +129,7 @@ function ensureScrollerProxy(scrollEl: HTMLElement) {
         height: window.innerHeight,
       };
     },
-    pinType: scrollEl.style.transform ? "transform" : "fixed",
+    pinType: "transform",
   });
 }
 
@@ -126,7 +142,11 @@ function bindLenisScrollListener(inst: InstanceType<typeof LocomotiveScroll>) {
     return;
   }
 
-  const onScroll = () => ScrollTrigger.update();
+  const onScroll = () => {
+    const lenis = getLenisFromScroll(inst);
+    if (lenis?.isTouching) markArcUserScrolling();
+    ScrollTrigger.update();
+  };
   lenis.on("scroll", onScroll);
   lenisScrollCleanup = () => {
     lenis.off?.("scroll", onScroll);
@@ -152,6 +172,67 @@ export function destroyArcLocomotiveInstanceOnly() {
   }
 }
 
+function arcLenisPreventNode(node: HTMLElement): boolean {
+  if (node.id === "main" || node.hasAttribute("data-scroll-content")) return false;
+
+  /** Explicit full block only — used for drawers/modals, not image carousels. */
+  let el: HTMLElement | null = node;
+  while (el && el !== document.body) {
+    if (el.dataset.lenisPrevent !== undefined) return true;
+    el = el.parentElement;
+  }
+  return false;
+}
+
+/**
+ * Inside horizontal strips (`data-arc-h-scroll`), ignore horizontal-dominant touch so
+ * native overflow-x can slide cards. Vertical gestures still go to Lenis.
+ */
+function arcLenisVirtualScroll(data: {
+  deltaX: number;
+  deltaY: number;
+  event: WheelEvent | TouchEvent;
+}): boolean {
+  const { deltaX, deltaY, event } = data;
+  if (!event.type.includes("touch")) return true;
+
+  const target = event.target;
+  if (!(target instanceof Element)) return true;
+
+  const strip = target.closest("[data-arc-h-scroll]");
+  if (!strip) return true;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY) * 1.1) {
+    return false;
+  }
+  return true;
+}
+
+function buildLenisOptions(scrollEl: HTMLElement, contentEl: HTMLElement) {
+  const touch = prefersTouchPointer();
+  return {
+    wrapper: scrollEl,
+    content: contentEl,
+    eventsTarget: scrollEl,
+    smoothWheel: true,
+    /**
+     * Phone still needs syncTouch (overflow-hidden `#main` can't use native touch scroll).
+     * Feel matches laptop / DevTools preview: same duration, lerp, multipliers as desktop wheel.
+     */
+    syncTouch: touch,
+    syncTouchLerp: touch ? 0.1 : undefined,
+    touchInertiaExponent: touch ? 1.7 : undefined,
+    touchMultiplier: 1,
+    lerp: 0.1,
+    wheelMultiplier: 1,
+    allowNestedScroll: true,
+    prevent: arcLenisPreventNode,
+    virtualScroll: arcLenisVirtualScroll,
+    duration: 1.05,
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  };
+}
+
 function mountArcLocomotiveScroll(
   scrollEl: HTMLElement,
   contentEl: HTMLElement,
@@ -161,13 +242,7 @@ function mountArcLocomotiveScroll(
 
   try {
     activeLocomotiveInstance = new LocomotiveScroll({
-      lenisOptions: {
-        wrapper: scrollEl,
-        content: contentEl,
-        smoothWheel: true,
-        duration: 1.05,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      },
+      lenisOptions: buildLenisOptions(scrollEl, contentEl),
     });
 
     if (typeof window !== "undefined") {
@@ -298,6 +373,52 @@ export function bindArcBookingNavigationMarker() {
   };
 }
 
+function mountLocomotiveFromContainer(
+  containerRef: RefObject<HTMLDivElement | null>,
+  refreshListenerBound: { value: boolean },
+): InstanceType<typeof LocomotiveScroll> | null {
+  const scrollEl = containerRef.current;
+  if (!scrollEl) return null;
+
+  const contentEl =
+    scrollEl.querySelector<HTMLElement>("[data-scroll-content]") || scrollEl.firstElementChild;
+  if (!contentEl || !(contentEl instanceof HTMLElement)) return null;
+
+  const inst = mountArcLocomotiveScroll(scrollEl, contentEl);
+  if (!inst) return null;
+
+  if (!refreshListenerBound.value) {
+    ScrollTrigger.addEventListener("refresh", () => {
+      const L = getLenisFromScroll(activeLocomotiveInstance);
+      if (L && typeof L.resize === "function") {
+        try {
+          L.resize();
+        } catch {
+          /* noop */
+        }
+      }
+    });
+    refreshListenerBound.value = true;
+  }
+
+  const touch = prefersTouchPointer();
+  window.setTimeout(() => resizeLenisAndRefresh(inst), touch ? 500 : 400);
+  if (!touch) {
+    window.setTimeout(() => resizeLenisAndRefresh(inst), 1600);
+    window.setTimeout(() => ScrollTrigger.refresh(), 800);
+    window.setTimeout(() => ScrollTrigger.refresh(), 50);
+  }
+
+  markArcLocomotiveReady();
+  window.dispatchEvent(
+    new CustomEvent(ARC_LOCOMOTIVE_READY_EVENT, {
+      detail: { scrollEl },
+    }),
+  );
+
+  return inst;
+}
+
 /**
  * Ensemble v2–style Locomotive Scroll v5 (Lenis) + GSAP ScrollTrigger scroller proxy on `#main`.
  * Pins/scrub must be created after `ARC_LOCOMOTIVE_READY_EVENT` (see useArcFullscreenPin, hero).
@@ -306,60 +427,36 @@ export function useLocomotiveScroll(
   containerRef: RefObject<HTMLDivElement | null>,
   disabled: boolean,
 ) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (disabled || prefersReducedMotion()) return;
 
     if (typeof window !== "undefined" && (window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) {
       return;
     }
 
-    let refreshListenerBound = false;
+    const refreshListenerBound = { value: false };
+    const touch = prefersTouchPointer();
 
-    const timer = window.setTimeout(() => {
-      const scrollEl = containerRef.current;
-      if (!scrollEl) return;
+    const mount = () => {
+      mountLocomotiveFromContainer(containerRef, refreshListenerBound);
+    };
 
-      const contentEl =
-        scrollEl.querySelector<HTMLElement>("[data-scroll-content]") || scrollEl.firstElementChild;
-      if (!contentEl || !(contentEl instanceof HTMLElement)) return;
-
-      const inst = mountArcLocomotiveScroll(scrollEl, contentEl);
-      if (!inst) return;
-
-      if (!refreshListenerBound) {
-        ScrollTrigger.addEventListener("refresh", () => {
-          const L = getLenisFromScroll(activeLocomotiveInstance);
-          if (L && typeof L.resize === "function") {
-            try {
-              L.resize();
-            } catch {
-              /* noop */
-            }
-          }
-        });
-        refreshListenerBound = true;
-      }
-
-      window.setTimeout(() => resizeLenisAndRefresh(inst), 400);
-      window.setTimeout(() => resizeLenisAndRefresh(inst), 1600);
-      window.setTimeout(() => ScrollTrigger.refresh(), 800);
-
-      markArcLocomotiveReady();
-      window.dispatchEvent(
-        new CustomEvent(ARC_LOCOMOTIVE_READY_EVENT, {
-          detail: { scrollEl },
-        }),
-      );
-
-      window.setTimeout(() => ScrollTrigger.refresh(), 50);
-    }, 450);
+    let timer: number | undefined;
+    if (touch) {
+      mount();
+    } else {
+      timer = window.setTimeout(mount, 450);
+    }
 
     return () => {
-      window.clearTimeout(timer);
+      if (timer !== undefined) window.clearTimeout(timer);
+      const hadLocomotive = Boolean(activeLocomotiveInstance);
       destroyArcLocomotiveInstanceOnly();
       scrollerProxyScrollEl = null;
       arcLocomotiveReadyFlag = false;
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      if (hadLocomotive) {
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+      }
     };
   }, [containerRef, disabled]);
 }

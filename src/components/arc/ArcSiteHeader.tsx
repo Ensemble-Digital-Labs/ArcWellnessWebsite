@@ -71,10 +71,10 @@ export const SITE_HEADER_OFFSET = "0";
 /** Overlay / drawer / chrome, high enough to sit above pinned sections and modals below full-screen lightboxes. */
 const NAV_STACK_OVERLAY = "z-[1000]";
 const NAV_STACK_DRAWER = "z-[1001]";
-const NAV_STACK_CHROME = "z-[1002]";
+const NAV_STACK_CHROME = "z-[11000]";
 /** Drawer + chrome while menu is open, chrome (logo, close) stays above the drawer. */
-const NAV_STACK_DRAWER_OPEN = "z-[1003]";
-const NAV_STACK_CHROME_OPEN = "z-[1004]";
+const NAV_STACK_DRAWER_OPEN = "z-[11001]";
+const NAV_STACK_CHROME_OPEN = "z-[11002]";
 
 /** Mobile wordmark, explicit height so `h-full` + narrow max-w doesn’t cap size invisibly. */
 const ARC_HEADER_LOGO_LINK_CLASS =
@@ -610,6 +610,15 @@ function applyLogoScrollFade(
   if (t >= 1) fadeInRef.current = null;
 }
 
+/** Menu open: fade the wordmark out (same eased fade as scroll-hide), all viewports. */
+function applyMenuOpenLogoPolicy(
+  logoOpacity: MotionValue<number>,
+  fadeInRef: React.MutableRefObject<LogoFadeSession | null>,
+  fadeOutRef: React.MutableRefObject<LogoFadeSession | null>,
+) {
+  applyLogoScrollFade(logoOpacity, true, fadeInRef, fadeOutRef);
+}
+
 export function ArcSiteHeader({
   logoSrc = images.logo,
   logoAlt = "ARC Wellness",
@@ -663,11 +672,8 @@ export function ArcSiteHeader({
   });
 
   useEffect(() => {
-    if (isMenuOpen) {
-      logoFadeInSessionRef.current = null;
-      logoFadeOutSessionRef.current = null;
-      logoOpacity.set(1);
-    }
+    if (!isMenuOpen) return;
+    applyMenuOpenLogoPolicy(logoOpacity, logoFadeInSessionRef, logoFadeOutSessionRef);
   }, [isMenuOpen, logoOpacity]);
 
   useEffect(() => {
@@ -703,9 +709,11 @@ export function ArcSiteHeader({
       if (cancelled) return;
 
       if (isMenuOpenRef.current) {
-        logoFadeInSessionRef.current = null;
-        logoFadeOutSessionRef.current = null;
-        logoOpacity.set(1);
+        applyMenuOpenLogoPolicy(
+          logoOpacity,
+          logoFadeInSessionRef,
+          logoFadeOutSessionRef,
+        );
         raf = requestAnimationFrame(tick);
         return;
       }
@@ -816,6 +824,12 @@ export function ArcSiteHeader({
     if (links.length) gsap.set(links, { yPercent: 110, opacity: 0, rotate: 6 });
     setMobileNavReady(true);
   }, [reducedMotion]);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+    overlay.style.pointerEvents = isMenuOpen ? "auto" : "none";
+  }, [isMenuOpen]);
 
   useEffect(() => {
     if (reducedMotion || getStableNativeScroll()) return;
@@ -999,6 +1013,10 @@ export function ArcSiteHeader({
   const closeMenu = () => setIsMenuOpen(false);
   const navShellHidden =
     !mobileNavReady || (!isMenuOpen && !menuEverOpened);
+  const blockLogoPointer =
+    isMenuOpen ||
+    logoPointerDisabled ||
+    (logoClickOnlyAtTop && !logoHomeLinkActive);
 
   return (
     <div ref={containerRef}>
@@ -1009,8 +1027,9 @@ export function ArcSiteHeader({
         className={cn(
           "fixed inset-0 bg-black/55",
           NAV_STACK_OVERLAY,
-          !isMenuOpen && "pointer-events-none",
+          !isMenuOpen && "pointer-events-none invisible",
         )}
+        style={{ pointerEvents: isMenuOpen ? "auto" : "none" }}
         aria-hidden={!isMenuOpen}
         onClick={(e) => {
           if (e.target === e.currentTarget) closeMenu();
@@ -1025,7 +1044,9 @@ export function ArcSiteHeader({
         className={cn(
           "fixed inset-y-0 right-0 flex max-h-[100dvh] w-full max-w-[min(100vw,28rem)] flex-col bg-arc-cream text-arc-charcoal shadow-[-12px_0_40px_rgba(0,0,0,0.12)] sm:max-w-[min(100vw,32rem)]",
           isMenuOpen ? NAV_STACK_DRAWER_OPEN : NAV_STACK_DRAWER,
+          !isMenuOpen && "pointer-events-none",
         )}
+        style={{ pointerEvents: isMenuOpen ? "auto" : "none" }}
         aria-label="Site navigation"
       >
         <div ref={backdropRef} className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -1128,7 +1149,7 @@ export function ArcSiteHeader({
       <header
         ref={headerChromeRef}
         className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 flex w-full justify-center bg-transparent",
+          "pointer-events-none fixed inset-x-0 top-0 isolate flex w-full justify-center bg-transparent",
           isMenuOpen ? NAV_STACK_CHROME_OPEN : NAV_STACK_CHROME,
         )}
       >
@@ -1142,16 +1163,12 @@ export function ArcSiteHeader({
             href={homeHref}
             className={cn(
               ARC_HEADER_LOGO_LINK_CLASS,
-              isMenuOpen ||
-                logoPointerDisabled ||
-                (logoClickOnlyAtTop && !logoHomeLinkActive)
+              blockLogoPointer
                 ? "pointer-events-none [&_*]:pointer-events-none"
                 : "pointer-events-auto",
             )}
             aria-label="ARC Wellness home"
-            tabIndex={
-              logoPointerDisabled || (logoClickOnlyAtTop && !logoHomeLinkActive) ? -1 : undefined
-            }
+            tabIndex={blockLogoPointer ? -1 : undefined}
           >
             <motion.div
               className={ARC_HEADER_LOGO_MOTION_WRAP_CLASS}
@@ -1176,7 +1193,7 @@ export function ArcSiteHeader({
             aria-expanded={isMenuOpen}
             aria-controls="arc-nav-overlay"
             className={cn(
-              "pointer-events-auto relative z-20 col-start-2 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/25 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-colors hover:bg-black/40 sm:gap-3 sm:px-5 sm:py-3 sm:text-sm md:px-6 md:py-3.5 md:text-base",
+              "pointer-events-auto relative z-30 col-start-2 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 touch-manipulation items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/55 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-black/65 sm:gap-3 sm:bg-black/25 sm:px-5 sm:py-3 sm:text-sm sm:backdrop-blur-md md:px-6 md:py-3.5 md:text-base",
             )}
           >
             {isMenuOpen ? "Close" : "Menu"}

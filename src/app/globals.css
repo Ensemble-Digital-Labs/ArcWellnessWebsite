@@ -128,21 +128,70 @@ html.arc-scroll-lock::-webkit-scrollbar {
 }
 
 /* Native mobile scroll path — allow vertical touch gestures on the page wrapper. */
+html.arc-native-scroll,
+body.arc-native-scroll {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+  touch-action: pan-y;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-anchor: none;
+}
+
 #main.touch-pan-y {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+html.arc-scroll-lock #main {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+/** Any remaining GSAP pin spacers on native scroll should not flash white between sections. */
+html.arc-native-scroll .pin-spacer {
+  background-color: var(--arc-cream);
+}
+
+/** Marketing hero — photography fills the pinned section box (not independent dvh). */
+[data-arc-marketing-hero] {
+  height: 100dvh;
+  min-height: 100dvh;
+}
+
+[data-arc-marketing-hero] [data-arc-hero-bg] {
+  height: 100%;
+  width: 100%;
+  transform-origin: center center;
+  contain: layout paint;
+}
+
+/** Touch phones — marquee visible + moving even before JS hydrates (LAN dev / slow networks). */
+@media (hover: none) and (pointer: coarse) {
+  [data-arc-hero-marquee] {
+    opacity: 1 !important;
+  }
+
+  [data-arc-hero-marquee] .arc-marquee-track {
+    animation: arc-marquee 32s linear infinite;
+  }
 }
 
 /* Scroll reveal targets (ensemble: not snap — GSAP drives enter animation). Initial hide until GSAP runs. */
 @media (prefers-reduced-motion: no-preference) {
   [data-scroll-section] {
     opacity: 0;
+    visibility: hidden;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-scroll-section] {
     opacity: 1;
+    visibility: visible;
   }
 }
 

@@ -1,34 +1,25 @@
 "use client";
 
-import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getArcScrollTriggerScroller, getStableNativeScroll } from "@/lib/arcScrollMode";
-import { prefersReducedMotion } from "@/lib/motionPrefs";
-
-gsap.registerPlugin(ScrollTrigger);
+import { arcNativeScrollToY, shouldDeferArcScrollLayoutRefresh } from "@/lib/arcNativeScrollInteraction";
+import { reconcileArcScrollReveals } from "@/lib/scrollReveal";
+import { isArcModalScrollLockActive } from "@/lib/arcModalScrollLockState";
+import {
+  arcRestoreScrollY,
+  captureArcPageScrollY,
+  readArcPageScrollY,
+} from "@/lib/arcScrollPosition";
 
 type LocomotiveWindow = Window & {
   locomotiveScroll?: {
     lenisInstance?: {
-      scroll?: number | { y?: number };
       scrollTo: (target: number | HTMLElement, opts?: { immediate?: boolean; offset?: number }) => void;
       resize?: () => void;
     };
     resize?: () => void;
   };
 };
-
-function currentScrollY(): number {
-  const lenis = (window as LocomotiveWindow).locomotiveScroll?.lenisInstance;
-  if (lenis) {
-    const s = lenis.scroll;
-    if (typeof s === "number") return s;
-    if (s && typeof s === "object" && typeof s.y === "number") return s.y;
-  }
-  const scroller = getArcScrollTriggerScroller();
-  if (scroller) return scroller.scrollTop;
-  return window.scrollY;
-}
 
 function scrollToAnchor(anchor: HTMLElement, offset = -112) {
   const lenis = (window as LocomotiveWindow).locomotiveScroll?.lenisInstance;
@@ -59,24 +50,15 @@ function getMaxScroll(scroller?: HTMLElement | null): number {
 }
 
 function scrollToY(y: number) {
-  const lenis = (window as LocomotiveWindow).locomotiveScroll?.lenisInstance;
-  const target = Math.max(0, y);
-  if (lenis?.scrollTo) {
-    lenis.scrollTo(target, { immediate: true });
-    return;
-  }
-  const scroller = getArcScrollTriggerScroller();
-  if (scroller) {
-    scroller.scrollTop = target;
-    return;
-  }
-  window.scrollTo({ top: target, behavior: "auto" });
+  arcRestoreScrollY(y);
 }
 
 /** Exported for resize handlers that capture scroll before layout shifts. */
 export function currentScrollYForStabilize(): number {
-  return currentScrollY();
+  return readArcPageScrollY();
 }
+
+export { arcRestoreScrollY, captureArcPageScrollY };
 
 /**
  * After pin-spacer / layout height changes, keep an anchor at the same viewport Y
@@ -87,7 +69,7 @@ export function stabilizeViewportAfterLayoutShift(options: {
   anchorTopBefore: number;
   scrollBefore?: number;
 }) {
-  const { anchor, anchorTopBefore, scrollBefore = currentScrollY() } = options;
+  const { anchor, anchorTopBefore, scrollBefore = readArcPageScrollY() } = options;
 
   /** Pin spacers on first paint look like a layout shift — do not scroll away from the hero. */
   if (scrollBefore < 96) return;
@@ -109,9 +91,7 @@ function clampScrollToDocument() {
     const content =
       scroller.querySelector<HTMLElement>("[data-scroll-content]") ?? scroller;
     const maxScroll = Math.max(0, content.scrollHeight - scroller.clientHeight);
-    const current = lenis
-      ? currentScrollY()
-      : scroller.scrollTop;
+    const current = lenis ? readArcPageScrollY() : scroller.scrollTop;
 
     if (current > maxScroll) {
       if (lenis?.scrollTo) lenis.scrollTo(maxScroll, { immediate: true });
@@ -139,11 +119,13 @@ export function refreshDesktopScrollPinLayout(options?: {
   scrollBefore?: number;
 }) {
   if (typeof window === "undefined" || getStableNativeScroll()) return;
+  if (shouldDeferArcScrollLayoutRefresh()) return;
+  if (isArcModalScrollLockActive()) return;
 
   const pathAnchor = options?.anchor ?? document.getElementById("path");
   const anchorTopBefore =
     options?.anchorTopBefore ?? pathAnchor?.getBoundingClientRect().top;
-  const scrollBefore = options?.scrollBefore ?? currentScrollY();
+  const scrollBefore = options?.scrollBefore ?? readArcPageScrollY();
 
   resizeArcScrollViewport();
 
@@ -173,14 +155,17 @@ export function refreshNativeScrollPinLayout(options?: {
   scrollBefore?: number;
 }) {
   if (typeof window === "undefined" || !getStableNativeScroll()) return;
+  if (shouldDeferArcScrollLayoutRefresh()) return;
 
   const pathAnchor = options?.anchor ?? document.getElementById("path");
   const anchorTopBefore =
     options?.anchorTopBefore ?? pathAnchor?.getBoundingClientRect().top;
-  const scrollBefore = options?.scrollBefore ?? currentScrollY();
+  const scrollBefore = options?.scrollBefore ?? readArcPageScrollY();
 
   requestAnimationFrame(() => {
+    if (shouldDeferArcScrollLayoutRefresh()) return;
     requestAnimationFrame(() => {
+      if (shouldDeferArcScrollLayoutRefresh()) return;
       ScrollTrigger.refresh(true);
       clampScrollToDocument();
 
@@ -218,10 +203,11 @@ export function refreshArcScrollLayout(options?: {
   skipReveal?: boolean;
 }) {
   if (typeof window === "undefined") return;
+  if (isArcModalScrollLockActive()) return;
 
   const { anchor, skipReveal = false } = options ?? {};
 
-  const scrollBefore = currentScrollY();
+  const scrollBefore = currentScrollYForStabilize();
   const scrollerBefore = getArcScrollTriggerScroller();
   const maxScrollBefore = getMaxScroll(scrollerBefore);
 
@@ -252,15 +238,8 @@ export function refreshArcScrollLayout(options?: {
         }
       }
 
-      if (!prefersReducedMotion() && !skipReveal) {
-        const viewportH = window.innerHeight || 800;
-        document.querySelectorAll("[data-scroll-section]").forEach((node) => {
-          const el = node as HTMLElement;
-          const rect = el.getBoundingClientRect();
-          if (rect.top < viewportH * 1.08 && rect.bottom > -48) {
-            gsap.set(el, { opacity: 1, y: 0, filter: "blur(0px)" });
-          }
-        });
+      if (!skipReveal) {
+        reconcileArcScrollReveals();
       }
     });
   });

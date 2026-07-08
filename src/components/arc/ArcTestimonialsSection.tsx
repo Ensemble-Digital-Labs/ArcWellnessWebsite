@@ -3,7 +3,7 @@
 import { useReducedMotion } from "framer-motion";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useId, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
 import { Star } from "lucide-react";
 
 import { PinnedSection } from "@/components/arc/PinnedSection";
@@ -22,6 +22,7 @@ import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { useMinMd } from "@/lib/useMinMd";
 import { ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS, ARC_HOME_TESTIMONIALS_TOP_SEAM_SOFT_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import { useArcHorizontalSwipeNavigate } from "@/lib/useArcHorizontalSwipeNavigate";
 
 export type ArcTestimonialItem = {
   id: string;
@@ -432,6 +433,7 @@ export function ArcTestimonialsSection({
   bottomSeam = false,
 }: ArcTestimonialsSectionProps) {
   const sphereHintId = useId();
+  const mobileCardSwipeRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const interactionResumeTimeoutRef = useRef<number | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(
@@ -455,7 +457,7 @@ export function ArcTestimonialsSection({
     reduceMotion === true
       ? "Tap a portrait to read the testimonials."
       : mobileScrollUx
-        ? "Swipe up or down to scroll · drag sideways on the sphere to spin · tap a portrait to read."
+        ? "Swipe left or right on a review to browse."
         : "Spin me with a drag, then tap a portrait to read the testimonials.";
 
   useEffect(() => {
@@ -505,6 +507,34 @@ export function ArcTestimonialsSection({
     holdAutoplayForMs(2200);
     setSelectedId(id);
   };
+
+  const goToAdjacentTestimonial = useCallback(
+    (direction: 1 | -1) => {
+      if (items.length < 2) return;
+      const idx = selectedIndex >= 0 ? selectedIndex : 0;
+      const nextItem = items[(idx + direction + items.length) % items.length];
+      if (!nextItem) return;
+      holdAutoplayForMs(2200);
+      setSelectedId(nextItem.id);
+    },
+    [items, selectedIndex],
+  );
+
+  const goToNextTestimonial = useCallback(
+    () => goToAdjacentTestimonial(1),
+    [goToAdjacentTestimonial],
+  );
+
+  const goToPrevTestimonial = useCallback(
+    () => goToAdjacentTestimonial(-1),
+    [goToAdjacentTestimonial],
+  );
+
+  useArcHorizontalSwipeNavigate(mobileCardSwipeRef, {
+    enabled: mobileScrollUx && items.length > 1,
+    onSwipeLeft: goToNextTestimonial,
+    onSwipeRight: goToPrevTestimonial,
+  });
 
   useEffect(() => {
     if (items.length < 2 || isSphereInteracting) return;
@@ -565,7 +595,7 @@ export function ArcTestimonialsSection({
       <div className="flex min-h-0 flex-col max-md:overflow-hidden md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
         <div
           {...(pinEnabled ? { "data-scroll-section": true } : {})}
-          className="relative z-[1] flex min-h-[52vh] flex-1 items-center justify-center px-2 pb-10 pt-4 sm:min-h-[56vh] sm:pt-6 lg:h-full lg:min-h-0 lg:w-1/2 lg:justify-end lg:py-6 lg:pl-8 lg:pr-3 [@media(max-height:820px)]:lg:py-4 xl:pl-12 xl:pr-5"
+          className="relative z-[1] hidden min-h-0 flex-1 items-center justify-center px-2 pb-10 pt-4 sm:pt-6 lg:flex lg:h-full lg:min-h-[52vh] lg:w-1/2 lg:justify-end lg:py-6 lg:pl-8 lg:pr-3 [@media(max-height:820px)]:lg:py-4 xl:pl-12 xl:pr-5"
         >
           <div
             role="region"
@@ -579,7 +609,7 @@ export function ArcTestimonialsSection({
             onTouchEnd={() => holdAutoplayForMs(900)}
           >
             <div
-              className="w-full [@media(max-height:820px)]:scale-[0.92] [@media(max-height:820px)]:origin-center"
+              className="w-full touch-pan-y [@media(max-height:820px)]:scale-[0.92] [@media(max-height:820px)]:origin-center"
               style={sphereMotion}
             >
               <SphereImageGrid
@@ -616,7 +646,7 @@ export function ArcTestimonialsSection({
 
         <div
           {...(pinEnabled ? { "data-scroll-section": true } : {})}
-          className="relative z-[1] flex min-h-0 flex-1 flex-col items-center justify-center overflow-visible px-5 py-10 sm:px-8 lg:h-full lg:w-1/2 lg:items-end lg:justify-center lg:px-8 lg:py-6 lg:pt-28 [@media(max-height:820px)]:lg:py-4 [@media(max-height:820px)]:lg:pt-24 xl:px-12 2xl:px-14"
+          className="relative z-[1] flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-visible px-5 py-10 sm:px-8 lg:h-full lg:w-1/2 lg:items-end lg:justify-center lg:px-8 lg:py-6 lg:pt-28 [@media(max-height:820px)]:lg:py-4 [@media(max-height:820px)]:lg:pt-24 xl:px-12 2xl:px-14"
         >
           {selected ? (
             <div
@@ -633,15 +663,46 @@ export function ArcTestimonialsSection({
               </div>
 
               <div className="mx-auto min-h-0 w-full flex-1 overflow-visible">
-                <motion.div
-                  key={selected.id}
-                  className="lg:hidden"
-                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                <div
+                  ref={mobileCardSwipeRef}
+                  className="touch-pan-y lg:hidden"
+                  data-arc-swipe-nav
+                  aria-label="Swipe left or right to browse testimonials"
                 >
-                  <ArcTestimonialGlassCard item={selected} variant="active" />
-                </motion.div>
+                  <motion.div
+                    key={selected.id}
+                    initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <ArcTestimonialGlassCard item={selected} variant="active" />
+                  </motion.div>
+
+                  {items.length > 1 ? (
+                    <div
+                      className="mt-4 flex justify-center gap-1.5 sm:mt-5"
+                      role="tablist"
+                      aria-label="Testimonial pages"
+                    >
+                      {items.map((item, i) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={i === selectedIndex}
+                          aria-label={`Testimonial ${i + 1} of ${items.length}`}
+                          onClick={() => selectTestimonial(item.id)}
+                          className={cn(
+                            "h-1.5 rounded-full transition-[width,background-color] duration-300",
+                            i === selectedIndex
+                              ? "w-5 bg-arc-teal"
+                              : "w-1.5 bg-arc-charcoal/25",
+                          )}
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
 
                 <ArcTestimonial3DCarousel
                   items={items}

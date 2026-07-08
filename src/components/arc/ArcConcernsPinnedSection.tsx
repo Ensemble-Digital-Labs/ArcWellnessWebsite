@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { useStableNativeScroll } from "@/lib/useStableNativeScroll";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { CONCERN_PANELS, CONCERNS_SECTION_BG } from "@/content/concernsSection";
@@ -20,7 +19,6 @@ export function ArcConcernsPinnedSection({
   bottomSeam?: boolean;
 }) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const nativeScroll = useStableNativeScroll();
 
   useEffect(() => {
     ScrollTrigger.getById("arc-concerns-pin")?.kill(true);
@@ -49,7 +47,7 @@ export function ArcConcernsPinnedSection({
         ref={sectionRef}
         className={cn(
           "relative z-10 flex flex-col overflow-hidden",
-          nativeScroll ? "max-md:min-h-0" : "h-[100dvh] max-h-[100dvh] min-h-0",
+          "max-md:min-h-0 max-md:h-auto",
           "md:h-[100dvh] md:max-h-[100dvh] md:min-h-0",
         )}
       >
@@ -71,9 +69,10 @@ export function ArcConcernsPinnedSection({
               </div>
 
               <div
+                data-arc-h-scroll
                 className={cn(
                   "mt-6 grid w-full gap-x-2 gap-y-5 sm:mt-8 sm:gap-x-3 sm:gap-y-6 md:mt-10",
-                  "max-md:grid-flow-col max-md:auto-cols-[min(72vw,15rem)] max-md:grid-rows-1 max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:pb-1 max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden",
+                  "max-md:grid-flow-col max-md:auto-cols-[min(72vw,15rem)] max-md:grid-rows-1 max-md:overflow-x-auto max-md:overscroll-x-contain max-md:snap-x max-md:snap-mandatory max-md:pb-1 max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden",
                   "md:min-h-0 md:flex-1 md:grid-cols-3 md:grid-rows-2 md:overflow-hidden",
                   "lg:grid-cols-6 lg:grid-rows-1 lg:gap-y-0",
                   "[@media(max-height:780px)]:mt-4 [@media(max-height:680px)]:mt-3",
@@ -116,10 +115,10 @@ export function ArcConcernsPinnedSection({
         </div>
       </section>
 
-      {/* Breathing room before Wellness — background plate continues through this band. */}
+      {/* Breathing room before Wellness — desktop only; mobile flows straight into lounge photo. */}
       <div
         aria-hidden
-        className="relative z-[1] h-[min(10vh,5rem)] shrink-0 md:h-[min(12vh,6rem)]"
+        className="relative z-[1] hidden h-[min(12vh,6rem)] shrink-0 md:block"
       />
 
       {bottomSeam ? (
@@ -128,7 +127,7 @@ export function ArcConcernsPinnedSection({
           tone="cream"
           variant="soft"
           scope="background"
-          className={ARC_HOME_CONCERNS_BOTTOM_SEAM_SOFT_CLASS}
+          className={cn(ARC_HOME_CONCERNS_BOTTOM_SEAM_SOFT_CLASS, "max-md:hidden")}
         />
       ) : null}
     </div>

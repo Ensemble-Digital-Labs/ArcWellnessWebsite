@@ -8,6 +8,11 @@ export const ARC_SITE_MAX_WIDTH_PX = 1440;
 export const ARC_PAGE_RAIL_MAX = `max-w-[min(100%,${ARC_SITE_MAX_WIDTH_PX}px)] w-full`;
 
 /**
+ * Full-screen modals (clinic gallery, etc.) — above site header chrome (`z-[11002]` when menu open).
+ */
+export const ARC_FULLSCREEN_MODAL_Z_CLASS = "z-[12000]";
+
+/**
  * Padding-top so copy clears the fixed wordmark (`h-32` → `lg:h-48`) with a **short** air gap (~4px)
  * under the logo — content can sit close to the top without overlapping.
  */
@@ -62,6 +67,10 @@ export const ARC_MUTED_SECTION_BOTTOM_BLEND_CLASS =
 export const ARC_SECTION_SEAM_OVERLAP_SM_CLASS =
   "-mt-[min(7vh,3.5rem)] pt-[min(7vh,3.5rem)]";
 
+/** Same overlap on lg+ only — avoids covering mobile gallery thumbs / bottom UI. */
+export const ARC_SECTION_SEAM_OVERLAP_SM_LG_CLASS =
+  "max-lg:mt-0 max-lg:pt-0 lg:-mt-[min(7vh,3.5rem)] lg:pt-[min(7vh,3.5rem)]";
+
 /** Overlap pull when the next section’s top seam sits under the previous band. */
 export const ARC_SECTION_SEAM_OVERLAP_CLASS =
   "-mt-[min(10vh,5rem)] pt-[min(10vh,5rem)]";
@@ -87,6 +96,14 @@ export const ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS = ARC_HOME_WHOLE_BODY_TOP_S
 
 /** Matched pair — Home path steps ↕ testimonials (cream on cream). */
 export const ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS = ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS;
+
+/** Soft cream + blur where path step copy meets photography (mobile: top of image). */
+export const ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS =
+  "pointer-events-none absolute inset-x-0 top-0 z-[2] h-[min(4.75rem,24%)] bg-gradient-to-b from-arc-cream from-22% via-arc-cream/84 via-58% to-transparent backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-md [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_46%,transparent_100%)] mask-image-[linear-gradient(to_bottom,black_0%,black_46%,transparent_100%)]";
+
+/** Soft cream + blur at the vertical split between step tabs and image (desktop). */
+export const ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS =
+  "pointer-events-none absolute inset-y-0 left-0 z-[2] w-[min(6.25rem,16%)] bg-gradient-to-r from-arc-cream from-18% via-arc-cream/80 via-56% to-transparent backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-md [-webkit-mask-image:linear-gradient(to_right,black_0%,black_50%,transparent_100%)] mask-image-[linear-gradient(to_right,black_0%,black_50%,transparent_100%)]";
 
 export const ARC_HOME_TESTIMONIALS_TOP_SEAM_SOFT_CLASS = ARC_HOME_WHOLE_BODY_TOP_SEAM_SOFT_CLASS;
 

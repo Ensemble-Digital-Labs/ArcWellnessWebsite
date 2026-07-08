@@ -8,7 +8,7 @@ import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSect
 import {
   ClinicGalleryStaticGrid,
 } from "@/components/arc/clinic-gallery/ClinicGalleryDraggableGrid";
-import { prefersNativeScroll } from "@/lib/arcScrollMode";
+import { ARC_FULLSCREEN_MODAL_Z_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 type ClinicGalleryOverlayProps = {
@@ -36,45 +36,15 @@ export function ClinicGalleryOverlay({
   useEffect(() => {
     if (!open) return;
 
-    closeRef.current?.focus();
-
-    const scrollToFocus = () => {
-      document.getElementById("clinic-gallery-focus")?.scrollIntoView({
-        behavior: reduceMotion ? "auto" : "smooth",
-        block: "center",
-      });
-    };
-
-    let scrollTimer: number | undefined;
-    const scrollFrame = window.requestAnimationFrame(() => {
-      scrollToFocus();
-      scrollTimer = window.setTimeout(scrollToFocus, 120);
-    });
+    closeRef.current?.focus({ preventScroll: true });
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };
 
     window.addEventListener("keydown", onKey);
-
-    if (prefersNativeScroll()) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-    } else {
-      const main = document.getElementById("main");
-      if (main) main.style.overflow = "hidden";
-    }
-
-    return () => {
-      window.cancelAnimationFrame(scrollFrame);
-      if (scrollTimer) window.clearTimeout(scrollTimer);
-      window.removeEventListener("keydown", onKey);
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      const main = document.getElementById("main");
-      if (main) main.style.overflow = "";
-    };
-  }, [open, onClose, reduceMotion, initialSlideIndex]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
 
   if (!mounted) return null;
 
@@ -86,11 +56,16 @@ export function ClinicGalleryOverlay({
           aria-modal="true"
           aria-label="Clinic photo gallery"
           aria-describedby="clinic-gallery-exit-hint"
-          className="fixed inset-0 z-[1100] flex flex-col bg-[#141414] text-white"
+          data-lenis-prevent
+          data-arc-clinic-gallery-overlay
+          className={cn(
+            "fixed inset-0 flex flex-col bg-[#141414] text-white",
+            ARC_FULLSCREEN_MODAL_Z_CLASS,
+          )}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <header className="relative z-20 flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-8 sm:py-5">
             <div className="min-w-0">
@@ -98,7 +73,7 @@ export function ClinicGalleryOverlay({
                 id="clinic-gallery-exit-hint"
                 className="font-sans text-sm text-white/55 sm:text-[0.9375rem]"
               >
-                Scroll to explore our space · Hover each photo for its story · Press Esc or close to exit
+                Scroll to explore · Check each photo for its story
               </p>
             </div>
             <motion.button

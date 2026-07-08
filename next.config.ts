@@ -1,10 +1,26 @@
 import type { NextConfig } from "next";
+import os from "node:os";
 import path from "node:path";
 
 /** Pin Turbopack to this app (not `C:\Users\...\package-lock.json` one level up). */
 const appRoot = path.resolve(__dirname);
 
+/** iPhone / LAN dev — Next.js blocks `/_next/*` unless the host IP is allowlisted. */
+function getDevLanOrigins(): string[] {
+  const hosts = new Set<string>(["localhost", "127.0.0.1"]);
+  for (const ifaces of Object.values(os.networkInterfaces())) {
+    if (!ifaces) continue;
+    for (const iface of ifaces) {
+      if (iface.family === "IPv4" && !iface.internal) {
+        hosts.add(iface.address);
+      }
+    }
+  }
+  return [...hosts];
+}
+
 const nextConfig: NextConfig = {
+  allowedDevOrigins: getDevLanOrigins(),
   turbopack: {
     root: appRoot,
   },

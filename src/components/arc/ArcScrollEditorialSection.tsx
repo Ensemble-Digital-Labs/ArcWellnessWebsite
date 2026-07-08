@@ -17,7 +17,7 @@ import {
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
-import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
+import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_LG_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 
@@ -376,7 +376,7 @@ export function ArcScrollEditorialSection({
       className={cn(
         "relative overflow-hidden",
         bg,
-        topSeam && seamVariant === "soft" && ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
+        topSeam && seamVariant === "soft" && ARC_SECTION_SEAM_OVERLAP_SM_LG_CLASS,
         className,
       )}
     >

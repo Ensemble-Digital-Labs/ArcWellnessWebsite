@@ -13,6 +13,7 @@ import {
   memo,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -41,9 +42,13 @@ const tileVariants: Variants = {
 function ClinicGalleryTile({
   slide,
   className,
+  disableEntrance = false,
+  disableHoverMotion = false,
 }: {
   slide: ClinicCarouselSlide;
   className?: string;
+  disableEntrance?: boolean;
+  disableHoverMotion?: boolean;
 }) {
   const variant = useContext(GridVariantContext);
 
@@ -69,27 +74,41 @@ function ClinicGalleryTile({
         className,
       )}
       variants={tileVariants}
-      initial="initial"
-      animate="animate"
+      initial={disableEntrance ? false : "initial"}
+      animate={disableEntrance ? undefined : "animate"}
     >
       <Image
         src={slide.src}
         alt={slide.alt}
         fill
         className={cn(
-          "object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
+          "object-cover",
+          !disableHoverMotion &&
+            "transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
           slide.objectPosition ?? "object-center",
         )}
         sizes="(max-width: 768px) 72vw, 280px"
         draggable={false}
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/80 via-arc-charcoal/20 to-transparent opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/80 via-arc-charcoal/20 to-transparent",
+          !disableHoverMotion &&
+            "opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-100 group-focus-within:opacity-100",
+          disableHoverMotion && "opacity-80",
+        )}
         aria-hidden
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 sm:p-6">
         {slide.caption ? (
-          <p className="mb-2.5 max-w-[24ch] translate-y-5 font-serif text-lg leading-snug text-white opacity-0 transition-all duration-[550ms] ease-[cubic-bezier(0.18,0.71,0.11,1)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 sm:mb-3 sm:text-xl md:text-[1.35rem]">
+          <p
+            className={cn(
+              "mb-2.5 max-w-[24ch] font-serif text-lg leading-snug text-white sm:mb-3 sm:text-xl md:text-[1.35rem]",
+              !disableHoverMotion &&
+                "translate-y-5 opacity-0 transition-all duration-[550ms] ease-[cubic-bezier(0.18,0.71,0.11,1)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100",
+              disableHoverMotion && "opacity-100",
+            )}
+          >
             {slide.caption}
           </p>
         ) : null}
@@ -209,21 +228,49 @@ export function ClinicGalleryStaticGrid({
   className?: string;
   initialSlideIndex?: number;
 }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const didInitialFocusRef = useRef(false);
+
+  useLayoutEffect(() => {
+    if (didInitialFocusRef.current) return;
+    const container = scrollRef.current;
+    if (!container) return;
+    didInitialFocusRef.current = true;
+
+    const focus = container.querySelector<HTMLElement>("[data-gallery-focus]");
+    if (!focus) {
+      container.scrollTop = 0;
+      return;
+    }
+    const containerTop = container.getBoundingClientRect().top;
+    const focusTop = focus.getBoundingClientRect().top;
+    container.scrollTop += focusTop - containerTop - 16;
+  }, [initialSlideIndex, slides.length]);
+
   return (
     <div
+      ref={scrollRef}
+      data-arc-clinic-gallery-scroll
       className={cn(
-        "flex-1 overflow-y-auto overscroll-contain px-6 py-8",
+        "flex-1 overflow-y-auto overscroll-contain px-6 py-8 touch-pan-y",
+        "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         className,
       )}
+      onWheel={(event) => event.stopPropagation()}
+      onTouchMove={(event) => event.stopPropagation()}
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
         {slides.map((slide, index) => (
           <div
             key={slide.src}
-            id={index === initialSlideIndex ? "clinic-gallery-focus" : undefined}
-            className={cn(index === initialSlideIndex && "scroll-mt-24")}
+            data-gallery-focus={index === initialSlideIndex ? "" : undefined}
+            className={cn(index === initialSlideIndex && "scroll-mt-4")}
           >
-            <ClinicGalleryTile slide={slide} className="w-full even:mt-0" />
+            <ClinicGalleryTile
+              slide={slide}
+              className="w-full even:mt-0"
+              disableEntrance
+            />
           </div>
         ))}
       </div>
