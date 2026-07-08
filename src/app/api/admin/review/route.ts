@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/adminAuth";
 import {
-  exportClientReviewToXlsx,
   getClientReviewDocument,
   patchClientReviewSection,
 } from "@/lib/clientReviewStore";
@@ -62,6 +61,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { exportClientReviewToXlsx } = await import("@/lib/clientReviewExport");
     const { path: xlsxPath } = exportClientReviewToXlsx();
     return NextResponse.json({ ok: true, path: xlsxPath });
   } catch (err) {

@@ -1,3 +1,15 @@
+# Next.js on Netlify — use @netlify/plugin-nextjs (enable in Netlify UI).
+# Do NOT set "Publish directory" to `.next` in the UI; leave it empty so the plugin manages output.
+
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 # Long-lived cache for static media in /public (filenames are content-hashed or versioned manually).
 [[headers]]
   for = "/assets/*"
