@@ -38,7 +38,7 @@ type ArcAboutNarrativePinSectionProps = {
   ctaLabel?: string;
   /** `pin-scrub` locks viewport; `enter-once` reveals lines automatically when scrolled into view. */
   motion?: "pin-scrub" | "enter-once";
-  headlineEmphasisTone?: "rose" | "teal";
+  headlineEmphasisTone?: "teal";
   /** Soft cream feather at section top — overlaps previous band (About page seams). */
   topSeam?: boolean;
   /** Soft cream feather at section bottom — eases into next band (About page seams). */

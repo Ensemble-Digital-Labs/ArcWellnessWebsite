@@ -85,7 +85,7 @@ export function SimpleFooter() {
 
   return (
     <footer id="contact" className="relative flex flex-col overflow-hidden bg-arc-charcoal">
-      <div className="border-b border-arc-charcoal/10 bg-[#ebe8e2]/90 py-2.5">
+      <div className="border-b border-arc-charcoal/10 bg-[#e4d5c8]/90 py-2.5">
         <p className="text-center font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-arc-charcoal/55">
           Elevated care <span className="text-arc-champagne">✦</span> Extraordinary results <span className="text-arc-champagne">✦</span>{" "}
           ARC Wellness
@@ -114,7 +114,7 @@ export function SimpleFooter() {
             </div>
 
             <div className="order-1 flex flex-col items-center justify-center text-center md:order-2">
-              <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-[#f7f4ef]/92 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)] sm:text-xl md:text-2xl md:leading-relaxed">
+              <p className="max-w-[32ch] font-serif text-lg italic leading-snug text-[#f0e3d7]/92 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)] sm:text-xl md:text-2xl md:leading-relaxed">
                 Elevated care, extraordinary results, a life well-lived.
               </p>
             </div>

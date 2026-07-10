@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref } from "@/client-showcase/content";
-import { showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { whoWeAreCopy } from "@/client-showcase/mock-page-content";
 
@@ -26,11 +26,11 @@ function CopyColumn() {
 
   return (
     <div className="max-w-xl lg:max-w-none lg:pr-4">
-      <div className="border-l-2 border-arc-rose-gold-ink/40 pl-4 sm:pl-5">
+      <div className="border-l-2 border-arc-teal-ink/40 pl-4 sm:pl-5">
         <p
           className={cn(
             "max-w-md text-balance font-sans text-[10px] font-semibold uppercase leading-snug tracking-[0.2em] sm:text-[11px] sm:tracking-[0.24em]",
-            showcaseRoseClass.ink,
+            showcaseAccentClass.ink,
           )}
         >
           {whoWeAreCopy.eyebrow}
@@ -40,7 +40,7 @@ function CopyColumn() {
       <h2 className="mt-6 whitespace-pre-line font-serif text-[clamp(1.9rem,4vw,3rem)] font-normal leading-[1.12] tracking-[-0.02em] text-arc-charcoal sm:mt-8 sm:leading-[1.1]">
         {whoWeAreCopy.headlineParts.map((part, i) =>
           i % 2 === 1 ? (
-            <span key={i} className={cn("font-medium italic", showcaseRoseClass.ink)}>
+            <span key={i} className={cn("font-medium italic", showcaseAccentClass.ink)}>
               {part}
             </span>
           ) : (
@@ -54,7 +54,7 @@ function CopyColumn() {
         {restParagraphs.map((p, i) => (
           <p
             key={i}
-            className="rounded-r-lg border-l-2 border-arc-rose-gold-ink/25 bg-white/55 py-3 pl-4 font-serif text-[1.05rem] leading-relaxed text-arc-charcoal/88 sm:py-4 sm:pl-5 sm:text-[1.125rem]"
+            className="rounded-r-lg border-l-2 border-arc-teal-ink/25 bg-white/55 py-3 pl-4 font-serif text-[1.05rem] leading-relaxed text-arc-charcoal/88 sm:py-4 sm:pl-5 sm:text-[1.125rem]"
           >
             {p}
           </p>

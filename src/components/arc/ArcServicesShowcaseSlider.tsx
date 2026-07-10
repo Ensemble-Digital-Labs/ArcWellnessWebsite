@@ -4,10 +4,11 @@ import * as THREE from "three";
 import gsap from "gsap";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject, type ReactNode } from "react";
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
 import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
+import { ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS } from "@/lib/arc-layout";
 import {
   servicesShowcaseFragmentShader,
   servicesShowcaseVertexShader,
@@ -67,8 +68,34 @@ const SHOWCASE_SLIDE_DESC_CLASS =
   "mx-auto max-w-md font-sans text-sm leading-relaxed text-arc-charcoal sm:text-[0.9375rem] md:leading-relaxed";
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
+const SHOWCASE_NAV_SHELL_CLASS =
+  "pointer-events-none absolute inset-x-0 bottom-0 z-20";
 const SHOWCASE_NAV_CLASS =
-  "arc-slide-nav arc-slide-nav--light slides-navigation absolute bottom-0 left-0 right-0 z-20 flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain border-t border-arc-teal/28 bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+  "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+
+function ServicesShowcaseNav({
+  className,
+  navRef,
+  children,
+}: {
+  className?: string;
+  navRef?: RefObject<HTMLElement | null>;
+  children?: ReactNode;
+}) {
+  return (
+    <div className={SHOWCASE_NAV_SHELL_CLASS}>
+      <div aria-hidden className={ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS} />
+      <nav
+        ref={navRef}
+        id="slidesNav"
+        className={cn(SHOWCASE_NAV_CLASS, className)}
+        aria-label="Slide navigation"
+      >
+        {children}
+      </nav>
+    </div>
+  );
+}
 
 function getEffectIndex(name: string): number {
   const map: Record<string, number> = {
@@ -181,11 +208,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         </button>
       </div>
 
-      <nav
-        id="slidesNav"
-        className={SHOWCASE_NAV_CLASS}
-        aria-label="Slide navigation"
-      >
+      <ServicesShowcaseNav>
         {slides.map((s, i) => (
           <button
             key={s.title}
@@ -205,7 +228,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
             </div>
           </button>
         ))}
-      </nav>
+      </ServicesShowcaseNav>
     </section>
   );
 }
@@ -718,7 +741,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         antialias: true,
         alpha: false,
       });
-      renderer.setClearColor(0xf7f4ef, 1);
+      renderer.setClearColor(0xf0e3d7, 1);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       const w0 = root.clientWidth;
@@ -943,12 +966,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         </div>
       </div>
 
-      <nav
-        id="slidesNav"
-        ref={navRef}
-        className={SHOWCASE_NAV_CLASS}
-        aria-label="Slide navigation"
-      />
+      <ServicesShowcaseNav navRef={navRef} />
     </section>
   );
 }

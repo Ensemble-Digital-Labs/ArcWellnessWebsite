@@ -117,7 +117,7 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
       <Link
         href={href}
         className={cn(
-          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
           aspectClass,
         )}
       >
@@ -375,7 +375,7 @@ export function ArcInsightsFeedSection({
             priority
           />
           <div
-            className="absolute inset-x-0 bottom-0 z-[1] h-[min(7vh,3.25rem)] bg-gradient-to-t from-white from-50% via-white/55 via-85% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_22%,transparent_100%)]"
+            className="absolute inset-x-0 bottom-0 z-[1] h-[min(7vh,3.25rem)] bg-gradient-to-t from-arc-cream from-50% via-arc-cream/55 via-85% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_22%,transparent_100%)]"
             aria-hidden
           />
         </div>
@@ -403,7 +403,7 @@ export function ArcInsightsFeedSection({
         </div>
       </div>
 
-      <div className="relative z-10 bg-white px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
+      <div className="relative z-10 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
         <div className="mx-auto w-full max-w-[min(100%,1440px)]">
           <div
             id="insights-filter-bar"
@@ -423,7 +423,7 @@ export function ArcInsightsFeedSection({
                   aria-selected={active}
                   onClick={() => selectFilter(tab)}
                   className={cn(
-                    "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-[13px]",
+                    "relative min-h-[44px] pb-3 font-sans text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream sm:text-[13px]",
                     active ? "text-arc-charcoal" : "text-arc-charcoal/55 hover:text-arc-charcoal/90",
                   )}
                 >

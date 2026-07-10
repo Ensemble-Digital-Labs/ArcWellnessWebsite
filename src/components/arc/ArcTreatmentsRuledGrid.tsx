@@ -29,7 +29,7 @@ type ArcTreatmentsRuledGridProps = {
   subtitle?: string;
   treatments: readonly TreatmentPage[];
   /** Accent for script headings + row labels — teal matches About. */
-  accentTone?: "rose" | "teal";
+  accentTone?: "teal";
   topSeam?: boolean;
   bottomSeam?: boolean;
   className?: string;
@@ -114,13 +114,13 @@ function TreatmentInteractiveRow({
 }: {
   treatment: TreatmentPage;
   index: number;
-  accentTone: "rose" | "teal";
+  accentTone: "teal";
 }) {
   const reducedMotion = useReducedMotion();
   const canHover = useCanHover();
   const showInteractivePreview = canHover && !reducedMotion;
-  const accentInk = accentTone === "teal" ? "text-arc-teal-ink" : "text-arc-rose-gold-ink";
-  const accentBright = accentTone === "teal" ? "text-arc-teal" : "text-arc-rose-gold";
+  const accentInk = "text-arc-teal-ink";
+  const accentBright = "text-arc-teal";
 
   const [hovered, setHovered] = useState(false);
   const px = useMotionValue(0);
@@ -206,9 +206,7 @@ function TreatmentInteractiveRow({
                 )
               : cn(
                   "text-arc-charcoal/22",
-                  accentTone === "teal"
-                    ? "group-hover:text-arc-teal-ink/40"
-                    : "group-hover:text-arc-rose-gold-ink/40",
+                  "group-hover:text-arc-teal-ink/40",
                 ),
           )}
           aria-hidden
@@ -287,7 +285,7 @@ function TreatmentInteractiveRow({
               <h3
                 className={cn(
                   "mt-1.5 break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
-                  accentTone === "teal" ? "group-hover:text-arc-teal-ink" : "group-hover:text-arc-rose-gold-ink",
+                  "group-hover:text-arc-teal-ink",
                 )}
               >
                 {treatment.title}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref } from "@/client-showcase/content";
-import { showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { editorialHeroCopy } from "@/client-showcase/mock-page-content";
 
 type ArcDesignHeroProps = {
@@ -64,7 +64,7 @@ export function ArcDesignHero({ imageSrc }: ArcDesignHeroProps) {
           <div className="max-w-3xl">
             <h1 className="font-serif text-[clamp(2.05rem,6.1vw,4.25rem)] font-normal leading-[1.05] tracking-tight text-white lg:text-[clamp(2.2rem,5.2vw,4.65rem)] lg:leading-[1.03] xl:text-[clamp(2.25rem,4.6vw,4.85rem)]">
               {c.headlineLead}
-              <em className={cn("italic", showcaseRoseClass.bright)}>{c.headlineItalic}</em>
+              <em className={cn("italic", showcaseAccentClass.bright)}>{c.headlineItalic}</em>
               {c.headlineTrail}
             </h1>
             <p className="mt-2 max-w-lg font-sans text-[13px] leading-snug text-white/88 sm:mt-3 sm:text-[14px] sm:leading-relaxed md:text-[1rem]">

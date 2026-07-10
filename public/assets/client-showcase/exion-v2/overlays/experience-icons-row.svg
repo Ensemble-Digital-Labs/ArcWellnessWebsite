@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 220" role="img" aria-label="EXION experience timeline icons">
+  <defs>
+    <filter id="rowGlow" x="-30%" y="-80%" width="160%" height="260%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.77  0 1 0 0 0.66  0 0 1 0 0.47  0 0 0 0.9 0" result="goldGlow"/>
+      <feMerge><feMergeNode in="goldGlow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .line{fill:none;stroke:#C5A878;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:url(#rowGlow)}
+      .label{font-family:'DM Sans',Arial,sans-serif;font-size:18px;font-weight:700;letter-spacing:.08em;fill:#C5A878;text-anchor:middle}
+    </style>
+  </defs>
+  <path class="line" opacity=".75" d="M60 95 C160 30 250 160 350 95 S540 30 640 95 S830 160 930 95 S1120 30 1220 95 S1320 160 1370 95"/>
+  <circle cx="350" cy="95" r="4" fill="#C5A878" filter="url(#rowGlow)"/>
+  <circle cx="640" cy="95" r="4" fill="#C5A878" filter="url(#rowGlow)"/>
+  <circle cx="930" cy="95" r="4" fill="#C5A878" filter="url(#rowGlow)"/>
+  <circle cx="1220" cy="95" r="4" fill="#C5A878" filter="url(#rowGlow)"/>
+  <g transform="translate(95 18) scale(1.35)">
+    <g fill="none" stroke="#C5A878" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rowGlow)">
+      <path d="M18 9h22a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H28l-8 6v-6h-2a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5Z"/><path d="M22 18h14"/><path d="M22 23h8"/><circle cx="21" cy="42" r="6"/><path d="M9 57c1.2-7.4 5.8-11 12-11s10.8 3.6 12 11"/><circle cx="43" cy="42" r="6"/><path d="M31 57c1.2-7.4 5.8-11 12-11s10.8 3.6 12 11"/>
+    </g>
+  </g>
+  <text class="label" x="140" y="180">CONSULTATION</text>
+  <g transform="translate(375 18) scale(1.35)">
+    <g fill="none" stroke="#C5A878" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rowGlow)">
+      <rect x="17" y="12" width="30" height="42" rx="3.5"/><path d="M26 12v-2.5A2.5 2.5 0 0 1 28.5 7h7A2.5 2.5 0 0 1 38 9.5V12"/><path d="M24 16h16"/><circle cx="25" cy="27" r="1.5"/><path d="M31 27h9"/><circle cx="25" cy="36" r="1.5"/><path d="M31 36h9"/><circle cx="25" cy="45" r="1.5"/><path d="M31 45h9"/>
+    </g>
+  </g>
+  <text class="label" x="418" y="180">PERSONALIZED PLAN</text>
+  <g transform="translate(665 18) scale(1.35)">
+    <g fill="none" stroke="#C5A878" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rowGlow)">
+      <path d="M7 24h10"/><path d="M17 20v8"/><path d="M18 19h22a5 5 0 0 1 5 5v7H23a5 5 0 0 1-5-5v-7Z"/><path d="M28 25h8"/><path d="M42 30c4 2.2 7 6.6 6.6 12.2-.35 5.3-3.8 9.8-8.6 11.4"/><path d="M39 31c2.4 4 2.5 8.2.3 12.7l-3.5 7.1a4 4 0 0 1-6.9.5l-4.6-6.5"/><path d="M25 45l9-5"/>
+    </g>
+  </g>
+  <text class="label" x="708" y="180">COMFORTABLE TREATMENTS</text>
+  <g transform="translate(960 18) scale(1.35)">
+    <g fill="none" stroke="#C5A878" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rowGlow)">
+      <path d="M12 21v6"/><path d="M9 24h6"/><path d="M50 16v8"/><path d="M46 20h8"/><path d="M52 43v6"/><path d="M49 46h6"/><path d="M32 9c-10 0-17 8.5-17 20.5S22 52 32 55c10-3 17-13.5 17-25.5S42 9 32 9Z"/><path d="M26 18c-4 4-5.8 9.5-5.1 15.4.8 6.9 4.8 12.3 11.1 15.1"/><path d="M32 17c6 2 10.2 7.5 10.2 14.2 0 6.4-3.7 11.7-9.2 14"/><path d="M31 28c2.5 1.8 3.3 4.2 2.2 7"/>
+    </g>
+  </g>
+  <text class="label" x="1003" y="180">VISIBLE RESULTS</text>
+  <g transform="translate(1238 18) scale(1.35)">
+    <g fill="none" stroke="#C5A878" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" filter="url(#rowGlow)">
+      <rect x="13" y="14" width="38" height="38" rx="3.5"/><path d="M13 24h38"/><path d="M23 9v10"/><path d="M41 9v10"/><path d="M22 32h.01"/><path d="M32 32h.01"/><path d="M42 32h.01"/><path d="M22 40h.01"/><path d="M32 40h.01"/><path d="M42 40h.01"/>
+    </g>
+  </g>
+  <text class="label" x="1281" y="180">MAINTAIN &amp; ENHANCE</text>
+</svg>

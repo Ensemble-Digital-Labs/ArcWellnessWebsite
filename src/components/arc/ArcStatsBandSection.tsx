@@ -51,7 +51,7 @@ export function ArcStatsBandSection({
             {titleEmphasis ? (
               <>
                 {" "}
-                <TitleEmphasis className="text-[1.08em] text-arc-rose-gold">{titleEmphasis}</TitleEmphasis>
+                <TitleEmphasis className="text-[1.08em] text-arc-teal">{titleEmphasis}</TitleEmphasis>
               </>
             ) : null}
           </h2>

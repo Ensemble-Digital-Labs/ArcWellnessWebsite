@@ -145,7 +145,7 @@ export function ArcFooter() {
       id="contact"
       className={cn(ARC_SECTION_SEAM_TOP, "relative flex min-h-[100dvh] flex-col overflow-hidden bg-arc-cream")}
     >
-      <div className="border-b border-arc-charcoal/10 bg-[#ebe8e2]/90 py-2.5 overflow-hidden">
+      <div className="border-b border-arc-charcoal/10 bg-[#e4d5c8]/90 py-2.5 overflow-hidden">
         <div className="animate-arc-marquee gap-10 whitespace-nowrap font-sans text-[10px] font-semibold uppercase tracking-[0.35em] text-arc-charcoal/50">
           {[0, 1].map((dup) => (
             <span key={dup} className="inline-flex gap-10 pr-10">

@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { SeamlessLoopVideo, type SeamlessLoopVideoHandle } from "@/components/arc/SeamlessLoopVideo";
-import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
+import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ARC_HEADLINE_TITLE_EMPHASIS_CLASS, TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import {
@@ -204,12 +204,9 @@ export function ArcMicroStatementSection({
 
       {linkHref && linkLabel ? (
         <div style={pinnedScrollMotion ? linkMotion : undefined}>
-          <ArcTextUnderlineCta
-            href={linkHref}
-            className="mt-8 items-start sm:mt-10"
-          >
+          <ArcPrimaryCta href={linkHref} className="mt-8 sm:mt-10">
             {linkLabel}
-          </ArcTextUnderlineCta>
+          </ArcPrimaryCta>
         </div>
       ) : null}
     </>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,16 +11,20 @@ import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
+import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import { captureArcPageScrollY } from "@/lib/arcScrollPosition";
 import { lockArcPageScrollForModal } from "@/lib/arcModalScrollLock";
 import { releaseArcScrollTopGuard } from "@/lib/arcScrollTopGuard";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import {
+  ARC_MARBLE_AMBIENT_BOTTOM_SEAM_COMPACT_CLASS,
+  ARC_MARBLE_AMBIENT_TOP_SEAM_CLASS,
+  ARC_MARBLE_AMBIENT_WASH_CLASS,
+  ARC_PAGE_RAIL_MAX,
+} from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
-import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
-
 gsap.registerPlugin(ScrollTrigger);
 
 function ClinicGalleryHandArrow({ className }: { className?: string }) {
@@ -57,7 +60,7 @@ type ArcClinicSpaceTeaserSectionProps = {
   previewIntro?: string;
   slides: readonly ClinicCarouselSlide[];
   className?: string;
-  headlineEmphasisTone?: "rose" | "teal";
+  headlineEmphasisTone?: "teal";
   /** Soft cream feather at section top (About page seams). */
   topSeam?: boolean;
   /** Soft cream exit into the next section (gallery → mission). */
@@ -163,7 +166,7 @@ export function ArcClinicSpaceTeaserSection({
         ref={sectionRef}
         id={id}
         className={cn(
-          "relative overflow-visible bg-arc-teal-muted/25 pt-20 text-arc-charcoal sm:pt-24 md:pt-28",
+          "relative overflow-visible bg-arc-teal-muted/6 pt-20 text-arc-charcoal sm:pt-24 md:pt-28",
           bottomSeam
             ? "pb-24 max-lg:pb-[calc(6rem+env(safe-area-inset-bottom,0px))] sm:pb-24 md:pb-28"
             : "pb-20 sm:pb-24 md:pb-28",
@@ -171,21 +174,12 @@ export function ArcClinicSpaceTeaserSection({
           className,
         )}
       >
-        {topSeam ? <ArcSectionSeamBlend edge="top" scope="background" /> : null}
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
-          <Image
-            src={CLINIC_SPACE_TEASER_AMBIENT_SRC}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/55 via-arc-cream/35 to-arc-cream/70" />
+          <ArcMarbleAmbientPlate src={CLINIC_SPACE_TEASER_AMBIENT_SRC} priority />
+          <div className={ARC_MARBLE_AMBIENT_WASH_CLASS} />
+          {topSeam ? <div className={ARC_MARBLE_AMBIENT_TOP_SEAM_CLASS} aria-hidden /> : null}
           {bottomSeam ? (
-            <div
-              className="absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-arc-cream via-arc-cream/75 to-transparent max-lg:h-16 lg:h-[min(22vh,10rem)]"
-              aria-hidden
-            />
+            <div className={ARC_MARBLE_AMBIENT_BOTTOM_SEAM_COMPACT_CLASS} aria-hidden />
           ) : null}
         </div>
 
@@ -215,10 +209,10 @@ export function ArcClinicSpaceTeaserSection({
               {previewIntro ? (
                 <div className="mt-6 sm:mt-8 lg:flex lg:w-full lg:justify-end" style={introMotion}>
                   <div className="flex max-w-md flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:items-center lg:gap-3 xl:gap-4">
-                    <p className="text-center font-title-emphasis text-[1.35rem] leading-snug tracking-tight text-arc-teal-ink sm:text-[1.45rem] lg:text-right">
+                    <p className="text-center font-title-emphasis text-[1.65rem] leading-snug tracking-tight text-arc-teal-ink sm:text-[1.85rem] md:text-[2rem] lg:text-right lg:text-[1.95rem] xl:text-[2.1rem]">
                       {previewIntro}
                     </p>
-                    <ClinicGalleryHandArrow className="h-10 w-14 rotate-90 lg:h-11 lg:w-[5.25rem] lg:rotate-0 lg:translate-x-1 xl:w-24 xl:translate-x-2" />
+                    <ClinicGalleryHandArrow className="h-11 w-[3.75rem] rotate-90 sm:h-12 sm:w-16 lg:h-12 lg:w-[5.5rem] lg:rotate-0 lg:translate-x-1 xl:h-[3.25rem] xl:w-24 xl:translate-x-2" />
                   </div>
                 </div>
               ) : null}
@@ -237,10 +231,6 @@ export function ArcClinicSpaceTeaserSection({
             </div>
           </div>
         </div>
-
-        {bottomSeam ? (
-          <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
-        ) : null}
       </section>
 
       <ClinicGalleryOverlay

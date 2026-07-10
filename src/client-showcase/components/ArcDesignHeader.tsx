@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { images } from "@/content/site";
 import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
 import { CLIENT_SHOWCASE_BASE } from "@/client-showcase/content";
-import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
 
@@ -56,17 +56,17 @@ export function ArcDesignHeader() {
             </a>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-arc-charcoal/75 sm:gap-8 sm:text-[11px]">
-            <Link href={hrefFor("#services")} className="transition-colors hover:text-arc-rose-gold-ink">
+            <Link href={hrefFor("#services")} className="transition-colors hover:text-arc-teal-ink">
               Specials &amp; events
             </Link>
-            <Link href={hrefFor("#book")} className="transition-colors hover:text-arc-rose-gold-ink">
+            <Link href={hrefFor("#book")} className="transition-colors hover:text-arc-teal-ink">
               ARC Society membership
             </Link>
           </div>
           <div className="flex items-center justify-center gap-3 sm:justify-end">
             <a
               href="tel:+19495555279"
-              className="whitespace-nowrap font-sans text-xs font-medium text-arc-rose-gold-ink sm:text-sm"
+              className="whitespace-nowrap font-sans text-xs font-medium text-arc-teal-ink sm:text-sm"
             >
               (949) 555-ARCW
             </a>
@@ -113,7 +113,7 @@ export function ArcDesignHeader() {
               <Link
                 key={item.label}
                 href={hrefFor(item.hash)}
-                className="inline-flex items-center gap-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-white/92 drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)] transition-colors hover:text-arc-rose-gold xl:text-xs"
+                className="inline-flex items-center gap-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-white/92 drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)] transition-colors hover:text-arc-teal xl:text-xs"
               >
                 {item.label}
                 <ChevronDown className="size-3.5 opacity-80" strokeWidth={2} aria-hidden />
@@ -149,7 +149,7 @@ export function ArcDesignHeader() {
             <li key={item.label}>
               <Link
                 href={hrefFor(item.hash)}
-                className="block rounded-md px-3 py-3 font-sans text-sm font-medium text-arc-charcoal transition-colors hover:bg-arc-rose-gold/12 hover:text-arc-rose-gold-ink"
+                className="block rounded-md px-3 py-3 font-sans text-sm font-medium text-arc-charcoal transition-colors hover:bg-arc-teal/12 hover:text-arc-teal-ink"
                 onClick={() => setOpen(false)}
               >
                 {item.label}

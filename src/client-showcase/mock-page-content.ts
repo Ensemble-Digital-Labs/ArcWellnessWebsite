@@ -135,7 +135,7 @@ export const editorialHeroImage = images.heroBg;
 export const whoWeAreCopy = {
   /** Section theme, affordability & fineness (client showcase About / #about). */
   eyebrow: "Balance of affordability & fineness",
-  /** Alternating segments: even = plain, odd = rose-gold ink emphasis. Leading `\n` = line break (use `whitespace-pre-line` on h2). */
+  /** Alternating segments: even = plain, odd = teal ink emphasis. Leading `\n` = line break (use `whitespace-pre-line` on h2). */
   headlineParts: ["Wellness,\nMade ", "Personal", "."] as const,
   paragraphs: [
     "We believe the finest care shouldn’t come with a cost that holds you back. Our approach pairs medical-grade treatments, peptides, infusions, curated supplements, with pricing designed for real, lasting wellness.",
@@ -167,7 +167,7 @@ export const showcaseMembershipBandCopy = {
  */
 export const showcaseScienceBeautyBand = {
   eyebrow: "Medical aesthetics & wellness",
-  /** Serif headline: plain white segments + one italic rose-gold emphasis. */
+  /** Serif headline: plain white segments + one italic teal emphasis. */
   headlineBefore: "Where science meets ",
   headlineEmphasis: "lasting",
   headlineAfter: " beauty.",

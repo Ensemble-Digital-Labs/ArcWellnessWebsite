@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 type ArcSectionSeamBlendProps = {
   edge: "top" | "bottom";
-  /** `cream` or teal-muted band (`muted`), or `cream-deep` for values entry. */
+  /** `cream` for blur overlays (always arc-cream). `muted` aliases to the same cream blur — section fill may still be teal-muted. */
   tone?: "cream" | "muted" | "cream-deep";
   /** `soft` = gradient only, no backdrop blur (gallery / editorial handoffs). */
   variant?: "default" | "soft";

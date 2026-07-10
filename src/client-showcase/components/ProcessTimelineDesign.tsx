@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref, showcasePathSteps } from "@/client-showcase/content";
-import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { PATH_SECTION_INTRO_BACKGROUND_SRC } from "@/content/backgroundDecoration";
 
@@ -33,8 +33,8 @@ export function ProcessTimelineDesign() {
       <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="max-w-3xl">
           <h2 className="font-serif text-[clamp(1.65rem,3.4vw,2.65rem)] font-normal leading-[1.15] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
-            Your <span className={showcaseRoseClass.bright}>Path</span> to Feeling and Living at Your{" "}
-            <span className={showcaseRoseClass.bright}>Best</span>
+            Your <span className={showcaseAccentClass.bright}>Path</span> to Feeling and Living at Your{" "}
+            <span className={showcaseAccentClass.bright}>Best</span>
           </h2>
         </header>
 
@@ -53,14 +53,14 @@ export function ProcessTimelineDesign() {
                   {/* Timeline rail */}
                   <div className="flex w-11 shrink-0 flex-col items-center sm:w-12">
                     <div
-                      className="relative z-[1] flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-arc-rose-gold bg-black/25 font-serif text-[15px] font-normal leading-none text-white shadow-[0_4px_20px_rgba(0,0,0,0.35)] sm:size-11 sm:text-base"
+                      className="relative z-[1] flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-arc-teal bg-black/25 font-serif text-[15px] font-normal leading-none text-white shadow-[0_4px_20px_rgba(0,0,0,0.35)] sm:size-11 sm:text-base"
                       aria-hidden
                     >
                       {ROMAN_CIRCLE[index]}
                     </div>
                     {!isLast ? (
                       <div
-                        className="mt-3 min-h-[3rem] w-px flex-1 bg-gradient-to-b from-arc-rose-gold/75 to-arc-rose-gold/35 sm:mt-4 sm:min-h-[4rem]"
+                        className="mt-3 min-h-[3rem] w-px flex-1 bg-gradient-to-b from-arc-teal/75 to-arc-teal/35 sm:mt-4 sm:min-h-[4rem]"
                         aria-hidden
                       />
                     ) : null}

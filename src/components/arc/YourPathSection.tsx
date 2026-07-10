@@ -3,7 +3,7 @@
 import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
+import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
@@ -18,8 +18,11 @@ import {
   ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_STEPS_TOP_SEAM_DESKTOP_LEFT_CLASS,
+  ARC_HOME_PATH_STEPS_TOP_OVERLAP_CLASS,
   ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS,
   ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS,
+  ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_DESKTOP_CLASS,
   ARC_HOME_PATH_TOP_SEAM_SOFT_CLASS,
 } from "@/lib/arc-layout";
 import { useMinMd } from "@/lib/useMinMd";
@@ -27,7 +30,6 @@ import { cn } from "@/lib/utils";
 import { siteMeta } from "@/content/siteMeta";
 
 type PathStep = {
-  numeral: string;
   title: string;
   stepMeta: string;
   description: string;
@@ -38,7 +40,6 @@ type PathStep = {
 
 const PATH_STEPS: PathStep[] = [
   {
-    numeral: "01",
     title: "Listen",
     stepMeta: "STEP 01 · 90 MINUTES",
     description:
@@ -48,7 +49,6 @@ const PATH_STEPS: PathStep[] = [
     contentOnLeft: false,
   },
   {
-    numeral: "02",
     title: "Measure",
     stepMeta: "STEP 02 · TWO VISITS",
     description:
@@ -58,7 +58,6 @@ const PATH_STEPS: PathStep[] = [
     contentOnLeft: true,
   },
   {
-    numeral: "03",
     title: "Author",
     stepMeta: "STEP 03 · ONE WEEK",
     description:
@@ -68,7 +67,6 @@ const PATH_STEPS: PathStep[] = [
     contentOnLeft: false,
   },
   {
-    numeral: "04",
     title: "Practice",
     stepMeta: "STEP 04 · ONGOING",
     description:
@@ -78,7 +76,6 @@ const PATH_STEPS: PathStep[] = [
     contentOnLeft: true,
   },
   {
-    numeral: "05",
     title: "Revise",
     stepMeta: "STEP 05 · EACH SEASON",
     description:
@@ -155,7 +152,7 @@ function YourPathIntroSection({
       {topSeam ? (
         <ArcSectionSeamBlend
           edge="top"
-          tone="muted"
+          tone="cream"
           variant="soft"
           scope="background"
           className={ARC_HOME_PATH_TOP_SEAM_SOFT_CLASS}
@@ -180,14 +177,9 @@ function YourPathIntroSection({
             {lead}
           </p>
           <div style={linkMotion}>
-            <ArcTextUnderlineCta
-              href={ctaHref}
-              accent="teal"
-              centered
-              className="mt-1"
-            >
+            <ArcPrimaryCta href={ctaHref} centered className="mt-1">
               {ctaLabel}
-            </ArcTextUnderlineCta>
+            </ArcPrimaryCta>
           </div>
         </div>
       </div>
@@ -195,7 +187,7 @@ function YourPathIntroSection({
       {bottomSeam ? (
         <ArcSectionSeamBlend
           edge="bottom"
-          tone="muted"
+          tone="cream"
           variant="soft"
           scope="background"
           className={ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS}
@@ -246,9 +238,6 @@ function YourPathStepPanel({
           ].join(" ")}
         >
           <div className="w-full max-w-xl text-left" style={textStyle}>
-            <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.28em] text-arc-teal-ink">
-              {step.numeral}
-            </p>
             <p className="mb-3 font-serif text-3xl leading-none text-arc-charcoal sm:text-4xl">
               {step.title}
             </p>
@@ -403,9 +392,6 @@ function YourPathStepsMobileExpanded() {
           className="border-b border-arc-charcoal/10 bg-arc-cream last:border-b-0"
         >
           <div className="flex w-full flex-col px-5 py-6 sm:px-8 sm:py-7">
-            <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-arc-teal-ink">
-              {step.numeral}
-            </p>
             <p className="mb-2 font-serif text-[1.75rem] leading-none text-arc-charcoal sm:text-3xl">
               {step.title}
             </p>
@@ -480,7 +466,10 @@ function YourPathStepsInteractiveSection({
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-clip bg-arc-cream md:min-h-[100dvh]"
+      className={cn(
+        "relative overflow-clip bg-arc-cream md:min-h-[100dvh]",
+        topSeam && ARC_HOME_PATH_STEPS_TOP_OVERLAP_CLASS,
+      )}
       aria-label="Your path steps"
       onMouseEnter={pauseAutoAdvance}
       onMouseLeave={resumeAutoAdvance}
@@ -494,19 +483,26 @@ function YourPathStepsInteractiveSection({
       }}
     >
       {topSeam ? (
-        <ArcSectionSeamBlend
-          edge="top"
-          tone="cream"
-          variant="soft"
-          scope="background"
-          className={ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS}
-        />
+        isMinMd ? (
+          <div
+            aria-hidden
+            className={ARC_HOME_PATH_STEPS_TOP_SEAM_DESKTOP_LEFT_CLASS}
+          />
+        ) : (
+          <ArcSectionSeamBlend
+            edge="top"
+            tone="cream"
+            variant="soft"
+            scope="background"
+            className={ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS}
+          />
+        )
       ) : null}
 
       {isMinMd ? (
       <div className="grid min-h-[100dvh] grid-cols-2">
         <div
-          className="grid min-h-[100dvh] grid-rows-5 bg-arc-cream/95"
+          className="grid min-h-[100dvh] grid-rows-5 bg-arc-cream"
           role="tablist"
           aria-label="Your path steps"
         >
@@ -530,14 +526,6 @@ function YourPathStepsInteractiveSection({
                 )}
               >
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <p
-                    className={cn(
-                      "font-sans text-[10px] font-semibold uppercase tracking-[0.22em] lg:text-[11px]",
-                      isActive ? "text-arc-teal-ink" : "text-arc-charcoal/45",
-                    )}
-                  >
-                    {step.numeral}
-                  </p>
                   <p
                     className={cn(
                       "font-serif text-xl leading-none lg:text-2xl",
@@ -574,6 +562,10 @@ function YourPathStepsInteractiveSection({
           <div
             aria-hidden
             className={ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS}
+          />
+          <div
+            aria-hidden
+            className={ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_DESKTOP_CLASS}
           />
           {PATH_STEPS.map((step, index) => (
             <div

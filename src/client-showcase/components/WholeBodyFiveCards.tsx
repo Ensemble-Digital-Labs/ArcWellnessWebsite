@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref } from "@/client-showcase/content";
-import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseAccentClass } from "@/client-showcase/design-tokens";
 import {
   wholeBodyCards,
   wholeBodySectionHeading,
@@ -126,7 +126,7 @@ function ServicePillarCard({ card, index }: { card: WholeBodyCardData; index: nu
         <h3
           className={cn(
             "font-serif text-[1.15rem] font-semibold leading-[1.15] tracking-tight sm:text-xl",
-            showcaseRoseClass.bright,
+            showcaseAccentClass.bright,
           )}
         >
           {card.title}
@@ -147,7 +147,7 @@ function ServicePillarCard({ card, index }: { card: WholeBodyCardData; index: nu
         <p
           className={cn(
             "mt-4 font-serif text-[13px] italic leading-relaxed sm:text-sm",
-            showcaseRoseClass.bright,
+            showcaseAccentClass.bright,
           )}
         >
           {card.quote}
@@ -156,7 +156,7 @@ function ServicePillarCard({ card, index }: { card: WholeBodyCardData; index: nu
           href={showcaseInternalHref("/#contact")}
           className={cn(
             "mt-auto pt-5 inline-flex items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors",
-            "text-arc-rose-gold hover:text-arc-rose-gold-hover",
+            "text-arc-teal hover:text-arc-teal-hover",
           )}
         >
           Explore
@@ -176,7 +176,7 @@ function WholeBodySectionHeader() {
       <h2
         className={cn(
           "max-w-2xl font-serif text-[clamp(1.95rem,4vw,3.15rem)] font-semibold leading-[1.1] tracking-[-0.025em]",
-          showcaseRoseClass.bright,
+          showcaseAccentClass.bright,
         )}
       >
         {h.title}

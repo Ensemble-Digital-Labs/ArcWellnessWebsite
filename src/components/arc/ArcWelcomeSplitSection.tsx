@@ -5,11 +5,12 @@ import { motion, useMotionValue, useTransform, type MotionStyle } from "framer-m
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
-import { ARC_HOME_WELLNESS_TOP_SEAM_SOFT_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
+import { ARC_MARBLE_AMBIENT_WASH_CLASS, ARC_HOME_WELLNESS_TOP_SEAM_SOFT_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { whenArcLocomotiveReady } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
@@ -34,22 +35,16 @@ const WELCOME_COPY_HEADLINE_EMPHASIS_CLASS =
 const WELCOME_COPY_BODY_CLASS =
   "space-y-3 font-sans text-[13px] leading-relaxed text-arc-charcoal/88 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:max-w-[54rem] lg:text-base";
 
-/** Light tint on photo during phase 1 only, keeps title readable without a heavy shadow plate. */
+/** Light cream tint on photo during phase 1 only, keeps title readable without a heavy shadow plate. */
 const WELCOME_PHOTO_PHASE_WASH_CLASS =
-  "pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-teal-muted/25 via-transparent to-black/20";
+  "pointer-events-none absolute inset-0 bg-gradient-to-b from-arc-cream/28 via-transparent to-black/20";
 
 /** Same marble plate + cream wash as About clinic gallery (`#about-clinic`). */
 function WelcomeCopyStageMarblePlate() {
   return (
     <>
-      <Image
-        src={CLINIC_SPACE_TEASER_AMBIENT_SRC}
-        alt=""
-        fill
-        className="object-cover object-center"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/55 via-arc-cream/35 to-arc-cream/70" />
+      <ArcMarbleAmbientPlate src={CLINIC_SPACE_TEASER_AMBIENT_SRC} />
+      <div className={ARC_MARBLE_AMBIENT_WASH_CLASS} />
     </>
   );
 }

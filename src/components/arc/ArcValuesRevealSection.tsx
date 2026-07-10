@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import {
   ARC_EDITORIAL_BODY_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
@@ -8,7 +8,12 @@ import {
   arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import {
+  ARC_MARBLE_AMBIENT_BOTTOM_SEAM_CLASS,
+  ARC_MARBLE_AMBIENT_TOP_SEAM_CLASS,
+  ARC_MARBLE_AMBIENT_WASH_CLASS,
+  ARC_PAGE_RAIL_MAX,
+} from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 
@@ -26,7 +31,7 @@ type ArcValuesRevealSectionProps = {
   titleEmphasis?: string;
   intro: string;
   items: readonly ValueItem[];
-  accentTone?: "rose" | "teal";
+  accentTone?: "teal";
   /** Same marble plate as the About clinic gallery teaser. */
   marbleAmbient?: boolean;
   topSeam?: boolean;
@@ -52,17 +57,15 @@ export function ArcValuesRevealSection({
   compactBottom = false,
 }: ArcValuesRevealSectionProps) {
   const total = items.length;
-  const numeralClass =
-    accentTone === "teal" ? "text-arc-teal-ink" : "text-arc-rose-gold-ink";
-  const titleClass =
-    accentTone === "teal" ? "text-arc-teal-ink" : "text-arc-rose-gold-ink";
+  const numeralClass = "text-arc-teal-ink";
+  const titleClass = "text-arc-teal-ink";
 
   return (
     <section
       id={id}
       className={cn(
         "relative text-arc-charcoal",
-        marbleAmbient ? "bg-arc-teal-muted/25" : topSeam
+        marbleAmbient ? "bg-arc-teal-muted/6" : topSeam
           ? "bg-gradient-to-b from-arc-cream from-0% via-arc-cream via-[20%] to-arc-cream-deep/40"
           : "bg-arc-cream-deep/40",
         compactTop && compactBottom
@@ -78,25 +81,13 @@ export function ArcValuesRevealSection({
     >
       {marbleAmbient ? (
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
-          <Image
-            src={CLINIC_SPACE_TEASER_AMBIENT_SRC}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/55 via-arc-cream/35 to-arc-cream/70" />
+          <ArcMarbleAmbientPlate src={CLINIC_SPACE_TEASER_AMBIENT_SRC} />
+          <div className={ARC_MARBLE_AMBIENT_WASH_CLASS} />
           {topSeam ? (
-            <div
-              className="absolute inset-x-0 top-0 z-[2] h-[min(18vh,8rem)] bg-gradient-to-b from-arc-cream via-arc-cream/88 to-transparent"
-              aria-hidden
-            />
+            <div className={ARC_MARBLE_AMBIENT_TOP_SEAM_CLASS} aria-hidden />
           ) : null}
           {bottomSeam ? (
-            <div
-              className="absolute inset-x-0 bottom-0 z-[2] h-[min(22vh,10rem)] bg-gradient-to-t from-arc-cream via-arc-cream/75 to-transparent"
-              aria-hidden
-            />
+            <div className={ARC_MARBLE_AMBIENT_BOTTOM_SEAM_CLASS} aria-hidden />
           ) : null}
         </div>
       ) : null}
@@ -105,7 +96,7 @@ export function ArcValuesRevealSection({
         <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
       ) : null}
 
-      {bottomSeam ? (
+      {bottomSeam && !marbleAmbient ? (
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
       ) : null}
 

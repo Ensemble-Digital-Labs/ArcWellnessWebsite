@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
-import { ArcTextUnderlineCta } from "@/components/arc/ArcTextUnderlineCta";
+import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import {
   ARC_EDITORIAL_BODY_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
@@ -100,7 +100,7 @@ type ArcScrollEditorialSectionProps = {
   bodyTypography?: "default" | "editorial";
   /** Optional sign-off block below body (founder note). */
   signature?: { signoff: string; role: string };
-  headlineEmphasisTone?: "rose" | "teal";
+  headlineEmphasisTone?: "teal";
   /** Soft feather at section top (About page seams). */
   topSeam?: boolean;
   /** Soft feather at section bottom (About page seams). */
@@ -253,9 +253,7 @@ function EditorialBody({
       ) : null}
       {cta ? (
         <div className="mt-8 sm:mt-10">
-          <ArcTextUnderlineCta href={cta.href} accent="roseGoldInk">
-            {cta.label}
-          </ArcTextUnderlineCta>
+          <ArcPrimaryCta href={cta.href}>{cta.label}</ArcPrimaryCta>
         </div>
       ) : null}
     </div>

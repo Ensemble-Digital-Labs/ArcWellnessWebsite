@@ -11,7 +11,7 @@ type SplitPrefooterCTAProps = {
 
 /**
  * Full-bleed cohort / membership band: left copy stack, bottom-right year + cohort line + pill CTAs
- * (reference: dark clinical photography, white + rose-gold type, ghost + solid buttons).
+ * (reference: dark clinical photography, white + teal type, ghost + solid buttons).
  */
 export function SplitPrefooterCTA({ imageSrc }: SplitPrefooterCTAProps) {
   const reserveHref = showcaseInternalHref("/#contact");
@@ -41,8 +41,8 @@ export function SplitPrefooterCTA({ imageSrc }: SplitPrefooterCTAProps) {
         <div className="relative z-[1] mx-auto flex min-h-[min(76svh,42rem)] max-w-[1600px] flex-col justify-between px-5 pb-8 pt-10 sm:min-h-[min(72svh,38rem)] sm:px-10 sm:pb-10 sm:pt-12 lg:min-h-[min(68svh,36rem)] lg:px-14 lg:pb-11 lg:pt-14">
           <div className="max-w-[26rem] text-left sm:max-w-xl">
             <div className="flex items-center gap-3 sm:gap-4">
-              <span className="h-px w-8 shrink-0 bg-arc-rose-gold/90 sm:w-10" aria-hidden />
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-arc-rose-gold sm:text-[11px] sm:tracking-[0.34em]">
+              <span className="h-px w-8 shrink-0 bg-arc-teal/90 sm:w-10" aria-hidden />
+              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-arc-teal sm:text-[11px] sm:tracking-[0.34em]">
                 {copy.eyebrow}
               </p>
             </div>
@@ -87,7 +87,7 @@ export function SplitPrefooterCTA({ imageSrc }: SplitPrefooterCTAProps) {
                 <Link
                   href={memberHref}
                   className={cn(
-                    "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-arc-rose-gold px-8 py-3 text-center font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)] transition-colors hover:bg-arc-rose-gold-hover sm:text-[11px]",
+                    "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-arc-teal px-8 py-3 text-center font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)] transition-colors hover:bg-arc-teal-hover sm:text-[11px]",
                   )}
                 >
                   {copy.memberLabel}

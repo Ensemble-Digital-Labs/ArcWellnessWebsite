@@ -572,10 +572,10 @@ export default function SphereImageGrid({
     ? "border-white/18 shadow-[0_10px_36px_rgba(0,0,0,0.88)] focus-visible:ring-offset-black"
     : "border-arc-charcoal/12 shadow-md focus-visible:ring-offset-arc-cream";
 
-  /** Selected portrait on light plates — dark rose-gold ink + white halo (reads on cream/mint). */
+  /** Selected portrait on light plates — teal ink + white halo (reads on cream/mint). */
   const tileSelectedLight = cn(
-    "border-[3.5px] border-arc-rose-gold-ink ring-[3px] ring-white/95",
-    "shadow-[0_0_0_2px_rgba(255,255,255,1),0_0_0_5px_rgba(143,83,70,0.92),0_0_24px_rgba(143,83,70,0.45)]",
+    "border-[3.5px] border-arc-teal-ink ring-[3px] ring-white/95",
+    "shadow-[0_0_0_2px_rgba(255,255,255,1),0_0_0_5px_rgba(69,136,114,0.92),0_0_24px_rgba(69,136,114,0.45)]",
   );
 
   const tileSelected = "border-arc-teal ring-2 ring-arc-teal/75";

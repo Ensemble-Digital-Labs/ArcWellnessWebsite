@@ -74,7 +74,7 @@ type ScrollChapterIntroSectionProps = {
   /** Override copy color logic, default auto-detects from `-light` ambient paths. */
   copyTone?: "light" | "dark";
   /** Script emphasis on light plates — teal matches About; rose on dark photography. */
-  headlineEmphasisTone?: "rose" | "teal";
+  headlineEmphasisTone?: "teal";
   /** Soft cream feather at section bottom (About page seams). */
   bottomSeam?: boolean;
 };
@@ -252,7 +252,7 @@ export function ScrollChapterIntroSection({
         : ambientFullBleed
           ? !ambientsIncludeLightPlate && ambientCount === 0
           : ambientCount > 0 && !ambientsIncludeLightPlate;
-  const resolvedEmphasisTone = headlineEmphasisTone ?? (onDarkCopy ? "rose" : "teal");
+  const resolvedEmphasisTone = headlineEmphasisTone ?? "teal";
   const lightPlateEmphasisClass = arcHeadlineEmphasisClass(resolvedEmphasisTone);
   const singleTileHero = Boolean(heroCanvasTiles?.length === 1);
 
@@ -480,7 +480,7 @@ export function ScrollChapterIntroSection({
                       onDarkCopy
                         ? compactEmphasis
                           ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
-                          : "text-[1.42em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)]"
+                          : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
                         : compactEmphasis
                           ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
                           : lightPlateEmphasisClass,
@@ -503,7 +503,7 @@ export function ScrollChapterIntroSection({
                       className={cn(
                         "inline align-baseline leading-none tracking-tight",
                         onDarkCopy
-                          ? "text-[1.35em] text-arc-rose-gold [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-rose-gold-glow)] sm:text-[1.42em] md:text-[1.5em]"
+                          ? "text-[1.35em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)] sm:text-[1.42em] md:text-[1.5em]"
                           : lightPlateEmphasisClass,
                       )}
                     >

@@ -25,7 +25,7 @@ type ArcFounderNoteSectionProps = {
   imageSrc: string;
   imageAlt: string;
   className?: string;
-  headlineEmphasisTone?: "rose" | "teal";
+  headlineEmphasisTone?: "teal";
   topSeam?: boolean;
   bottomSeam?: boolean;
   compactTop?: boolean;
@@ -113,15 +113,9 @@ export function ArcFounderNoteSection({
             </h2>
           </div>
 
-          <p
-            className={cn(
-              "mt-8 max-w-xl font-serif text-[clamp(1.05rem,2.5vw,1.4rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal sm:mt-10 sm:text-[clamp(1.15rem,2.6vw,1.55rem)]",
-            )}
-          >
-            {lead}
-          </p>
+          <p className={cn("mt-8 max-w-xl sm:mt-10", ARC_EDITORIAL_BODY_CLASS)}>{lead}</p>
 
-          <p className={cn("mt-6 max-w-lg sm:mt-7", ARC_EDITORIAL_BODY_CLASS)}>{body}</p>
+          <p className={cn("mt-6 max-w-xl sm:mt-7", ARC_EDITORIAL_BODY_CLASS)}>{body}</p>
 
           <footer className="mt-10 w-full max-w-lg border-t border-arc-charcoal/10 pt-8 sm:mt-12 lg:max-w-none">
             <p className="font-serif text-[clamp(1.125rem,2.2vw,1.35rem)] font-semibold tracking-tight text-arc-charcoal">

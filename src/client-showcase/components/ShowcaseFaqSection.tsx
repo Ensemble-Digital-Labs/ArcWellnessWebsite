@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseFaqHeading as heading, showcaseFaqItems } from "@/client-showcase/mock-page-content";
 
 /**
@@ -19,10 +19,10 @@ export function ShowcaseFaqSection() {
           <header className="max-w-xl lg:sticky lg:top-36">
             <div className="flex items-center gap-3.5 sm:gap-4">
               <span
-                className="h-0.5 w-10 shrink-0 rounded-full bg-arc-rose-gold-ink/90 sm:w-12"
+                className="h-0.5 w-10 shrink-0 rounded-full bg-arc-teal-ink/90 sm:w-12"
                 aria-hidden
               />
-              <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-arc-rose-gold-ink sm:text-xs sm:tracking-[0.3em]">
+              <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-arc-teal-ink sm:text-xs sm:tracking-[0.3em]">
                 {heading.eyebrow}
               </p>
             </div>
@@ -30,7 +30,7 @@ export function ShowcaseFaqSection() {
               id="showcase-faq-heading"
               className="mt-5 font-serif text-[clamp(1.65rem,3.4vw,2.65rem)] font-normal leading-[1.12] tracking-[-0.025em] text-arc-charcoal sm:mt-6"
             >
-              <span className={showcaseRoseClass.ink}>{heading.title}</span>
+              <span className={showcaseAccentClass.ink}>{heading.title}</span>
             </h2>
             <p className="mt-4 font-sans text-[15px] leading-relaxed text-arc-charcoal/72 sm:text-base">{heading.supporting}</p>
           </header>
@@ -46,7 +46,7 @@ export function ShowcaseFaqSection() {
                 >
                   <span className="min-w-0 pr-2">{item.question}</span>
                   <Plus
-                    className="size-4 shrink-0 text-arc-rose-gold-ink transition-transform duration-300 ease-out group-open:rotate-45"
+                    className="size-4 shrink-0 text-arc-teal-ink transition-transform duration-300 ease-out group-open:rotate-45"
                     strokeWidth={2}
                     aria-hidden
                   />

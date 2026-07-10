@@ -14,6 +14,10 @@
     "content:spreadsheet": "node scripts/generate-content-parity-spreadsheet.mjs",
     "review:import": "node scripts/review-import-xlsx.mjs",
     "review:export": "node scripts/review-export-xlsx.mjs",
+    "review:enhance-tracking": "node scripts/review-enhance-tracking-columns.mjs",
+    "review:fix-status": "node scripts/review-fix-status-dropdown.mjs",
+    "review:fix-headers": "node scripts/review-fix-header-styles.mjs",
+    "review:sync-client": "node scripts/review-sync-client-sheet.mjs",
     "review:sync-home": "node scripts/review-update-home-implementation.mjs",
     "review:sync-about": "node scripts/review-update-about-implementation.mjs"
   },

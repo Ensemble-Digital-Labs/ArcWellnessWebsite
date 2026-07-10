@@ -103,13 +103,13 @@ export function ArcTreatmentsPinExplorer({
         }}
       >
         <div className="mx-auto w-full max-w-7xl text-center">
-          <h2 className="font-serif text-3xl font-bold tracking-tight text-[#f7f4ef] sm:text-4xl md:text-[2.5rem]">
+          <h2 className="font-serif text-3xl font-bold tracking-tight text-[#f0e3d7] sm:text-4xl md:text-[2.5rem]">
             Explore{" "}
-            <TitleEmphasis className="text-[1.35em] text-arc-rose-gold sm:text-[1.45em]">
+            <TitleEmphasis className="text-[1.35em] text-arc-teal sm:text-[1.45em]">
               {title}
             </TitleEmphasis>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl font-sans text-sm text-[#f7f4ef]/78 sm:text-base">
+          <p className="mx-auto mt-4 max-w-2xl font-sans text-sm text-[#f0e3d7]/78 sm:text-base">
             {subtitle}
           </p>
         </div>
@@ -179,10 +179,10 @@ export function ArcTreatmentsPinExplorer({
                   : "hover:border-white/22 hover:bg-white/[0.09] md:flex-[0.75]",
               )}
             >
-              <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f7f4ef]/65">
+              <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f0e3d7]/65">
                 See more
               </span>
-              <span className="font-serif text-sm font-medium leading-snug text-[#f7f4ef]/88 sm:text-base">
+              <span className="font-serif text-sm font-medium leading-snug text-[#f0e3d7]/88 sm:text-base">
                 All treatments
               </span>
               <ChevronDown
@@ -216,7 +216,7 @@ export function ArcTreatmentsPinExplorer({
                   <Link
                     href={`/treatments/${t.slug}`}
                     className={cn(
-                      "group flex min-h-[48px] items-center gap-3 rounded-md px-2 py-2 font-sans text-sm text-[#f7f4ef]/92 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 sm:px-3",
+                      "group flex min-h-[48px] items-center gap-3 rounded-md px-2 py-2 font-sans text-sm text-[#f0e3d7]/92 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 sm:px-3",
                       "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/10",
                     )}
                     onClick={() => setSeeMoreOpen(false)}
@@ -240,7 +240,7 @@ export function ArcTreatmentsPinExplorer({
                     </span>
                     <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
                       <span className="font-medium leading-snug">{t.title}</span>
-                      <span className="hidden shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#f7f4ef]/45 sm:inline">
+                      <span className="hidden shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#f0e3d7]/45 sm:inline">
                         {t.categoryLabel}
                       </span>
                     </span>

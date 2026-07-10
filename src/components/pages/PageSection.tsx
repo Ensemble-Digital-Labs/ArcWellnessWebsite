@@ -70,7 +70,7 @@ export function SectionHeading({
       >
         {title}
         {emphasis ? (
-          <span className="block font-title-emphasis text-[1.15em] font-normal not-italic text-arc-rose-gold-ink">
+          <span className="block font-title-emphasis text-[1.15em] font-normal not-italic text-arc-teal-ink">
             {emphasis}
           </span>
         ) : null}

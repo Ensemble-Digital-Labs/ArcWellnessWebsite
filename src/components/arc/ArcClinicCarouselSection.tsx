@@ -180,7 +180,7 @@ export function ArcClinicCarouselSection({
                 className="font-serif text-3xl font-semibold tracking-tight will-change-[transform,opacity,filter] sm:text-4xl md:text-[2.35rem]"
                 style={emphasisStyle}
               >
-                <TitleEmphasis className="text-[1.08em] text-arc-rose-gold">{titleEmphasis}</TitleEmphasis>
+                <TitleEmphasis className="text-[1.08em] text-arc-teal">{titleEmphasis}</TitleEmphasis>
               </p>
             </ArcScrollRevealMask>
           ) : null}

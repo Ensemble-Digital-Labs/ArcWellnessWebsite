@@ -5,7 +5,7 @@ import { Play } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref } from "@/client-showcase/content";
-import { showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { showcaseScienceBeautyBand as band } from "@/client-showcase/mock-page-content";
 
@@ -39,8 +39,8 @@ function LeftColumn() {
   return (
     <>
       <p className="flex items-center gap-3 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.32em]">
-        <span className="h-px w-8 shrink-0 bg-arc-rose-gold sm:w-10" aria-hidden />
-        <span className={showcaseRoseClass.bright}>{band.eyebrow}</span>
+        <span className="h-px w-8 shrink-0 bg-arc-teal sm:w-10" aria-hidden />
+        <span className={showcaseAccentClass.bright}>{band.eyebrow}</span>
       </p>
 
       <h2
@@ -48,7 +48,7 @@ function LeftColumn() {
         className="mt-6 font-serif text-[clamp(1.85rem,5.2vw,3.25rem)] font-normal leading-[1.12] tracking-tight text-white sm:mt-8 lg:leading-[1.08]"
       >
         {band.headlineBefore}
-        <em className={cn("italic", showcaseRoseClass.bright)}>{band.headlineEmphasis}</em>
+        <em className={cn("italic", showcaseAccentClass.bright)}>{band.headlineEmphasis}</em>
         {band.headlineAfter}
       </h2>
 
@@ -63,11 +63,11 @@ function LeftColumn() {
 
         <Link
           href={showcaseInternalHref("/#services")}
-          className="inline-flex items-center gap-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/88 transition-colors hover:text-arc-rose-gold sm:text-[11px] sm:tracking-[0.26em]"
+          className="inline-flex items-center gap-2.5 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/88 transition-colors hover:text-arc-teal sm:text-[11px] sm:tracking-[0.26em]"
         >
           <span>{band.secondaryLabel}</span>
           <span
-            className="flex size-9 shrink-0 items-center justify-center rounded-full border-2 border-arc-rose-gold/85 text-arc-rose-gold"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border-2 border-arc-teal/85 text-arc-teal"
             aria-hidden
           >
             <Play className="size-3.5 translate-x-0.5 fill-none" strokeWidth={1.75} />
@@ -84,7 +84,7 @@ function ValueCard({ card }: { card: Card }) {
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="font-serif text-sm italic text-white/45">{card.index}</span>
         <h3 className="font-sans text-base font-semibold tracking-tight text-white sm:text-lg">
-          <span className={showcaseRoseClass.bright}>{card.titleLead}</span>
+          <span className={showcaseAccentClass.bright}>{card.titleLead}</span>
           <span className="text-white/35">-</span>
           <span>{card.titleTrail}</span>
         </h3>

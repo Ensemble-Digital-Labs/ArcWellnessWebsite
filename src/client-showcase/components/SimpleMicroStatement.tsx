@@ -26,7 +26,7 @@ export function SimpleMicroStatement({
   linkLabel,
 }: SimpleMicroStatementProps) {
   return (
-    <section className="relative overflow-hidden bg-arc-charcoal text-[#f7f4ef]" aria-labelledby="showcase-micro-heading">
+    <section className="relative overflow-hidden bg-arc-charcoal text-[#f0e3d7]" aria-labelledby="showcase-micro-heading">
       <div className="relative aspect-[21/9] min-h-[200px] w-full sm:aspect-[24/9] sm:min-h-[240px] md:min-h-[280px]">
         <Image src={posterSrc} alt="" fill className="object-cover object-center" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-arc-charcoal via-arc-charcoal/55 to-arc-charcoal/25" />

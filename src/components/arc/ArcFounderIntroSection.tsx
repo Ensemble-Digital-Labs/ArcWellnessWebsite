@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
-import { ARC_PINNED_CLEAR_BELOW_LOGO, ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS } from "@/lib/arc-layout";
+import { ARC_PINNED_CLEAR_BELOW_LOGO, ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS, ARC_FOUNDER_SPLIT_MARBLE_FEATHER_CLASS, ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 const FOUNDER_MARBLE_BG = ABOUT_HERO_COPY_AMBIENT_IMAGES[0];
@@ -106,8 +106,12 @@ export function ArcFounderIntroSection({
               className="object-cover object-center"
               sizes="(min-width: 1024px) 55vw, 100vw"
             />
-            <div className="absolute inset-0 bg-arc-cream/28" />
+            <div className="absolute inset-0 bg-arc-cream/8" />
           </div>
+          <div
+            aria-hidden
+            className={cn(ARC_FOUNDER_SPLIT_MARBLE_FEATHER_CLASS, "max-lg:hidden")}
+          />
 
           <div className="relative z-10 mx-auto w-full max-w-xl text-left lg:max-w-lg xl:max-w-xl">
             <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
@@ -149,7 +153,7 @@ export function ArcFounderIntroSection({
 
         <div
           data-scroll-section
-          className="relative min-h-[min(68dvh,520px)] w-full min-w-0 sm:min-h-[min(72dvh,560px)] lg:min-h-0 lg:h-auto"
+          className="relative min-h-[min(68dvh,520px)] w-full min-w-0 sm:min-h-[min(72dvh,560px)] lg:-ml-[min(4.5rem,7%)] lg:min-h-0 lg:h-auto lg:w-[calc(100%+min(4.5rem,7%))]"
         >
           <Image
             src={imageSrc}
@@ -158,6 +162,10 @@ export function ArcFounderIntroSection({
             className="object-cover object-[50%_22%]"
             sizes="(min-width: 1024px) 45vw, 100vw"
             priority={false}
+          />
+          <div
+            aria-hidden
+            className={cn(ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS, "max-lg:hidden")}
           />
         </div>
       </div>

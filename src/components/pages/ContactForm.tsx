@@ -5,9 +5,12 @@ import { siteMeta } from "@/content/siteMeta";
 import { cn } from "@/lib/utils";
 
 const inputClass = cn(
-  "w-full rounded-xl border border-arc-charcoal/12 bg-white px-4 py-3 font-sans text-sm text-arc-charcoal",
+  "w-full rounded-xl border-2 border-arc-charcoal/20 bg-arc-cream/60 px-4 py-3 font-sans text-sm text-arc-charcoal",
   "placeholder:text-arc-charcoal/40",
-  "focus:border-arc-teal/50 focus:outline-none focus:ring-2 focus:ring-arc-teal/25",
+  "shadow-[inset_0_1px_2px_rgba(44,44,44,0.05),0_1px_2px_rgba(44,44,44,0.04)]",
+  "transition-[border-color,background-color,box-shadow] duration-200",
+  "hover:border-arc-teal-ink/35",
+  "focus:border-arc-teal-ink/55 focus:bg-white focus:outline-none focus:ring-2 focus:ring-arc-teal/30 focus:shadow-[0_0_0_1px_rgba(69,136,114,0.12),inset_0_1px_2px_rgba(44,44,44,0.04)]",
 );
 
 export function ContactForm() {

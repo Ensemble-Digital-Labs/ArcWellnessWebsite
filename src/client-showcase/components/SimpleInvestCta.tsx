@@ -42,7 +42,7 @@ export function SimpleInvestCta({ imageSrc, supportingLine }: SimpleInvestCtaPro
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <h2
             className={cn(
-              "font-serif text-3xl font-semibold leading-snug text-[#f7f4ef] drop-shadow md:text-4xl lg:text-5xl",
+              "font-serif text-3xl font-semibold leading-snug text-[#f0e3d7] drop-shadow md:text-4xl lg:text-5xl",
               supportingLine ? "mb-6 md:mb-7" : "mb-10 md:mb-12",
             )}
           >
@@ -51,7 +51,7 @@ export function SimpleInvestCta({ imageSrc, supportingLine }: SimpleInvestCtaPro
             <TitleEmphasis className={investHeadlineEmphasisClass}>Age</TitleEmphasis> Intentionally.
           </h2>
           {supportingLine ? (
-            <p className="mx-auto mb-10 max-w-2xl font-sans text-sm leading-relaxed text-[#f7f4ef]/88 md:mb-12 md:text-base">
+            <p className="mx-auto mb-10 max-w-2xl font-sans text-sm leading-relaxed text-[#f0e3d7]/88 md:mb-12 md:text-base">
               {supportingLine}
             </p>
           ) : null}

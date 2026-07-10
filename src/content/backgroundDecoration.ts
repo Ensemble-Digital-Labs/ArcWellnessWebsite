@@ -13,6 +13,9 @@ export const BACKGROUND_DECORATION_IMAGES = [
   "/assets/decoration/background/ambient-08.webp",
 ] as const;
 
+/** Cache-bust when decoration masters are re-exported (e.g. HD marble upscale). */
+const DECORATION_HD_VERSION = "20260710-hd";
+
 /** Original darker-tone plates for slots 01–04 (kept for rollback). */
 export const BACKGROUND_DECORATION_DARK_IMAGES = [
   "/assets/decoration/background/ambient-01.webp",
@@ -40,11 +43,11 @@ export const INSIGHTS_FEED_AMBIENT_SRC = BACKGROUND_DECORATION_IMAGES[1]!;
 
 /** About hero, full-bleed marble plate (`ambient-01-light`). */
 export const ABOUT_HERO_COPY_AMBIENT_IMAGES = [
-  BACKGROUND_DECORATION_IMAGES[0],
+  `${BACKGROUND_DECORATION_IMAGES[0]}?v=${DECORATION_HD_VERSION}`,
 ] as const;
 
 /** About clinic tour teaser, light mint/teal plate (`#about-clinic`). */
-export const CLINIC_SPACE_TEASER_AMBIENT_SRC = BACKGROUND_DECORATION_IMAGES[2]!;
+export const CLINIC_SPACE_TEASER_AMBIENT_SRC = `${BACKGROUND_DECORATION_IMAGES[2]}?v=${DECORATION_HD_VERSION}`;
 
 /** Full-bleed plate under `#founder` immersive stack (visible as editorial hero fades into detail copy). */
 export const FOUNDER_SECTION_AMBIENT_SRC =

@@ -80,7 +80,14 @@ export function ContactPageContent() {
             </blockquote>
           </div>
 
-          <div data-scroll-section className="rounded-2xl border border-arc-teal/15 bg-arc-cream shadow-[0_16px_48px_rgba(44,44,44,0.08)]">
+          <div
+            data-scroll-section
+            className={cn(
+              "overflow-hidden rounded-2xl border border-arc-charcoal/10 bg-white sm:rounded-3xl",
+              "shadow-[0_24px_64px_rgba(44,44,44,0.12),0_10px_32px_rgba(131,208,187,0.14)]",
+              "ring-1 ring-arc-teal/20",
+            )}
+          >
             <ArcTibbixelCopyFrame>
               <h3 className="font-serif text-2xl font-semibold text-arc-charcoal">Send a message</h3>
               <p className="mt-2 font-sans text-sm text-arc-charcoal/65">Every note is read by our care team.</p>

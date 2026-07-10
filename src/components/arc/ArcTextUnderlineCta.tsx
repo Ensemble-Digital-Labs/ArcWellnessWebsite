@@ -16,10 +16,8 @@ type ArcTextUnderlineCtaProps = {
    * - **`teal`**, darker ink teal for cream / light grey backgrounds (default).
    * - **`tealBright`**, signature vivid teal for dark photography or heavy overlays (e.g. hero).
    * - **`champagne`**, gold on dark photography.
-   * - **`roseGoldInk`**, rose-gold ink on cream / light surfaces.
-   * - **`roseGoldBright`**, luminous rose-gold on dark photography.
    */
-  accent?: "teal" | "tealBright" | "champagne" | "roseGoldInk" | "roseGoldBright";
+  accent?: "teal" | "tealBright" | "champagne";
 };
 
 /**
@@ -48,18 +46,6 @@ export function ArcTextUnderlineCta({
           "[text-shadow:0_1px_2px_rgba(0,0,0,0.28),0_0_26px_rgba(197,168,120,0.42)]",
           "focus-visible:ring-arc-champagne/45 focus-visible:ring-offset-black/35",
         ]
-      : accent === "roseGoldBright"
-        ? [
-            "text-arc-rose-gold hover:text-arc-rose-gold-hover",
-            "[text-shadow:0_1px_2px_rgba(0,0,0,0.22),0_0_32px_var(--arc-rose-gold-glow),0_0_1px_rgba(44,44,44,0.12)]",
-            "focus-visible:ring-arc-rose-gold/50 focus-visible:ring-offset-black/35",
-          ]
-      : accent === "roseGoldInk"
-        ? [
-            "text-arc-rose-gold-ink hover:text-arc-rose-gold-ink-hover",
-            "[text-shadow:0_1px_0_rgba(255,255,255,0.55),0_1px_3px_rgba(44,44,44,0.14),0_0_18px_rgba(143,83,70,0.22)]",
-            "focus-visible:ring-arc-rose-gold-ink/50 focus-visible:ring-offset-arc-cream/80",
-          ]
       : accent === "tealBright"
         ? [
             "text-arc-teal hover:text-arc-teal-hover",

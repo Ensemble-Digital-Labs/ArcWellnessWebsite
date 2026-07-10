@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { showcaseInternalHref } from "@/client-showcase/content";
-import { showcaseDesign, showcaseRoseClass } from "@/client-showcase/design-tokens";
+import { showcaseDesign, showcaseAccentClass } from "@/client-showcase/design-tokens";
 import { showcaseBookCtaClass } from "@/client-showcase/showcase-book-cta";
 import { images } from "@/content/site";
 import { IconFacebook, IconInstagram } from "@/components/arc/SocialIcons";
@@ -23,7 +23,7 @@ const cols = {
 } as const;
 
 const linkClass =
-  "font-sans text-sm text-arc-charcoal/75 transition-colors hover:text-arc-rose-gold-ink";
+  "font-sans text-sm text-arc-charcoal/75 transition-colors hover:text-arc-teal-ink";
 
 export function ArcDesignFooter() {
   const year = new Date().getFullYear();
@@ -38,16 +38,16 @@ export function ArcDesignFooter() {
             </div>
             <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-arc-charcoal/70">
               Elevated care for{" "}
-              <span className={showcaseRoseClass.ink}>aesthetics</span>,{" "}
-              <span className={showcaseRoseClass.ink}>wellness</span>, and{" "}
-              <span className={showcaseRoseClass.ink}>longevity</span>, rooted in intention and continuity.
+              <span className={showcaseAccentClass.ink}>aesthetics</span>,{" "}
+              <span className={showcaseAccentClass.ink}>wellness</span>, and{" "}
+              <span className={showcaseAccentClass.ink}>longevity</span>, rooted in intention and continuity.
             </p>
           </div>
 
           <nav className="grid grid-cols-2 gap-8 sm:grid-cols-4" aria-label="Footer">
             {Object.entries(cols).map(([heading, items]) => (
               <div key={heading}>
-                <p className={cn("font-sans text-[11px] font-semibold uppercase tracking-[0.2em]", showcaseRoseClass.ink)}>
+                <p className={cn("font-sans text-[11px] font-semibold uppercase tracking-[0.2em]", showcaseAccentClass.ink)}>
                   {heading}
                 </p>
                 <ul className="mt-4 space-y-2.5">
@@ -64,7 +64,7 @@ export function ArcDesignFooter() {
           </nav>
 
           <div>
-            <p className={cn("font-sans text-[11px] font-semibold uppercase tracking-[0.2em]", showcaseRoseClass.ink)}>
+            <p className={cn("font-sans text-[11px] font-semibold uppercase tracking-[0.2em]", showcaseAccentClass.ink)}>
               Stay connected
             </p>
             <div className="mt-4 flex gap-3">
@@ -81,7 +81,7 @@ export function ArcDesignFooter() {
             <Link href={showcaseInternalHref("/#book")} className={cn("mt-6", showcaseBookCtaClass("light"))}>
               Book here
             </Link>
-            <a href="tel:+19495555279" className="mt-4 block font-sans text-sm font-medium text-arc-rose-gold-ink">
+            <a href="tel:+19495555279" className="mt-4 block font-sans text-sm font-medium text-arc-teal-ink">
               (949) 555-ARCW
             </a>
           </div>
@@ -92,10 +92,10 @@ export function ArcDesignFooter() {
             © {year} ARC Wellness. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-2 font-sans text-xs text-arc-charcoal/55">
-            <Link href="#" className="transition-colors hover:text-arc-rose-gold-ink">
+            <Link href="#" className="transition-colors hover:text-arc-teal-ink">
               Privacy policy
             </Link>
-            <Link href="#" className="transition-colors hover:text-arc-rose-gold-ink">
+            <Link href="#" className="transition-colors hover:text-arc-teal-ink">
               Terms of use
             </Link>
           </div>

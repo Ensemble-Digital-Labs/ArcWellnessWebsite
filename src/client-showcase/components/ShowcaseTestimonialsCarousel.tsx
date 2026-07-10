@@ -174,7 +174,7 @@ function TestimonialCard({
                 {testimonial.name}
               </p>
               <div className="py-8 font-serif text-xl font-light leading-snug tracking-wide text-arc-charcoal/78 md:text-3xl md:leading-snug">
-                <Quote className="mb-4 size-6 shrink-0 text-arc-rose-gold-ink/90" aria-hidden />
+                <Quote className="mb-4 size-6 shrink-0 text-arc-teal-ink/90" aria-hidden />
                 {testimonial.description}
               </div>
             </motion.div>
@@ -186,7 +186,7 @@ function TestimonialCard({
         type="button"
         onClick={() => setIsExpanded(true)}
         className={cn(
-          "relative block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-arc-rose-gold/90 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
+          "relative block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/90 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
           isExpanded && "pointer-events-none opacity-0",
         )}
         aria-expanded={isExpanded}
@@ -221,7 +221,7 @@ function TestimonialCard({
           <p className="relative z-[2] mt-5 text-center font-serif text-xl font-semibold text-white [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] md:text-2xl">
             {testimonial.name}
           </p>
-          <p className="relative z-[2] mt-2 max-w-[95%] text-center font-serif text-sm font-medium italic text-arc-rose-gold [text-shadow:0_2px_12px_rgba(0,0,0,0.45)] md:text-base">
+          <p className="relative z-[2] mt-2 max-w-[95%] text-center font-serif text-sm font-medium italic text-arc-teal [text-shadow:0_2px_12px_rgba(0,0,0,0.45)] md:text-base">
             {testimonial.designation.length > 40
               ? `${testimonial.designation.slice(0, 40)}…`
               : testimonial.designation}

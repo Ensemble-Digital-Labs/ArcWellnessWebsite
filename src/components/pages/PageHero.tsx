@@ -66,7 +66,7 @@ export function PageHero({
           {titleEmphasis ? (
             <>
               <br />
-              <TitleEmphasis className="text-[1.08em] text-arc-rose-gold sm:text-[1.1em] [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]">
+              <TitleEmphasis className="text-[1.08em] text-arc-teal sm:text-[1.1em] [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]">
                 {titleEmphasis}
               </TitleEmphasis>
             </>
