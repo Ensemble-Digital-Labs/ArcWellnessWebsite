@@ -21,6 +21,7 @@ import {
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 
 type InsightFilter = "all" | InsightKind;
 
@@ -116,30 +117,28 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
     <article className="group break-inside-avoid">
       <Link
         href={href}
-        className={cn(
-          "relative block overflow-hidden bg-arc-charcoal/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
-          aspectClass,
-        )}
+        className="relative block rounded-t-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream"
       >
-        <Image
+        <ArcWindowFrame
           src={entry.imageSrc}
           alt={entry.imageAlt}
-          fill
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
+          className={cn("w-full", aspectClass)}
+          imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 bg-arc-charcoal/0 transition-colors duration-300 group-hover:bg-arc-charcoal/18 motion-reduce:group-hover:bg-transparent"
-          aria-hidden
-        />
-        <span
-          className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:opacity-100"
-          aria-hidden
         >
-          <span className="flex size-[4.75rem] items-center justify-center rounded-full bg-arc-charcoal font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_12px_40px_rgba(0,0,0,0.28)] sm:size-20">
-            View
+          <div
+            className="pointer-events-none absolute inset-0 bg-arc-charcoal/0 transition-colors duration-300 group-hover:bg-arc-charcoal/18 motion-reduce:group-hover:bg-transparent"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:opacity-100"
+            aria-hidden
+          >
+            <span className="flex size-[4.75rem] items-center justify-center rounded-full bg-arc-charcoal font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_12px_40px_rgba(0,0,0,0.28)] sm:size-20">
+              View
+            </span>
           </span>
-        </span>
+        </ArcWindowFrame>
       </Link>
 
       <div className="mt-5 sm:mt-6">

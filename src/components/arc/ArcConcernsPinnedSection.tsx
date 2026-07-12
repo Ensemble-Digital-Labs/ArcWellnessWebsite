@@ -101,7 +101,7 @@ export function ArcConcernsPinnedSection({
                         <h3 className="text-pretty font-serif text-[0.95rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:text-base">
                           {panel.title}
                         </h3>
-                        <p className="mx-auto mt-1.5 max-w-[15rem] text-pretty font-sans text-[0.72rem] leading-relaxed text-arc-charcoal/72 sm:mt-2 sm:text-[0.75rem] md:max-w-[16rem] md:text-[0.8125rem] lg:max-w-[12.5rem]">
+                        <p className="mx-auto mt-1.5 max-w-[15rem] text-pretty font-sans text-[0.72rem] leading-relaxed text-arc-charcoal/72 sm:mt-2 sm:text-[0.75rem] md:max-w-[16rem] md:min-h-[4rem] md:text-[0.8125rem] lg:max-w-[12.5rem]">
                           {panel.tagline}
                         </p>
                       </div>

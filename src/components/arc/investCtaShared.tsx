@@ -108,7 +108,7 @@ export function InvestCTASignoffBlock({
           "[text-shadow:0_2px_20px_rgba(0,0,0,0.4)]",
           stacked
             ? "text-[clamp(1.25rem,4.8vw,1.55rem)]"
-            : "text-[clamp(1.5rem,3.2vw,2.65rem)]",
+            : "whitespace-nowrap text-[clamp(1.5rem,3.2vw,2.65rem)]",
         )}
       >
         {signoff.preamble}

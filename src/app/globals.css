@@ -231,6 +231,21 @@ html.arc-native-scroll .pin-spacer {
   paint-order: stroke fill;
 }
 
+/**
+ * Alternative emphasis face: Radley italic (set `data-emphasis-font="radley"` on <html>).
+ * Radley is a normal serif, so at the same font-size it reads far larger than the Birthstone
+ * script. `font-size-adjust` normalizes it to the script's visual size across the whole site,
+ * so none of the hardcoded per-section font sizes need to change. Tune the value to taste.
+ */
+html[data-emphasis-font="radley"] .font-title-emphasis {
+  font-family: var(--font-radley), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size-adjust: 0.31;
+  /* Radley has real strokes; drop the Birthstone hairline hack so it doesn't read too heavy. */
+  -webkit-text-stroke: 0;
+}
+
 @keyframes arc-marquee {
   from {
     transform: translate3d(0, 0, 0);
