@@ -256,7 +256,14 @@ function ArcTestimonialGlassCard({
           aria-hidden
         />
       ) : null}
-      <div className={cn("flex items-center gap-3", isActive ? "p-5 pb-3 sm:p-6 sm:pb-4" : "p-4 pb-2")}>
+      <div
+        className={cn(
+          "flex items-center gap-3",
+          isActive
+            ? "p-5 pb-3 sm:p-6 sm:pb-4 [@media(max-height:820px)]:p-4 [@media(max-height:820px)]:pb-2 [@media(max-height:700px)]:p-3 [@media(max-height:700px)]:pb-1.5"
+            : "p-4 pb-2",
+        )}
+      >
         <GoogleReviewMark className={cn(!isActive && "scale-90")} />
         <TestimonialStars />
       </div>
@@ -264,7 +271,7 @@ function ArcTestimonialGlassCard({
       <div
         className={cn(
           "relative mx-auto w-[calc(100%-1.5rem)] overflow-hidden rounded-xl shadow-[0_8px_24px_rgba(28,32,36,0.1)] ring-1 ring-arc-charcoal/10",
-          isActive ? "aspect-[4/3] max-h-52 sm:max-h-56 [@media(max-height:820px)]:max-h-44" : "aspect-[5/4] max-h-32 [@media(max-height:820px)]:max-h-28",
+          isActive ? "aspect-[4/3] max-h-52 sm:max-h-56 [@media(max-height:820px)]:max-h-44 [@media(max-height:700px)]:max-h-36" : "aspect-[5/4] max-h-32 [@media(max-height:820px)]:max-h-28",
         )}
       >
         <Image
@@ -277,12 +284,19 @@ function ArcTestimonialGlassCard({
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/15 via-transparent to-transparent" />
       </div>
 
-      <blockquote className={cn("flex flex-1 items-center", isActive ? "px-5 py-5 sm:px-6 sm:py-6" : "px-4 py-3")}>
+      <blockquote
+        className={cn(
+          "flex flex-1 items-center",
+          isActive
+            ? "px-5 py-5 sm:px-6 sm:py-6 [@media(max-height:820px)]:py-4 [@media(max-height:700px)]:py-3"
+            : "px-4 py-3",
+        )}
+      >
         <p
           className={cn(
             "w-full text-pretty text-center font-serif italic leading-relaxed text-arc-charcoal",
             isActive
-              ? "text-base sm:text-lg lg:text-[1.12rem] lg:leading-[1.65]"
+              ? "text-base sm:text-lg lg:text-[1.12rem] lg:leading-[1.65] [@media(max-height:820px)]:lg:text-base [@media(max-height:820px)]:lg:leading-[1.55] [@media(max-height:700px)]:lg:text-[0.95rem] [@media(max-height:700px)]:lg:leading-[1.5]"
               : "line-clamp-3 text-sm leading-snug [@media(max-width:1320px)]:line-clamp-2 [@media(max-height:820px)]:line-clamp-2",
           )}
         >
@@ -293,7 +307,7 @@ function ArcTestimonialGlassCard({
       <figcaption
         className={cn(
           "text-right font-sans leading-snug text-arc-charcoal/78",
-          isActive ? "px-5 pb-5 text-xs sm:px-6 sm:pb-6 sm:text-sm" : "px-4 pb-4 text-[11px]",
+          isActive ? "px-5 pb-5 text-xs sm:px-6 sm:pb-6 sm:text-sm [@media(max-height:820px)]:pb-4 [@media(max-height:700px)]:pb-3" : "px-4 pb-4 text-[11px]",
         )}
       >
         <cite className="not-italic">
