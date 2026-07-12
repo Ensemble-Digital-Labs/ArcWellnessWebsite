@@ -153,7 +153,13 @@ export function ArcFounderIntroSection({
 
         <div
           data-scroll-section
-          className="relative min-h-[min(68dvh,520px)] w-full min-w-0 sm:min-h-[min(72dvh,560px)] lg:-ml-[min(4.5rem,7%)] lg:min-h-0 lg:h-auto lg:w-[calc(100%+min(4.5rem,7%))]"
+          className={cn(
+            "relative min-h-[min(68dvh,520px)] w-full min-w-0 sm:min-h-[min(72dvh,560px)] lg:-ml-[min(4.5rem,7%)] lg:min-h-0 lg:h-auto lg:w-[calc(100%+min(4.5rem,7%))]",
+            // Brand arch: dome the portrait's top on lg+ only, via mask (no overflow clip) so
+            // the curved edge alpha-blends into cream with no compositing hairline. Bottom stays
+            // full-bleed; the left feather keeps blending into the marble panel.
+            "arc-arch-mask-top",
+          )}
         >
           <Image
             src={imageSrc}
@@ -163,6 +169,9 @@ export function ArcFounderIntroSection({
             sizes="(min-width: 1024px) 45vw, 100vw"
             priority={false}
           />
+          {/* The arch shape + all-border feather come from the soft `arc-arch-mask-top` mask on
+              the container (dissolves the image into cream along the curve). The left feather
+              keeps the wider blend into the marble text panel. */}
           <div
             aria-hidden
             className={cn(ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS, "max-lg:hidden")}

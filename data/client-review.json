@@ -3,10 +3,10 @@
     "sourceFile": "ARC_Wellness_Website_Review.xlsx",
     "sourcePath": "C:\\Users\\Chinh Mach\\Downloads\\Arc Wellness Website\\ARC_Wellness_Website_Review.xlsx",
     "importedAt": "2026-07-07T03:13:43.424Z",
-    "updatedAt": "2026-07-08T11:21:51.150Z",
+    "updatedAt": "2026-07-12T07:12:39.825Z",
     "sheetCount": 12,
     "sectionCount": 161,
-    "lastExportedAt": "2026-07-08T11:21:51.150Z"
+    "lastExportedAt": "2026-07-12T07:12:39.825Z"
   },
   "pages": [
     {
@@ -84,7 +84,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Intro → \"Your story starts here.\"\n• CTA \"Let's begin\" → /book only\n• Step labels 01–05; teal rail accents\n• Soft cream seams: intro ↔ steps carousel; steps bottom → Testimonials\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Intro → \"Your story starts here.\"\n• CTA \"Let's begin\" → /book only\n• Step labels 01–05; teal rail accents\n• Soft cream seams: intro ↔ steps carousel; steps bottom → Testimonials\n• Jul 12 2026: Desktop path steps — wider soft cream blend at vertical split between left step tabs and right photo (less harsh two-color seam)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/lib/arc-layout.ts — ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS widened to 38%\nsrc/components/arc/YourPathSection.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -164,7 +164,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Headline: More Than a Wellness Clinic / A Different Way to Think About Health\n• Client philosophy copy in narrative section (enter-once scroll reveal)\n• Stacked headline + editorial body with bonsai side image\n• Soft cream seams: top from hero, bottom into clinic gallery (ArcSectionSeamBlend, no blur on copy)\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Headline: More Than a Wellness Clinic / A Different Way to Think About Health\n• Client philosophy copy in narrative section (enter-once scroll reveal)\n• Stacked headline + editorial body with bonsai side image\n• Soft cream seams: top from hero, bottom into clinic gallery (ArcSectionSeamBlend, no blur on copy)\n• Jul 12 2026: Bonsai story image → brand arch window frame with soft cream edge blend (photo stays sharp)\n• Jul 12 2026: Mobile story image taller portrait crop (3:4)\n\nNOT CHANGED:\n• Client philosophy copy and stacked headline\n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcAboutNarrativePinSection.tsx\nsrc/components/arc/ArcWindowFrame.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -176,7 +176,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Blueprint headline + intro: \"Tap any photo to open the full gallery.\" (Birthstone + hand-drawn arrow → slideshow)\n• Headline + intro block vertically centered with preview; intro nudged right on desktop\n• Crossfade preview carousel: on-image title/caption, thumbnail strip, stable height\n• View full gallery link; tap photo opens full gallery at current slide\n• Marble ambient plate (teal-muted band); green corner arcs removed\n• Soft cream seams: top from story, bottom into Mission (soft gradient only — marble background preserved)\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Blueprint headline + intro: \"Tap any photo to open the full gallery.\" (Birthstone + hand-drawn arrow → slideshow)\n• Headline + intro block vertically centered with preview; intro nudged right on desktop\n• Crossfade preview carousel: on-image title/caption, thumbnail strip, stable height\n• View full gallery link; tap photo opens full gallery at current slide\n• Marble ambient plate (teal-muted band); green corner arcs removed\n• Soft cream seams: top from story, bottom into Mission (soft gradient only — marble background preserved)\n• Jul 12 2026: Gallery preview slideshow → arch window frame with cream feather into marble background\n• Jul 12 2026: Mobile gallery preview full-width + taller 4:5 portrait frame\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/clinic-gallery/ClinicSpacePreviewSlideshow.tsx\nsrc/components/arc/ArcClinicSpaceTeaserSection.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -188,7 +188,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Mission copy + stacked serif/script headline (Shaping your arc)\n• Editorial body typography; shared cream surface with Vision (variant cream)\n• Soft cream top seam from clinic gallery; compact bottom spacing into Vision\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Mission copy + stacked serif/script headline (Shaping your arc)\n• Editorial body typography; shared cream surface with Vision (variant cream)\n• Soft cream top seam from clinic gallery; compact bottom spacing into Vision\n• Jul 12 2026: Mission editorial photo → arch window frame with cream feather blend\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcScrollEditorialSection.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -200,7 +200,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Vision copy + subtitle (Every decade, lived with intention.)\n• Same cream background as Mission (continuous white band, compact spacing)\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Vision copy + subtitle (Every decade, lived with intention.)\n• Same cream background as Mission (continuous white band, compact spacing)\n• Jul 12 2026: Vision editorial photo → arch window frame with cream feather blend\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcScrollEditorialSection.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -284,7 +284,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Blocked",
-          "implementationNotes": "CHANGED:\n• Founder note copy per client feedback\n• Portrait-forward static layout (no scroll animation / flash)\n• Soft cream seams: top from Values marble band, bottom into Invest CTA\n\nBLOCKED:\n• Approved real founder portrait (replace AI-looking stock)",
+          "implementationNotes": "CHANGED:\n• Founder note copy per client feedback\n• Portrait-forward static layout (no scroll animation / flash)\n• Soft cream seams: top from Values marble band, bottom into Invest CTA\n• Jul 12 2026: Founder portrait → arch window frame with cream feather (replaces rounded rectangle card)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• Approved real founder portrait (replace AI-looking stock)\n\nFILES:\nsrc/components/arc/ArcFounderNoteSection.tsx",
           "implementationBlocked": "• Approved real founder portrait (replace AI-looking stock)"
         },
         {
@@ -308,7 +308,7 @@
           "status": "",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Alternating teal-muted / cream section rhythm on About\n• Teal script accents on headings (rose-gold removed on About)\n• Green arcs removed from clinic teaser\n• Site-wide em dash cleanup in marketing copy\n• Founder section static (removed scroll slide-up flash)\n• Jul 2026: Soft section seams across full About scroll (7 transitions) via ArcSectionSeamBlend + arc-layout seam tokens — gradient-only soft variant (no backdrop blur on copy/photos); background-layer feathers so hero collage, gallery marble, and sticky values header stay sharp\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Alternating teal-muted / cream section rhythm on About\n• Teal script accents on headings (rose-gold removed on About)\n• Green arcs removed from clinic teaser\n• Site-wide em dash cleanup in marketing copy\n• Founder section static (removed scroll slide-up flash)\n• Jul 2026: Soft section seams across full About scroll (7 transitions) via ArcSectionSeamBlend + arc-layout seam tokens — gradient-only soft variant (no backdrop blur on copy/photos); background-layer feathers so hero collage, gallery marble, and sticky values header stay sharp\n• Jul 12 2026: New reusable ArcWindowFrame brand image frame (arch silhouette + optional cream feather)\n• Jul 12 2026: Large inner-page editorial images use feathered arch; small chapter-hero flanking tiles use arch only (no feather)\n• Jul 12 2026: Arch frame hairline fix — solid cream background + opaque edge cap on feathered frames\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcWindowFrame.tsx\nsrc/components/arc/ArcChapterHeroImageCanvas.tsx\nsrc/components/arc/ArcScrollEditorialSection.tsx",
           "implementationBlocked": "•"
         }
       ]
@@ -327,8 +327,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Aesthetics chapter-hero flanking tiles → arch window frames (no feather)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• "
         },
         {
           "id": "row-10",
@@ -338,8 +338,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Our approach editorial photo → arch window frame with cream feather\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/pages/AestheticsPageContent.tsx"
         },
         {
           "id": "row-11",
@@ -368,8 +368,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Programs chapter-hero flanking tiles → arch window frames (no feather)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• "
         },
         {
           "id": "row-10",
@@ -409,8 +409,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Financing chapter-hero flanking tiles → arch window frames (no feather)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• "
         },
         {
           "id": "row-10",
@@ -450,8 +450,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Contact chapter-hero flanking tiles → arch window frames (no feather)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• "
         },
         {
           "id": "row-10",
@@ -601,7 +601,7 @@
           "status": "",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Soft bottom handoff on chapter hero (marble ambient plate fade + cream ArcSectionSeamBlend — matches About hero pattern)\n• Applies to Treatments, Programs, Financing, and other ambient-full marketing heroes\n\nBLOCKED:\n• "
+          "implementationNotes": "CHANGED:\n• Soft bottom handoff on chapter hero (marble ambient plate fade + cream ArcSectionSeamBlend — matches About hero pattern)\n• Applies to Treatments, Programs, Financing, and other ambient-full marketing heroes\n• Jul 12 2026: Chapter-hero flanking photos on inner marketing pages use brand arch window shape (crisp edges, no cream feather on small tiles)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcChapterHeroImageCanvas.tsx"
         },
         {
           "id": "row-8",
@@ -611,8 +611,8 @@
           "feedback": "",
           "status": "Not Reviewed",
           "priority": "",
-          "implementationStatus": "Not Started",
-          "implementationNotes": ""
+          "implementationStatus": "In Progress",
+          "implementationNotes": "CHANGED:\n• Jul 12 2026: Treatments hub hero flanking images use arch window frames (no feather on small tiles)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/pages/TreatmentsPageContent.tsx"
         },
         {
           "id": "row-9",

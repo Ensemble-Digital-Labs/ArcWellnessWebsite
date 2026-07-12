@@ -77,6 +77,12 @@ type ScrollChapterIntroSectionProps = {
   headlineEmphasisTone?: "teal";
   /** Soft cream feather at section bottom (About page seams). */
   bottomSeam?: boolean;
+  /**
+   * `left` (default), copy column on the left with the image canvas on the right.
+   * `center`, headline centered with the canvas full-bleed behind, flanking both sides
+   * (ambient-full layout only; use placement tiles positioned left/right).
+   */
+  heroAlign?: "left" | "center";
 };
 
 /**
@@ -105,6 +111,7 @@ export function ScrollChapterIntroSection({
   copyTone,
   headlineEmphasisTone,
   bottomSeam = false,
+  heroAlign = "left",
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -233,6 +240,7 @@ export function ScrollChapterIntroSection({
   const pinScrub = motion === "pin-scrub";
   const heroCanvasAnimation = motion === "enter-once" ? "enter-once" : "scroll-scrub";
   const ambientFullBleed = layout === "ambient-full";
+  const centeredHero = ambientFullBleed && heroAlign === "center";
   const compactEmphasis = headlineEmphasisSize === "compact";
   const ambientEnterOnce = ambientFullBleed && motion === "enter-once" && !reduceMotion;
   const heroCopyReveal = ambientEnterOnce
@@ -353,7 +361,12 @@ export function ScrollChapterIntroSection({
         className={cn(
           "relative z-10 mx-auto w-full",
           ambientFullBleed
-            ? cn(
+            ? centeredHero
+              ? cn(
+                  "flex min-h-[min(90dvh,840px)] flex-col justify-center px-6 py-16 text-center sm:px-10 sm:py-20 md:items-center md:px-12 md:py-24 lg:px-16",
+                  ARC_PAGE_RAIL_MAX,
+                )
+              : cn(
                 "flex min-h-[min(90dvh,840px)] flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 md:grid md:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] md:items-center md:gap-10 md:px-12 md:py-24 lg:gap-14 lg:px-16 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]",
                 ARC_PAGE_RAIL_MAX,
               )
@@ -392,7 +405,9 @@ export function ScrollChapterIntroSection({
           className={cn(
             "flex flex-col justify-center",
             ambientFullBleed
-              ? "order-2 w-full shrink-0 md:order-none md:max-w-[min(100%,48rem)] md:flex-none"
+              ? centeredHero
+                ? "relative z-10 order-2 w-full shrink-0 items-center text-center md:order-none md:max-w-[min(100%,44rem)] md:flex-none"
+                : "order-2 w-full shrink-0 md:order-none md:max-w-[min(100%,48rem)] md:flex-none"
               : "relative w-full flex-[1.02] overflow-hidden sm:py-20 md:max-w-[min(100%,34rem)] md:flex-none md:py-24",
           )}
         >
@@ -443,8 +458,14 @@ export function ScrollChapterIntroSection({
                 "font-serif font-semibold tracking-tight will-change-[transform,opacity]",
                 ambientFullBleed && headlineEmphasis
                   ? compactEmphasis
-                    ? "mt-6 flex max-w-full flex-col items-start gap-0 text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]"
-                    : "mt-6 inline-flex max-w-none flex-wrap items-baseline gap-x-[0.18em] text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]"
+                    ? cn(
+                        "mt-6 flex max-w-full flex-col gap-0 text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]",
+                        centeredHero ? "items-center" : "items-start",
+                      )
+                    : cn(
+                        "mt-6 inline-flex max-w-none flex-wrap items-baseline gap-x-[0.18em] text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]",
+                        centeredHero && "justify-center",
+                      )
                   : headlineEmphasis
                     ? "flex max-w-[min(100%,32rem)] flex-wrap items-baseline gap-x-[0.28em] text-3xl leading-[1.14] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]"
                     : "max-w-[22ch] text-3xl leading-[1.22] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]",
@@ -564,7 +585,12 @@ export function ScrollChapterIntroSection({
             scrollTriggerRootRef={sectionRef}
             reduceMotion={reduceMotion}
             animation={heroCanvasAnimation}
-            className="order-3 hidden md:flex"
+            fullBleed={centeredHero}
+            className={
+              centeredHero
+                ? "absolute inset-0 z-0 hidden md:block"
+                : "order-3 hidden md:flex"
+            }
           />
         ) : null}
 

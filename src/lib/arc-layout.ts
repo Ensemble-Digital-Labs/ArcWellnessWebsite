@@ -193,9 +193,11 @@ export const ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS =
 export const ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_DESKTOP_CLASS =
   ARC_IMAGE_TOP_BORDER_FEATHER_LIP_CLASS;
 
-/** Soft cream fade at the vertical split between step tabs and image (desktop). No backdrop-blur — blur at the grid seam caused a visible hairline. */
+/** Soft cream fade at the vertical split between step tabs and image (desktop). Wider band so
+ *  the cream cards and the photo blend gradually (no backdrop-blur — blur at the grid seam
+ *  caused a visible hairline; a broader cream gradient softens the two-color split instead). */
 export const ARC_HOME_PATH_STEP_IMAGE_LEFT_FEATHER_CLASS =
-  ARC_IMAGE_LEFT_BORDER_FEATHER_CLASS;
+  `pointer-events-none absolute inset-y-0 -left-px z-[3] w-[min(15rem,38%)] ${ARC_CREAM_BLUR_GRADIENT_LEFT} ${ARC_CREAM_BLUR_MASK_LEFT}`;
 
 export const ARC_HOME_TESTIMONIALS_TOP_SEAM_SOFT_CLASS = ARC_HOME_WHOLE_BODY_TOP_SEAM_SOFT_CLASS;
 

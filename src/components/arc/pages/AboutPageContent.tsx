@@ -6,9 +6,7 @@ import { ArcFounderNoteSection } from "@/components/arc/ArcFounderNoteSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
 import { ArcValuesRevealSection } from "@/components/arc/ArcValuesRevealSection";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
-import { ABOUT_HERO_CANVAS_TILES } from "@/content/aboutHeroCanvas";
-import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
+import { ScrollExpandHero } from "@/components/arc/ScrollExpandHero";
 import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { aboutPage } from "@/content/pages/about";
 import { images } from "@/content/site";
@@ -18,31 +16,33 @@ export function AboutPageContent() {
 
   return (
     <>
-      <ScrollChapterIntroSection
-        id="about-hero"
-        layout="ambient-full"
-        motion="enter-once"
-        headline={hero.headline}
-        headlineEmphasis={hero.headlineEmphasis}
-        body=""
-        introMode="visible-on-load"
-        copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
-        heroCanvasTiles={ABOUT_HERO_CANVAS_TILES}
+      <ScrollExpandHero
+        bgImageSrc={images.heroMedia}
+        title="Where Wellness, Longevity & Aesthetics Converge."
+        referenceLayout
+        showCopy={false}
+        showKeywordMarquee={false}
+        overlayHeading={`${hero.headline} ${hero.headlineEmphasis}`}
         bottomSeam
+        intro={null}
       />
 
-      <ArcAboutNarrativePinSection
-        id="about-story"
-        motion="enter-once"
-        title={hero.title}
-        titleEmphasis={hero.titleEmphasis}
-        storyLines={hero.paragraphs}
-        sideImageSrc={hero.storySideImage}
-        sideImageAlt={hero.storySideImageAlt}
-        headlineEmphasisTone="teal"
-        topSeam
-        bottomSeam
-      />
+      {/* Pull the cream story section up a few px under the pinned hero so the GSAP
+          pin/fixed layer boundary can't leave a 1px compositing hairline at the seam. */}
+      <div className="relative z-[5] -mt-[8px] bg-arc-cream">
+        <ArcAboutNarrativePinSection
+          id="about-story"
+          motion="enter-once"
+          title={hero.title}
+          titleEmphasis={hero.titleEmphasis}
+          storyLines={hero.paragraphs}
+          sideImageSrc={hero.storySideImage}
+          sideImageAlt={hero.storySideImageAlt}
+          headlineEmphasisTone="teal"
+          topSeam
+          bottomSeam
+        />
+      </div>
 
       <ArcClinicSpaceTeaserSection
         id="about-clinic"

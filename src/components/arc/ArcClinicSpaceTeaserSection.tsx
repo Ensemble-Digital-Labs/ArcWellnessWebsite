@@ -218,7 +218,7 @@ export function ArcClinicSpaceTeaserSection({
               ) : null}
             </div>
 
-            <div className="relative z-10 w-full max-w-[min(100%,22rem)] sm:max-w-md lg:col-span-7 lg:max-w-none">
+            <div className="relative z-10 w-full sm:max-w-md lg:col-span-7 lg:max-w-none">
               <ClinicSpacePreviewSlideshow
                 slides={slides}
                 activeIndex={previewIndex}

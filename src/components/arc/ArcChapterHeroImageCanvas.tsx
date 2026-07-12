@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { isArcSectionVisibleOnLoad } from "@/lib/arcEnterOnceScroll";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
@@ -40,6 +40,8 @@ type ArcChapterHeroImageCanvasProps = {
   /** `enter-once`, fly + fade into place on load; `scroll-scrub`, tied to scroll progress. */
   animation?: ArcChapterHeroCanvasAnimation;
   className?: string;
+  /** Fill the parent (absolute inset-0) so placement tiles can flank a centered headline. */
+  fullBleed?: boolean;
 };
 
 type SortedTile = {
@@ -270,6 +272,7 @@ export function ArcChapterHeroImageCanvas({
   reduceMotion = false,
   animation = "enter-once",
   className,
+  fullBleed = false,
 }: ArcChapterHeroImageCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const tileRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -322,28 +325,31 @@ export function ArcChapterHeroImageCanvas({
         className={cn(
           "relative mx-auto w-full",
           useAbsoluteLayout
-            ? "h-[min(66dvh,580px)] max-w-[min(100%,680px)] lg:h-[min(70dvh,620px)]"
+            ? fullBleed
+              ? "h-full max-w-none"
+              : "h-[min(66dvh,580px)] max-w-[min(100%,680px)] lg:h-[min(70dvh,620px)]"
             : "grid max-w-[min(100%,720px)] grid-cols-3 items-end gap-4 md:gap-5 lg:gap-6",
         )}
       >
         {tiles.map((tile, index) => {
           const frame = (
-            <div
+            <ArcWindowFrame
+              src={tile.src}
+              alt={tile.alt}
+              archDepth={34}
+              baseRadius={12}
               className={cn(
-                "relative isolate w-full overflow-hidden rounded-sm border border-white/25 bg-arc-charcoal shadow-[0_20px_50px_rgba(0,0,0,0.45)] [transform:translateZ(0)]",
+                "w-full [transform:translateZ(0)]",
                 tile.aspectClass ?? "aspect-[4/5]",
               )}
+              imageClassName="object-cover"
+              sizes="(min-width: 768px) 220px, 30vw"
             >
-              <Image
-                src={tile.src}
-                alt={tile.alt}
-                fill
-                className="object-cover"
-                sizes="(min-width: 768px) 220px, 30vw"
-                loading="lazy"
+              <div
+                className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/25 via-transparent to-black/10"
+                aria-hidden
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
-            </div>
+            </ArcWindowFrame>
           );
 
           if (useAbsoluteLayout) {
@@ -547,12 +553,17 @@ export function ArcChapterHeroImageCanvasMobile({
           ref={(el) => {
             tileRefs.current[0] = el;
           }}
-          className={cn(
-            "relative aspect-[4/5] overflow-hidden rounded-sm border border-white/20 shadow-[0_12px_32px_rgba(0,0,0,0.35)]",
-            hideUntilAnimate && CANVAS_TILE_HIDDEN_CLASS,
-          )}
+          className={cn("w-full", hideUntilAnimate && CANVAS_TILE_HIDDEN_CLASS)}
         >
-          <Image src={soloTile.src} alt={soloTile.alt} fill className="object-cover" sizes="72vw" loading="lazy" />
+          <ArcWindowFrame
+            src={soloTile.src}
+            alt={soloTile.alt}
+            archDepth={34}
+            baseRadius={12}
+            className="aspect-[4/5] w-full"
+            imageClassName="object-cover"
+            sizes="72vw"
+          />
         </div>
       </div>
     );
@@ -572,13 +583,17 @@ export function ArcChapterHeroImageCanvasMobile({
           ref={(el) => {
             tileRefs.current[index] = el;
           }}
-          className={cn(
-            "relative overflow-hidden rounded-sm border border-white/20 shadow-[0_12px_32px_rgba(0,0,0,0.35)]",
-            hideUntilAnimate && CANVAS_TILE_HIDDEN_CLASS,
-            index === 1 ? "aspect-[3/4]" : "aspect-[4/5]",
-          )}
+          className={cn("w-full", hideUntilAnimate && CANVAS_TILE_HIDDEN_CLASS)}
         >
-          <Image src={tile.src} alt={tile.alt} fill className="object-cover" sizes="33vw" />
+          <ArcWindowFrame
+            src={tile.src}
+            alt={tile.alt}
+            archDepth={34}
+            baseRadius={12}
+            className={cn("w-full", index === 1 ? "aspect-[3/4]" : "aspect-[4/5]")}
+            imageClassName="object-cover"
+            sizes="33vw"
+          />
         </div>
       ))}
     </div>

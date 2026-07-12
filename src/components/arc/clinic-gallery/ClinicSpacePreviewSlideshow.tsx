@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { prefersTouchPointer } from "@/lib/arcTouchDevice";
 import { useArcHorizontalSwipeNavigate } from "@/lib/useArcHorizontalSwipeNavigate";
 import { cn } from "@/lib/utils";
@@ -142,70 +143,79 @@ export function ClinicSpacePreviewSlideshow({
             }
           }}
           className={cn(
-            "relative block aspect-[3/2] w-full cursor-pointer overflow-hidden rounded-xl bg-arc-charcoal/5 touch-pan-y max-lg:rounded-2xl",
-            "shadow-[0_16px_40px_rgba(44,44,44,0.1)]",
+            "relative block w-full cursor-pointer touch-pan-y",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/90",
           )}
           aria-label={`${slide.label}. Swipe for more photos or tap to open full gallery.`}
         >
-          {slides.map((item, index) => {
-            const isActive = index === activeIndex;
-            return (
-              <div
-                key={item.src}
-                className={cn(
-                  "absolute inset-0 transition-opacity ease-out",
-                  isActive ? "opacity-100" : "pointer-events-none opacity-0",
-                )}
-                style={{ transitionDuration: `${fadeMs}ms` }}
-                aria-hidden={!isActive}
-              >
-                <Image
-                  src={item.src}
-                  alt={isActive ? item.alt : ""}
-                  fill
-                  className={cn("object-cover", item.objectPosition ?? "object-center")}
-                  sizes="(max-width: 1024px) 92vw, 50vw"
-                  priority={index === 0}
-                  draggable={false}
-                />
-              </div>
-            );
-          })}
-
-          <span className="pointer-events-none absolute right-3 top-3 rounded-sm bg-arc-charcoal/50 px-2 py-1 font-sans text-xs tabular-nums text-white/90 backdrop-blur-[2px]">
-            {counter}
-          </span>
-
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 min-h-[38%] bg-gradient-to-t from-arc-charcoal/82 via-arc-charcoal/45 to-transparent px-4 pb-4 pt-12 sm:px-5 sm:pb-5"
-            aria-hidden
+          <ArcWindowFrame
+            feather
+            archDepth={32}
+            baseRadius={12}
+            className="aspect-[4/5] w-full sm:aspect-[3/2]"
+            media={
+              <>
+                {slides.map((item, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <div
+                      key={item.src}
+                      className={cn(
+                        "absolute inset-0 transition-opacity ease-out",
+                        isActive ? "opacity-100" : "pointer-events-none opacity-0",
+                      )}
+                      style={{ transitionDuration: `${fadeMs}ms` }}
+                      aria-hidden={!isActive}
+                    >
+                      <Image
+                        src={item.src}
+                        alt={isActive ? item.alt : ""}
+                        fill
+                        className={cn("object-cover", item.objectPosition ?? "object-center")}
+                        sizes="(max-width: 1024px) 92vw, 50vw"
+                        priority={index === 0}
+                        draggable={false}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            }
           >
-            <div className="relative min-h-[4.5rem] sm:min-h-[5rem]">
-              {slides.map((item, index) => {
-                const isActive = index === activeIndex;
-                return (
-                  <div
-                    key={`caption-${item.src}`}
-                    className={cn(
-                      "text-left transition-opacity ease-out",
-                      isActive ? "relative opacity-100" : "absolute inset-x-0 bottom-0 opacity-0",
-                    )}
-                    style={{ transitionDuration: `${fadeMs}ms` }}
-                  >
-                    <p className="font-serif text-lg font-medium leading-snug text-white sm:text-xl">
-                      {slideTitle(item.label)}
-                    </p>
-                    {item.caption ? (
-                      <p className="mt-1.5 line-clamp-2 max-w-[36ch] font-sans text-sm leading-relaxed text-white/88 sm:text-[0.9375rem]">
-                        {item.caption}
+            <span className="pointer-events-none absolute right-3 top-3 z-[2] rounded-sm bg-arc-charcoal/50 px-2 py-1 font-sans text-xs tabular-nums text-white/90 backdrop-blur-[2px]">
+              {counter}
+            </span>
+
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] min-h-[38%] bg-gradient-to-t from-arc-charcoal/82 via-arc-charcoal/45 to-transparent px-4 pb-4 pt-12 sm:px-5 sm:pb-5"
+              aria-hidden
+            >
+              <div className="relative min-h-[4.5rem] sm:min-h-[5rem]">
+                {slides.map((item, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <div
+                      key={`caption-${item.src}`}
+                      className={cn(
+                        "text-left transition-opacity ease-out",
+                        isActive ? "relative opacity-100" : "absolute inset-x-0 bottom-0 opacity-0",
+                      )}
+                      style={{ transitionDuration: `${fadeMs}ms` }}
+                    >
+                      <p className="font-serif text-lg font-medium leading-snug text-white sm:text-xl">
+                        {slideTitle(item.label)}
                       </p>
-                    ) : null}
-                  </div>
-                );
-              })}
+                      {item.caption ? (
+                        <p className="mt-1.5 line-clamp-2 max-w-[36ch] font-sans text-sm leading-relaxed text-white/88 sm:text-[0.9375rem]">
+                          {item.caption}
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          </ArcWindowFrame>
         </div>
 
         {count > 1 ? (

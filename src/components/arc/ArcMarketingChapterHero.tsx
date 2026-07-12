@@ -2,6 +2,7 @@
 
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import type { ArcChapterHeroCanvasTile } from "@/components/arc/ArcChapterHeroImageCanvas";
+import { splitCenterHeroTiles } from "@/content/heroCanvasSplit";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
 
 type ArcMarketingChapterHeroProps = {
@@ -25,13 +26,14 @@ export function ArcMarketingChapterHero({
     <ScrollChapterIntroSection
       id={id}
       layout="ambient-full"
+      heroAlign="center"
       motion="enter-once"
       headline={headline}
       headlineEmphasis={headlineEmphasis}
       body=""
       introMode="visible-on-load"
       copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
-      heroCanvasTiles={heroCanvasTiles}
+      heroCanvasTiles={splitCenterHeroTiles(heroCanvasTiles)}
       bottomSeam={bottomSeam}
     />
   );

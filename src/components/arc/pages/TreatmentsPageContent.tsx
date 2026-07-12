@@ -6,6 +6,7 @@ import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSe
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
 import { homeInvestSupport } from "@/content/homepage";
 import { allTreatments, treatmentsHub } from "@/content/pages/treatments";
+import { splitCenterHeroTiles } from "@/content/heroCanvasSplit";
 import { TREATMENTS_HERO_CANVAS_TILES } from "@/content/treatmentsHeroCanvas";
 import { images } from "@/content/site";
 
@@ -17,13 +18,14 @@ export function TreatmentsPageContent() {
       <ScrollChapterIntroSection
         id="treatments-hero"
         layout="ambient-full"
+        heroAlign="center"
         motion="enter-once"
         headline={hero.title}
         headlineEmphasis={hero.titleEmphasis}
         body=""
         introMode="visible-on-load"
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
-        heroCanvasTiles={TREATMENTS_HERO_CANVAS_TILES}
+        heroCanvasTiles={splitCenterHeroTiles(TREATMENTS_HERO_CANVAS_TILES)}
         bottomSeam
       />
 

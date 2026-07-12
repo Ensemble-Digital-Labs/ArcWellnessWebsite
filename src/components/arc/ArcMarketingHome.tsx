@@ -12,6 +12,7 @@ import { WholeBodySection } from "@/components/arc/WholeBodySection";
 import { YourPathSection } from "@/components/arc/YourPathSection";
 import { ArcTestimonialsSection } from "@/components/arc/ArcTestimonialsSection";
 import { ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS } from "@/lib/arc-layout";
+import { PATH_SECTION_INTRO_BACKGROUND_SRC } from "@/content/backgroundDecoration";
 import {
   homeInvestSupport,
   homeFounder,
@@ -42,7 +43,10 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
       {header}
       <ArcScrollShell>
         <ScrollExpandHero
-          bgImageSrc={images.heroMedia}
+          bgImageSrc={PATH_SECTION_INTRO_BACKGROUND_SRC}
+          staticBackground
+          lightSurface
+          centerCopy
           title="Where Wellness, Longevity & Aesthetics Converge."
           referenceLayout
           intro={

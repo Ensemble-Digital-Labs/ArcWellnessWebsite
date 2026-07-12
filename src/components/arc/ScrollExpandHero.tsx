@@ -20,10 +20,16 @@ import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { homeHeroSecondaryCta } from "@/content/homepage";
 import { siteMeta } from "@/content/siteMeta";
 import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
-import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import {
+  ARC_PAGE_RAIL_MAX,
+  ARC_CREAM_BLUR_GRADIENT_BOTTOM,
+  ARC_CREAM_BLUR_MASK_BOTTOM,
+} from "@/lib/arc-layout";
 import {
   heroPrimaryCtaClass,
   heroSecondaryCtaClass,
+  heroPrimaryCtaClassLight,
+  heroSecondaryCtaClassLight,
 } from "@/lib/heroCtaStyles";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -216,15 +222,84 @@ const HERO_REF_MOBILE_TEXT_SCRIM = cn(
   "max-md:px-5 max-md:py-6 max-md:shadow-[0_12px_40px_rgba(0,0,0,0.24)]",
 );
 
+/** Light-surface variants — charcoal connectors + teal script, no photo drop shadow (textured hero). */
+const HERO_REF_WHERE_LIGHT_CLASS = cn(
+  "block font-sans text-[1.75rem] font-medium leading-none text-arc-charcoal md:text-[2rem]",
+  HERO_REF_LINE_ALIGN,
+);
+
+const HERO_REF_KEYWORD_LINE_LIGHT_CLASS = cn(
+  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-teal md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
+  HERO_REF_LINE_ALIGN,
+);
+
+const HERO_REF_CONVERGE_LIGHT_CLASS = cn(
+  "block font-sans text-[1.75rem] font-medium leading-none text-arc-charcoal md:text-[2rem]",
+  "mt-2 md:mt-2.5",
+  HERO_REF_LINE_ALIGN,
+);
+
+const HERO_REF_INTRO_TYPE_LIGHT = cn(
+  "font-sans text-base font-normal leading-[1.6] text-arc-charcoal/78 md:text-[1.125rem]",
+  "max-w-[min(100%,21rem)] sm:max-w-[22rem] md:max-w-[min(100%,22.5rem)]",
+  "max-md:mx-auto max-md:text-center md:text-left",
+);
+
 /** Stacked headline, matches reference mockup line breaks. */
-function HeroReferenceHeadline() {
+function HeroReferenceHeadline({
+  light = false,
+  center = false,
+  oneLine = false,
+}: {
+  light?: boolean;
+  center?: boolean;
+  /** On xl+, render the whole title on a single left-to-right line (stacked below xl). */
+  oneLine?: boolean;
+}) {
+  const centerAlign = center ? "md:text-center" : undefined;
+  const whereClass = cn(light ? HERO_REF_WHERE_LIGHT_CLASS : HERO_REF_WHERE_CLASS, centerAlign);
+  const keywordClass = cn(
+    light ? HERO_REF_KEYWORD_LINE_LIGHT_CLASS : HERO_REF_KEYWORD_LINE_CLASS,
+    centerAlign,
+  );
+  const convergeClass = cn(
+    light ? HERO_REF_CONVERGE_LIGHT_CLASS : HERO_REF_CONVERGE_CLASS,
+    centerAlign,
+  );
+
+  const stacked = (
+    <>
+      <span className={whereClass}>Where</span>
+      <TitleEmphasis className={cn(keywordClass, "mt-1")}>Wellness,</TitleEmphasis>
+      <TitleEmphasis className={cn(keywordClass, "mt-0.5")}>Longevity &</TitleEmphasis>
+      <TitleEmphasis className={cn(keywordClass, "mt-0.5")}>Aesthetics</TitleEmphasis>
+      <span className={convergeClass}>Converge.</span>
+    </>
+  );
+
+  if (!oneLine) return stacked;
+
+  const inlineConnector = cn(
+    "font-sans font-medium leading-none tracking-tight text-[clamp(2rem,2.5vw,2.9rem)]",
+    light ? "text-arc-charcoal" : cn("text-arc-cream", HERO_REF_CONNECTOR_SHADOW),
+  );
+  const inlineKeyword = cn(
+    "font-title-emphasis font-normal not-italic leading-[1.0] tracking-tight text-[clamp(3.5rem,6.2vw,7.25rem)]",
+    light ? "text-arc-teal" : cn("text-arc-cream", HERO_REF_CONNECTOR_SHADOW),
+  );
+
   return (
     <>
-      <span className={HERO_REF_WHERE_CLASS}>Where</span>
-      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-1")}>Wellness,</TitleEmphasis>
-      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-0.5")}>Longevity &</TitleEmphasis>
-      <TitleEmphasis className={cn(HERO_REF_KEYWORD_LINE_CLASS, "mt-0.5")}>Aesthetics</TitleEmphasis>
-      <span className={HERO_REF_CONVERGE_CLASS}>Converge.</span>
+      <span className="flex w-full flex-col xl:hidden">{stacked}</span>
+      <span className="hidden w-full flex-col items-center xl:flex">
+        <span className={cn(inlineConnector, "leading-none")}>Where</span>
+        <span className="flex items-baseline justify-center gap-x-[0.26em] whitespace-nowrap leading-none pb-[0.5em] pt-[0.08em]">
+          <TitleEmphasis className={inlineKeyword}>Wellness,</TitleEmphasis>
+          <TitleEmphasis className={inlineKeyword}>Longevity &</TitleEmphasis>
+          <TitleEmphasis className={inlineKeyword}>Aesthetics</TitleEmphasis>
+        </span>
+        <span className={cn(inlineConnector, "mt-1 leading-none")}>Converge.</span>
+      </span>
     </>
   );
 }
@@ -400,6 +475,20 @@ type ScrollExpandHeroProps = {
   titleKeywords?: readonly string[];
   /** Bottom teal keyword marquee, off on homepage reference layout. */
   showKeywordMarquee?: boolean;
+  /** Render the headline / intro / CTAs. Off = image-only hero (e.g. About page). */
+  showCopy?: boolean;
+  /** Small uppercase kicker above the overlay heading (e.g. "Our story"). */
+  overlayEyebrow?: string;
+  /** Signature-script heading overlaid on the image (e.g. "About Us"). Independent of `showCopy`. */
+  overlayHeading?: string;
+  /** Cream feather at the hero's bottom edge, soft handoff into the next section. */
+  bottomSeam?: boolean;
+  /** Disable the scroll-driven zoom + pin — background stays static (no scale). */
+  staticBackground?: boolean;
+  /** Background is a light surface (e.g. cream texture): charcoal/teal copy, no dark scrim. */
+  lightSurface?: boolean;
+  /** Center the hero copy on md+ (defaults to the left reference stack). */
+  centerCopy?: boolean;
   /** Match client reference mockup, cream script, left stack, light overlay. */
   referenceLayout?: boolean;
 };
@@ -414,6 +503,13 @@ export function ScrollExpandHero({
   textBlend,
   titleKeywords = DEFAULT_HERO_TITLE_KEYWORDS,
   showKeywordMarquee = true,
+  showCopy = true,
+  overlayEyebrow,
+  overlayHeading,
+  bottomSeam = false,
+  staticBackground = false,
+  lightSurface = false,
+  centerCopy = false,
   referenceLayout = false,
 }: ScrollExpandHeroProps) {
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -439,11 +535,11 @@ export function ScrollExpandHero({
     const bg = heroBgRef.current;
     if (!bg) return;
     bg.style.transformOrigin = "center center";
-    bg.style.transform = reduceMotion ? "scale(1.42)" : "scale(1)";
-  }, [reduceMotion]);
+    bg.style.transform = reduceMotion && !staticBackground ? "scale(1.42)" : "scale(1)";
+  }, [reduceMotion, staticBackground]);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || staticBackground) return;
 
     let revert: (() => void) | null = null;
     let cancelled = false;
@@ -535,7 +631,7 @@ export function ScrollExpandHero({
       window.visualViewport?.removeEventListener("resize", onLayoutChange);
       revert?.();
     };
-  }, [reduceMotion, bgImageSrc]);
+  }, [reduceMotion, bgImageSrc, staticBackground]);
 
   const handleHeroImageReady = () => {
     if (heroImageReadyRef.current) return;
@@ -589,13 +685,13 @@ export function ScrollExpandHero({
         data-arc-marketing-hero
         className={cn(
           "relative flex h-[100dvh] min-h-[100dvh] flex-col items-center justify-start",
-          !showKeywordMarquee && "max-md:h-auto max-md:min-h-[88dvh] max-md:pb-4",
+          !showKeywordMarquee && showCopy && "max-md:h-auto max-md:min-h-[88dvh] max-md:pb-4",
         )}
       >
         <div
           className={cn(
             "relative flex h-full min-h-0 w-full flex-col items-center overflow-hidden",
-            showKeywordMarquee ? "" : "max-md:min-h-full",
+            !showKeywordMarquee && showCopy ? "max-md:min-h-full" : "",
           )}
         >
           <div className="absolute inset-0 z-0 overflow-hidden">
@@ -615,10 +711,12 @@ export function ScrollExpandHero({
               />
             </div>
             {referenceLayout ? (
-              <div
-                className="absolute inset-0 hidden bg-gradient-to-r from-black/22 via-black/5 to-transparent md:block"
-                aria-hidden
-              />
+              lightSurface ? null : (
+                <div
+                  className="absolute inset-0 hidden bg-gradient-to-r from-black/22 via-black/5 to-transparent md:block"
+                  aria-hidden
+                />
+              )
             ) : (
               <>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/18 to-black/8" />
@@ -627,6 +725,37 @@ export function ScrollExpandHero({
             )}
           </div>
 
+          {overlayHeading ? (
+            <div className="pointer-events-none absolute inset-0 z-20 flex items-center">
+              <div
+                className={cn(
+                  "w-full px-5 text-center sm:px-8 md:pl-[clamp(2.75rem,10.5vw,9.5rem)] md:pr-10 md:text-left lg:pl-[clamp(3.5rem,11vw,10rem)] xl:pl-[clamp(4rem,12vw,11rem)]",
+                )}
+              >
+                {overlayEyebrow ? (
+                  <span
+                    className={cn(
+                      "mb-3 block font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-cream/90 sm:text-sm",
+                      HERO_REF_CONNECTOR_SHADOW,
+                    )}
+                  >
+                    {overlayEyebrow}
+                  </span>
+                ) : null}
+                <TitleEmphasis
+                  className={cn(
+                    "block font-title-emphasis font-normal not-italic leading-[0.95] tracking-tight text-arc-cream",
+                    "text-[clamp(4.5rem,17vw,12rem)]",
+                    HERO_REF_LINE_ALIGN,
+                    HERO_REF_CONNECTOR_SHADOW,
+                  )}
+                >
+                  {overlayHeading}
+                </TitleEmphasis>
+              </div>
+            </div>
+          ) : null}
+
           <div
             className={cn(
               "relative z-10 flex h-full min-h-0 w-full items-center",
@@ -634,6 +763,7 @@ export function ScrollExpandHero({
               referenceLayout
                 ? cn(
                     "justify-center px-5 pt-[max(4.5rem,env(safe-area-inset-top))] sm:px-8 md:justify-start md:pl-[clamp(2.75rem,10.5vw,9.5rem)] md:pr-10 lg:pl-[clamp(3.5rem,11vw,10rem)] xl:pl-[clamp(4rem,12vw,11rem)]",
+                    centerCopy && "md:justify-center md:pl-10 lg:pl-10 xl:pl-10",
                     showKeywordMarquee
                       ? "pb-[calc(3.75rem+env(safe-area-inset-bottom))] md:pb-[calc(4rem+env(safe-area-inset-bottom))]"
                       : "pb-12",
@@ -649,6 +779,7 @@ export function ScrollExpandHero({
               textBlend ? "mix-blend-difference" : "mix-blend-normal",
             )}
           >
+            {showCopy ? (
             <div
               className={cn(
                 "z-20 flex w-full flex-col",
@@ -656,7 +787,9 @@ export function ScrollExpandHero({
                   ? "max-w-[min(100%,22rem)] sm:max-w-[24rem] md:max-w-[min(34vw,26rem)] lg:max-w-[min(32vw,24.5rem)]"
                   : "max-w-xl gap-4 sm:max-w-2xl sm:gap-5 md:max-w-[34rem] md:gap-6 lg:max-w-[36rem]",
                 "max-md:mx-auto max-md:items-center max-md:text-center md:items-start md:text-left",
-                referenceLayout && HERO_REF_MOBILE_TEXT_SCRIM,
+                centerCopy && "md:mx-auto md:items-center md:text-center",
+                centerCopy && "xl:max-w-none",
+                referenceLayout && !lightSurface && HERO_REF_MOBILE_TEXT_SCRIM,
                 showKeywordMarquee && referenceLayout && "-translate-y-3 sm:-translate-y-4 md:-translate-y-5",
               )}
             >
@@ -666,10 +799,15 @@ export function ScrollExpandHero({
                   referenceLayout
                     ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
                     : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
+                  centerCopy && "md:items-center md:text-center",
                 )}
               >
                 {referenceLayout ? (
-                  <HeroReferenceHeadline />
+                  <HeroReferenceHeadline
+                    light={lightSurface}
+                    center={centerCopy}
+                    oneLine={centerCopy}
+                  />
                 ) : (
                   <>
                     <span className={heroLeadWordClass}>{firstWord}</span>
@@ -683,8 +821,13 @@ export function ScrollExpandHero({
 
               <p
                 className={cn(
-                  referenceLayout ? HERO_REF_INTRO_TYPE : HERO_INTRO_TYPE,
+                  referenceLayout
+                    ? lightSurface
+                      ? HERO_REF_INTRO_TYPE_LIGHT
+                      : HERO_REF_INTRO_TYPE
+                    : HERO_INTRO_TYPE,
                   "max-md:mx-auto",
+                  centerCopy && "md:mx-auto md:text-center",
                   referenceLayout && "mt-6 md:mt-7",
                 )}
               >
@@ -694,27 +837,43 @@ export function ScrollExpandHero({
               <div
                 className={cn(
                   "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                  centerCopy && "md:mx-auto md:justify-center",
                   referenceLayout && "mt-6 md:mt-7",
                 )}
               >
                 <Link
                   href={siteMeta.bookingUrl}
-                  className={heroPrimaryCtaClass}
+                  className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
                   {...bookingLinkExternalProps(siteMeta.bookingUrl)}
                 >
                   Begin your Journey
                 </Link>
-                <Link href={homeHeroSecondaryCta.href} className={heroSecondaryCtaClass}>
+                <Link
+                  href={homeHeroSecondaryCta.href}
+                  className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                >
                   {homeHeroSecondaryCta.label}
                 </Link>
               </div>
             </div>
+            ) : null}
           </div>
 
           {showKeywordMarquee ? (
             <div className="absolute bottom-0 left-0 right-0 z-[30] w-full max-w-none">
               <HeroKeywordMarquee variant={referenceLayout ? "cream" : "teal"} />
             </div>
+          ) : null}
+
+          {bottomSeam ? (
+            <div
+              className={cn(
+                "pointer-events-none absolute inset-x-0 bottom-0 z-[30] h-[min(26vh,12rem)]",
+                ARC_CREAM_BLUR_GRADIENT_BOTTOM,
+                ARC_CREAM_BLUR_MASK_BOTTOM,
+              )}
+              aria-hidden
+            />
           ) : null}
         </div>
       </section>

@@ -13,6 +13,7 @@ import { images } from "@/content/site";
 import { ArcNavDrawerMenu } from "@/components/arc/ArcNavDrawerMenu";
 import { ArcNavDrawerBookCta } from "@/components/arc/ArcNavDrawerBookCta";
 import { ArcNavDrawerTopBar } from "@/components/arc/ArcNavDrawerTopBar";
+import { ArcDesktopNav } from "@/components/arc/ArcDesktopNav";
 import { ARC_PRIMARY_NAV_LINKS, ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
 import { forwardWheelEventToLenis, getStableNativeScroll } from "@/lib/arcScrollMode";
 import { ARC_HEADER_CHROME_RESET_EVENT } from "@/lib/arcHeaderChromeRecovery";
@@ -1194,6 +1195,7 @@ export function ArcSiteHeader({
             aria-controls="arc-nav-overlay"
             className={cn(
               "pointer-events-auto relative z-30 col-start-2 row-start-1 flex min-h-[44px] min-w-[44px] shrink-0 touch-manipulation items-center justify-self-end gap-2.5 self-center rounded-full border border-white/40 bg-black/55 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-black/65 sm:gap-3 sm:bg-black/25 sm:px-5 sm:py-3 sm:text-sm sm:backdrop-blur-md md:px-6 md:py-3.5 md:text-base",
+              "xl:hidden",
             )}
           >
             {isMenuOpen ? "Close" : "Menu"}
@@ -1210,6 +1212,8 @@ export function ArcSiteHeader({
           </button>
         </div>
       </header>
+
+      <ArcDesktopNav />
     </div>
   );
 }

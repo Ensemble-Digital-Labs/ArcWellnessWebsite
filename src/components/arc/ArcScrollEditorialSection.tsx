@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import {
   ARC_EDITORIAL_BODY_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
@@ -40,11 +40,11 @@ function useVoobanImageReveal(imageWrapRef: React.RefObject<HTMLDivElement | nul
       const ctx = gsap.context(() => {
         gsap.fromTo(
           el,
-          { clipPath: "inset(12% 8% 12% 8%)", scale: 1.08, opacity: 0.6 },
+          { opacity: 0, y: 32, scale: 1.03 },
           {
-            clipPath: "inset(0% 0% 0% 0%)",
-            scale: 1,
             opacity: 1,
+            y: 0,
+            scale: 1,
             duration: 1.1,
             ease: ARC_VOOBAN_EASE,
             scrollTrigger: {
@@ -311,20 +311,15 @@ export function ArcScrollEditorialSection({
         <div
           ref={imageWrapRef}
           data-scroll-section
-          className={cn(
-            "group relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-sm shadow-[0_20px_48px_rgba(44,44,44,0.1)] md:max-w-md lg:max-w-lg",
-            imageHoverExpand &&
-              "transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_28px_64px_rgba(44,44,44,0.14)]",
-          )}
+          className="w-full shrink-0 md:max-w-md lg:max-w-lg"
         >
-          <Image
+          <ArcWindowFrame
             src={imageSrc}
             alt={imageAlt}
-            fill
-            className={cn(
-              "object-cover object-[42%_22%] transition-transform duration-700 ease-out",
-              imageHoverExpand && "group-hover:scale-[1.05]",
-            )}
+            feather
+            interactive={imageHoverExpand}
+            className="aspect-[4/5] w-full sm:aspect-[4/5]"
+            imageClassName="object-cover object-[42%_22%]"
             sizes="(min-width: 768px) 40vw, 100vw"
           />
         </div>

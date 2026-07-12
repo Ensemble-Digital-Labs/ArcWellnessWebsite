@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { CONCERN_PANELS, CONCERNS_SECTION_BG } from "@/content/concernsSection";
 import { homeConcerns } from "@/content/homeConcerns";
@@ -83,15 +84,13 @@ export function ArcConcernsPinnedSection({
                     key={panel.title}
                     className="group flex max-md:snap-center flex-col items-center text-center md:h-full md:min-h-0"
                   >
-                    <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl sm:aspect-[5/6] md:aspect-auto md:min-h-0 md:flex-1">
-                      <Image
-                        src={panel.image}
-                        alt=""
-                        fill
-                        sizes="(max-width: 768px) 72vw, 16vw"
-                        className="object-cover object-center transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
-                      />
-                    </div>
+                    <ArcWindowFrame
+                      src={panel.image}
+                      sizes="(max-width: 768px) 72vw, 16vw"
+                      archDepth={34}
+                      interactive
+                      className="aspect-[4/5] w-full sm:aspect-[5/6] md:aspect-auto md:min-h-0 md:flex-1"
+                    />
 
                     <div className="mt-3 flex w-full shrink-0 flex-col items-center sm:mt-3.5 md:mt-2.5">
                       <div

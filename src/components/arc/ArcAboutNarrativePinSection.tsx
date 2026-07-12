@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { ArcScrollRevealMask, ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
@@ -99,9 +99,6 @@ function useStorySideImageReveal(
   }, [enabled, imageRef]);
 }
 
-const storySideImageFrameClass =
-  "group relative overflow-hidden rounded-sm border border-arc-charcoal/8 bg-arc-cream-deep shadow-[0_20px_48px_rgba(44,44,44,0.1)] motion-reduce:opacity-100 sm:shadow-[0_24px_56px_rgba(44,44,44,0.12)]";
-
 function StorySideImage({
   src,
   alt,
@@ -118,20 +115,15 @@ function StorySideImage({
   objectClass: string;
 }) {
   return (
-    <div ref={imageRef} className={cn(storySideImageFrameClass, aspectClass, "w-full")}>
-      <Image
+    <div ref={imageRef} className={cn(aspectClass, "w-full motion-reduce:opacity-100")}>
+      <ArcWindowFrame
         src={src}
         alt={alt}
-        fill
-        className={cn(
-          "object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none",
-          objectClass,
-        )}
+        className="h-full w-full"
+        imageClassName={objectClass}
         sizes={sizes}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-arc-charcoal/12 via-transparent to-arc-cream/10"
-        aria-hidden
+        feather
+        interactive
       />
     </div>
   );
@@ -301,7 +293,7 @@ export function ArcAboutNarrativePinSection({
                 src={sideImageSrc}
                 alt={sideImageAlt}
                 imageRef={sideImageMobileRef}
-                aspectClass="aspect-[4/3] sm:aspect-[5/4]"
+                aspectClass="aspect-[3/4] sm:aspect-[4/5]"
                 sizes="(max-width: 1023px) 100vw, 0px"
                 objectClass="object-cover object-[50%_42%]"
               />

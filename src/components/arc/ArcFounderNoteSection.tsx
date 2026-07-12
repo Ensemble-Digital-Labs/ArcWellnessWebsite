@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import {
   ARC_EDITORIAL_BODY_CLASS,
@@ -8,6 +7,7 @@ import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
@@ -79,20 +79,14 @@ export function ArcFounderNoteSection({
           data-scroll-section
           className="relative min-h-[min(68dvh,520px)] w-full sm:min-h-[min(72dvh,560px)] lg:min-h-0 lg:h-full"
         >
-          <div className="absolute inset-0 overflow-hidden rounded-2xl shadow-[0_20px_48px_rgba(44,44,44,0.1)] sm:rounded-3xl lg:rounded-2xl lg:shadow-[0_24px_56px_rgba(44,44,44,0.12)]">
-            <Image
-              src={imageSrc}
-              alt={imageAlt}
-              fill
-              loading="lazy"
-              className="object-cover object-[50%_18%]"
-              sizes="(min-width: 1024px) 55vw, 100vw"
-            />
-            <div
-              className="pointer-events-none absolute inset-0 hidden rounded-2xl lg:block lg:rounded-2xl lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-arc-cream/20"
-              aria-hidden
-            />
-          </div>
+          <ArcWindowFrame
+            src={imageSrc}
+            alt={imageAlt}
+            feather
+            className="absolute inset-0 h-full w-full"
+            imageClassName="object-cover object-[50%_18%]"
+            sizes="(min-width: 1024px) 55vw, 100vw"
+          />
         </div>
 
         <div
