@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PATH_SECTION_INTRO_BACKGROUND_SRC } from "@/content/backgroundDecoration";
+import {
+  ABOUT_HERO_COPY_AMBIENT_IMAGES,
+  INSIGHTS_FEED_AMBIENT_SRC,
+  PATH_SECTION_INTRO_BACKGROUND_SRC,
+} from "@/content/backgroundDecoration";
 import { images } from "@/content/site";
 
 /**
@@ -23,6 +27,23 @@ const PRELOAD_SRCS: readonly string[] = [
   images.founderPortrait,
 ];
 
+/**
+ * Full-bleed hero plates served through next/image on inner pages. Nearly every
+ * marketing page hero (Contact, Programs, Financing, Aesthetics, Treatments,
+ * treatment detail) shares the same marble plate, so warming these one time
+ * makes those heroes paint instantly on the first navigation.
+ *
+ * These are warmed via the exact `/_next/image` variant (not the raw file) so the
+ * cached URL matches what the destination pages actually request.
+ */
+const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
+  ABOUT_HERO_COPY_AMBIENT_IMAGES[0]!,
+  INSIGHTS_FEED_AMBIENT_SRC,
+];
+
+/** Next.js default `deviceSizes` — used to pick the same width next/image would for `sizes="100vw"`. */
+const NEXT_DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840] as const;
+
 /** Minimum on-screen time so the brand moment never feels like a flicker. */
 const MIN_HOLD_MS = 1400;
 /** Hard cap so a slow/failed asset never keeps the splash up. */
@@ -37,6 +58,43 @@ function preloadImage(src: string): Promise<void> {
     img.onerror = () => resolve();
     img.src = src;
   });
+}
+
+/** Build the optimized URL next/image requests for a full-bleed `sizes="100vw"` plate on this screen. */
+function nextImageVariantUrl(src: string, quality = 75): string {
+  const target = Math.ceil(window.innerWidth * (window.devicePixelRatio || 1));
+  const width =
+    NEXT_DEVICE_SIZES.find((w) => w >= target) ??
+    NEXT_DEVICE_SIZES[NEXT_DEVICE_SIZES.length - 1];
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+}
+
+/**
+ * Warm shared inner-page hero plates in the background (idle, non-blocking) so
+ * navigation from the homepage lands on an already-cached hero. Skipped on
+ * Save-Data connections.
+ */
+function warmInnerPageHeroAssets() {
+  const connection = (
+    navigator as Navigator & { connection?: { saveData?: boolean } }
+  ).connection;
+  if (connection?.saveData) return;
+
+  const warm = () => {
+    for (const src of WARM_OPTIMIZED_HERO_SRCS) {
+      const img = new window.Image();
+      img.decoding = "async";
+      img.src = nextImageVariantUrl(src);
+    }
+  };
+
+  const idle = (
+    window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+    }
+  ).requestIdleCallback;
+  if (idle) idle(warm, { timeout: 2500 });
+  else window.setTimeout(warm, 600);
 }
 
 export function ArcSitePreloader() {
@@ -55,6 +113,9 @@ export function ArcSitePreloader() {
     let exitTimer: ReturnType<typeof setTimeout> | undefined;
     let removeTimer: ReturnType<typeof setTimeout> | undefined;
     const startedAt = performance.now();
+
+    // Warm shared inner-page hero plates in the background — never gates the splash.
+    warmInnerPageHeroAssets();
 
     const assetsReady = Promise.all(PRELOAD_SRCS.map(preloadImage));
     const maxWait = new Promise<void>((resolve) => setTimeout(resolve, MAX_WAIT_MS));
