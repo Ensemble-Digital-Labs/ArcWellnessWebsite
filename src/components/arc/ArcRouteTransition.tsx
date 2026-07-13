@@ -38,7 +38,7 @@ export function ArcRouteTransition({ children }: ArcRouteTransitionProps) {
   const [curtainVisible, setCurtainVisible] = useState(false);
   const coverStartedAt = useRef(0);
   const isFirstPath = useRef(true);
-  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealTimer = useRef<number | null>(null);
 
   const clearRevealTimer = () => {
     if (revealTimer.current) {
