@@ -31,7 +31,8 @@ const PRELOAD_SRCS: readonly string[] = [
  * Full-bleed hero plates served through next/image on inner pages. Nearly every
  * marketing page hero (Contact, Programs, Financing, Aesthetics, Treatments,
  * treatment detail) shares the same marble plate, so warming these one time
- * makes those heroes paint instantly on the first navigation.
+ * makes those heroes paint instantly on the first navigation. Also warms
+ * `images.heroMedia` for the About page hero (`ScrollExpandHero`).
  *
  * These are warmed via the exact `/_next/image` variant (not the raw file) so the
  * cached URL matches what the destination pages actually request.
@@ -39,6 +40,7 @@ const PRELOAD_SRCS: readonly string[] = [
 const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
   ABOUT_HERO_COPY_AMBIENT_IMAGES[0]!,
   INSIGHTS_FEED_AMBIENT_SRC,
+  images.heroMedia,
 ];
 
 /** Next.js default `deviceSizes` — used to pick the same width next/image would for `sizes="100vw"`. */
