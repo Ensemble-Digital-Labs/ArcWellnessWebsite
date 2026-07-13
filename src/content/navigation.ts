@@ -42,6 +42,9 @@ export const ARC_NAV_BOOK_CTA = {
   href: siteMeta.bookingUrl,
 } as const;
 
+/** Simple homepage link — desktop bar + mobile drawer (not in mega-menu IA columns). */
+export const ARC_NAV_HOME_ITEM: NavTopItem = { id: "home", label: "Home", href: "/" };
+
 const treatmentHrefByLabel = Object.fromEntries(
   ARC_TREATMENT_NAV_LINKS.map((t) => [t.label, t.href]),
 ) as Record<string, string>;

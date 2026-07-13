@@ -4,7 +4,7 @@
  */
 
 /** Bump when panel art changes, busts browser + `next/image` optimizer cache. */
-export const CONCERNS_ASSETS_VERSION = "20260706-webp";
+export const CONCERNS_ASSETS_VERSION = "20260713-webp";
 
 function concernsAssetPath(path: string): string {
   return `${path}?v=${CONCERNS_ASSETS_VERSION}`;

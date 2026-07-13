@@ -89,7 +89,7 @@ export function ArcConcernsPinnedSection({
                       sizes="(max-width: 768px) 72vw, 16vw"
                       archDepth={34}
                       interactive
-                      className="aspect-[4/5] w-full sm:aspect-[5/6] md:aspect-auto md:min-h-0 md:flex-1"
+                      className="aspect-[4/5] w-full border border-arc-teal/35 sm:aspect-[5/6] md:aspect-auto md:min-h-0 md:flex-1"
                     />
 
                     <div className="mt-3 flex w-full shrink-0 flex-col items-center sm:mt-3.5 md:mt-2.5">

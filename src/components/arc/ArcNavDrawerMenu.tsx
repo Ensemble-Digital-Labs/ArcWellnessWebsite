@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import {
+  ARC_NAV_HOME_ITEM,
   ARC_NAV_TOP_ITEMS,
   type NavColumn,
   type NavLeaf,
@@ -28,6 +29,7 @@ const DRAWER_META: Record<
   string,
   { shape: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8"; previewSrc: string }
 > = {
+  home: { shape: "1", previewSrc: CLINIC_INTERIOR_IMAGES.heroReceptionInterior },
   about: { shape: "1", previewSrc: CLINIC_INTERIOR_IMAGES.receptionBacklitLogoWall },
   services: { shape: "2", previewSrc: NAV_PREVIEW.facialAesthetic },
   conditions: { shape: "3", previewSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment },
@@ -37,6 +39,8 @@ const DRAWER_META: Record<
   shop: { shape: "7", previewSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay },
   contact: { shape: "8", previewSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts },
 };
+
+const DRAWER_NAV_ITEMS: readonly NavTopItem[] = [ARC_NAV_HOME_ITEM, ...ARC_NAV_TOP_ITEMS];
 
 const TOP_ROW_CLASS =
   "group relative flex w-full min-h-[52px] touch-manipulation items-center justify-between gap-4 overflow-visible border-b py-3 font-serif text-3xl font-semibold tracking-tight transition-colors duration-300 sm:min-h-[56px] sm:py-4 sm:text-4xl";
@@ -472,7 +476,7 @@ export function ArcNavDrawerMenu({
 }: DrawerMenuProps) {
   return (
     <ul className="flex flex-col gap-2 pt-4 sm:pt-6">
-      {ARC_NAV_TOP_ITEMS.map((item, index) => (
+      {DRAWER_NAV_ITEMS.map((item, index) => (
         <DrawerNavItem
           key={item.id}
           item={item}

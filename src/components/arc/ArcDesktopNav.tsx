@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import {
+  ARC_NAV_HOME_ITEM,
   ARC_NAV_TOP_ITEMS,
   ARC_NAV_BOOK_CTA,
   navItemHasPanel,
@@ -19,9 +20,7 @@ import { getStableNativeScroll } from "@/lib/arcScrollMode";
 import { cn } from "@/lib/utils";
 import type Lenis from "lenis";
 
-/** Horizontal-bar-only Home tab (not in the shared IA / mobile drawer). */
-const HOME_NAV_ITEM: NavTopItem = { id: "home", label: "Home", href: "/" };
-const DESKTOP_NAV_ITEMS: readonly NavTopItem[] = [HOME_NAV_ITEM, ...ARC_NAV_TOP_ITEMS];
+const DESKTOP_NAV_ITEMS: readonly NavTopItem[] = [ARC_NAV_HOME_ITEM, ...ARC_NAV_TOP_ITEMS];
 
 /** Always show the nav while scroll is within this distance from the top. */
 const NAV_TOP_PIN_Y = 48;

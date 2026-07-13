@@ -1,12 +1,12 @@
 {
   "meta": {
-    "sourceFile": "ARC_Wellness_Website_Review.xlsx",
-    "sourcePath": "C:\\Users\\Chinh Mach\\Downloads\\Arc Wellness Website\\ARC_Wellness_Website_Review.xlsx",
+    "sourceFile": "ARC_Wellness_Website_Review (added column).xlsx",
+    "sourcePath": "C:\\Users\\Chinh Mach\\Downloads\\Arc Wellness Website\\ARC_Wellness_Website_Review (added column).xlsx",
     "importedAt": "2026-07-07T03:13:43.424Z",
-    "updatedAt": "2026-07-12T07:12:39.825Z",
+    "updatedAt": "2026-07-12T14:39:25.024Z",
     "sheetCount": 12,
     "sectionCount": 161,
-    "lastExportedAt": "2026-07-12T07:12:39.825Z"
+    "lastExportedAt": "2026-07-12T14:39:25.024Z"
   },
   "pages": [
     {
@@ -24,7 +24,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Hero background → arc_wellness_mint_wall_hero_HD_4K_web.webp\n• All headline words cream on mint wall\n• Keyword marquee kept with cream bar\n• Concerns section top border for handoff from hero\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Hero background → arc_wellness_mint_wall_hero_HD_4K_web.webp\n• All headline words cream on mint wall\n• Keyword marquee kept with cream bar\n• Concerns section top border for handoff from hero\n• Jul 12 2026 (pm): Site-wide emphasis script → Radley italic (toggle from Birthstone via layout.tsx; font-size-adjust normalizes sizing)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/app/layout.tsx\nsrc/app/globals.css",
           "implementationBlocked": "•"
         },
         {
@@ -36,7 +36,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Title → \"Because every story is different.\" + intro\n• Six aspiration cards with client photography (WebP)\n• Title + tagline below each card with separator line\n• Cards not interactive\n• USP bar moved to after Wellness section\n• GSAP pin removed — section scrolls naturally with page\n• Full-viewport band restored; bottom spacer before Wellness (marble bg continues)\n• Soft cream bottom seam into Wellness intro (ArcSectionSeamBlend)\n\nBLOCKED:\n• ",
+          "implementationNotes": "CHANGED:\n• Title → \"Because every story is different.\" + intro\n• Six aspiration cards with client photography (WebP)\n• Title + tagline below each card with separator line\n• Cards not interactive\n• USP bar moved to after Wellness section\n• GSAP pin removed — section scrolls naturally with page\n• Full-viewport band restored; bottom spacer before Wellness (marble bg continues)\n• Soft cream bottom seam into Wellness intro (ArcSectionSeamBlend)\n• Jul 12 2026 (pm): Concern aspiration cards — equal tagline min-height on desktop so arch images stay aligned when copy wraps to 3 lines (e.g. Wake refreshed.)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcConcernsPinnedSection.tsx",
           "implementationBlocked": "•"
         },
         {
@@ -96,7 +96,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Deferred",
-          "implementationNotes": "CHANGED:\n• Quotes and bubble UI unchanged per client\n• Soft cream top seam from Path steps; bottom seam into Invest\n\nBLOCKED:\n• Real clinic / service photography for sphere tiles",
+          "implementationNotes": "CHANGED:\n• Quotes and bubble UI unchanged per client\n• Soft cream top seam from Path steps; bottom seam into Invest\n• Jul 12 2026 (pm): Desktop carousel — compact active card at short viewport heights so long quotes no longer crowd the Testimonials heading\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• Real clinic / service photography for sphere tiles\n\nFILES:\nsrc/components/arc/ArcTestimonialsSection.tsx",
           "implementationBlocked": "• Real clinic / service photography for sphere tiles"
         },
         {
@@ -108,7 +108,7 @@
           "status": "Needs Changes",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Split layout — copy left, sign-off right, center photo visible\n• Headline: hero-style Birthstone script, one phrase per line (Invest in You. / Live Fully. / Age Intentionally.)\n• Single outlined CTA \"Reserve your Consultation\" → /book\n• Sign-off: \"We look forward to meeting you\" + \"— Dr. Jabbar\" (Birthstone placeholder)\n• Mobile dark panel for readability; side vignettes on desktop; same hero background image\n• Refresh scroll guard — page lands at hero on reload\n• Soft cream top seam from Testimonials (stronger downward feather: 88% / 28% mask)\n\nBLOCKED:\n• Approved handwritten Dr. Jabbar sign-off image (replace script placeholder)\n• Wall color fine-tune if hero asset still differs from true clinic mint",
+          "implementationNotes": "CHANGED:\n• Split layout — copy left, sign-off right, center photo visible\n• Headline: hero-style Birthstone script, one phrase per line (Invest in You. / Live Fully. / Age Intentionally.)\n• Single outlined CTA \"Reserve your Consultation\" → /book\n• Sign-off: \"We look forward to meeting you\" + \"— Dr. Jabbar\" (Birthstone placeholder)\n• Mobile dark panel for readability; side vignettes on desktop; same hero background image\n• Refresh scroll guard — page lands at hero on reload\n• Soft cream top seam from Testimonials (stronger downward feather: 88% / 28% mask)\n• Jul 12 2026 (pm): Invest sign-off preamble whitespace-nowrap on desktop — restores clean two-line layout (We look forward… / Dr. Jabbar) with Radley italic\n• Jul 12 2026 (pm): Headline + sign-off use Radley italic emphasis font (was Birthstone script)\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• Approved handwritten Dr. Jabbar sign-off image (replace script placeholder)\n• Wall color fine-tune if hero asset still differs from true clinic mint\n\nFILES:\nsrc/components/arc/investCtaShared.tsx",
           "implementationBlocked": "• Approved handwritten Dr. Jabbar sign-off image (replace script placeholder)\n• Wall color fine-tune if hero asset still differs from true clinic mint"
         },
         {
@@ -511,7 +511,7 @@
           "status": "Not Reviewed",
           "priority": "",
           "implementationStatus": "Done",
-          "implementationNotes": "CHANGED:\n• Soft handoff under INSIGHTS masthead — marble ambient plate fades to white grid (background layer)\n• Removed header border hairline; light top feather on white feed band\n\nBLOCKED:\n• "
+          "implementationNotes": "CHANGED:\n• Soft handoff under INSIGHTS masthead — marble ambient plate fades to white grid (background layer)\n• Removed header border hairline; light top feather on white feed band\n• Jul 12 2026 (pm): Blog / case-study feed cards → brand arch window frame (ArcWindowFrame); hover View badge + scrim preserved\n\nNOT CHANGED:\n• \n\nBLOCKED:\n• \n\nFILES:\nsrc/components/arc/ArcInsightsFeedSection.tsx"
         },
         {
           "id": "row-16",
