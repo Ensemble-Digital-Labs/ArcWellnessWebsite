@@ -35,6 +35,7 @@ export function ArcMarketingChapterHero({
       copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
       heroCanvasTiles={splitCenterHeroTiles(heroCanvasTiles)}
       bottomSeam={bottomSeam}
+      priorityBackground
     />
   );
 }

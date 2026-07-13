@@ -511,8 +511,11 @@ function useArcHeroCopyRevealReady(enabled: boolean) {
     setReady(false);
     const html = document.documentElement;
 
+    // Unlock as soon as the preloader begins its exit fade ("exiting") rather
+    // than waiting for it to be fully removed — so the hero copy reveals in sync
+    // with the background instead of lagging ~900ms behind it.
     const unlock = () => {
-      if (!html.getAttribute("data-arc-intro")) setReady(true);
+      if (html.getAttribute("data-arc-intro") !== "active") setReady(true);
     };
 
     unlock();

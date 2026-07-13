@@ -79,6 +79,11 @@ type ScrollChapterIntroSectionProps = {
   /** Soft cream feather at section bottom (About page seams). */
   bottomSeam?: boolean;
   /**
+   * Eager-load the first background plate (above-the-fold page heroes) so it
+   * paints immediately on navigation instead of lazy-loading after ~1s.
+   */
+  priorityBackground?: boolean;
+  /**
    * `left` (default), copy column on the left with the image canvas on the right.
    * `center`, headline centered with the canvas full-bleed behind, flanking both sides
    * (ambient-full layout only; use placement tiles positioned left/right).
@@ -113,6 +118,7 @@ export function ScrollChapterIntroSection({
   headlineEmphasisTone,
   bottomSeam = false,
   heroAlign = "left",
+  priorityBackground = false,
 }: ScrollChapterIntroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
@@ -300,6 +306,7 @@ export function ScrollChapterIntroSection({
               unoptimized
               className="object-cover object-center"
               sizes="100vw"
+              priority={priorityBackground && index === 0}
               style={{ opacity: ambientLayerOpacity(index) }}
             />
           ))}
@@ -327,6 +334,7 @@ export function ScrollChapterIntroSection({
                 fill
                 className={cn("object-cover", bgObjectPosition)}
                 sizes="100vw"
+                priority={priorityBackground}
               />
             </div>
           </div>
@@ -418,6 +426,7 @@ export function ScrollChapterIntroSection({
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 34rem"
+                  priority={priorityBackground && index === 0}
                   style={{ opacity: ambientLayerOpacity(index) }}
                 />
               ))}
