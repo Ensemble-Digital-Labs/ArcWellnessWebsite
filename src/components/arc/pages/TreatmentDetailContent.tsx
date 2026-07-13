@@ -40,6 +40,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
         heroCanvasTiles={buildTreatmentHeroCanvasTiles(treatment)}
         bottomSeam
+        priorityBackground
       />
 
       <ArcAboutNarrativePinSection

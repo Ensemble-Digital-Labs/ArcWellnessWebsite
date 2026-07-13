@@ -369,7 +369,6 @@ export function ArcInsightsFeedSection({
             src={INSIGHTS_FEED_AMBIENT_SRC}
             alt=""
             fill
-            unoptimized
             className="object-cover object-center"
             sizes="100vw"
             priority

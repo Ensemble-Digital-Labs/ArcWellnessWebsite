@@ -27,6 +27,7 @@ export function TreatmentsPageContent() {
         copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
         heroCanvasTiles={splitCenterHeroTiles(TREATMENTS_HERO_CANVAS_TILES)}
         bottomSeam
+        priorityBackground
       />
 
       <ArcTreatmentsRuledGrid

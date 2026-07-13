@@ -35,6 +35,7 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
         ctaHref={siteMeta.bookingUrl}
         ctaLabel="Book a consultation"
         bottomSeam
+        priorityBackground
       />
 
       <section
