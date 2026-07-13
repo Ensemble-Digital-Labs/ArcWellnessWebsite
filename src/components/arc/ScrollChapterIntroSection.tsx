@@ -32,6 +32,10 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Tiny blur of the marble page-hero plate — shows instantly so the hero never flashes blank on navigation. */
+const HERO_PLATE_BLUR_DATA_URL =
+  "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAQCdASoMAAcAA4BaJYwAAugwP91QAP7x0JalUQRVNL2lx639vfseEAA=";
+
 export type ScrollChapterFloatingMedia = {
   src: string;
   alt: string;
@@ -297,19 +301,28 @@ export function ScrollChapterIntroSection({
 
       {ambientFullBleed && ambientCount > 0 ? (
         <div className="pointer-events-none absolute inset-0" aria-hidden>
-          {copyColumnAmbients!.map((src, index) => (
-            <Image
-              key={src}
-              src={src}
-              alt=""
-              fill
-              unoptimized
-              className="object-cover object-center"
-              sizes="100vw"
-              priority={priorityBackground && index === 0}
-              style={{ opacity: ambientLayerOpacity(index) }}
-            />
-          ))}
+          {copyColumnAmbients!.map((src, index) => {
+            // The above-the-fold page-hero plate is heavy (~700KB raw); let Next
+            // serve an optimized, viewport-sized AVIF/WebP so it loads fast on
+            // navigation. Non-priority decorative plates stay unoptimized (crisp
+            // marble texture, no recompression).
+            const optimizePlate = priorityBackground && index === 0;
+            return (
+              <Image
+                key={src}
+                src={src}
+                alt=""
+                fill
+                unoptimized={!optimizePlate}
+                className="object-cover object-center"
+                sizes="100vw"
+                priority={optimizePlate}
+                placeholder={optimizePlate ? "blur" : undefined}
+                blurDataURL={optimizePlate ? HERO_PLATE_BLUR_DATA_URL : undefined}
+                style={{ opacity: ambientLayerOpacity(index) }}
+              />
+            );
+          })}
           {bottomSeam ? (
             <div
               className="absolute inset-x-0 bottom-0 z-[1] h-[min(30vh,13rem)] bg-gradient-to-t from-arc-cream from-20% via-arc-cream/92 via-45% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_55%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_55%,transparent_100%)]"
