@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, type RefObject, type ReactNode } from "rea
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
 import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS } from "@/lib/arc-layout";
 import {
   servicesShowcaseFragmentShader,
@@ -173,13 +174,19 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         ))}
       </div>
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2 className={SHOWCASE_HEADLINE_CLASS}>
-          Whole-Body Care. Inside and Out.
-        </h2>
+        <ArcTextReveal variant="heading">
+          <h2 className={SHOWCASE_HEADLINE_CLASS}>
+            Whole-Body Care. Inside and Out.
+          </h2>
+        </ArcTextReveal>
         <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
           <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
-            <h3 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h3>
-            <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
+            <ArcTextReveal variant="line" delayIndex={1}>
+              <h3 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h3>
+            </ArcTextReveal>
+            <ArcTextReveal variant="body" delayIndex={2}>
+              <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
+            </ArcTextReveal>
           </div>
         </div>
       </div>
@@ -944,9 +951,11 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       </div>
 
       <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <h2 className={SHOWCASE_HEADLINE_CLASS}>
-          Whole-Body Care. Inside and Out.
-        </h2>
+        <ArcTextReveal variant="heading">
+          <h2 className={SHOWCASE_HEADLINE_CLASS}>
+            Whole-Body Care. Inside and Out.
+          </h2>
+        </ArcTextReveal>
         <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
           <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
             <h3

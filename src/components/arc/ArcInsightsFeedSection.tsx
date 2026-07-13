@@ -21,6 +21,7 @@ import {
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 
 type InsightFilter = "all" | InsightKind;
@@ -387,16 +388,20 @@ export function ArcInsightsFeedSection({
         >
           <div className="mx-auto w-full max-w-[min(100%,1440px)]">
             <header className="pb-10 text-center sm:pb-12 md:pb-14">
-              <h1
-                ref={mastheadTitleRef}
-                id="insights-masthead-title"
-                className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-arc-charcoal"
-              >
-                {feed.masthead}
-              </h1>
-              <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base md:mt-6">
-                {feed.subtitle}
-              </p>
+              <ArcTextReveal variant="heading" trigger="mount" when>
+                <h1
+                  ref={mastheadTitleRef}
+                  id="insights-masthead-title"
+                  className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-arc-charcoal"
+                >
+                  {feed.masthead}
+                </h1>
+              </ArcTextReveal>
+              <ArcTextReveal variant="body" delayIndex={1} trigger="mount" when>
+                <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base md:mt-6">
+                  {feed.subtitle}
+                </p>
+              </ArcTextReveal>
             </header>
           </div>
         </div>

@@ -19,6 +19,7 @@ import {
 } from "@/components/arc/TitleEmphasis";
 import type { TreatmentPage } from "@/content/pages/treatments";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -147,7 +148,7 @@ function TreatmentInteractiveRow({
   };
 
   return (
-    <li data-scroll-section className="border-b border-arc-charcoal/12">
+    <li className="border-b border-arc-charcoal/12">
       <Link
         href={`/treatments/${treatment.slug}`}
         onMouseEnter={() => showInteractivePreview && setHovered(true)}
@@ -352,35 +353,36 @@ export function ArcTreatmentsRuledGrid({
       ) : null}
       <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
         <div className="min-w-0 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-10 xl:grid-cols-[minmax(0,38rem)_minmax(0,1fr)] xl:gap-16">
-          <header
-            data-scroll-section
-            className="mb-10 min-w-0 lg:sticky lg:top-28 lg:mb-0 lg:max-w-[38rem] lg:pt-2 xl:top-32"
-          >
-            <div className="pb-[0.12em] pl-[0.06em]">
-              <h2
-                className={cn(
-                  "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] text-arc-charcoal sm:flex-nowrap",
-                  ARC_STACKED_HEADLINE_SERIF_CLASS,
-                )}
-              >
-                <TitleEmphasis
-                  className={cn(emphasisClass, "shrink-0 leading-none")}
+          <header className="mb-10 min-w-0 lg:sticky lg:top-28 lg:mb-0 lg:max-w-[38rem] lg:pt-2 xl:top-32">
+            <ArcTextReveal variant="heading">
+              <div className="pb-[0.12em] pl-[0.06em]">
+                <h2
+                  className={cn(
+                    "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] text-arc-charcoal sm:flex-nowrap",
+                    ARC_STACKED_HEADLINE_SERIF_CLASS,
+                  )}
                 >
-                  {title}
-                </TitleEmphasis>
-                {titleEmphasis ? (
                   <TitleEmphasis
                     className={cn(emphasisClass, "shrink-0 leading-none")}
                   >
-                    {titleEmphasis}
+                    {title}
                   </TitleEmphasis>
-                ) : null}
-              </h2>
-            </div>
+                  {titleEmphasis ? (
+                    <TitleEmphasis
+                      className={cn(emphasisClass, "shrink-0 leading-none")}
+                    >
+                      {titleEmphasis}
+                    </TitleEmphasis>
+                  ) : null}
+                </h2>
+              </div>
+            </ArcTextReveal>
             {subtitle ? (
-              <p className={cn("mt-8 min-w-0 sm:mt-10", ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/90")}>
-                {subtitle}
-              </p>
+              <ArcTextReveal variant="body" delayIndex={1}>
+                <p className={cn("mt-8 min-w-0 sm:mt-10", ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/90")}>
+                  {subtitle}
+                </p>
+              </ArcTextReveal>
             ) : null}
           </header>
 

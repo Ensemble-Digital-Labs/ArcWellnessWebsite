@@ -17,6 +17,7 @@ import {
 import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
 import { resizeArcScrollViewport } from "@/lib/arcScrollLayoutRefresh";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { homeHeroSecondaryCta } from "@/content/homepage";
 import { siteMeta } from "@/content/siteMeta";
 import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
@@ -491,11 +492,43 @@ type ScrollExpandHeroProps = {
   centerCopy?: boolean;
   /** Match client reference mockup, cream script, left stack, light overlay. */
   referenceLayout?: boolean;
+  /** Staggered mount-time copy reveal (homepage hero — syncs with intro preloader). */
+  copyReveal?: boolean;
 };
 
 /**
  * Hero expand animation driven by scroll progress inside the pinned block (ensemble / Locomotive model).
  */
+function useArcHeroCopyRevealReady(enabled: boolean) {
+  const [ready, setReady] = useState(!enabled);
+
+  useEffect(() => {
+    if (!enabled) {
+      setReady(true);
+      return;
+    }
+
+    setReady(false);
+    const html = document.documentElement;
+
+    const unlock = () => {
+      if (!html.getAttribute("data-arc-intro")) setReady(true);
+    };
+
+    unlock();
+    const observer = new MutationObserver(unlock);
+    observer.observe(html, { attributes: true, attributeFilter: ["data-arc-intro"] });
+    const fallback = window.setTimeout(unlock, 5500);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, [enabled]);
+
+  return ready;
+}
+
 export function ScrollExpandHero({
   bgImageSrc,
   title,
@@ -511,8 +544,10 @@ export function ScrollExpandHero({
   lightSurface = false,
   centerCopy = false,
   referenceLayout = false,
+  copyReveal = false,
 }: ScrollExpandHeroProps) {
   const [reduceMotion, setReduceMotion] = useState(false);
+  const copyRevealReady = useArcHeroCopyRevealReady(copyReveal);
 
   const heroRef = useRef<HTMLElement | null>(null);
   const heroBgRef = useRef<HTMLDivElement | null>(null);
@@ -733,25 +768,29 @@ export function ScrollExpandHero({
                 )}
               >
                 {overlayEyebrow ? (
-                  <span
+                  <ArcTextReveal variant="body" trigger="mount" when>
+                    <span
+                      className={cn(
+                        "mb-3 block font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-cream/90 sm:text-sm",
+                        HERO_REF_CONNECTOR_SHADOW,
+                      )}
+                    >
+                      {overlayEyebrow}
+                    </span>
+                  </ArcTextReveal>
+                ) : null}
+                <ArcTextReveal variant="heading" delayIndex={overlayEyebrow ? 1 : 0} trigger="mount" when>
+                  <TitleEmphasis
                     className={cn(
-                      "mb-3 block font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-cream/90 sm:text-sm",
+                      "block font-title-emphasis font-normal not-italic leading-[0.95] tracking-tight text-arc-cream",
+                      "text-[clamp(4.5rem,17vw,12rem)]",
+                      HERO_REF_LINE_ALIGN,
                       HERO_REF_CONNECTOR_SHADOW,
                     )}
                   >
-                    {overlayEyebrow}
-                  </span>
-                ) : null}
-                <TitleEmphasis
-                  className={cn(
-                    "block font-title-emphasis font-normal not-italic leading-[0.95] tracking-tight text-arc-cream",
-                    "text-[clamp(4.5rem,17vw,12rem)]",
-                    HERO_REF_LINE_ALIGN,
-                    HERO_REF_CONNECTOR_SHADOW,
-                  )}
-                >
-                  {overlayHeading}
-                </TitleEmphasis>
+                    {overlayHeading}
+                  </TitleEmphasis>
+                </ArcTextReveal>
               </div>
             </div>
           ) : null}
@@ -793,68 +832,158 @@ export function ScrollExpandHero({
                 showKeywordMarquee && referenceLayout && "-translate-y-3 sm:-translate-y-4 md:-translate-y-5",
               )}
             >
-              <motion.h1
-                className={cn(
-                  "pointer-events-auto m-0 flex w-full min-w-0 max-w-full flex-col",
-                  referenceLayout
-                    ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
-                    : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
-                  centerCopy && "md:items-center md:text-center",
-                )}
-              >
-                {referenceLayout ? (
-                  <HeroReferenceHeadline
-                    light={lightSurface}
-                    center={centerCopy}
-                    oneLine={centerCopy}
-                  />
-                ) : (
-                  <>
-                    <span className={heroLeadWordClass}>{firstWord}</span>
-                    <HeroKeywordOneLine>{restWithEmphasis}</HeroKeywordOneLine>
-                    {restClosing ? (
-                      <span className={heroTitleClosingLineClass}>{restClosing}</span>
-                    ) : null}
-                  </>
-                )}
-              </motion.h1>
-
-              <p
-                className={cn(
-                  referenceLayout
-                    ? lightSurface
-                      ? HERO_REF_INTRO_TYPE_LIGHT
-                      : HERO_REF_INTRO_TYPE
-                    : HERO_INTRO_TYPE,
-                  "max-md:mx-auto",
-                  centerCopy && "md:mx-auto md:text-center",
-                  referenceLayout && "mt-6 md:mt-7",
-                )}
-              >
-                {intro}
-              </p>
-
-              <div
-                className={cn(
-                  "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
-                  centerCopy && "md:mx-auto md:justify-center",
-                  referenceLayout && "mt-6 md:mt-7",
-                )}
-              >
-                <Link
-                  href={siteMeta.bookingUrl}
-                  className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
-                  {...bookingLinkExternalProps(siteMeta.bookingUrl)}
+              {copyReveal ? (
+                <ArcTextReveal
+                  variant="heading"
+                  trigger="mount"
+                  when={copyRevealReady}
+                  delayIndex={0}
                 >
-                  Begin your Journey
-                </Link>
-                <Link
-                  href={homeHeroSecondaryCta.href}
-                  className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                  <h1
+                    className={cn(
+                      "pointer-events-auto m-0 flex w-full min-w-0 max-w-full flex-col",
+                      referenceLayout
+                        ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
+                        : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
+                      centerCopy && "md:items-center md:text-center",
+                    )}
+                  >
+                    {referenceLayout ? (
+                      <HeroReferenceHeadline
+                        light={lightSurface}
+                        center={centerCopy}
+                        oneLine={centerCopy}
+                      />
+                    ) : (
+                      <>
+                        <span className={heroLeadWordClass}>{firstWord}</span>
+                        <HeroKeywordOneLine>{restWithEmphasis}</HeroKeywordOneLine>
+                        {restClosing ? (
+                          <span className={heroTitleClosingLineClass}>{restClosing}</span>
+                        ) : null}
+                      </>
+                    )}
+                  </h1>
+                </ArcTextReveal>
+              ) : (
+                <motion.h1
+                  className={cn(
+                    "pointer-events-auto m-0 flex w-full min-w-0 max-w-full flex-col",
+                    referenceLayout
+                      ? "items-center gap-0 text-center leading-none md:items-start md:text-left"
+                      : "items-center gap-1 text-center sm:gap-1.5 md:items-start md:gap-2 md:text-left",
+                    centerCopy && "md:items-center md:text-center",
+                  )}
                 >
-                  {homeHeroSecondaryCta.label}
-                </Link>
-              </div>
+                  {referenceLayout ? (
+                    <HeroReferenceHeadline
+                      light={lightSurface}
+                      center={centerCopy}
+                      oneLine={centerCopy}
+                    />
+                  ) : (
+                    <>
+                      <span className={heroLeadWordClass}>{firstWord}</span>
+                      <HeroKeywordOneLine>{restWithEmphasis}</HeroKeywordOneLine>
+                      {restClosing ? (
+                        <span className={heroTitleClosingLineClass}>{restClosing}</span>
+                      ) : null}
+                    </>
+                  )}
+                </motion.h1>
+              )}
+
+              {copyReveal ? (
+                <ArcTextReveal
+                  variant="body"
+                  trigger="mount"
+                  when={copyRevealReady}
+                  delayIndex={1}
+                >
+                  <p
+                    className={cn(
+                      referenceLayout
+                        ? lightSurface
+                          ? HERO_REF_INTRO_TYPE_LIGHT
+                          : HERO_REF_INTRO_TYPE
+                        : HERO_INTRO_TYPE,
+                      "max-md:mx-auto",
+                      centerCopy && "md:mx-auto md:text-center",
+                      referenceLayout && "mt-6 md:mt-7",
+                    )}
+                  >
+                    {intro}
+                  </p>
+                </ArcTextReveal>
+              ) : (
+                <p
+                  className={cn(
+                    referenceLayout
+                      ? lightSurface
+                        ? HERO_REF_INTRO_TYPE_LIGHT
+                        : HERO_REF_INTRO_TYPE
+                      : HERO_INTRO_TYPE,
+                    "max-md:mx-auto",
+                    centerCopy && "md:mx-auto md:text-center",
+                    referenceLayout && "mt-6 md:mt-7",
+                  )}
+                >
+                  {intro}
+                </p>
+              )}
+
+              {copyReveal ? (
+                <ArcTextReveal
+                  variant="body"
+                  trigger="mount"
+                  when={copyRevealReady}
+                  delayIndex={2}
+                >
+                  <div
+                    className={cn(
+                      "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                      centerCopy && "md:mx-auto md:justify-center",
+                      referenceLayout && "mt-6 md:mt-7",
+                    )}
+                  >
+                    <Link
+                      href={siteMeta.bookingUrl}
+                      className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
+                      {...bookingLinkExternalProps(siteMeta.bookingUrl)}
+                    >
+                      Begin your Journey
+                    </Link>
+                    <Link
+                      href={homeHeroSecondaryCta.href}
+                      className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                    >
+                      {homeHeroSecondaryCta.label}
+                    </Link>
+                  </div>
+                </ArcTextReveal>
+              ) : (
+                <div
+                  className={cn(
+                    "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                    centerCopy && "md:mx-auto md:justify-center",
+                    referenceLayout && "mt-6 md:mt-7",
+                  )}
+                >
+                  <Link
+                    href={siteMeta.bookingUrl}
+                    className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
+                    {...bookingLinkExternalProps(siteMeta.bookingUrl)}
+                  >
+                    Begin your Journey
+                  </Link>
+                  <Link
+                    href={homeHeroSecondaryCta.href}
+                    className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                  >
+                    {homeHeroSecondaryCta.label}
+                  </Link>
+                </div>
+              )}
             </div>
             ) : null}
           </div>

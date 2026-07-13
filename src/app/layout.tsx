@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Birthstone, DM_Sans, Playfair_Display, Radley } from "next/font/google";
+import { ArcRouteTransition } from "@/components/arc/ArcRouteTransition";
 import "./globals.css";
 
 /**
@@ -47,6 +48,15 @@ export const metadata: Metadata = {
     "Where aesthetics, wellness, and longevity converge. Elevated care for intentional results.",
 };
 
+/**
+ * Pre-paint gate for the homepage intro preloader (see `ArcSitePreloader`).
+ * Runs synchronously before first paint so the overlay only shows on the FIRST
+ * homepage load per tab — a refresh (flag already set) never flashes the splash.
+ * Skips entirely under reduced-motion. A failsafe timeout clears the flag/attr
+ * so JS/hydration stalls can never trap the user behind the overlay.
+ */
+const ARC_INTRO_PREPAINT_SCRIPT = `(function(){try{var d=document.documentElement;if(location.pathname!=="/")return;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("arc-intro-seen")==="1")return;sessionStorage.setItem("arc-intro-seen","1");d.setAttribute("data-arc-intro","active");window.setTimeout(function(){if(d.getAttribute("data-arc-intro"))d.removeAttribute("data-arc-intro");},6000);}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,7 +73,8 @@ export default function RootLayout({
         className="min-h-full bg-arc-cream text-arc-charcoal"
         suppressHydrationWarning
       >
-        {children}
+        <script dangerouslySetInnerHTML={{ __html: ARC_INTRO_PREPAINT_SCRIPT }} />
+        <ArcRouteTransition>{children}</ArcRouteTransition>
       </body>
     </html>
   );

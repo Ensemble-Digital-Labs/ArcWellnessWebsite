@@ -1,19 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useMotionValue, useTransform, type MotionStyle } from "framer-motion";
+import { motion, useMotionValue, useMotionValueEvent, useTransform, type MotionStyle } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import { ARC_MARBLE_AMBIENT_WASH_CLASS, ARC_HOME_WELLNESS_TOP_SEAM_SOFT_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { whenArcLocomotiveReady } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
+import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,13 +23,15 @@ gsap.registerPlugin(ScrollTrigger);
 const WELCOME_SCROLL_TRACK_CLASS =
   "relative scroll-mt-28 overflow-anchor-none bg-arc-cream pt-0 max-md:h-[150svh] md:h-[180vh]";
 
-/** Backdrop zoom completes in the first ~half of progress; remaining scroll holds readable Blueprint copy. */
-const BACKDROP_ZOOM_END = 0.52;
+/** Phase 1 hold — title readable on photo before drift begins. */
+const WELCOME_PARALLAX_HOLD = 0.12;
 
-const WELCOME_PARALLAX_HOLD = 0.14;
+/** Layered Y-parallax + gentle zoom complete by here (phase 2). */
+const PARALLAX_DRIFT_END = 0.45;
+const BACKDROP_ZOOM_END = PARALLAX_DRIFT_END;
 
-const COPY_FADE_IN_START = 0.34;
-const COPY_FADE_IN_END = 0.56;
+const COPY_FADE_IN_START = 0.38;
+const COPY_FADE_IN_END = 0.58;
 
 const WELCOME_COPY_HEADLINE_SERIF_CLASS = "text-arc-charcoal";
 const WELCOME_COPY_HEADLINE_EMPHASIS_CLASS =
@@ -105,7 +109,13 @@ export function ArcWelcomeSplitSection({
         <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
           <WelcomeCopyStageMarblePlate />
         </div>
-        <WelcomeCopyBlock split={split} headline={headline} headlineEmphasisWord={headlineEmphasisWord} paragraphs={paragraphs} />
+        <WelcomeCopyBlock
+          split={split}
+          headline={headline}
+          headlineEmphasisWord={headlineEmphasisWord}
+          paragraphs={paragraphs}
+          editorialReveal
+        />
       </section>
     );
   }
@@ -171,14 +181,44 @@ function WelcomeCopyBlock({
   headlineEmphasisWord,
   paragraphs,
   style,
+  editorialReveal = false,
+  editorialRevealReady = true,
 }: {
   split: SplitHeadline;
   headline: string;
   headlineEmphasisWord: string;
   paragraphs: readonly string[];
   style?: MotionStyle;
+  editorialReveal?: boolean;
+  /** Gate mount reveals until the scroll crossfade opens the copy stage (welcome scroll track). */
+  editorialRevealReady?: boolean;
 }) {
   const { hasEmphasis, before, after } = split;
+
+  const headlineBlock = (
+    <h2 className="mb-4 font-serif text-[1.65rem] font-bold leading-[1.12] tracking-tight sm:mb-5 sm:text-3xl md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
+      {hasEmphasis ? (
+        <>
+          <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{before}</span>
+          {before ? " " : null}
+          <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
+            {headlineEmphasisWord}
+          </TitleEmphasis>
+          {after ? (
+            after.trim() === "." ? (
+              <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
+            ) : (
+              <> {after}</>
+            )
+          ) : (
+            <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
+          )}
+        </>
+      ) : (
+        <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{headline}</span>
+      )}
+    </h2>
+  );
 
   return (
     <motion.div
@@ -192,33 +232,34 @@ function WelcomeCopyBlock({
         className="pointer-events-auto max-w-2xl text-center md:max-w-4xl lg:max-w-5xl"
         ornamentClassName="w-[min(98vw,68rem)]"
       >
-        <h2 className="mb-4 font-serif text-[1.65rem] font-bold leading-[1.12] tracking-tight sm:mb-5 sm:text-3xl md:text-[2rem] md:leading-[1.1] lg:text-[2.35rem]">
-          {hasEmphasis ? (
-            <>
-              <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{before}</span>
-              {before ? " " : null}
-              <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
-                {headlineEmphasisWord}
-              </TitleEmphasis>
-              {after ? (
-                after.trim() === "." ? (
-                  <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
-                ) : (
-                  <> {after}</>
-                )
-              ) : (
-                <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
-              )}
-            </>
-          ) : (
-            <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{headline}</span>
-          )}
-        </h2>
+        {editorialReveal ? (
+          <ArcTextReveal
+            variant="heading"
+            trigger="mount"
+            when={editorialRevealReady}
+          >
+            {headlineBlock}
+          </ArcTextReveal>
+        ) : (
+          headlineBlock
+        )}
 
         <div className={WELCOME_COPY_BODY_CLASS}>
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-          ))}
+          {paragraphs.map((paragraph, index) =>
+            editorialReveal ? (
+              <ArcTextReveal
+                key={paragraph.slice(0, 48)}
+                variant="body"
+                trigger="mount"
+                when={editorialRevealReady}
+                delayIndex={index + 1}
+              >
+                <p>{paragraph}</p>
+              </ArcTextReveal>
+            ) : (
+              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+            ),
+          )}
         </div>
       </ArcTibbixelCopyFrame>
     </motion.div>
@@ -246,6 +287,17 @@ function WelcomeBackdropScrollBody({
 }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const progress = useMotionValue(0);
+  const [editorialRevealReady, setEditorialRevealReady] = useState(false);
+  const isMinMd = useMinMd();
+  const isCompact = !isMinMd;
+
+  useMotionValueEvent(progress, "change", (value) => {
+    if (value >= COPY_FADE_IN_END) setEditorialRevealReady(true);
+  });
+
+  useEffect(() => {
+    if (progress.get() >= COPY_FADE_IN_END) setEditorialRevealReady(true);
+  }, [progress]);
 
   const parallaxProgress = useTransform(
     progress,
@@ -253,11 +305,36 @@ function WelcomeBackdropScrollBody({
     [0, 0, 1],
   );
 
-  const scaleBackdrop = useTransform(
-    parallaxProgress,
-    [0, BACKDROP_ZOOM_END, 1],
-    [1, 1.28, 1.28],
-  );
+  const driftAmount = (p: number) =>
+    Math.min(1, Math.max(0, p / PARALLAX_DRIFT_END));
+
+  const scaleBackdrop = useTransform(parallaxProgress, (p) => {
+    const t = driftAmount(p);
+    const maxScale = isCompact ? 1.06 : 1.1;
+    return 1 + t * (maxScale - 1);
+  });
+
+  /** Background photo — slowest layer. */
+  const photoY = useTransform(parallaxProgress, (p) => {
+    const t = driftAmount(p);
+    const maxVh = isCompact ? 3 : 4;
+    return `${-t * maxVh}vh`;
+  });
+
+  /** Title on photo — fastest layer, lifts off the image. */
+  const titleY = useTransform(parallaxProgress, (p) => {
+    const t = driftAmount(p);
+    const maxVh = isCompact ? 6 : 10;
+    return `${-t * maxVh}vh`;
+  });
+
+  /** Marble plate rises as the photo recedes. */
+  const marbleY = useTransform(progress, (p) => {
+    const span = COPY_FADE_IN_END - WELCOME_PARALLAX_HOLD;
+    const t = span > 0 ? Math.min(1, Math.max(0, (p - WELCOME_PARALLAX_HOLD) / span)) : 0;
+    const maxVh = isCompact ? 4 : 6;
+    return `${(1 - t) * maxVh}vh`;
+  });
 
   const opacityTitleOnBackdrop = useTransform(
     progress,
@@ -273,8 +350,16 @@ function WelcomeBackdropScrollBody({
   const copyScale = useTransform(
     progress,
     [COPY_FADE_IN_START, COPY_FADE_IN_END, 1],
-    [0.94, 1, 1],
+    [0.96, 1, 1],
   );
+
+  /** Copy frame — subtle lag behind the marble stage. */
+  const copyY = useTransform(progress, (p) => {
+    const span = COPY_FADE_IN_END - COPY_FADE_IN_START;
+    const t = span > 0 ? Math.min(1, Math.max(0, (p - COPY_FADE_IN_START) / span)) : 0;
+    const maxVh = isCompact ? 2 : 3;
+    return `${(1 - t) * maxVh}vh`;
+  });
 
   const opacityPhoto = useTransform(
     progress,
@@ -349,8 +434,8 @@ function WelcomeBackdropScrollBody({
         ) : null}
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
           <motion.div
-            style={{ opacity: opacityCopyStage }}
-            className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
+            style={{ opacity: opacityCopyStage, y: marbleY }}
+            className="pointer-events-none absolute inset-x-0 -top-[6vh] h-[calc(100%+12vh)] z-[1] overflow-hidden"
             aria-hidden
           >
             <WelcomeCopyStageMarblePlate />
@@ -358,8 +443,8 @@ function WelcomeBackdropScrollBody({
 
           <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             <motion.div
-              style={{ scale: scaleBackdrop, opacity: opacityPhoto }}
-              className="absolute inset-0 origin-center will-change-transform"
+              style={{ y: photoY, scale: scaleBackdrop, opacity: opacityPhoto }}
+              className="absolute inset-x-0 -top-[6vh] h-[calc(100%+12vh)] origin-center will-change-transform"
             >
               <Image
                 src={backdropSrc}
@@ -370,11 +455,16 @@ function WelcomeBackdropScrollBody({
                 priority
               />
               <div className={WELCOME_PHOTO_PHASE_WASH_CLASS} />
+              {/* Scrim locked to the photo so it never detaches from the image on drift. */}
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-black/15"
+                aria-hidden
+              />
             </motion.div>
 
             <motion.div
-              style={{ opacity: opacityTitleOnBackdrop }}
-              className="absolute inset-0 z-[2] flex items-center justify-center bg-gradient-to-t from-black/40 via-black/10 to-black/15 px-3 sm:px-5"
+              style={{ y: titleY, opacity: opacityTitleOnBackdrop }}
+              className="absolute inset-0 z-[2] flex items-center justify-center px-3 sm:px-5"
             >
               <WelcomeTitleOnBackdrop
                 split={split}
@@ -389,9 +479,12 @@ function WelcomeBackdropScrollBody({
             headline={headline}
             headlineEmphasisWord={headlineEmphasisWord}
             paragraphs={paragraphs}
+            editorialReveal
+            editorialRevealReady={editorialRevealReady}
             style={{
               opacity: opacityCopy,
               scale: copyScale,
+              y: copyY,
             }}
           />
         </div>

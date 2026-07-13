@@ -7,6 +7,7 @@ import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
@@ -89,36 +90,41 @@ export function ArcFounderNoteSection({
           />
         </div>
 
-        <div
-          data-scroll-section
-          className="relative flex flex-col items-center justify-center py-10 text-center sm:py-12 lg:items-start lg:px-4 lg:py-16 lg:text-left xl:px-8 xl:py-20"
-        >
-          <div className="flex min-w-0 flex-col items-center pb-[0.12em] text-center lg:items-start lg:text-left">
-            <h2 className={cn("text-arc-charcoal", ARC_STACKED_HEADLINE_SERIF_CLASS)}>
-              <span className="block">{title}</span>
-              <TitleEmphasis
-                className={cn(
-                  arcHeadlineEmphasisClass(headlineEmphasisTone),
-                  "mx-auto mt-3 block w-max max-w-full leading-none sm:mt-3.5 lg:mx-0",
-                )}
-              >
-                {titleEmphasis}
-              </TitleEmphasis>
-            </h2>
-          </div>
+        <div className="relative flex flex-col items-center justify-center py-10 text-center sm:py-12 lg:items-start lg:px-4 lg:py-16 lg:text-left xl:px-8 xl:py-20">
+          <ArcTextReveal variant="heading">
+            <div className="flex min-w-0 flex-col items-center pb-[0.12em] text-center lg:items-start lg:text-left">
+              <h2 className={cn("text-arc-charcoal", ARC_STACKED_HEADLINE_SERIF_CLASS)}>
+                <span className="block">{title}</span>
+                <TitleEmphasis
+                  className={cn(
+                    arcHeadlineEmphasisClass(headlineEmphasisTone),
+                    "mx-auto mt-3 block w-max max-w-full leading-none sm:mt-3.5 lg:mx-0",
+                  )}
+                >
+                  {titleEmphasis}
+                </TitleEmphasis>
+              </h2>
+            </div>
+          </ArcTextReveal>
 
-          <p className={cn("mt-8 max-w-xl sm:mt-10", ARC_EDITORIAL_BODY_CLASS)}>{lead}</p>
+          <ArcTextReveal variant="body" delayIndex={1}>
+            <p className={cn("mt-8 max-w-xl sm:mt-10", ARC_EDITORIAL_BODY_CLASS)}>{lead}</p>
+          </ArcTextReveal>
 
-          <p className={cn("mt-6 max-w-xl sm:mt-7", ARC_EDITORIAL_BODY_CLASS)}>{body}</p>
+          <ArcTextReveal variant="body" delayIndex={2}>
+            <p className={cn("mt-6 max-w-xl sm:mt-7", ARC_EDITORIAL_BODY_CLASS)}>{body}</p>
+          </ArcTextReveal>
 
-          <footer className="mt-10 w-full max-w-lg border-t border-arc-charcoal/10 pt-8 sm:mt-12 lg:max-w-none">
-            <p className="font-serif text-[clamp(1.125rem,2.2vw,1.35rem)] font-semibold tracking-tight text-arc-charcoal">
-              {signoff}
-            </p>
-            <p className="mt-2 font-sans text-sm font-medium uppercase tracking-[0.14em] text-arc-charcoal/55">
-              {role}
-            </p>
-          </footer>
+          <ArcTextReveal variant="body" delayIndex={3}>
+            <footer className="mt-10 w-full max-w-lg border-t border-arc-charcoal/10 pt-8 sm:mt-12 lg:max-w-none">
+              <p className="font-serif text-[clamp(1.125rem,2.2vw,1.35rem)] font-semibold tracking-tight text-arc-charcoal">
+                {signoff}
+              </p>
+              <p className="mt-2 font-sans text-sm font-medium uppercase tracking-[0.14em] text-arc-charcoal/55">
+                {role}
+              </p>
+            </footer>
+          </ArcTextReveal>
         </div>
       </div>
 

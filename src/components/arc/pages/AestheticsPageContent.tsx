@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArcMarketingChapterHero } from "@/components/arc/ArcMarketingChapterHero";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { homeInvestSupport } from "@/content/homepage";
@@ -51,15 +52,15 @@ export function AestheticsPageContent() {
         <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
         <div className="relative z-10 mx-auto flex max-w-4xl flex-wrap justify-center gap-3">
-          {linkedTreatments.map((t) => (
-            <Link
-              key={t.slug}
-              href={`/treatments/${t.slug}`}
-              data-scroll-section
-              className="rounded-full border border-arc-teal/25 bg-white px-5 py-2.5 font-sans text-sm font-medium text-arc-charcoal hover:bg-arc-teal-muted/40"
-            >
-              {t.label}
-            </Link>
+          {linkedTreatments.map((t, index) => (
+            <ArcTextReveal key={t.slug} variant="line" delayIndex={index % 6}>
+              <Link
+                href={`/treatments/${t.slug}`}
+                className="rounded-full border border-arc-teal/25 bg-white px-5 py-2.5 font-sans text-sm font-medium text-arc-charcoal hover:bg-arc-teal-muted/40"
+              >
+                {t.label}
+              </Link>
+            </ArcTextReveal>
           ))}
         </div>
       </section>

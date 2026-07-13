@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { BACKGROUND_DECORATION_IMAGES } from "@/content/backgroundDecoration";
 import { HOME_USP_ITEMS } from "@/content/homeConcerns";
 import { cn } from "@/lib/utils";
@@ -38,12 +41,16 @@ export function ArcUspStatBar({ className }: ArcUspStatBarProps) {
             />
           </div>
           <div className="relative z-10">
-            <p className="font-serif text-2xl font-bold leading-none text-arc-charcoal sm:text-3xl md:text-4xl lg:text-[2.5rem] [text-shadow:0_1px_2px_rgba(255,255,255,0.55)]">
-              {item.value}
-            </p>
-            <p className="mt-2 font-sans text-xs font-bold uppercase tracking-[0.12em] text-arc-charcoal/90 sm:text-sm md:text-[0.8125rem] md:tracking-[0.14em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45)]">
-              {item.label}
-            </p>
+            <ArcTextReveal variant="heading" delayIndex={i * 2}>
+              <p className="font-serif text-2xl font-bold leading-none text-arc-charcoal sm:text-3xl md:text-4xl lg:text-[2.5rem] [text-shadow:0_1px_2px_rgba(255,255,255,0.55)]">
+                {item.value}
+              </p>
+            </ArcTextReveal>
+            <ArcTextReveal variant="body" delayIndex={i * 2 + 1}>
+              <p className="mt-2 font-sans text-xs font-bold uppercase tracking-[0.12em] text-arc-charcoal/90 sm:text-sm md:text-[0.8125rem] md:tracking-[0.14em] [text-shadow:0_1px_2px_rgba(255,255,255,0.45)]">
+                {item.label}
+              </p>
+            </ArcTextReveal>
           </div>
         </div>
       ))}

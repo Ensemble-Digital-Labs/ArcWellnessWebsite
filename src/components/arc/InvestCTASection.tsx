@@ -13,6 +13,7 @@ import {
   type InvestCTASignoff,
   investSectionShellClass,
 } from "@/components/arc/investCtaShared";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import { homeInvestCtaLabel, homeInvestSignoff } from "@/content/homepage";
 import { siteMeta } from "@/content/siteMeta";
@@ -45,7 +46,6 @@ function InvestCTAContent({
   signoff,
   ctaLabel,
   ctaHref,
-  scrollReveal,
   topSeam = false,
   topSeamClassName,
 }: {
@@ -54,7 +54,6 @@ function InvestCTAContent({
   signoff: InvestCTASignoff;
   ctaLabel: string;
   ctaHref: string;
-  scrollReveal: boolean;
   topSeam?: boolean;
   topSeamClassName?: string;
 }) {
@@ -71,7 +70,6 @@ function InvestCTAContent({
         />
       ) : null}
       <div
-        {...(scrollReveal ? { "data-scroll-section": true } : {})}
         className={cn(
           "relative z-10 mx-auto flex w-full max-w-[90rem] justify-center",
           "px-5 sm:px-8 xl:px-14",
@@ -79,56 +77,72 @@ function InvestCTAContent({
         )}
       >
         <div className={cn(investMobilePanelClass, "text-center xl:hidden")}>
-          <InvestCTAHeadline
-            headlineMotion={staticMotion}
-            className="mx-auto text-center"
-          />
-          {supportingLine ? (
-            <p
-              className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)] sm:text-[15px]"
-              style={staticMotion}
-            >
-              {supportingLine}
-            </p>
-          ) : null}
-          <InvestCTAActions
-            motionStyle={staticMotion}
-            ctaLabel={ctaLabel}
-            ctaHref={ctaHref}
-            className="flex justify-center"
-          />
-          <div className="mt-8">
-            <InvestCTASignoffBlock
-              signoff={signoff}
-              motionStyle={staticMotion}
-              stacked
-              centered
+          <ArcTextReveal variant="heading">
+            <InvestCTAHeadline
+              headlineMotion={staticMotion}
+              className="mx-auto text-center"
             />
+          </ArcTextReveal>
+          {supportingLine ? (
+            <ArcTextReveal variant="body" delayIndex={1}>
+              <p
+                className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)] sm:text-[15px]"
+                style={staticMotion}
+              >
+                {supportingLine}
+              </p>
+            </ArcTextReveal>
+          ) : null}
+          <ArcTextReveal variant="body" delayIndex={supportingLine ? 2 : 1}>
+            <InvestCTAActions
+              motionStyle={staticMotion}
+              ctaLabel={ctaLabel}
+              ctaHref={ctaHref}
+              className="flex justify-center"
+            />
+          </ArcTextReveal>
+          <div className="mt-8">
+            <ArcTextReveal variant="heading" delayIndex={supportingLine ? 3 : 2}>
+              <InvestCTASignoffBlock
+                signoff={signoff}
+                motionStyle={staticMotion}
+                stacked
+                centered
+              />
+            </ArcTextReveal>
           </div>
         </div>
 
         <div className={cn(investCopyBlockClass, "hidden max-w-xl xl:col-start-1 xl:block")}>
-          <InvestCTAHeadline headlineMotion={staticMotion} />
+          <ArcTextReveal variant="heading">
+            <InvestCTAHeadline headlineMotion={staticMotion} />
+          </ArcTextReveal>
           {supportingLine ? (
-            <p
-              className="mt-5 max-w-md font-sans text-[15px] leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)]"
-              style={staticMotion}
-            >
-              {supportingLine}
-            </p>
+            <ArcTextReveal variant="body" delayIndex={1}>
+              <p
+                className="mt-5 max-w-md font-sans text-[15px] leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)]"
+                style={staticMotion}
+              >
+                {supportingLine}
+              </p>
+            </ArcTextReveal>
           ) : null}
-          <InvestCTAActions
-            motionStyle={staticMotion}
-            ctaLabel={ctaLabel}
-            ctaHref={ctaHref}
-          />
+          <ArcTextReveal variant="body" delayIndex={supportingLine ? 2 : 1}>
+            <InvestCTAActions
+              motionStyle={staticMotion}
+              ctaLabel={ctaLabel}
+              ctaHref={ctaHref}
+            />
+          </ArcTextReveal>
         </div>
 
         <div aria-hidden className="hidden xl:block xl:col-start-2" />
 
         <div className="hidden xl:col-start-3 xl:flex xl:items-end xl:justify-end">
           <div className={cn(investCopyBlockClass, "max-w-sm")}>
-            <InvestCTASignoffBlock signoff={signoff} motionStyle={staticMotion} />
+            <ArcTextReveal variant="heading">
+              <InvestCTASignoffBlock signoff={signoff} motionStyle={staticMotion} />
+            </ArcTextReveal>
           </div>
         </div>
       </div>
@@ -162,7 +176,6 @@ export function InvestCTASection({
       signoff={signoff}
       ctaLabel={ctaLabel}
       ctaHref={ctaHref}
-      scrollReveal={pinEnabled}
       topSeam={topSeam}
       topSeamClassName={topSeamClassName}
     />

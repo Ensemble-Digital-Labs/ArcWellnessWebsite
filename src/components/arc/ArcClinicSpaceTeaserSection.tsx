@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ClinicCarouselSlide } from "@/components/arc/ArcClinicCarouselSection";
 import { ClinicGalleryOverlay } from "@/components/arc/clinic-gallery/ClinicGalleryOverlay";
 import { ClinicSpacePreviewSlideshow } from "@/components/arc/clinic-gallery/ClinicSpacePreviewSlideshow";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import {
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
@@ -13,8 +12,6 @@ import {
 } from "@/components/arc/TitleEmphasis";
 import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration";
-import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
-import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import { captureArcPageScrollY } from "@/lib/arcScrollPosition";
 import { lockArcPageScrollForModal } from "@/lib/arcModalScrollLock";
 import { releaseArcScrollTopGuard } from "@/lib/arcScrollTopGuard";
@@ -25,7 +22,6 @@ import {
   ARC_PAGE_RAIL_MAX,
 } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
-gsap.registerPlugin(ScrollTrigger);
 
 function ClinicGalleryHandArrow({ className }: { className?: string }) {
   return (
@@ -80,7 +76,6 @@ export function ArcClinicSpaceTeaserSection({
 }: ArcClinicSpaceTeaserSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const galleryReturnFocusRef = useRef<HTMLButtonElement>(null);
-  const [progress, setProgress] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
@@ -94,52 +89,6 @@ export function ArcClinicSpaceTeaserSection({
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setProgress(1);
-      return;
-    }
-
-    let dispose: (() => void) | null = null;
-    let cancelled = false;
-
-    const setup = () => {
-      if (cancelled) return;
-      const section = sectionRef.current;
-      if (!section) return;
-      dispose = bindArcEnterOnceProgress({
-        trigger: section,
-        onProgress: setProgress,
-        playIfVisibleOnLoad: true,
-      });
-    };
-
-    const onReady = () => queueMicrotask(setup);
-    window.addEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-    if ((window as unknown as { locomotiveScroll?: unknown }).locomotiveScroll) onReady();
-    const fallback = window.setTimeout(() => {
-      if (!cancelled && dispose === null) setup();
-    }, 1800);
-
-    return () => {
-      cancelled = true;
-      window.removeEventListener(ARC_LOCOMOTIVE_READY_EVENT, onReady as EventListener);
-      window.clearTimeout(fallback);
-      dispose?.();
-    };
-  }, [reduceMotion]);
-
-  const p = reduceMotion ? 1 : progress;
-  const titleMotion = {
-    opacity: Math.min(1, 0.7 + p * 0.3),
-    transform: `translate3d(0, ${22 - p * 22}px, 0)`,
-  };
-  const introReveal = Math.min(1, Math.max(0, (p - 0.15) / 0.85));
-  const introMotion = {
-    opacity: introReveal,
-    transform: `translate3d(0, ${14 - introReveal * 14}px, 0)`,
-  };
 
   const handleCloseGallery = () => {
     setGalleryOpen(false);
@@ -186,35 +135,36 @@ export function ArcClinicSpaceTeaserSection({
         <div className={cn("relative z-10 mx-auto max-lg:px-4 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}>
           <div className="flex flex-col items-center gap-10 max-lg:gap-12 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-10 xl:gap-x-14">
             <div className="w-full max-w-md text-center lg:col-span-5 lg:max-w-xl lg:text-left lg:self-center">
-              <h2
-                className={cn(
-                  "max-w-xl pb-[0.14em] text-arc-charcoal will-change-transform",
-                  ARC_SPLIT_HEADLINE_SERIF_CLASS,
-                )}
-                style={titleMotion}
-              >
-                <span className="block text-arc-charcoal">{title}</span>
-                {titleEmphasis ? (
-                  <TitleEmphasis
-                    className={cn(
-                      arcHeadlineEmphasisClass(headlineEmphasisTone),
-                      "mt-1 block leading-[1.04] sm:mt-1.5",
-                    )}
-                  >
-                    {titleEmphasis}
-                  </TitleEmphasis>
-                ) : null}
-              </h2>
+              <ArcTextReveal variant="heading">
+                <h2
+                  className={cn(
+                    "max-w-xl pb-[0.14em] text-arc-charcoal",
+                    ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                  )}
+                >
+                  <span className="block text-arc-charcoal">{title}</span>
+                  {titleEmphasis ? (
+                    <TitleEmphasis
+                      className={cn(
+                        arcHeadlineEmphasisClass(headlineEmphasisTone),
+                        "mt-1 block leading-[1.04] sm:mt-1.5",
+                      )}
+                    >
+                      {titleEmphasis}
+                    </TitleEmphasis>
+                  ) : null}
+                </h2>
+              </ArcTextReveal>
 
               {previewIntro ? (
-                <div className="mt-6 sm:mt-8 lg:flex lg:w-full lg:justify-end" style={introMotion}>
+                <ArcTextReveal variant="body" delayIndex={1} className="mt-6 sm:mt-8 lg:flex lg:w-full lg:justify-end">
                   <div className="flex max-w-md flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:items-center lg:gap-3 xl:gap-4">
                     <p className="text-center font-title-emphasis text-[1.65rem] leading-snug tracking-tight text-arc-teal-ink sm:text-[1.85rem] md:text-[2rem] lg:text-right lg:text-[1.95rem] xl:text-[2.1rem]">
                       {previewIntro}
                     </p>
                     <ClinicGalleryHandArrow className="h-11 w-[3.75rem] rotate-90 sm:h-12 sm:w-16 lg:h-12 lg:w-[5.5rem] lg:rotate-0 lg:translate-x-1 xl:h-[3.25rem] xl:w-24 xl:translate-x-2" />
                   </div>
-                </div>
+                </ArcTextReveal>
               ) : null}
             </div>
 

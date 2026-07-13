@@ -1,3 +1,6 @@
+"use client";
+
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { cn } from "@/lib/utils";
 
 type ArcTrustStripSectionProps = {
@@ -18,22 +21,18 @@ export function ArcTrustStripSection({ id, className, items }: ArcTrustStripSect
         className,
       )}
     >
-      <div
-        data-scroll-section
-        className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-4 px-6 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-3 md:px-10"
-      >
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-4 px-6 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-3 md:px-10">
         {items.map((item, i) => (
-          <span
-            key={item}
-            className="flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-arc-charcoal/70 sm:text-xs"
-          >
-            {i > 0 ? (
-              <span className="hidden text-arc-teal/50 sm:inline" aria-hidden>
-                ✦
-              </span>
-            ) : null}
-            {item}
-          </span>
+          <ArcTextReveal key={item} variant="line" delayIndex={i}>
+            <span className="flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-arc-charcoal/70 sm:text-xs">
+              {i > 0 ? (
+                <span className="hidden text-arc-teal/50 sm:inline" aria-hidden>
+                  ✦
+                </span>
+              ) : null}
+              {item}
+            </span>
+          </ArcTextReveal>
         ))}
       </div>
     </section>

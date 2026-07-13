@@ -8,8 +8,9 @@ import { ARC_VOOBAN_DURATION, ARC_VOOBAN_EASE } from "@/lib/arcVoobanMotion";
 gsap.registerPlugin(ScrollTrigger);
 
 const REVEAL_START = "top 88%";
-const REVEAL_HIDDEN = { autoAlpha: 0, y: 48, filter: "blur(4px)" } as const;
-const REVEAL_SHOWN = { autoAlpha: 1, y: 0, filter: "blur(0px)" } as const;
+/** Crisp section reveal — smaller travel, no blur (editorial / ExoMind-adjacent). */
+const REVEAL_HIDDEN = { autoAlpha: 0, y: 26 } as const;
+const REVEAL_SHOWN = { autoAlpha: 1, y: 0 } as const;
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -25,7 +26,7 @@ function markRevealDone(el: HTMLElement) {
 
 /** Snap a section to its revealed state and stop any in-flight reveal tween. */
 export function finishArcScrollReveal(el: HTMLElement) {
-  gsap.killTweensOf(el, "opacity,y,filter,autoAlpha");
+  gsap.killTweensOf(el, "opacity,y,autoAlpha");
   gsap.set(el, REVEAL_SHOWN);
   markRevealDone(el);
 }

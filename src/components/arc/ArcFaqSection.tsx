@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 
@@ -128,14 +129,13 @@ export function ArcFaqSection({
       {bottomSeam ? (
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
       ) : null}
-      <div
-        data-scroll-section
-        className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]"
-      >
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]">
         <header className="mb-10 shrink-0 text-left lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 xl:top-52">
-          <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">
-            FAQ
-          </h2>
+          <ArcTextReveal variant="heading">
+            <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">
+              FAQ
+            </h2>
+          </ArcTextReveal>
         </header>
 
         <div className="relative min-w-0 flex-1 lg:pt-2">

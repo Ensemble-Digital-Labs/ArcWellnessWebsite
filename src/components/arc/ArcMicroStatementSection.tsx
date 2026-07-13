@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { SeamlessLoopVideo, type SeamlessLoopVideoHandle } from "@/components/arc/SeamlessLoopVideo";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ARC_HEADLINE_TITLE_EMPHASIS_CLASS, TitleEmphasis } from "@/components/arc/TitleEmphasis";
@@ -180,11 +181,11 @@ export function ArcMicroStatementSection({
   const linkMotion = fadeUp(0.26, 2.2);
   const bgBreath = pinnedScrollMotion ? Math.min(1, p * 1.15) : 0;
 
-  const inner = (
+  const inner = pinnedScrollMotion ? (
     <>
       <h2
         className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]"
-        style={pinnedScrollMotion ? headlineMotion : undefined}
+        style={headlineMotion}
       >
         <span className="text-balance">
           {headlineBefore}{" "}
@@ -197,17 +198,45 @@ export function ArcMicroStatementSection({
 
       <p
         className="mt-6 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/82 sm:text-base md:mt-7 md:text-[1.05rem]"
-        style={pinnedScrollMotion ? uspMotion : undefined}
+        style={uspMotion}
       >
         {uspLine}
       </p>
 
       {linkHref && linkLabel ? (
-        <div style={pinnedScrollMotion ? linkMotion : undefined}>
+        <div style={linkMotion}>
           <ArcPrimaryCta href={linkHref} className="mt-8 sm:mt-10">
             {linkLabel}
           </ArcPrimaryCta>
         </div>
+      ) : null}
+    </>
+  ) : (
+    <>
+      <ArcTextReveal variant="heading">
+        <h2 className="font-serif text-3xl font-bold leading-[1.12] tracking-tight text-arc-charcoal sm:text-4xl md:text-[2.65rem] md:leading-[1.08]">
+          <span className="text-balance">
+            {headlineBefore}{" "}
+            <TitleEmphasis className={ARC_HEADLINE_TITLE_EMPHASIS_CLASS}>
+              {headlineEmphasis}
+            </TitleEmphasis>
+            {headlineAfterNode(headlineAfter)}
+          </span>
+        </h2>
+      </ArcTextReveal>
+
+      <ArcTextReveal variant="body" delayIndex={1}>
+        <p className="mt-6 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/82 sm:text-base md:mt-7 md:text-[1.05rem]">
+          {uspLine}
+        </p>
+      </ArcTextReveal>
+
+      {linkHref && linkLabel ? (
+        <ArcTextReveal variant="body" delayIndex={2}>
+          <ArcPrimaryCta href={linkHref} className="mt-8 sm:mt-10">
+            {linkLabel}
+          </ArcPrimaryCta>
+        </ArcTextReveal>
       ) : null}
     </>
   );
@@ -267,10 +296,7 @@ export function ArcMicroStatementSection({
           </div>
         </>
       ) : (
-        <div
-          data-scroll-section
-          className="mx-auto w-full max-w-3xl px-6 md:max-w-4xl md:px-10"
-        >
+        <div className="mx-auto w-full max-w-3xl px-6 md:max-w-4xl md:px-10">
           <ArcTibbixelCopyFrame>{inner}</ArcTibbixelCopyFrame>
         </div>
       )}

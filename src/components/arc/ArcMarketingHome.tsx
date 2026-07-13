@@ -47,6 +47,7 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
           staticBackground
           lightSurface
           centerCopy
+          copyReveal
           title="Where Wellness, Longevity & Aesthetics Converge."
           referenceLayout
           intro={

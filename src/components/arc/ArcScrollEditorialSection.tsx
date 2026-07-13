@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PinnedSection } from "@/components/arc/PinnedSection";
-import { ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import {
@@ -123,7 +123,6 @@ function EditorialBody({
   titleEmphasis,
   paragraphs,
   cta,
-  revealLines,
   headlineLayout = "inline",
   bodyTypography = "default",
   signature,
@@ -135,7 +134,6 @@ function EditorialBody({
   | "titleEmphasis"
   | "paragraphs"
   | "cta"
-  | "revealLines"
   | "headlineLayout"
   | "bodyTypography"
   | "signature"
@@ -152,109 +150,101 @@ function EditorialBody({
     bodyTypography === "editorial" ? "md:max-w-2xl" : "md:max-w-xl";
 
   return (
-    <div data-scroll-section className="flex min-w-0 flex-1 flex-col justify-center">
-      <div
-        className={cn(
-          "overflow-y-visible pb-[0.12em]",
-          splitHeadline ? "overflow-x-visible" : "overflow-x-clip",
-        )}
-      >
-        <h2
+    <div className="flex min-w-0 flex-1 flex-col justify-center">
+      <ArcTextReveal variant="heading">
+        <div
           className={cn(
-            "text-arc-charcoal",
-            splitHeadline
-              ? cn(
-                  "max-w-full",
-                  hasAdjacentImage
-                    ? "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap md:max-w-none"
-                    : "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap",
-                  ARC_SPLIT_HEADLINE_SERIF_CLASS,
-                )
-              : stackedHeadline
-              ? cn("max-w-none", ARC_STACKED_HEADLINE_SERIF_CLASS)
-              : "max-w-[20ch] font-serif text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.65rem]",
+            "overflow-y-visible pb-[0.12em]",
+            splitHeadline ? "overflow-x-visible" : "overflow-x-clip",
           )}
         >
-          {splitHeadline ? (
-            <>
-              <span className="shrink-0">{title}</span>
-              {titleEmphasis ? (
+          <h2
+            className={cn(
+              "text-arc-charcoal",
+              splitHeadline
+                ? cn(
+                    "max-w-full",
+                    hasAdjacentImage
+                      ? "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap md:max-w-none"
+                      : "inline-flex max-w-full flex-wrap items-baseline gap-x-[0.28em] sm:flex-nowrap",
+                    ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                  )
+                : stackedHeadline
+                ? cn("max-w-none", ARC_STACKED_HEADLINE_SERIF_CLASS)
+                : "max-w-[20ch] font-serif text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.65rem]",
+            )}
+          >
+            {splitHeadline ? (
+              <>
+                <span className="shrink-0">{title}</span>
+                {titleEmphasis ? (
+                  <TitleEmphasis
+                    className={cn(
+                      emphasisClass,
+                      "inline shrink-0 align-baseline leading-none",
+                    )}
+                  >
+                    {titleEmphasis}
+                  </TitleEmphasis>
+                ) : null}
+              </>
+            ) : stackedHeadline ? (
+              <>
+                <span className="block max-w-full sm:w-max sm:whitespace-nowrap">{title}</span>
+                {titleEmphasis.split("\n").map((line, index) => (
+                  <TitleEmphasis
+                    key={`${line}-${index}`}
+                    className={cn(
+                      emphasisClass,
+                      "block w-max max-w-full leading-none",
+                      index === 0 ? "mt-3 sm:mt-3.5" : "mt-1 sm:mt-1.5",
+                    )}
+                  >
+                    {line.trim()}
+                  </TitleEmphasis>
+                ))}
+              </>
+            ) : titleEmphasis ? (
+              <>
+                {title}{" "}
                 <TitleEmphasis
                   className={cn(
                     emphasisClass,
-                    "inline shrink-0 align-baseline leading-none",
+                    "text-[1.2em] leading-[1.04] sm:text-[1.28em]",
                   )}
                 >
                   {titleEmphasis}
                 </TitleEmphasis>
-              ) : null}
-            </>
-          ) : stackedHeadline ? (
-            <>
-              <span className="block max-w-full sm:w-max sm:whitespace-nowrap">{title}</span>
-              {titleEmphasis.split("\n").map((line, index) => (
-                <TitleEmphasis
-                  key={`${line}-${index}`}
-                  className={cn(
-                    emphasisClass,
-                    "block w-max max-w-full leading-none",
-                    index === 0 ? "mt-3 sm:mt-3.5" : "mt-1 sm:mt-1.5",
-                  )}
-                >
-                  {line.trim()}
-                </TitleEmphasis>
-              ))}
-            </>
-          ) : titleEmphasis ? (
-            <>
-              {title}{" "}
-              <TitleEmphasis
-                className={cn(
-                  emphasisClass,
-                  "text-[1.2em] leading-[1.04] sm:text-[1.28em]",
-                )}
-              >
-                {titleEmphasis}
-              </TitleEmphasis>
-            </>
-          ) : (
-            title
-          )}
-        </h2>
-      </div>
-      {revealLines ? (
-        <ArcScrollSplitReveal
-          className={cn("mt-8 sm:mt-10", bodyWrapClass)}
-          lines={paragraphs}
-          lineClassName={bodyLineClass}
-        />
-      ) : (
-        <div
-          className={cn(
-            "mt-6 space-y-4 sm:mt-8",
-            bodyLineClass,
-            bodyWrapClass,
-          )}
-        >
-          {paragraphs.map((p) => (
-            <p key={p.slice(0, 32)}>{p}</p>
-          ))}
+              </>
+            ) : (
+              title
+            )}
+          </h2>
         </div>
-      )}
+      </ArcTextReveal>
+      <div className={cn("mt-8 space-y-5 sm:mt-10 sm:space-y-6", bodyWrapClass)}>
+        {paragraphs.map((paragraph, index) => (
+          <ArcTextReveal key={paragraph.slice(0, 32)} variant="body" delayIndex={index + 1}>
+            <p className={bodyLineClass}>{paragraph}</p>
+          </ArcTextReveal>
+        ))}
+      </div>
       {signature ? (
-        <footer className="mt-10 border-t border-arc-charcoal/10 pt-8 sm:mt-12 sm:pt-10">
-          <p className="font-serif text-[clamp(1.125rem,2.2vw,1.4rem)] font-semibold tracking-tight text-arc-charcoal">
-            {signature.signoff}
-          </p>
-          <p className="mt-2 font-serif text-[clamp(1rem,1.9vw,1.125rem)] font-medium leading-[1.4] text-arc-charcoal/72">
-            {signature.role}
-          </p>
-        </footer>
+        <ArcTextReveal variant="body" delayIndex={paragraphs.length + 1}>
+          <footer className="mt-10 border-t border-arc-charcoal/10 pt-8 sm:mt-12 sm:pt-10">
+            <p className="font-serif text-[clamp(1.125rem,2.2vw,1.4rem)] font-semibold tracking-tight text-arc-charcoal">
+              {signature.signoff}
+            </p>
+            <p className="mt-2 font-serif text-[clamp(1rem,1.9vw,1.125rem)] font-medium leading-[1.4] text-arc-charcoal/72">
+              {signature.role}
+            </p>
+          </footer>
+        </ArcTextReveal>
       ) : null}
       {cta ? (
-        <div className="mt-8 sm:mt-10">
+        <ArcTextReveal variant="body" delayIndex={paragraphs.length + (signature ? 2 : 1)} className="mt-8 sm:mt-10">
           <ArcPrimaryCta href={cta.href}>{cta.label}</ArcPrimaryCta>
-        </div>
+        </ArcTextReveal>
       ) : null}
     </div>
   );
@@ -329,7 +319,6 @@ export function ArcScrollEditorialSection({
         titleEmphasis={titleEmphasis}
         paragraphs={paragraphs}
         cta={cta}
-        revealLines={revealLines}
         headlineLayout={headlineLayout}
         bodyTypography={bodyTypography}
         signature={signature}

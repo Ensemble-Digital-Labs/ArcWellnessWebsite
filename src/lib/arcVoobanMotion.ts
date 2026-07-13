@@ -13,7 +13,7 @@ export const ARC_VOOBAN_DURATION = {
   micro: 0.08,
   small: 0.15,
   medium: 0.3,
-  reveal: 0.85,
+  reveal: 1,
   pinScrub: 0.75,
 } as const;
 

@@ -5,6 +5,7 @@ import { ArcAboutNarrativePinSection } from "@/components/arc/ArcAboutNarrativeP
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
@@ -125,12 +126,14 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
         <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
-          <Link
-            href="/treatments"
-            className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
-          >
-            ← All treatments
-          </Link>
+          <ArcTextReveal variant="line">
+            <Link
+              href="/treatments"
+              className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
+            >
+              ← All treatments
+            </Link>
+          </ArcTextReveal>
         </div>
       </section>
 

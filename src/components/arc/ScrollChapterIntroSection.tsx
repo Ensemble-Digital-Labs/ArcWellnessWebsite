@@ -19,6 +19,7 @@ import {
   arcHeadlineTaglineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { ArcVoobanHeadline } from "@/components/arc/ArcVoobanHeadline";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_LOCOMOTIVE_READY_EVENT } from "@/lib/locomotive";
 import { bindArcEnterOnceProgress } from "@/lib/arcEnterOnceScroll";
 import {
@@ -238,15 +239,11 @@ export function ScrollChapterIntroSection({
   const imageRotate = visibleOnLoad ? (0.35 - p) * 1.2 : (0.5 - p) * 2;
 
   const pinScrub = motion === "pin-scrub";
+  const enterOnce = motion === "enter-once";
   const heroCanvasAnimation = motion === "enter-once" ? "enter-once" : "scroll-scrub";
   const ambientFullBleed = layout === "ambient-full";
   const centeredHero = ambientFullBleed && heroAlign === "center";
   const compactEmphasis = headlineEmphasisSize === "compact";
-  const ambientEnterOnce = ambientFullBleed && motion === "enter-once" && !reduceMotion;
-  const heroCopyReveal = ambientEnterOnce
-    ? Math.min(1, Math.max(0, (p - 0.04) * 1.08))
-    : 1;
-  const heroCopyLift = ambientEnterOnce ? (1 - p) * 28 : 0;
   const ambientCount = copyColumnAmbients?.length ?? 0;
   const ambientsIncludeLightPlate =
     copyColumnAmbients?.some((src) =>
@@ -453,6 +450,80 @@ export function ScrollChapterIntroSection({
           ) : null}
 
           {headline ? (
+            enterOnce ? (
+              <ArcTextReveal
+                variant="heading"
+                trigger={visibleOnLoad ? "mount" : "inView"}
+                when
+              >
+                <h2
+                  className={cn(
+                    "font-serif font-semibold tracking-tight",
+                    ambientFullBleed && headlineEmphasis
+                      ? compactEmphasis
+                        ? cn(
+                            "mt-6 flex max-w-full flex-col gap-0 text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]",
+                            centeredHero ? "items-center" : "items-start",
+                          )
+                        : cn(
+                            "mt-6 inline-flex max-w-none flex-wrap items-baseline gap-x-[0.18em] text-[clamp(2.5rem,12vw,4.5rem)] leading-[0.92] tracking-tight md:mt-0 md:text-[clamp(3.25rem,11vw,7.25rem)]",
+                            centeredHero && "justify-center",
+                          )
+                      : headlineEmphasis
+                        ? "flex max-w-[min(100%,32rem)] flex-wrap items-baseline gap-x-[0.28em] text-3xl leading-[1.14] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]"
+                        : "max-w-[22ch] text-3xl leading-[1.22] sm:text-[2rem] md:text-[2.25rem] lg:text-[2.45rem]",
+                    onDarkCopy
+                      ? "text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45),0_1px_3px_rgba(0,0,0,0.35)]"
+                      : "text-arc-charcoal",
+                  )}
+                >
+                  {ambientFullBleed && headlineEmphasis ? (
+                    <>
+                      <span
+                        className={cn(
+                          "font-serif font-semibold tracking-tight",
+                          !onDarkCopy && "text-arc-charcoal",
+                        )}
+                      >
+                        {headline}
+                      </span>
+                      <TitleEmphasis
+                        className={cn(
+                          compactEmphasis
+                            ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
+                            : "inline align-baseline leading-none tracking-tight",
+                          onDarkCopy
+                            ? compactEmphasis
+                              ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
+                              : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
+                            : compactEmphasis
+                              ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
+                              : lightPlateEmphasisClass,
+                        )}
+                      >
+                        {headlineEmphasis}
+                      </TitleEmphasis>
+                    </>
+                  ) : (
+                    <>
+                      <span className="inline font-serif font-semibold tracking-tight">{headline}</span>
+                      {headlineEmphasis ? (
+                        <TitleEmphasis
+                          className={cn(
+                            "inline align-baseline leading-none tracking-tight",
+                            onDarkCopy
+                              ? "text-[1.35em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)] sm:text-[1.42em] md:text-[1.5em]"
+                              : lightPlateEmphasisClass,
+                          )}
+                        >
+                          {headlineEmphasis}
+                        </TitleEmphasis>
+                      ) : null}
+                    </>
+                  )}
+                </h2>
+              </ArcTextReveal>
+            ) : (
             <h2
               className={cn(
                 "font-serif font-semibold tracking-tight will-change-[transform,opacity]",
@@ -472,16 +543,7 @@ export function ScrollChapterIntroSection({
                 onDarkCopy
                   ? "text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.45),0_1px_3px_rgba(0,0,0,0.35)]"
                   : "text-arc-charcoal",
-                ambientEnterOnce && heroCopyReveal <= 0 && "opacity-0",
               )}
-              style={
-                ambientEnterOnce
-                  ? {
-                      opacity: heroCopyReveal,
-                      transform: `translate3d(0, ${heroCopyLift}px, 0)`,
-                    }
-                  : undefined
-              }
             >
               {ambientFullBleed && headlineEmphasis ? (
                 <>
@@ -534,9 +596,25 @@ export function ScrollChapterIntroSection({
                 </>
               )}
             </h2>
+            )
           ) : null}
 
           {body.trim() ? (
+            enterOnce ? (
+              <ArcTextReveal variant="body" delayIndex={1}>
+                <p
+                  className={cn(
+                    "max-w-xl font-sans leading-relaxed sm:text-[1.05rem] md:text-lg",
+                    onDarkCopy
+                      ? "text-white/88 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)]"
+                      : "text-arc-charcoal/88",
+                    headline ? "mt-6 sm:mt-7 md:mt-8" : "mt-0",
+                  )}
+                >
+                  {body}
+                </p>
+              </ArcTextReveal>
+            ) : (
             <p
               className={cn(
                 "max-w-xl font-sans leading-relaxed sm:text-[1.05rem] md:text-lg",
@@ -552,9 +630,17 @@ export function ScrollChapterIntroSection({
             >
               {body}
             </p>
+            )
           ) : null}
 
           {ctaHref && ctaLabel ? (
+            enterOnce ? (
+              <ArcTextReveal variant="body" delayIndex={body.trim() ? 2 : 1}>
+                <ArcStandardCta href={ctaHref} className="mt-8 w-fit sm:mt-10">
+                  {ctaLabel}
+                </ArcStandardCta>
+              </ArcTextReveal>
+            ) : (
             <ArcStandardCta
               href={ctaHref}
               className="mt-8 w-fit sm:mt-10"
@@ -565,6 +651,7 @@ export function ScrollChapterIntroSection({
             >
               {ctaLabel}
             </ArcStandardCta>
+            )
           ) : null}
 
           {visibleOnLoad && pinScrub ? (

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcPinProgressRail } from "@/components/arc/ArcPinProgressRail";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { ArcScrollRevealMask, ArcScrollSplitReveal } from "@/components/arc/ArcScrollSplitReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
@@ -266,8 +267,29 @@ export function ArcAboutNarrativePinSection({
         )}
       >
         <div className="min-w-0">
-          <div style={headerMotion}>
-            <ArcScrollRevealMask className="overflow-visible pb-[0.12em]">
+          {pinScrub ? (
+            <div style={headerMotion}>
+              <ArcScrollRevealMask className="overflow-visible pb-[0.12em]">
+                <h2
+                  className={cn(
+                    "max-w-full text-balance text-arc-charcoal",
+                    ARC_SPLIT_HEADLINE_SERIF_CLASS,
+                  )}
+                >
+                  <span className="block">{title}</span>
+                  <TitleEmphasis
+                    className={cn(
+                      arcHeadlineEmphasisClass(headlineEmphasisTone),
+                      "mt-2 block max-w-full text-balance leading-[1.06] sm:leading-[1.04]",
+                    )}
+                  >
+                    {titleEmphasis}
+                  </TitleEmphasis>
+                </h2>
+              </ArcScrollRevealMask>
+            </div>
+          ) : (
+            <ArcTextReveal variant="heading">
               <h2
                 className={cn(
                   "max-w-full text-balance text-arc-charcoal",
@@ -284,8 +306,8 @@ export function ArcAboutNarrativePinSection({
                   {titleEmphasis}
                 </TitleEmphasis>
               </h2>
-            </ArcScrollRevealMask>
-          </div>
+            </ArcTextReveal>
+          )}
 
           {sideImageSrc ? (
             <div className="mt-8 w-full max-w-md sm:mt-10 lg:hidden">
@@ -300,20 +322,41 @@ export function ArcAboutNarrativePinSection({
             </div>
           ) : null}
 
-          <ArcScrollSplitReveal
-            className={cn(
-              "max-w-3xl",
-              sideImageSrc ? "mt-8 sm:mt-10 lg:mt-12" : "mt-10 sm:mt-12 md:mt-14",
-            )}
-            lines={storyLines}
-            scrubProgress={pinScrub ? p : undefined}
-            lineClassName={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}
-          />
+          {pinScrub ? (
+            <ArcScrollSplitReveal
+              className={cn(
+                "max-w-3xl",
+                sideImageSrc ? "mt-8 sm:mt-10 lg:mt-12" : "mt-10 sm:mt-12 md:mt-14",
+              )}
+              lines={storyLines}
+              scrubProgress={p}
+              lineClassName={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}
+            />
+          ) : (
+            <div
+              className={cn(
+                "max-w-3xl space-y-5 sm:space-y-6",
+                sideImageSrc ? "mt-8 sm:mt-10 lg:mt-12" : "mt-10 sm:mt-12 md:mt-14",
+              )}
+            >
+              {storyLines.map((line, index) => (
+                <ArcTextReveal key={line.slice(0, 48)} variant="body" delayIndex={index + 1}>
+                  <p className={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}>{line}</p>
+                </ArcTextReveal>
+              ))}
+            </div>
+          )}
 
           {ctaHref && ctaLabel ? (
-            <div className="mt-10 sm:mt-12" style={ctaMotion}>
-              <ArcStandardCta href={ctaHref}>{ctaLabel}</ArcStandardCta>
-            </div>
+            pinScrub ? (
+              <div className="mt-10 sm:mt-12" style={ctaMotion}>
+                <ArcStandardCta href={ctaHref}>{ctaLabel}</ArcStandardCta>
+              </div>
+            ) : (
+              <ArcTextReveal variant="body" delayIndex={storyLines.length + 1} className="mt-10 sm:mt-12">
+                <ArcStandardCta href={ctaHref}>{ctaLabel}</ArcStandardCta>
+              </ArcTextReveal>
+            )
           ) : null}
         </div>
 

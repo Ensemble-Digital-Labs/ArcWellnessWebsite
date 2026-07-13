@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { PinnedSection } from "@/components/arc/PinnedSection";
 import {
   TitleEmphasis,
@@ -160,27 +161,30 @@ function YourPathIntroSection({
       ) : null}
 
       <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pb-16 md:pt-36 lg:pt-40">
-        <div
-          data-scroll-section
-          className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center lg:max-w-3xl"
-        >
-          <h2
-            className="mb-5 max-w-[min(100%,20rem)] font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
-            style={headlineMotion}
-          >
-            <YourPathHeadlineTitle />
-          </h2>
-          <p
-            className="mb-4 font-sans text-base leading-relaxed text-arc-charcoal/82 sm:text-lg"
-            style={headlineMotion}
-          >
-            {lead}
-          </p>
-          <div style={linkMotion}>
-            <ArcPrimaryCta href={ctaHref} centered className="mt-1">
-              {ctaLabel}
-            </ArcPrimaryCta>
-          </div>
+        <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center lg:max-w-3xl">
+          <ArcTextReveal variant="heading">
+            <h2
+              className="mb-5 max-w-[min(100%,20rem)] font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
+              style={headlineMotion}
+            >
+              <YourPathHeadlineTitle />
+            </h2>
+          </ArcTextReveal>
+          <ArcTextReveal variant="body" delayIndex={1}>
+            <p
+              className="mb-4 font-sans text-base leading-relaxed text-arc-charcoal/82 sm:text-lg"
+              style={headlineMotion}
+            >
+              {lead}
+            </p>
+          </ArcTextReveal>
+          <ArcTextReveal variant="body" delayIndex={2}>
+            <div style={linkMotion}>
+              <ArcPrimaryCta href={ctaHref} centered className="mt-1">
+                {ctaLabel}
+              </ArcPrimaryCta>
+            </div>
+          </ArcTextReveal>
         </div>
       </div>
 
@@ -392,15 +396,21 @@ function YourPathStepsMobileExpanded() {
           className="border-b border-arc-charcoal/10 bg-arc-cream last:border-b-0"
         >
           <div className="flex w-full flex-col px-5 py-6 sm:px-8 sm:py-7">
-            <p className="mb-2 font-serif text-[1.75rem] leading-none text-arc-charcoal sm:text-3xl">
-              {step.title}
-            </p>
-            <p className="mb-4 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/52">
-              {step.stepMeta}
-            </p>
-            <p className="font-sans text-base leading-relaxed text-arc-charcoal/85">
-              {step.description}
-            </p>
+            <ArcTextReveal variant="heading" delayIndex={0}>
+              <p className="mb-2 font-serif text-[1.75rem] leading-none text-arc-charcoal sm:text-3xl">
+                {step.title}
+              </p>
+            </ArcTextReveal>
+            <ArcTextReveal variant="body" delayIndex={1}>
+              <p className="mb-4 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/52">
+                {step.stepMeta}
+              </p>
+            </ArcTextReveal>
+            <ArcTextReveal variant="body" delayIndex={2}>
+              <p className="font-sans text-base leading-relaxed text-arc-charcoal/85">
+                {step.description}
+              </p>
+            </ArcTextReveal>
           </div>
 
           <div className="relative aspect-[4/3] w-full bg-arc-charcoal/5 sm:aspect-[3/2]">
@@ -525,29 +535,33 @@ function YourPathStepsInteractiveSection({
                     : "bg-arc-cream/70 opacity-[0.88] hover:bg-arc-cream/90 hover:opacity-100",
                 )}
               >
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <ArcTextReveal variant="line" delayIndex={0} className="w-full">
+                  <div className="flex flex-col items-start gap-1.5">
+                    <p
+                      className={cn(
+                        "font-serif text-xl leading-none lg:text-2xl",
+                        isActive ? "text-arc-charcoal" : "text-arc-charcoal/52",
+                      )}
+                    >
+                      {step.title}
+                    </p>
+                    <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal/48 lg:text-[10px] lg:tracking-[0.16em]">
+                      {step.stepMeta}
+                    </p>
+                  </div>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" delayIndex={1} className="w-full">
                   <p
                     className={cn(
-                      "font-serif text-xl leading-none lg:text-2xl",
-                      isActive ? "text-arc-charcoal" : "text-arc-charcoal/52",
+                      "mt-2 font-sans leading-relaxed",
+                      isActive
+                        ? "text-sm text-arc-charcoal/85 lg:text-[0.9375rem] lg:leading-relaxed"
+                        : "line-clamp-2 text-xs text-arc-charcoal/42 lg:text-sm",
                     )}
                   >
-                    {step.title}
+                    {step.description}
                   </p>
-                  <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal/48 lg:text-[10px] lg:tracking-[0.16em]">
-                    {step.stepMeta}
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "mt-2 font-sans leading-relaxed",
-                    isActive
-                      ? "text-sm text-arc-charcoal/85 lg:text-[0.9375rem] lg:leading-relaxed"
-                      : "line-clamp-2 text-xs text-arc-charcoal/42 lg:text-sm",
-                  )}
-                >
-                  {step.description}
-                </p>
+                </ArcTextReveal>
               </button>
             );
           })}

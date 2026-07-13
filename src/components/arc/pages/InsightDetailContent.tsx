@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { homeInvestSupport } from "@/content/homepage";
@@ -46,23 +47,23 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
         <div className={cn("relative z-10 mx-auto w-full max-w-3xl", ARC_PAGE_RAIL_MAX)}>
           <div className="space-y-6">
-            {entry.body.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 48)}
-                data-scroll-section
-                className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg"
-              >
-                {paragraph}
-              </p>
+            {entry.body.map((paragraph, index) => (
+              <ArcTextReveal key={paragraph.slice(0, 48)} variant="body" delayIndex={index}>
+                <p className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg">
+                  {paragraph}
+                </p>
+              </ArcTextReveal>
             ))}
           </div>
 
-          <Link
-            href={backHref(entry.kind)}
-            className="mt-10 inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-teal hover:text-arc-teal-hover"
-          >
-            {backLabel(entry.kind)}
-          </Link>
+          <ArcTextReveal variant="line" delayIndex={entry.body.length}>
+            <Link
+              href={backHref(entry.kind)}
+              className="mt-10 inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-teal hover:text-arc-teal-hover"
+            >
+              {backLabel(entry.kind)}
+            </Link>
+          </ArcTextReveal>
         </div>
       </section>
 

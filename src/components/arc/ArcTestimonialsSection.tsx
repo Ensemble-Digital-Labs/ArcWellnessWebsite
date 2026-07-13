@@ -1,12 +1,13 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
 import { Star } from "lucide-react";
 
 import { PinnedSection } from "@/components/arc/PinnedSection";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import SphereImageGrid, {
   type ImageData,
@@ -296,7 +297,7 @@ function ArcTestimonialGlassCard({
           className={cn(
             "w-full text-pretty text-center font-serif italic leading-relaxed text-arc-charcoal",
             isActive
-              ? "text-base sm:text-lg lg:text-[1.12rem] lg:leading-[1.65] [@media(max-height:820px)]:lg:text-base [@media(max-height:820px)]:lg:leading-[1.55] [@media(max-height:700px)]:lg:text-[0.95rem] [@media(max-height:700px)]:lg:leading-[1.5]"
+              ? "max-lg:line-clamp-6 text-base sm:text-lg lg:text-[1.12rem] lg:leading-[1.65] [@media(max-height:820px)]:lg:text-base [@media(max-height:820px)]:lg:leading-[1.55] [@media(max-height:700px)]:lg:text-[0.95rem] [@media(max-height:700px)]:lg:leading-[1.5]"
               : "line-clamp-3 text-sm leading-snug [@media(max-width:1320px)]:line-clamp-2 [@media(max-height:820px)]:line-clamp-2",
           )}
         >
@@ -668,29 +669,41 @@ export function ArcTestimonialsSection({
               style={cardMotion}
             >
               <div style={titleMotion} className="shrink-0">
-                <h2
-                  id="testimonials-heading"
-                  className="mb-4 text-center font-serif text-[2.1rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:mb-5 sm:text-4xl md:text-[2.45rem] lg:mx-auto lg:mb-5 lg:w-[min(100%,26rem)] lg:text-[2.65rem] [@media(max-height:820px)]:lg:mb-4 [@media(max-height:820px)]:lg:text-[2.15rem]"
-                >
-                  Testimonials
-                </h2>
+                <ArcTextReveal variant="heading">
+                  <h2
+                    id="testimonials-heading"
+                    className="mb-4 text-center font-serif text-[2.1rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:mb-5 sm:text-4xl md:text-[2.45rem] lg:mx-auto lg:mb-5 lg:w-[min(100%,26rem)] lg:text-[2.65rem] [@media(max-height:820px)]:lg:mb-4 [@media(max-height:820px)]:lg:text-[2.15rem]"
+                  >
+                    Testimonials
+                  </h2>
+                </ArcTextReveal>
               </div>
 
               <div className="mx-auto min-h-0 w-full flex-1 overflow-visible">
                 <div
                   ref={mobileCardSwipeRef}
-                  className="touch-pan-y lg:hidden"
+                  className="relative touch-pan-y lg:hidden"
                   data-arc-swipe-nav
                   aria-label="Swipe left or right to browse testimonials"
                 >
-                  <motion.div
-                    key={selected.id}
-                    initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <ArcTestimonialGlassCard item={selected} variant="active" />
-                  </motion.div>
+                  <div className="grid h-[30rem] grid-cols-1 grid-rows-1 [@media(max-height:740px)]:h-[26rem] sm:h-[32rem]">
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      <motion.div
+                        key={selected.id}
+                        className="h-full [grid-area:1/1]"
+                        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <ArcTestimonialGlassCard
+                          item={selected}
+                          variant="active"
+                          className="h-full"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
 
                   {items.length > 1 ? (
                     <div

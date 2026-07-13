@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
 import { ARC_PINNED_CLEAR_BELOW_LOGO, ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS, ARC_FOUNDER_SPLIT_MARBLE_FEATHER_CLASS, ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS } from "@/lib/arc-layout";
@@ -92,7 +93,6 @@ export function ArcFounderIntroSection({
       ) : null}
       <div className="grid w-full lg:min-h-[min(88dvh,860px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch">
         <div
-          data-scroll-section
           className={cn(
             ARC_PINNED_CLEAR_BELOW_LOGO,
             "relative flex flex-col justify-center px-5 py-12 sm:px-8 sm:py-14 md:px-10 md:py-16 lg:px-12 lg:py-20 xl:px-14",
@@ -114,38 +114,46 @@ export function ArcFounderIntroSection({
           />
 
           <div className="relative z-10 mx-auto w-full max-w-xl text-left lg:max-w-lg xl:max-w-xl">
-            <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
-              {split.hasDoubleEmphasis ? (
-                <>
-                  {split.beforeDouble}
-                  {split.beforeDouble ? " " : null}
-                  <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
-                  {split.gapDouble || " "}
-                  <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e2}</TitleEmphasis>
-                  {split.afterDouble ? <> {split.afterDouble}</> : null}
-                </>
-              ) : split.hasSingleEmphasis ? (
-                <>
-                  {split.beforeSingle}
-                  {split.beforeSingle ? " " : null}
-                  <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
-                  {split.afterSingle ? <> {split.afterSingle}</> : null}
-                </>
-              ) : (
-                headline
-              )}
-            </h2>
+            <ArcTextReveal variant="heading">
+              <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
+                {split.hasDoubleEmphasis ? (
+                  <>
+                    {split.beforeDouble}
+                    {split.beforeDouble ? " " : null}
+                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
+                    {split.gapDouble || " "}
+                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e2}</TitleEmphasis>
+                    {split.afterDouble ? <> {split.afterDouble}</> : null}
+                  </>
+                ) : split.hasSingleEmphasis ? (
+                  <>
+                    {split.beforeSingle}
+                    {split.beforeSingle ? " " : null}
+                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
+                    {split.afterSingle ? <> {split.afterSingle}</> : null}
+                  </>
+                ) : (
+                  headline
+                )}
+              </h2>
+            </ArcTextReveal>
 
-            <p className={cn("mb-6 sm:mb-8", FOUNDER_COPY_EYEBROW_CLASS)}>{roleTitle}</p>
+            <ArcTextReveal variant="body" delayIndex={1}>
+              <p className={cn("mb-6 sm:mb-8", FOUNDER_COPY_EYEBROW_CLASS)}>{roleTitle}</p>
+            </ArcTextReveal>
 
             <div className={FOUNDER_COPY_BODY_CLASS}>
-              {letterParagraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+              {letterParagraphs.map((paragraph, index) => (
+                <ArcTextReveal key={paragraph.slice(0, 48)} variant="body" delayIndex={index + 2}>
+                  <p>{paragraph}</p>
+                </ArcTextReveal>
               ))}
               {closingLine ? (
-                <p className="font-serif text-[1.05rem] font-semibold leading-snug text-arc-charcoal sm:text-lg">
-                  {closingLine}
-                </p>
+                <ArcTextReveal variant="body" delayIndex={letterParagraphs.length + 2}>
+                  <p className="font-serif text-[1.05rem] font-semibold leading-snug text-arc-charcoal sm:text-lg">
+                    {closingLine}
+                  </p>
+                </ArcTextReveal>
               ) : null}
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
@@ -45,23 +46,24 @@ export function ArcStatsBandSection({
       />
 
       <div className={cn("relative", ARC_PAGE_RAIL_MAX)}>
-        <div data-scroll-section className="max-w-2xl">
-          <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.35rem]">
-            {title}
-            {titleEmphasis ? (
-              <>
-                {" "}
-                <TitleEmphasis className="text-[1.08em] text-arc-teal">{titleEmphasis}</TitleEmphasis>
-              </>
-            ) : null}
-          </h2>
-        </div>
+        <ArcTextReveal variant="heading">
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.35rem]">
+              {title}
+              {titleEmphasis ? (
+                <>
+                  {" "}
+                  <TitleEmphasis className="text-[1.08em] text-arc-teal">{titleEmphasis}</TitleEmphasis>
+                </>
+              ) : null}
+            </h2>
+          </div>
+        </ArcTextReveal>
 
         <ul className="mt-12 flex flex-col gap-10 md:mt-14 md:gap-0">
           {items.map((item, idx) => (
             <li
               key={item.label}
-              data-scroll-section
               className={cn(
                 "grid grid-cols-1 items-center gap-6 border-arc-cream/15 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:gap-10 md:border-t md:py-10",
                 idx === items.length - 1 && "md:border-b",
@@ -74,15 +76,17 @@ export function ArcStatsBandSection({
                 {item.value}
               </p>
 
-              <div className="min-w-0 md:pr-4">
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-arc-teal/85">
-                  {String(idx + 1).padStart(2, "0")}
-                </p>
-                <p className="mt-2 font-serif text-xl font-semibold text-arc-cream sm:text-2xl">{item.label}</p>
-                {item.caption ? (
-                  <p className="mt-2 max-w-md font-sans text-sm leading-relaxed text-arc-cream/75">{item.caption}</p>
-                ) : null}
-              </div>
+              <ArcTextReveal variant="body" delayIndex={0} className="min-w-0 md:pr-4">
+                <div>
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-arc-teal/85">
+                    {String(idx + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-2 font-serif text-xl font-semibold text-arc-cream sm:text-2xl">{item.label}</p>
+                  {item.caption ? (
+                    <p className="mt-2 max-w-md font-sans text-sm leading-relaxed text-arc-cream/75">{item.caption}</p>
+                  ) : null}
+                </div>
+              </ArcTextReveal>
 
               <div className="relative mx-auto aspect-square w-full max-w-[200px] shrink-0 overflow-hidden rounded-sm border border-arc-cream/20 md:mx-0 md:max-w-[220px]">
                 <Image
