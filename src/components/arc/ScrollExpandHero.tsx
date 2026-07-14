@@ -786,7 +786,7 @@ export function ScrollExpandHero({
                   <TitleEmphasis
                     className={cn(
                       "block font-title-emphasis font-normal not-italic leading-[0.95] tracking-tight text-arc-cream",
-                      "text-[clamp(4.5rem,17vw,12rem)]",
+                      "text-[clamp(4.5rem,17vw,12rem)] max-md:text-[clamp(6.5rem,25vw,10rem)]",
                       HERO_REF_LINE_ALIGN,
                       HERO_REF_CONNECTOR_SHADOW,
                     )}

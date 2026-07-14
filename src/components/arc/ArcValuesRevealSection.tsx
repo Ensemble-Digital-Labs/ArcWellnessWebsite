@@ -5,7 +5,7 @@
 import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import {
-  ARC_EDITORIAL_BODY_CLASS,
+  ARC_ABOUT_COMPACT_BODY_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -124,7 +124,7 @@ export function ArcValuesRevealSection({
               </div>
             </ArcTextReveal>
             <ArcTextReveal variant="body" delayIndex={1}>
-              <p className={cn("mt-8 min-w-0 sm:mt-10", ARC_EDITORIAL_BODY_CLASS)}>{intro}</p>
+              <p className={cn("mt-8 min-w-0 sm:mt-10", ARC_ABOUT_COMPACT_BODY_CLASS)}>{intro}</p>
             </ArcTextReveal>
           </header>
 
