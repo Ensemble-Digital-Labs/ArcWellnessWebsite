@@ -8,6 +8,7 @@ import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import {
+  ARC_ABOUT_COMPACT_BODY_CLASS,
   ARC_EDITORIAL_BODY_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
@@ -97,7 +98,7 @@ type ArcScrollEditorialSectionProps = {
   /** `split`, About-style inline serif + script on one line (treatment detail sections). */
   headlineLayout?: "inline" | "stacked" | "split";
   /** Larger serif body copy (mission / vision blocks). */
-  bodyTypography?: "default" | "editorial";
+  bodyTypography?: "default" | "editorial" | "about-compact";
   /** Optional sign-off block below body (founder note). */
   signature?: { signoff: string; role: string };
   headlineEmphasisTone?: "teal";
@@ -145,9 +146,15 @@ function EditorialBody({
   const stackedHeadline = headlineLayout === "stacked" && titleEmphasis;
   const splitHeadline = headlineLayout === "split";
   const bodyLineClass =
-    bodyTypography === "editorial" ? ARC_EDITORIAL_BODY_CLASS : DEFAULT_BODY_LINE_CLASS;
+    bodyTypography === "about-compact"
+      ? ARC_ABOUT_COMPACT_BODY_CLASS
+      : bodyTypography === "editorial"
+        ? ARC_EDITORIAL_BODY_CLASS
+        : DEFAULT_BODY_LINE_CLASS;
   const bodyWrapClass =
-    bodyTypography === "editorial" ? "md:max-w-2xl" : "md:max-w-xl";
+    bodyTypography === "editorial" || bodyTypography === "about-compact"
+      ? "md:max-w-2xl"
+      : "md:max-w-xl";
 
   return (
     <div className="flex min-w-0 flex-1 flex-col justify-center">

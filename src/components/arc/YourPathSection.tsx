@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
@@ -385,6 +385,17 @@ function YourPathStepsCrossfadeSection({ pinDisabled = false }: { pinDisabled?: 
 
 /** Desktop/tablet step carousel, dwell per step before auto-advance. */
 const PATH_STEP_AUTO_ADVANCE_MS = 5200;
+/** Hover must settle this long before switching — skips fast cursor sweeps across tabs. */
+const PATH_STEP_HOVER_INTENT_MS = 150;
+/** Shared ease for tab copy + image crossfade. */
+const PATH_STEP_TAB_EASE = [0.22, 1, 0.36, 1] as const;
+const PATH_STEP_TAB_TRANSITION = { duration: 0.75, ease: PATH_STEP_TAB_EASE } as const;
+const PATH_STEP_TITLE_ACTIVE = "rgba(44, 44, 44, 1)";
+const PATH_STEP_TITLE_IDLE = "rgba(44, 44, 44, 0.52)";
+const PATH_STEP_META_ACTIVE = "rgba(44, 44, 44, 0.62)";
+const PATH_STEP_META_IDLE = "rgba(44, 44, 44, 0.42)";
+const PATH_STEP_BODY_ACTIVE = "rgba(44, 44, 44, 0.85)";
+const PATH_STEP_BODY_IDLE = "rgba(44, 44, 44, 0.42)";
 
 /** Mobile: full-width stacked steps — every step expanded with text then image. */
 function YourPathStepsMobileExpanded() {
@@ -443,6 +454,7 @@ function YourPathStepsInteractiveSection({
   const reduceMotion = useReducedMotion();
   const isMinMd = useMinMd();
   const sectionRef = useRef<HTMLElement>(null);
+  const hoverIntentTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -454,6 +466,14 @@ function YourPathStepsInteractiveSection({
     );
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (hoverIntentTimerRef.current != null) {
+        window.clearTimeout(hoverIntentTimerRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -469,8 +489,30 @@ function YourPathStepsInteractiveSection({
   const pauseAutoAdvance = () => setAutoPaused(true);
   const resumeAutoAdvance = () => setAutoPaused(false);
 
+  const clearHoverIntent = () => {
+    if (hoverIntentTimerRef.current != null) {
+      window.clearTimeout(hoverIntentTimerRef.current);
+      hoverIntentTimerRef.current = null;
+    }
+  };
+
+  /** Immediate — click / keyboard. */
   const selectStep = (index: number) => {
+    clearHoverIntent();
     setActiveIndex(index);
+  };
+
+  /** Delayed — only commits if the cursor settles on the tab. */
+  const previewStepOnHover = (index: number) => {
+    if (index === activeIndex) {
+      clearHoverIntent();
+      return;
+    }
+    clearHoverIntent();
+    hoverIntentTimerRef.current = window.setTimeout(() => {
+      hoverIntentTimerRef.current = null;
+      setActiveIndex(index);
+    }, PATH_STEP_HOVER_INTENT_MS);
   };
 
   return (
@@ -482,7 +524,10 @@ function YourPathStepsInteractiveSection({
       )}
       aria-label="Your path steps"
       onMouseEnter={pauseAutoAdvance}
-      onMouseLeave={resumeAutoAdvance}
+      onMouseLeave={() => {
+        clearHoverIntent();
+        resumeAutoAdvance();
+      }}
       onFocusCapture={pauseAutoAdvance}
       onTouchStart={pauseAutoAdvance}
       onTouchEnd={() => window.setTimeout(resumeAutoAdvance, 900)}
@@ -526,42 +571,70 @@ function YourPathStepsInteractiveSection({
                 role="tab"
                 aria-selected={isActive}
                 aria-controls="path-step-image-panel"
+                onMouseEnter={() => previewStepOnHover(index)}
+                onMouseLeave={clearHoverIntent}
+                onFocus={() => selectStep(index)}
                 onClick={() => selectStep(index)}
                 className={cn(
-                  "flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity,box-shadow] duration-300 last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
+                  "relative flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-arc-teal/45",
-                  isActive
-                    ? "bg-arc-cream shadow-[inset_3px_0_0_0_var(--color-arc-teal)]"
-                    : "bg-arc-cream/70 opacity-[0.88] hover:bg-arc-cream/90 hover:opacity-100",
+                  isActive ? "bg-arc-cream opacity-100" : "bg-arc-cream/70 opacity-[0.9]",
                 )}
               >
-                <ArcTextReveal variant="line" delayIndex={0} className="w-full">
-                  <div className="flex flex-col items-start gap-1.5">
-                    <p
-                      className={cn(
-                        "font-serif text-xl leading-none lg:text-2xl",
-                        isActive ? "text-arc-charcoal" : "text-arc-charcoal/52",
-                      )}
-                    >
-                      {step.title}
-                    </p>
-                    <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-arc-charcoal/48 lg:text-[10px] lg:tracking-[0.16em]">
-                      {step.stepMeta}
-                    </p>
-                  </div>
-                </ArcTextReveal>
-                <ArcTextReveal variant="body" delayIndex={1} className="w-full">
-                  <p
-                    className={cn(
-                      "mt-2 font-sans leading-relaxed",
-                      isActive
-                        ? "text-sm text-arc-charcoal/85 lg:text-[0.9375rem] lg:leading-relaxed"
-                        : "line-clamp-2 text-xs text-arc-charcoal/42 lg:text-sm",
-                    )}
+                <motion.span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 w-[3px] bg-arc-teal"
+                  initial={false}
+                  animate={{ opacity: isActive ? 1 : 0, scaleY: isActive ? 1 : 0.72 }}
+                  transition={
+                    reduceMotion ? { duration: 0 } : PATH_STEP_TAB_TRANSITION
+                  }
+                  style={{ transformOrigin: "center top" }}
+                />
+                <div className="flex w-full flex-col items-start gap-1.5">
+                  <motion.p
+                    className="origin-left font-serif text-xl leading-none lg:text-2xl"
+                    initial={false}
+                    animate={{
+                      scale: isActive ? 1 : 0.94,
+                      color: isActive ? PATH_STEP_TITLE_ACTIVE : PATH_STEP_TITLE_IDLE,
+                    }}
+                    transition={
+                      reduceMotion ? { duration: 0 } : PATH_STEP_TAB_TRANSITION
+                    }
+                    style={{ transformOrigin: "left center" }}
                   >
-                    {step.description}
-                  </p>
-                </ArcTextReveal>
+                    {step.title}
+                  </motion.p>
+                  <motion.p
+                    className="origin-left font-sans text-[9px] font-semibold uppercase tracking-[0.14em] lg:text-[10px] lg:tracking-[0.16em]"
+                    initial={false}
+                    animate={{
+                      scale: isActive ? 1 : 0.94,
+                      color: isActive ? PATH_STEP_META_ACTIVE : PATH_STEP_META_IDLE,
+                    }}
+                    transition={
+                      reduceMotion ? { duration: 0 } : PATH_STEP_TAB_TRANSITION
+                    }
+                    style={{ transformOrigin: "left center" }}
+                  >
+                    {step.stepMeta}
+                  </motion.p>
+                </div>
+                <motion.p
+                  className="mt-2 origin-top-left font-sans text-sm leading-relaxed lg:text-[0.9375rem] lg:leading-relaxed"
+                  initial={false}
+                  animate={{
+                    scale: isActive ? 1 : 0.88,
+                    color: isActive ? PATH_STEP_BODY_ACTIVE : PATH_STEP_BODY_IDLE,
+                  }}
+                  transition={
+                    reduceMotion ? { duration: 0 } : PATH_STEP_TAB_TRANSITION
+                  }
+                  style={{ transformOrigin: "left top" }}
+                >
+                  {step.description}
+                </motion.p>
               </button>
             );
           })}
@@ -590,7 +663,7 @@ function YourPathStepsInteractiveSection({
                   ? index === activeIndex
                     ? "opacity-100"
                     : "opacity-0"
-                  : "transition-opacity duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  : "transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
                 index === activeIndex ? "opacity-100" : "opacity-0",
               )}
               aria-hidden={index !== activeIndex}

@@ -1,17 +1,23 @@
 "use client";
 
-import { useRef } from "react";
+import Image from "next/image";
+import { useRef, type CSSProperties } from "react";
 import {
-  ARC_EDITORIAL_BODY_CLASS,
+  ARC_ABOUT_COMPACT_BODY_CLASS,
   ARC_STACKED_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
   arcHeadlineEmphasisClass,
 } from "@/components/arc/TitleEmphasis";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
-import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
+
+/** Soft cream edge fade on a normal (non-arch) portrait frame. */
+const FOUNDER_NOTE_FEATHER_PX = 44;
+const founderNoteFeatherStyle: CSSProperties = {
+  boxShadow: `inset 0 0 0 3px var(--arc-cream), inset 0 0 ${FOUNDER_NOTE_FEATHER_PX}px ${Math.round(FOUNDER_NOTE_FEATHER_PX * 0.55)}px var(--arc-cream), inset 0 0 ${Math.round(FOUNDER_NOTE_FEATHER_PX * 0.45)}px ${Math.round(FOUNDER_NOTE_FEATHER_PX * 0.2)}px var(--arc-cream)`,
+};
 
 type ArcFounderNoteSectionProps = {
   id?: string;
@@ -80,14 +86,21 @@ export function ArcFounderNoteSection({
           data-scroll-section
           className="relative min-h-[min(68dvh,520px)] w-full sm:min-h-[min(72dvh,560px)] lg:min-h-0 lg:h-full"
         >
-          <ArcWindowFrame
-            src={imageSrc}
-            alt={imageAlt}
-            feather
-            className="absolute inset-0 h-full w-full"
-            imageClassName="object-cover object-[50%_18%]"
-            sizes="(min-width: 1024px) 55vw, 100vw"
-          />
+          {/* Rectangular frame + cream edge blur — no arch window mask (About only). */}
+          <div className="absolute inset-0 overflow-hidden rounded-2xl bg-arc-cream sm:rounded-[1.35rem]">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              fill
+              className="object-cover object-[50%_18%]"
+              sizes="(min-width: 1024px) 55vw, 100vw"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-[inherit]"
+              style={founderNoteFeatherStyle}
+            />
+          </div>
         </div>
 
         <div className="relative flex flex-col items-center justify-center py-10 text-center sm:py-12 lg:items-start lg:px-4 lg:py-16 lg:text-left xl:px-8 xl:py-20">
@@ -108,11 +121,11 @@ export function ArcFounderNoteSection({
           </ArcTextReveal>
 
           <ArcTextReveal variant="body" delayIndex={1}>
-            <p className={cn("mt-8 max-w-xl sm:mt-10", ARC_EDITORIAL_BODY_CLASS)}>{lead}</p>
+            <p className={cn("mt-8 max-w-xl sm:mt-10", ARC_ABOUT_COMPACT_BODY_CLASS)}>{lead}</p>
           </ArcTextReveal>
 
           <ArcTextReveal variant="body" delayIndex={2}>
-            <p className={cn("mt-6 max-w-xl sm:mt-7", ARC_EDITORIAL_BODY_CLASS)}>{body}</p>
+            <p className={cn("mt-6 max-w-xl sm:mt-7", ARC_ABOUT_COMPACT_BODY_CLASS)}>{body}</p>
           </ArcTextReveal>
 
           <ArcTextReveal variant="body" delayIndex={3}>

@@ -10,7 +10,7 @@ import { ArcScrollRevealMask, ArcScrollSplitReveal } from "@/components/arc/ArcS
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcStandardCta } from "@/components/arc/ArcStandardCta";
 import {
-  ARC_EDITORIAL_BODY_CLASS,
+  ARC_ABOUT_COMPACT_BODY_CLASS,
   ARC_SPLIT_HEADLINE_SERIF_CLASS,
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -330,7 +330,7 @@ export function ArcAboutNarrativePinSection({
               )}
               lines={storyLines}
               scrubProgress={p}
-              lineClassName={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}
+              lineClassName={ARC_ABOUT_COMPACT_BODY_CLASS}
             />
           ) : (
             <div
@@ -341,7 +341,7 @@ export function ArcAboutNarrativePinSection({
             >
               {storyLines.map((line, index) => (
                 <ArcTextReveal key={line.slice(0, 48)} variant="body" delayIndex={index + 1}>
-                  <p className={cn(ARC_EDITORIAL_BODY_CLASS, "text-arc-charcoal/92")}>{line}</p>
+                  <p className={ARC_ABOUT_COMPACT_BODY_CLASS}>{line}</p>
                 </ArcTextReveal>
               ))}
             </div>

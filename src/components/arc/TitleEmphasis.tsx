@@ -51,6 +51,13 @@ export const ARC_HEADLINE_TITLE_EMPHASIS_DARK_CLASS =
 export const ARC_EDITORIAL_BODY_CLASS =
   "font-serif text-[clamp(0.9375rem,2.2vw,1.2rem)] font-medium leading-[1.45] tracking-tight text-arc-charcoal/90 sm:text-[clamp(1.0625rem,2.5vw,1.5rem)] md:text-[clamp(1.125rem,2.75vw,1.625rem)] lg:text-[clamp(1.2rem,2.4vw,1.75rem)]";
 
+/**
+ * About story / mission / vision / founder note — mobile keeps editorial scale;
+ * laptop+ matches values item body size.
+ */
+export const ARC_ABOUT_COMPACT_BODY_CLASS =
+  "font-serif font-medium tracking-tight text-arc-charcoal/88 text-[clamp(0.9375rem,2.2vw,1.2rem)] leading-[1.45] sm:text-[clamp(1.0625rem,2.5vw,1.5rem)] lg:text-[clamp(1rem,2.1vw,1.25rem)] lg:leading-[1.42]";
+
 type TitleEmphasisProps = {
   children: React.ReactNode;
   className?: string;

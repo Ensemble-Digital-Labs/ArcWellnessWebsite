@@ -5,8 +5,10 @@
  *
  * See `public/assets/sections/founder/README.md`.
  *
- * `site.ts` **`images.founderPortrait`** uses the **professional** lead by default;
- * switch to `PHYSICIAN_SMILING_PORTRAITS[0]` for a friendlier mood.
+ * Homepage teal card uses transparent **cutout**
+ * (`/assets/sections/founder/physician-jabbar-cutout.webp`) via `images.founderPortrait`.
+ * About founder note uses **`images.founderNotePortrait`** (framed professional).
+ * Switch to a smiling/professional path for other campaigns.
  */
 export const PHYSICIAN_PROFESSIONAL_PORTRAITS = [
   "/assets/sections/founder/physician-professional-01.webp",

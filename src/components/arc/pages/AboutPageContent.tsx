@@ -60,7 +60,7 @@ export function AboutPageContent() {
         title={mission.title}
         titleEmphasis={mission.subtitle}
         headlineLayout="stacked"
-        bodyTypography="editorial"
+        bodyTypography="about-compact"
         paragraphs={[mission.body]}
         imageSrc={CLINIC_INTERIOR_IMAGES.consultationLounge}
         imageAlt={CLINIC_INTERIOR_ALT.consultationLounge}
@@ -78,7 +78,7 @@ export function AboutPageContent() {
         title={vision.title}
         titleEmphasis={vision.subtitle}
         headlineLayout="stacked"
-        bodyTypography="editorial"
+        bodyTypography="about-compact"
         paragraphs={[vision.body]}
         imageSrc={CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom}
         imageAlt={CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom}
@@ -111,7 +111,7 @@ export function AboutPageContent() {
         body={founder.body}
         signoff={founder.signoff}
         role={founder.role}
-        imageSrc={images.founderPortrait}
+        imageSrc={images.founderNotePortrait}
         imageAlt="Dr. Danish Jabbar, Founder & Medical Director"
         headlineEmphasisTone="teal"
         topSeam

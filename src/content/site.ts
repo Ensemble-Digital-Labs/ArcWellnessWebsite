@@ -45,10 +45,15 @@ export const images = {
   heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.webp",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.webp",
   /**
-   * Founder: Dr. Danish Jabbar. Default: **professional** (formal) lead; use smiling variant for warmer campaigns
-   * (`PHYSICIAN_SMILING_PORTRAITS` in `founderPortraits.ts`).
+   * Homepage teal expand card — transparent **cutout** (person only).
+   * Master: `public/assets/sections/founder/physician-jabbar-cutout.png` (4K).
+   * See smiling/professional pools in `founderPortraits.ts` for other campaigns.
    */
-  founderPortrait: "/assets/sections/founder/physician-professional-01.webp",
+  founderPortrait: "/assets/sections/founder/physician-jabbar-cutout.webp",
+  /**
+   * About “A Note from Our Founder” — full framed portrait (not the homepage cutout).
+   */
+  founderNotePortrait: "/assets/sections/founder/physician-professional-01.webp",
   /**
    * Extra portraits for **`#founder`** mosaic only, all under **`/public/assets/sections/founder/`**.
    * (Avoids clinic / service stock used elsewhere.)

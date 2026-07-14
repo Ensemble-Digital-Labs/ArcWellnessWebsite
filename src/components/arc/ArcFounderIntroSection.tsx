@@ -1,21 +1,39 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
-import { ABOUT_HERO_COPY_AMBIENT_IMAGES } from "@/content/backgroundDecoration";
-import { ARC_PINNED_CLEAR_BELOW_LOGO, ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS, ARC_FOUNDER_SPLIT_MARBLE_FEATHER_CLASS, ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS } from "@/lib/arc-layout";
+import {
+  ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS,
+  ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS,
+  ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS,
+  ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS,
+} from "@/lib/arc-layout";
+import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
+import { whenArcLocomotiveReady } from "@/lib/locomotive";
+import { prefersReducedMotion } from "@/lib/motionPrefs";
 import { cn } from "@/lib/utils";
 
-const FOUNDER_MARBLE_BG = ABOUT_HERO_COPY_AMBIENT_IMAGES[0];
+gsap.registerPlugin(ScrollTrigger);
 
-const FOUNDER_COPY_NAME_EMPHASIS_CLASS =
-  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
-const FOUNDER_COPY_EYEBROW_CLASS =
-  "font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-charcoal/62 sm:text-[0.7rem]";
-const FOUNDER_COPY_BODY_CLASS =
-  "space-y-4 font-sans text-sm leading-relaxed text-arc-charcoal/88 sm:space-y-5 sm:text-[0.95rem] md:text-base md:leading-relaxed";
+/** Desktop resting → expanded (matches demo inset-to-bleed scrub). */
+const DESKTOP_WIDTH = { start: "78%", end: "100%" } as const;
+const DESKTOP_RADIUS = { start: "48px", end: "28px" } as const;
+/** Milder expand on narrow viewports so the card stays readable. */
+const MOBILE_WIDTH = { start: "90%", end: "100%" } as const;
+const MOBILE_RADIUS = { start: "36px", end: "28px" } as const;
+
+const FOUNDER_NAME_EMPHASIS_CLASS =
+  "text-[1.35em] leading-[1.01] text-arc-teal sm:text-[1.4em] md:text-[1.45em] lg:text-[1.5em]";
+const FOUNDER_EYEBROW_CLASS =
+  "font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-champagne sm:text-[0.7rem]";
+const FOUNDER_BODY_CLASS =
+  "space-y-4 font-sans text-sm leading-relaxed text-arc-cream/90 sm:space-y-5 sm:text-[0.95rem] md:text-base md:leading-relaxed";
 
 type ArcFounderIntroSectionProps = {
   id?: string;
@@ -58,8 +76,48 @@ function splitHeadline(
   };
 }
 
+function expandRange() {
+  const mobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 767px)").matches;
+  return {
+    width: mobile ? MOBILE_WIDTH : DESKTOP_WIDTH,
+    radius: mobile ? MOBILE_RADIUS : DESKTOP_RADIUS,
+  };
+}
+
+function setCardExpanded(card: HTMLElement, expanded: boolean) {
+  const { width, radius } = expandRange();
+  gsap.set(card, {
+    width: expanded ? width.end : width.start,
+    borderRadius: expanded ? radius.end : radius.start,
+  });
+}
+
+/** Pin the content rail to the resting card width so scrub only grows teal chrome. */
+function lockContentRailWidth(card: HTMLElement, content: HTMLElement, restingWidth: string) {
+  content.style.width = "";
+  content.style.maxWidth = "";
+  gsap.set(card, { width: restingWidth });
+  // Measure after resting width is applied — rail fills the card, then we freeze px.
+  const measured = Math.round(content.getBoundingClientRect().width);
+  if (measured <= 0) return;
+  content.style.width = `${measured}px`;
+  content.style.maxWidth = `${measured}px`;
+  content.style.marginLeft = "auto";
+  content.style.marginRight = "auto";
+}
+
+function clearContentRailLock(content: HTMLElement) {
+  content.style.width = "";
+  content.style.maxWidth = "";
+  content.style.marginLeft = "";
+  content.style.marginRight = "";
+}
+
 /**
- * Physician-founder, static split: marble letter on the left, portrait on the right (no scroll transitions).
+ * Physician-founder teal split card with scroll-driven inset→bleed expand
+ * (width + border-radius scrub — not CSS transform scale).
  */
 export function ArcFounderIntroSection({
   id,
@@ -75,12 +133,102 @@ export function ArcFounderIntroSection({
   topSeam = false,
   bottomSeam = false,
 }: ArcFounderIntroSectionProps) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const split = splitHeadline(headline, headlineEmphasisWord, headlineEmphasisWord2);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const card = cardRef.current;
+    const content = contentRef.current;
+    if (!section || !card || !content) return;
+
+    if (prefersReducedMotion()) {
+      setCardExpanded(card, true);
+      clearContentRailLock(content);
+      return;
+    }
+
+    let cancelled = false;
+    let revert: (() => void) | null = null;
+
+    const setup = () => {
+      if (cancelled) return;
+      const sec = sectionRef.current;
+      const el = cardRef.current;
+      const rail = contentRef.current;
+      if (!sec || !el || !rail) return;
+
+      revert?.();
+      const { width, radius } = expandRange();
+
+      // Freeze copy + portrait at resting card size before shell expands.
+      lockContentRailWidth(el, rail, width.start);
+
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          el,
+          { width: width.start, borderRadius: radius.start },
+          {
+            width: width.end,
+            borderRadius: radius.end,
+            ease: "none",
+            overwrite: "auto",
+            scrollTrigger: {
+              id: "arc-founder-card-expand",
+              trigger: sec,
+              ...arcScrollTriggerScrollerProps(),
+              start: "top 90%",
+              end: "top 18%",
+              scrub: arcScrollScrubLag(),
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      }, sec);
+
+      revert = () => {
+        ctx.revert();
+        clearContentRailLock(rail);
+      };
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.setTimeout(() => ScrollTrigger.refresh(), 160);
+    };
+
+    const unregisterReady = whenArcLocomotiveReady(() => queueMicrotask(setup));
+    const fallback = window.setTimeout(() => {
+      if (!cancelled && revert === null) setup();
+    }, 1800);
+
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (!cancelled) setup();
+      }, 150);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelled = true;
+      unregisterReady();
+      window.clearTimeout(fallback);
+      window.clearTimeout(resizeTimer);
+      window.removeEventListener("resize", onResize);
+      revert?.();
+    };
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id={id}
-      className={cn("relative scroll-mt-28 overflow-hidden bg-arc-cream", className)}
+      className={cn(
+        // Flush to services — no cream strip; keep bottom soft blur on the card itself.
+        "relative scroll-mt-28 overflow-hidden bg-arc-cream px-4 pb-0 sm:px-6 lg:mt-2 lg:px-8",
+        className,
+      )}
     >
       {topSeam ? (
         <ArcSectionSeamBlend
@@ -91,45 +239,42 @@ export function ArcFounderIntroSection({
           className="h-[min(10vh,4.5rem)] bg-gradient-to-b from-arc-cream from-40% via-arc-cream/75 via-70% to-transparent [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_30%,transparent_100%)] mask-image-[linear-gradient(to_bottom,black_0%,black_30%,transparent_100%)]"
         />
       ) : null}
-      <div className="grid w-full lg:min-h-[min(88dvh,860px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch">
-        <div
-          className={cn(
-            ARC_PINNED_CLEAR_BELOW_LOGO,
-            "relative flex flex-col justify-center px-5 py-12 sm:px-8 sm:py-14 md:px-10 md:py-16 lg:px-12 lg:py-20 xl:px-14",
-          )}
-        >
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <Image
-              src={FOUNDER_MARBLE_BG}
-              alt=""
-              fill
-              className="object-cover object-center"
-              sizes="(min-width: 1024px) 55vw, 100vw"
-            />
-            <div className="absolute inset-0 bg-arc-cream/8" />
-          </div>
-          <div
-            aria-hidden
-            className={cn(ARC_FOUNDER_SPLIT_MARBLE_FEATHER_CLASS, "max-lg:hidden")}
-          />
 
-          <div className="relative z-10 mx-auto w-full max-w-xl text-left lg:max-w-lg xl:max-w-xl">
+      {/*
+        Only the teal SHELL scrub-expands. Inner rail is locked to resting card width in px
+        so copy/portrait never reflow during the scrub (including the start of the range).
+      */}
+      <div
+        ref={cardRef}
+        data-scroll-section
+        className="relative mx-auto w-[90%] overflow-hidden rounded-[36px] bg-arc-teal-ink md:w-[78%] md:rounded-[48px]"
+      >
+        {/* Cream edge feathers — same soft lip as the section top seam, on L/R/bottom. */}
+        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS} />
+        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS} />
+        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS} />
+
+        <div
+          ref={contentRef}
+          className="relative z-10 mx-auto grid w-full items-stretch gap-8 px-6 pt-12 pb-16 sm:gap-10 sm:px-10 sm:pt-16 sm:pb-22 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14 lg:px-14 lg:pt-20 lg:pb-28"
+        >
+          <div className="relative flex min-w-0 flex-col justify-center text-left">
             <ArcTextReveal variant="heading">
-              <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight text-arc-charcoal sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
+              <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-normal leading-[1.08] tracking-tight text-arc-cream sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
                 {split.hasDoubleEmphasis ? (
                   <>
                     {split.beforeDouble}
                     {split.beforeDouble ? " " : null}
-                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
+                    <TitleEmphasis className={FOUNDER_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
                     {split.gapDouble || " "}
-                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e2}</TitleEmphasis>
+                    <TitleEmphasis className={FOUNDER_NAME_EMPHASIS_CLASS}>{split.e2}</TitleEmphasis>
                     {split.afterDouble ? <> {split.afterDouble}</> : null}
                   </>
                 ) : split.hasSingleEmphasis ? (
                   <>
                     {split.beforeSingle}
                     {split.beforeSingle ? " " : null}
-                    <TitleEmphasis className={FOUNDER_COPY_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
+                    <TitleEmphasis className={FOUNDER_NAME_EMPHASIS_CLASS}>{split.e1}</TitleEmphasis>
                     {split.afterSingle ? <> {split.afterSingle}</> : null}
                   </>
                 ) : (
@@ -139,10 +284,10 @@ export function ArcFounderIntroSection({
             </ArcTextReveal>
 
             <ArcTextReveal variant="body" delayIndex={1}>
-              <p className={cn("mb-6 sm:mb-8", FOUNDER_COPY_EYEBROW_CLASS)}>{roleTitle}</p>
+              <p className={cn("mb-6 sm:mb-8", FOUNDER_EYEBROW_CLASS)}>{roleTitle}</p>
             </ArcTextReveal>
 
-            <div className={FOUNDER_COPY_BODY_CLASS}>
+            <div className={FOUNDER_BODY_CLASS}>
               {letterParagraphs.map((paragraph, index) => (
                 <ArcTextReveal key={paragraph.slice(0, 48)} variant="body" delayIndex={index + 2}>
                   <p>{paragraph}</p>
@@ -150,42 +295,40 @@ export function ArcFounderIntroSection({
               ))}
               {closingLine ? (
                 <ArcTextReveal variant="body" delayIndex={letterParagraphs.length + 2}>
-                  <p className="font-serif text-[1.05rem] font-semibold leading-snug text-arc-charcoal sm:text-lg">
+                  <p className="font-serif text-[1.05rem] font-semibold leading-snug text-arc-cream sm:text-lg">
                     {closingLine}
                   </p>
                 </ArcTextReveal>
               ) : null}
             </div>
           </div>
-        </div>
 
-        <div
-          data-scroll-section
-          className={cn(
-            "relative min-h-[min(68dvh,520px)] w-full min-w-0 sm:min-h-[min(72dvh,560px)] lg:-ml-[min(4.5rem,7%)] lg:min-h-0 lg:h-auto lg:w-[calc(100%+min(4.5rem,7%))]",
-            // Brand arch: dome the portrait's top on lg+ only, via mask (no overflow clip) so
-            // the curved edge alpha-blends into cream with no compositing hairline. Bottom stays
-            // full-bleed; the left feather keeps blending into the marble panel.
-            "arc-arch-mask-top",
-          )}
-        >
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            className="object-cover object-[50%_22%]"
-            sizes="(min-width: 1024px) 45vw, 100vw"
-            priority={false}
-          />
-          {/* The arch shape + all-border feather come from the soft `arc-arch-mask-top` mask on
-              the container (dissolves the image into cream along the curve). The left feather
-              keeps the wider blend into the marble text panel. */}
-          <div
-            aria-hidden
-            className={cn(ARC_FOUNDER_SPLIT_PORTRAIT_FEATHER_CLASS, "max-lg:hidden")}
-          />
+          {/* Cutout portrait — bottom fades into teal so the crop edge doesn’t hard-cut. */}
+          <div className="relative min-h-[min(54dvh,380px)] w-full min-w-0 sm:min-h-[min(58dvh,440px)] lg:min-h-[600px]">
+            <div
+              className={cn(
+                "absolute inset-0",
+                "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_68%,rgba(0,0,0,0.4)_86%,transparent_100%)]",
+                "mask-image-[linear-gradient(to_bottom,black_0%,black_68%,rgba(0,0,0,0.4)_86%,transparent_100%)]",
+              )}
+            >
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                fill
+                className="object-cover object-top"
+                sizes="(min-width: 1024px) 420px, 100vw"
+                priority={false}
+              />
+            </div>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[40%] bg-gradient-to-t from-arc-teal-ink from-20% via-arc-teal-ink/65 via-58% to-transparent"
+            />
+          </div>
         </div>
       </div>
+
       {bottomSeam ? (
         <ArcSectionSeamBlend
           edge="bottom"
