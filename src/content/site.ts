@@ -46,10 +46,9 @@ export const images = {
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.webp",
   /**
    * Homepage teal expand card — transparent **cutout** (person only).
-   * Master: `public/assets/sections/founder/physician-jabbar-cutout.png` (4K).
-   * See smiling/professional pools in `founderPortraits.ts` for other campaigns.
+   * Source: demo cutout (`dr_jabbar` webp), not the damaged local 4K re-exports.
    */
-  founderPortrait: "/assets/sections/founder/physician-jabbar-cutout.webp",
+  founderPortrait: "/assets/sections/founder/physician-jabbar-cutout.webp?v=6",
   /**
    * About “A Note from Our Founder” — full framed portrait (not the homepage cutout).
    */

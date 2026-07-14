@@ -4,7 +4,7 @@ Two editorial sets of the **same physician**, plus a homepage **cutout**:
 
 | Pattern | Files | Best for |
 |---------|--------|-----------|
-| **`physician-jabbar-cutout.png` / `.webp`** | single | Homepage teal card — transparent 4K cutout (person only). |
+| **`physician-jabbar-cutout.webp`** | single | Homepage teal card — clean transparent cutout (demo asset). |
 | **`physician-professional-*.webp`** | `01` … `05` | Formal, clinical, executive tone (neutral expression). |
 | **`physician-smiling-*.webp`** | `01` … `06` | Warm, approachable marketing. |
 

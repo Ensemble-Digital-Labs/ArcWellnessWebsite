@@ -249,16 +249,16 @@ export function ArcFounderIntroSection({
         data-scroll-section
         className="relative mx-auto w-[90%] overflow-hidden rounded-[36px] bg-arc-teal-ink md:w-[78%] md:rounded-[48px]"
       >
-        {/* Cream edge feathers — same soft lip as the section top seam, on L/R/bottom. */}
+        {/* Cream edge feathers — L/R on all sizes; bottom lip desktop-only. */}
         <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS} />
         <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS} />
-        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS} />
+        <div aria-hidden className={cn(ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS, "max-lg:hidden")} />
 
         <div
           ref={contentRef}
-          className="relative z-10 mx-auto grid w-full items-stretch gap-8 px-6 pt-12 pb-16 sm:gap-10 sm:px-10 sm:pt-16 sm:pb-22 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14 lg:px-14 lg:pt-20 lg:pb-28"
+          className="relative z-10 mx-auto grid w-full max-w-[1180px] items-stretch gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14 lg:px-14 lg:py-24"
         >
-          <div className="relative flex min-w-0 flex-col justify-center text-left">
+          <div className="relative min-w-0 text-left">
             <ArcTextReveal variant="heading">
               <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-normal leading-[1.08] tracking-tight text-arc-cream sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
                 {split.hasDoubleEmphasis ? (
@@ -303,27 +303,17 @@ export function ArcFounderIntroSection({
             </div>
           </div>
 
-          {/* Cutout portrait — bottom fades into teal so the crop edge doesn’t hard-cut. */}
-          <div className="relative min-h-[min(54dvh,380px)] w-full min-w-0 sm:min-h-[min(58dvh,440px)] lg:min-h-[600px]">
-            <div
-              className={cn(
-                "absolute inset-0",
-                "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_68%,rgba(0,0,0,0.4)_86%,transparent_100%)]",
-                "mask-image-[linear-gradient(to_bottom,black_0%,black_68%,rgba(0,0,0,0.4)_86%,transparent_100%)]",
-              )}
-            >
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                fill
-                className="object-cover object-top"
-                sizes="(min-width: 1024px) 420px, 100vw"
-                priority={false}
-              />
-            </div>
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[40%] bg-gradient-to-t from-arc-teal-ink from-20% via-arc-teal-ink/65 via-58% to-transparent"
+          {/* Demo #doctor portrait: flow img, object-cover object-top, min-h 360/520 */}
+          <div className="h-full">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              width={958}
+              height={1287}
+              unoptimized
+              className="h-full min-h-[360px] w-full object-cover object-top lg:min-h-[520px]"
+              sizes="(min-width: 1024px) 420px, 100vw"
+              priority={false}
             />
           </div>
         </div>
