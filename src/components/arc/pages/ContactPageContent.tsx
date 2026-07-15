@@ -6,6 +6,7 @@ import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
+import { ARC_ABOUT_COMPACT_BODY_CLASS } from "@/components/arc/TitleEmphasis";
 import { ContactForm } from "@/components/pages/ContactForm";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { contactPage } from "@/content/pages/contact";
@@ -44,7 +45,7 @@ export function ContactPageContent() {
               <h2 className="font-serif text-3xl font-semibold text-arc-charcoal sm:text-4xl">Reach out your way</h2>
             </ArcTextReveal>
             <ArcTextReveal variant="body" delayIndex={1}>
-              <p className="mt-4 max-w-xl font-serif text-base leading-relaxed text-arc-charcoal/88 sm:text-lg">
+              <p className={cn("mt-4 max-w-xl", ARC_ABOUT_COMPACT_BODY_CLASS)}>
                 {hero.body}
               </p>
             </ArcTextReveal>
@@ -87,7 +88,7 @@ export function ContactPageContent() {
             </ul>
             <ArcTextReveal variant="body" delayIndex={5}>
               <blockquote className="mt-10 border-l-2 border-arc-teal-ink/50 pl-5">
-                <p className="font-serif text-xl italic text-arc-charcoal">{closing.quote}</p>
+                <p className={ARC_ABOUT_COMPACT_BODY_CLASS}>{closing.quote}</p>
                 <p className="mt-2 font-sans text-sm text-arc-charcoal/65">{closing.line}</p>
               </blockquote>
             </ArcTextReveal>

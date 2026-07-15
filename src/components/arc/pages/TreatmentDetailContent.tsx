@@ -62,7 +62,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
           title="What to"
           titleEmphasis="expect"
           headlineLayout="split"
-          bodyTypography="editorial"
+          bodyTypography="about-compact"
           revealLines
           paragraphs={treatment.highlights}
           variant="cream"
@@ -91,7 +91,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
             title={title}
             titleEmphasis={titleEmphasis}
             headlineLayout="split"
-            bodyTypography="editorial"
+            bodyTypography="about-compact"
             revealLines
             paragraphs={paragraphs}
             imageSrc={i % 2 === 0 ? treatment.imageSrc : undefined}

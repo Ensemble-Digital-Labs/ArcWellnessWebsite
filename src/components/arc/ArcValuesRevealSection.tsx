@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { ArcMarbleAmbientPlate } from "@/components/arc/ArcMarbleAmbientPlate";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import {
@@ -158,12 +156,7 @@ export function ArcValuesRevealSection({
                       </h3>
                     </ArcTextReveal>
                     <ArcTextReveal variant="body" delayIndex={1}>
-                      <p
-                        className={cn(
-                          "mt-2.5 break-words md:mt-3",
-                          "font-serif text-[clamp(1rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal/88",
-                        )}
-                      >
+                      <p className={cn("mt-2.5 break-words md:mt-3", ARC_ABOUT_COMPACT_BODY_CLASS)}>
                         {item.body}
                       </p>
                     </ArcTextReveal>

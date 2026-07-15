@@ -345,7 +345,7 @@ export function ArcDesktopNav() {
           href={ARC_NAV_BOOK_CTA.href}
           {...bookingLinkExternalProps(ARC_NAV_BOOK_CTA.href)}
           className={cn(
-            "group pointer-events-auto inline-flex items-center gap-2 justify-self-end rounded-full bg-arc-teal py-2.5 pl-6 pr-5",
+            "group pointer-events-auto inline-flex w-max shrink-0 items-center gap-2 justify-self-end whitespace-nowrap rounded-full bg-arc-teal py-2.5 pl-6 pr-5",
             "border border-white/50",
             "font-sans text-[0.9375rem] font-semibold tracking-tight text-white",
             "shadow-[0_10px_28px_rgba(131,208,187,0.38)] transition-[filter,transform] duration-300",

@@ -29,7 +29,7 @@ const MOBILE_WIDTH = { start: "90%", end: "100%" } as const;
 const MOBILE_RADIUS = { start: "36px", end: "28px" } as const;
 
 const FOUNDER_NAME_EMPHASIS_CLASS =
-  "text-[1.35em] leading-[1.01] text-arc-teal sm:text-[1.4em] md:text-[1.45em] lg:text-[1.5em]";
+  "text-[1.35em] leading-[1.01] text-arc-cream sm:text-[1.4em] md:text-[1.45em] lg:text-[1.5em]";
 const FOUNDER_EYEBROW_CLASS =
   "font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-champagne sm:text-[0.7rem]";
 const FOUNDER_BODY_CLASS =
@@ -295,7 +295,7 @@ export function ArcFounderIntroSection({
               ))}
               {closingLine ? (
                 <ArcTextReveal variant="body" delayIndex={letterParagraphs.length + 2}>
-                  <p className="font-serif text-[1.05rem] font-semibold leading-snug text-arc-cream sm:text-lg">
+                  <p className="text-base font-semibold sm:text-[1.05rem] md:text-lg">
                     {closingLine}
                   </p>
                 </ArcTextReveal>
