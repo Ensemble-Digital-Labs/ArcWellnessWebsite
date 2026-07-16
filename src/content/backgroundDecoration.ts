@@ -71,7 +71,7 @@ export const TESTIMONIALS_SECTION_BACKGROUND_PREVIOUS_SRC =
 
 /** Full-bleed art behind `#path` sticky intro only (per-step backgrounds can be wired separately later). */
 export const PATH_SECTION_INTRO_BACKGROUND_SRC =
-  "/assets/decoration/background/ambient-09.webp?v=20260711" as const;
+  "/assets/sections/your-path/path-intro-background.webp?v=20260716" as const;
 
 /** Photography for each journey step panel in `#path` (after intro). See `public/assets/sections/your-path/steps/`. */
 export const PATH_STEP_IMAGE_SRC = {

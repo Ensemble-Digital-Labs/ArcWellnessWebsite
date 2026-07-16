@@ -41,6 +41,8 @@ export const images = {
   logo: "/assets/branding/arc-wellness-logo-transparent-gold.webp",
   /** Full-bleed hero background, scroll-zoom in `ScrollExpandHero` (mint wall, 4K WebP). */
   heroMedia: "/assets/hero/arc_wellness_mint_wall_hero_HD_4K_web.webp",
+  /** Homepage `ScrollExpandHero` plate — silk sheet + floral corners. */
+  homeHeroMedia: "/assets/hero/hero-silk-floral-sheet.webp?v=20260716b",
   /** Alternate hero plate, entrance glass doors (contact / showcase). */
   heroBg: "/assets/hero/arc-wellness-entrance-glass-doors.webp",
   whoWeAre: "/assets/sections/who-we-are/doctor-consultation-office.webp",

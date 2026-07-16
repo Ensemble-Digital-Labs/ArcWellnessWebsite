@@ -749,7 +749,19 @@ export function ScrollExpandHero({
               />
             </div>
             {referenceLayout ? (
-              lightSurface ? null : (
+              lightSurface ? (
+                /* Soft cream pocket under the fixed header logo — calms floral noise in the top-left. */
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  aria-hidden
+                  style={{
+                    background: [
+                      "radial-gradient(ellipse 52% 44% at 0% 0%, color-mix(in srgb, var(--arc-cream) 94%, transparent) 0%, color-mix(in srgb, var(--arc-cream) 58%, transparent) 34%, color-mix(in srgb, var(--arc-cream) 18%, transparent) 58%, transparent 74%)",
+                      "linear-gradient(135deg, color-mix(in srgb, var(--arc-cream) 55%, transparent) 0%, transparent 28%)",
+                    ].join(", "),
+                  }}
+                />
+              ) : (
                 <div
                   className="absolute inset-0 hidden bg-gradient-to-r from-black/22 via-black/5 to-transparent md:block"
                   aria-hidden

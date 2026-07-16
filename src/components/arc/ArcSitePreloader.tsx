@@ -22,6 +22,7 @@ import { images } from "@/content/site";
 /** Above-the-fold art warmed while the splash holds, so the hero paints instantly on reveal. */
 const PRELOAD_SRCS: readonly string[] = [
   images.logo,
+  images.homeHeroMedia,
   PATH_SECTION_INTRO_BACKGROUND_SRC,
   images.heroMedia,
   images.founderPortrait,
