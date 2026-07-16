@@ -245,7 +245,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 
 function WebGLShowcase({ slides, className }: ShowcaseProps) {
   const [webglReady, setWebglReady] = useState(false);
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const posterSrc = slides[0]?.imageSrc;
   const titleRef = useRef<HTMLHeadingElement>(null);
