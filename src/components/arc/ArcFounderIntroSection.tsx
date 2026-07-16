@@ -91,7 +91,7 @@ function setCardExpanded(card: HTMLElement, expanded: boolean) {
   });
 }
 
-/** Pin the content rail to the resting card width so scrub only grows teal chrome. */
+/** Freeze copy + portrait layout at resting card width so scrub only grows teal chrome. */
 function lockContentRailWidth(card: HTMLElement, content: HTMLElement, restingWidth: string) {
   content.style.width = "";
   content.style.maxWidth = "";
@@ -112,8 +112,8 @@ function clearContentRailLock(content: HTMLElement) {
 }
 
 /**
- * Physician-founder teal card — scroll expands width + radius from inset to
- * true left–right edge (no cream gutters when fully expanded).
+ * Physician-founder teal card — scroll expands shell inset→bleed.
+ * Inner rail stays locked so text/portrait don’t reflow during the scrub.
  */
 export function ArcFounderIntroSection({
   id,
@@ -220,7 +220,6 @@ export function ArcFounderIntroSection({
       ref={sectionRef}
       id={id}
       className={cn(
-        // Cream plate shows only while inset; expanded 100% is true L–R edge.
         "relative scroll-mt-28 overflow-hidden bg-arc-cream px-0 pb-0",
         className,
       )}
@@ -235,6 +234,10 @@ export function ArcFounderIntroSection({
         />
       ) : null}
 
+      {/*
+        Teal SHELL scrub-expands. Inner rail is locked to resting width in px
+        so copy + portrait stay stable while chrome goes edge-to-edge.
+      */}
       <div
         ref={cardRef}
         data-scroll-section
@@ -244,10 +247,10 @@ export function ArcFounderIntroSection({
 
         <div
           ref={contentRef}
-          className="relative z-10 mx-auto grid w-full max-w-[1180px] items-stretch gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14 lg:px-14 lg:py-24"
+          className="relative z-10 mx-auto grid w-full max-w-[1280px] items-center justify-items-center gap-6 px-5 pb-10 pt-12 text-center sm:gap-8 sm:px-8 sm:pb-12 sm:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end lg:justify-items-stretch lg:gap-8 lg:px-8 lg:pb-11 lg:pt-14 lg:text-left xl:gap-10 xl:px-10 xl:pb-12 xl:pt-16"
         >
-          <div className="relative min-w-0 text-left">
-            <ArcTextReveal variant="heading">
+          <div className="relative flex w-full min-w-0 max-w-xl flex-col items-center justify-center pb-2 text-center lg:max-w-none lg:items-start lg:self-stretch lg:pb-3 lg:text-left">
+            <ArcTextReveal variant="heading" className="w-full">
               <h2 className="mb-2 max-w-full break-words font-serif text-[2rem] font-normal leading-[1.08] tracking-tight text-arc-cream sm:text-[2.35rem] sm:leading-[1.06] md:text-[2.65rem] lg:text-[2.85rem]">
                 {split.hasDoubleEmphasis ? (
                   <>
@@ -271,11 +274,11 @@ export function ArcFounderIntroSection({
               </h2>
             </ArcTextReveal>
 
-            <ArcTextReveal variant="body" delayIndex={1}>
+            <ArcTextReveal variant="body" delayIndex={1} className="w-full">
               <p className={cn("mb-6 sm:mb-8", FOUNDER_EYEBROW_CLASS)}>{roleTitle}</p>
             </ArcTextReveal>
 
-            <div className={FOUNDER_BODY_CLASS}>
+            <div className={cn(FOUNDER_BODY_CLASS, "w-full max-lg:mx-auto")}>
               {letterParagraphs.map((paragraph, index) => (
                 <ArcTextReveal key={paragraph.slice(0, 48)} variant="body" delayIndex={index + 2}>
                   <p>{paragraph}</p>
@@ -291,15 +294,15 @@ export function ArcFounderIntroSection({
             </div>
           </div>
 
-          <div className="h-full">
+          <div className="relative flex min-h-[460px] w-full max-w-[460px] translate-x-[8%] items-end justify-center self-center sm:min-h-[520px] sm:max-w-[520px] sm:translate-x-[10%] lg:-mr-12 lg:min-h-[580px] lg:max-w-none lg:translate-x-0 lg:justify-end lg:self-end xl:-mr-14 xl:min-h-[620px]">
             <Image
               src={imageSrc}
               alt={imageAlt}
               width={958}
               height={1287}
               unoptimized
-              className="h-full min-h-[360px] w-full object-cover object-top lg:min-h-[520px]"
-              sizes="(min-width: 1024px) 420px, 100vw"
+              className="h-full max-h-[440px] w-full max-w-none object-contain object-bottom sm:max-h-[500px] lg:max-h-none lg:w-[128%] lg:translate-x-[12%] lg:object-right-bottom xl:w-[132%] xl:translate-x-[14%]"
+              sizes="(min-width: 1024px) 52vw, 520px"
               priority={false}
             />
           </div>
@@ -307,13 +310,7 @@ export function ArcFounderIntroSection({
       </div>
 
       {bottomSeam ? (
-        <ArcSectionSeamBlend
-          edge="bottom"
-          tone="cream"
-          variant="soft"
-          scope="background"
-          className={ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS}
-        />
+        <div aria-hidden className={ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS} />
       ) : null}
     </section>
   );

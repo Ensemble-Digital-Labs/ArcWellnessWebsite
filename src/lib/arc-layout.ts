@@ -120,9 +120,9 @@ export const ARC_SECTION_SEAM_OVERLAP_SM_LG_CLASS =
 export const ARC_SECTION_SEAM_OVERLAP_CLASS =
   "-mt-[min(10vh,5rem)] pt-[min(10vh,5rem)]";
 
-/** Matched pair — Home founder ↕ whole-body handoff (tight, symmetric, no overlap). */
+/** Matched pair — Home founder ↕ whole-body handoff (tight). */
 export const ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS =
-  "pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[min(10vh,4.5rem)] bg-gradient-to-t from-arc-cream from-40% via-arc-cream/75 via-70% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_30%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_30%,transparent_100%)]";
+  "pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[min(5vh,2.25rem)] bg-gradient-to-t from-arc-cream from-35% via-arc-cream/65 via-75% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_22%,transparent_100%)]";
 
 /**
  * Soft cream lip on the teal founder card edges (matches the section top-seam look).
@@ -134,12 +134,12 @@ export const ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS =
 export const ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS =
   "pointer-events-none absolute inset-y-0 right-0 z-[5] w-[min(3.25rem,9%)] bg-gradient-to-l from-arc-cream from-35% via-arc-cream/70 via-68% to-transparent [-webkit-mask-image:linear-gradient(to_left,black_0%,black_28%,transparent_100%)] mask-image-[linear-gradient(to_left,black_0%,black_28%,transparent_100%)]";
 
-/** Bottom lip — same soft cream recipe as the section top seam (taller so it reads clearly). */
+/** Bottom lip — short cream exit at the card foot (desktop). */
 export const ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS =
-  "pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[min(10vh,4.5rem)] bg-gradient-to-t from-arc-cream from-40% via-arc-cream/75 via-70% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_30%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_30%,transparent_100%)]";
+  "pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[min(5vh,2.25rem)] bg-gradient-to-t from-arc-cream from-35% via-arc-cream/65 via-75% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_22%,transparent_100%)]";
 
 export const ARC_HOME_WHOLE_BODY_TOP_SEAM_SOFT_CLASS =
-  "pointer-events-none absolute inset-x-0 top-0 z-20 h-[min(6vh,2.75rem)] bg-gradient-to-b from-arc-cream from-38% via-arc-cream/72 via-80% to-transparent [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_22%,transparent_100%)] mask-image-[linear-gradient(to_bottom,black_0%,black_22%,transparent_100%)]";
+  "pointer-events-none absolute inset-x-0 top-0 z-20 h-[min(4vh,1.75rem)] bg-gradient-to-b from-arc-cream from-35% via-arc-cream/65 via-78% to-transparent [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_18%,transparent_100%)] mask-image-[linear-gradient(to_bottom,black_0%,black_18%,transparent_100%)]";
 
 /** Matched pair — Home whole-body ↕ path intro (cream exit, cream entry over marble). */
 export const ARC_HOME_WHOLE_BODY_BOTTOM_SEAM_SOFT_CLASS = ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS;
