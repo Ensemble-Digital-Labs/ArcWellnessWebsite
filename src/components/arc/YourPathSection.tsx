@@ -18,6 +18,7 @@ import { pathPinFadeUp, usePathPinScrubProgress } from "@/lib/arcPinReveal";
 import {
   ARC_HOME_PATH_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS,
+  ARC_HOME_PATH_STEPS_BOTTOM_SEAM_DESKTOP_RIGHT_CLASS,
   ARC_HOME_PATH_STEPS_TOP_SEAM_SOFT_CLASS,
   ARC_HOME_PATH_STEPS_TOP_SEAM_DESKTOP_LEFT_CLASS,
   ARC_HOME_PATH_STEPS_TOP_OVERLAP_CLASS,
@@ -161,25 +162,25 @@ function YourPathIntroSection({
       ) : null}
 
       <div className="relative z-[1] mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col items-center px-5 pb-[max(5.75rem,env(safe-area-inset-bottom,0px))] pt-28 text-center sm:px-8 sm:pb-[max(6.5rem,env(safe-area-inset-bottom,0px))] sm:pt-32 md:pb-16 md:pt-36 lg:pt-40">
-        <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center lg:max-w-3xl">
-          <ArcTextReveal variant="heading">
+        <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center text-center lg:max-w-3xl">
+          <ArcTextReveal variant="heading" className="w-full text-center">
             <h2
-              className="mb-5 max-w-[min(100%,20rem)] font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
+              className="mx-auto mb-5 max-w-[min(100%,22rem)] text-center font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
               style={headlineMotion}
             >
               <YourPathHeadlineTitle />
             </h2>
           </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={1}>
+          <ArcTextReveal variant="body" delayIndex={1} className="w-full text-center">
             <p
-              className="mb-4 font-sans text-base leading-relaxed text-arc-charcoal/82 sm:text-lg"
+              className="mb-4 text-center font-sans text-base leading-relaxed text-arc-charcoal/82 sm:text-lg"
               style={headlineMotion}
             >
               {lead}
             </p>
           </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={2}>
-            <div style={linkMotion}>
+          <ArcTextReveal variant="body" delayIndex={2} className="w-full text-center">
+            <div className="flex justify-center" style={linkMotion}>
               <ArcPrimaryCta href={ctaHref} centered className="mt-1">
                 {ctaLabel}
               </ArcPrimaryCta>
@@ -406,7 +407,12 @@ function YourPathStepsMobileExpanded() {
           key={step.stepMeta}
           className="border-b border-arc-charcoal/10 bg-arc-cream last:border-b-0"
         >
-          <div className="flex w-full flex-col px-5 py-6 sm:px-8 sm:py-7">
+          <div
+            className={cn(
+              "flex w-full flex-col px-5 py-6 sm:px-8 sm:py-7",
+              index === PATH_STEPS.length - 1 && "pb-10 sm:pb-12",
+            )}
+          >
             <ArcTextReveal variant="heading" delayIndex={0}>
               <p className="mb-2 font-serif text-[1.75rem] leading-none text-arc-charcoal sm:text-3xl">
                 {step.title}
@@ -577,6 +583,8 @@ function YourPathStepsInteractiveSection({
                 onClick={() => selectStep(index)}
                 className={cn(
                   "relative flex min-h-0 flex-col justify-center border-b border-arc-charcoal/10 px-6 py-4 text-left transition-[background-color,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] last:border-b-0 lg:px-8 lg:py-5 xl:px-10",
+                  // Last row sits above the section exit feather — keep description clear of the wash.
+                  index === PATH_STEPS.length - 1 && "pb-7 lg:pb-8",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-arc-teal/45",
                   isActive ? "bg-arc-cream opacity-100" : "bg-arc-cream/70 opacity-[0.9]",
                 )}
@@ -684,13 +692,11 @@ function YourPathStepsInteractiveSection({
         <YourPathStepsMobileExpanded />
       )}
       {bottomSeam ? (
-        <ArcSectionSeamBlend
-          edge="bottom"
-          tone="cream"
-          variant="soft"
-          scope="background"
-          className={ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS}
-        />
+        isMinMd ? (
+          <div aria-hidden className={ARC_HOME_PATH_STEPS_BOTTOM_SEAM_DESKTOP_RIGHT_CLASS} />
+        ) : (
+          <div aria-hidden className={ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS} />
+        )
       ) : null}
     </section>
   );

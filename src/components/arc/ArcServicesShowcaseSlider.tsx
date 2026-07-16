@@ -53,26 +53,32 @@ const SLIDER_CONFIG = {
   },
 };
 
-/** Light editorial photography, cream plate, charcoal type, frosted nav. */
+/** Light editorial photography + cream tab bar below (section may exceed one viewport). */
 const SHOWCASE_SHELL_CLASS =
-  "relative isolate h-[100dvh] min-h-[320px] w-full max-w-none overflow-hidden rounded-none bg-arc-cream";
-const SHOWCASE_HEADLINE_CLASS =
-  "shrink-0 text-center font-serif text-2xl font-semibold leading-tight tracking-tight text-arc-charcoal md:text-3xl lg:text-[2.5rem]";
-/** Transparent glass chip, hugs slide title + description (not full-bleed). */
+  "relative isolate flex w-full max-w-none flex-col overflow-x-clip rounded-none bg-arc-cream";
+/** Full-viewport photography stage — nav sits beneath in document flow. */
+const SHOWCASE_MEDIA_STAGE_CLASS =
+  "relative h-[100dvh] min-h-[320px] w-full overflow-hidden bg-arc-cream";
+/** Frosted glass chip — sits low on the photo; light type for contrast on imagery. */
 const SHOWCASE_SLIDE_GLASS_CLASS =
-  "inline-flex w-fit max-w-[min(calc(100vw-3rem),34rem)] flex-col items-center gap-2 rounded-2xl border border-white/50 bg-white/30 px-5 py-4 text-center shadow-[0_12px_40px_rgba(44,44,44,0.1)] ring-1 ring-arc-charcoal/10 backdrop-blur-xl supports-[backdrop-filter]:bg-white/22 sm:gap-2.5 sm:px-7 sm:py-5";
+  "inline-flex w-fit max-w-[min(calc(100vw-3rem),40rem)] flex-col items-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:gap-2.5 sm:px-7 sm:py-5";
+/** Anchors the glass pill near the bottom of the photo stage (above the nav feather). */
 const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
-  "pointer-events-auto mt-auto flex w-full shrink-0 justify-center px-4 sm:px-6";
+  "pointer-events-auto absolute inset-x-0 bottom-28 z-[1] flex w-full justify-center px-4 sm:bottom-32 sm:px-6 md:bottom-36";
 const SHOWCASE_SLIDE_TITLE_CLASS =
-  "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-arc-charcoal sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-arc-charcoal";
+  "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-white";
 const SHOWCASE_SLIDE_DESC_CLASS =
-  "mx-auto max-w-md font-sans text-sm leading-relaxed text-arc-charcoal sm:text-[0.9375rem] md:leading-relaxed";
+  "mx-auto max-w-xl font-sans text-sm font-medium leading-relaxed text-white/92 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)] sm:text-[0.9375rem] md:leading-relaxed";
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
+/** In-flow tab bar — not clipped by the media stage; keeps blur feather above. */
 const SHOWCASE_NAV_SHELL_CLASS =
-  "pointer-events-none absolute inset-x-0 bottom-0 z-20";
+  "pointer-events-none relative z-20 w-full shrink-0";
 const SHOWCASE_NAV_CLASS =
-  "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-hidden overscroll-x-contain bg-arc-cream px-2 py-4 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-6 [&::-webkit-scrollbar]:hidden";
+  "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-visible overscroll-x-contain bg-arc-cream px-2 py-3.5 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-4 md:px-6 md:py-5 lg:px-8 lg:py-5 [&::-webkit-scrollbar]:hidden";
+/** Slide overlay inside the media stage only. */
+const SHOWCASE_SLIDE_CONTENT_CLASS =
+  "slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col px-6 pb-8 pt-[calc(7rem+1.25rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(8.5rem+1.25rem+env(safe-area-inset-top,0px))] md:px-14 md:pt-[calc(9.5rem+1.25rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(10rem+1.25rem+env(safe-area-inset-top,0px))]";
 
 function ServicesShowcaseNav({
   className,
@@ -152,67 +158,64 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
-      <div className="absolute inset-0">
-        {slides.map((s, i) => (
-          <div
-            key={s.imageSrc}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700 ease-out",
-              i === index ? "opacity-100" : "pointer-events-none opacity-0",
-            )}
-            aria-hidden={i !== index}
-          >
-            <Image
-              src={s.imageSrc}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority={i === 0}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <ArcTextReveal variant="heading">
-          <h2 className={SHOWCASE_HEADLINE_CLASS}>
-            Whole-Body Care. Inside and Out.
-          </h2>
-        </ArcTextReveal>
-        <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
-          <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
-            <ArcTextReveal variant="line" delayIndex={1}>
-              <h3 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h3>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" delayIndex={2}>
-              <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
-            </ArcTextReveal>
+      <div className={SHOWCASE_MEDIA_STAGE_CLASS}>
+        <div className="absolute inset-0">
+          {slides.map((s, i) => (
+            <div
+              key={s.imageSrc}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-700 ease-out",
+                i === index ? "opacity-100" : "pointer-events-none opacity-0",
+              )}
+              aria-hidden={i !== index}
+            >
+              <Image
+                src={s.imageSrc}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={i === 0}
+              />
+            </div>
+          ))}
+        </div>
+        <div className={SHOWCASE_SLIDE_CONTENT_CLASS}>
+          <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
+            <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
+              <ArcTextReveal variant="line" delayIndex={1}>
+                <h2 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h2>
+              </ArcTextReveal>
+              <ArcTextReveal variant="body" delayIndex={2}>
+                <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
+              </ArcTextReveal>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
-        <button
-          type="button"
-          className={SHOWCASE_CTRL_BTN_CLASS}
-          aria-label="Previous slide"
-          onClick={() =>
-            setIndex((i) => (i - 1 + slides.length) % slides.length)
-          }
-        >
-          <ChevronLeft className="size-5" strokeWidth={1.5} />
-        </button>
-      </div>
+        <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
+          <button
+            type="button"
+            className={SHOWCASE_CTRL_BTN_CLASS}
+            aria-label="Previous slide"
+            onClick={() =>
+              setIndex((i) => (i - 1 + slides.length) % slides.length)
+            }
+          >
+            <ChevronLeft className="size-5" strokeWidth={1.5} />
+          </button>
+        </div>
 
-      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
-        <button
-          type="button"
-          className={SHOWCASE_CTRL_BTN_CLASS}
-          aria-label="Next slide"
-          onClick={() => setIndex((i) => (i + 1) % slides.length)}
-        >
-          <ChevronRight className="size-5" strokeWidth={1.5} />
-        </button>
+        <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
+          <button
+            type="button"
+            className={SHOWCASE_CTRL_BTN_CLASS}
+            aria-label="Next slide"
+            onClick={() => setIndex((i) => (i + 1) % slides.length)}
+          >
+            <ChevronRight className="size-5" strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
 
       <ServicesShowcaseNav>
@@ -305,7 +308,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           (t) => {
             t.minFilter = THREE.LinearFilter;
             t.magFilter = THREE.LinearFilter;
-            t.colorSpace = THREE.SRGBColorSpace;
+            // Pass-through: custom ShaderMaterial has no colorspace chunks; marking
+            // SRGB + default output encoding made slide photography look too dark.
+            t.colorSpace = THREE.NoColorSpace;
             t.userData = {
               size: new THREE.Vector2(t.image.width, t.image.height),
             };
@@ -748,6 +753,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         antialias: true,
         alpha: false,
       });
+      // Keep photographic slides at natural brightness (no ACES / double sRGB).
+      renderer.toneMapping = THREE.NoToneMapping;
+      renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
       renderer.setClearColor(0xf0e3d7, 1);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -796,6 +804,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         },
         vertexShader: servicesShowcaseVertexShader,
         fragmentShader: servicesShowcaseFragmentShader,
+        toneMapped: false,
       });
 
       const mesh = new THREE.Mesh(
@@ -903,74 +912,70 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
   return (
     <section
-      ref={rootRef}
       className={cn(SHOWCASE_SHELL_CLASS, className)}
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
-      {posterSrc ? (
-        <div className="absolute inset-0 z-0" aria-hidden>
-          <Image
-            src={posterSrc}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
+      <div ref={rootRef} className={SHOWCASE_MEDIA_STAGE_CLASS}>
+        {posterSrc ? (
+          <div className="absolute inset-0 z-0" aria-hidden>
+            <Image
+              src={posterSrc}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+          </div>
+        ) : null}
+        <canvas
+          ref={canvasRef}
+          className={cn(
+            "webgl-canvas absolute inset-0 z-[0] block h-full w-full transition-opacity duration-300 ease-out",
+            webglReady ? "opacity-100" : "opacity-0",
+          )}
+          aria-hidden
+        />
+        <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
+          <button
+            ref={prevBtnRef}
+            type="button"
+            className={SHOWCASE_CTRL_BTN_CLASS}
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="size-5" strokeWidth={1.5} />
+          </button>
         </div>
-      ) : null}
-      <canvas
-        ref={canvasRef}
-        className={cn(
-          "webgl-canvas absolute inset-0 z-[0] block h-full w-full transition-opacity duration-300 ease-out",
-          webglReady ? "opacity-100" : "opacity-0",
-        )}
-        aria-hidden
-      />
-      <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
-        <button
-          ref={prevBtnRef}
-          type="button"
-          className={SHOWCASE_CTRL_BTN_CLASS}
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="size-5" strokeWidth={1.5} />
-        </button>
-      </div>
 
-      <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
-        <button
-          ref={nextBtnRef}
-          type="button"
-          className={SHOWCASE_CTRL_BTN_CLASS}
-          aria-label="Next slide"
-        >
-          <ChevronRight className="size-5" strokeWidth={1.5} />
-        </button>
-      </div>
+        <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
+          <button
+            ref={nextBtnRef}
+            type="button"
+            className={SHOWCASE_CTRL_BTN_CLASS}
+            aria-label="Next slide"
+          >
+            <ChevronRight className="size-5" strokeWidth={1.5} />
+          </button>
+        </div>
 
-      <div className="slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col justify-between px-6 pb-[12rem] pt-[calc(8rem+1.5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(10rem+1.5rem+env(safe-area-inset-top,0px))] md:px-14 md:pb-52 md:pt-[calc(11rem+1.5rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(12rem+1.5rem+env(safe-area-inset-top,0px))]">
-        <ArcTextReveal variant="heading">
-          <h2 className={SHOWCASE_HEADLINE_CLASS}>
-            Whole-Body Care. Inside and Out.
-          </h2>
-        </ArcTextReveal>
-        <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
-          <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
-            <h3
-              ref={titleRef}
-              id="arc-showcase-title"
-              className={cn(
-                SHOWCASE_SLIDE_TITLE_CLASS,
-                "slide-title mb-0 [&_span]:will-change-transform",
-              )}
-            />
-            <p
-              ref={descRef}
-              id="arc-showcase-desc"
-              className={cn(SHOWCASE_SLIDE_DESC_CLASS, "slide-description")}
-            />
+        <div className={SHOWCASE_SLIDE_CONTENT_CLASS}>
+          <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
+            <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
+              <h2
+                ref={titleRef}
+                id="arc-showcase-title"
+                className={cn(
+                  SHOWCASE_SLIDE_TITLE_CLASS,
+                  "slide-title mb-0 [&_span]:will-change-transform",
+                )}
+              />
+              <p
+                ref={descRef}
+                id="arc-showcase-desc"
+                className={cn(SHOWCASE_SLIDE_DESC_CLASS, "slide-description")}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,3 @@
-import { EDITORIAL_SPA_IMAGES } from "@/content/editorialSpaImages";
-import { PATIENT_EXPERIENCE_IMAGES } from "@/content/patientExperienceImages";
-
 export type ServicesShowcaseSlide = {
   title: string;
   description: string;
@@ -22,47 +19,38 @@ export function servicesShowcaseNavLabel(slide: ServicesShowcaseSlide): string {
 }
 
 /**
- * Six-slide editorial strip for the Whole-Body Care showcase WebGL slider.
- * Uses on-brand editorial + patient-experience photography from `public/assets/`.
+ * Six-slide strip for the Whole-Body Care showcase WebGL slider.
+ * Photography: `public/assets/sections/whole-body/` pillar assets.
  */
 export const SERVICES_SHOWCASE_SLIDES: readonly ServicesShowcaseSlide[] = [
   {
-    title: "Aesthetic Optimization",
-    description: "Skin, face, body",
-    eyebrow: "Aesthetic care",
-    navLabel: "Aesthetic optimization",
-    imageSrc: EDITORIAL_SPA_IMAGES[0],
+    title: "Longevity",
+    description: "Healthy Aging • Hormone Balance • Metabolic Health",
+    imageSrc: "/assets/sections/whole-body/longevity.webp",
   },
   {
-    title: "Internal Health",
-    description: "Hormones, energy, metabolism",
-    eyebrow: "Internal care",
-    navLabel: "Internal health",
-    imageSrc: EDITORIAL_SPA_IMAGES[1],
+    title: "Strength & Performance",
+    description: "Core Strength • Pelvic Health • Mental Performance",
+    imageSrc: "/assets/sections/whole-body/strength-and-performance.webp",
   },
   {
-    title: "Functional Performance",
-    description: "Core, pelvic, posture",
-    eyebrow: "Functional care",
-    navLabel: "Functional performance",
-    imageSrc: EDITORIAL_SPA_IMAGES[2],
+    title: "Advanced Therapies",
+    description: "IV Infusions • Peptides • Targeted Supplements",
+    imageSrc: "/assets/sections/whole-body/advanced-therapies.webp",
   },
   {
-    title: "Your rhythm",
-    description:
-      "A patient journey built around listening first, then tailoring the plan to you.",
-    imageSrc: EDITORIAL_SPA_IMAGES[3],
+    title: "Aesthetic Rejuvenation",
+    description: "Natural-Looking Results • Healthy Skin • Lasting Confidence",
+    imageSrc: "/assets/sections/whole-body/aesthetic-rejuvenation.webp",
   },
   {
-    title: "Elevated environment",
-    description:
-      "Textures, light, and calm detail, so the experience feels as considered as the outcomes.",
-    imageSrc: EDITORIAL_SPA_IMAGES[4],
+    title: "Personalized Wellness",
+    description: "Physician Consultation • Root Cause Medicine • Advanced Lab Testing",
+    imageSrc: "/assets/sections/whole-body/personalized-wellness.webp",
   },
   {
-    title: "Confidence in the details",
-    description:
-      "From consultation to follow-up, consistent standards and warmth at every touchpoint.",
-    imageSrc: PATIENT_EXPERIENCE_IMAGES[0],
+    title: "Confidence in the Details",
+    description: "Warm Welcome • Personalized Guidance • Ongoing Support",
+    imageSrc: "/assets/sections/whole-body/confidence-in-the-details.webp",
   },
 ];

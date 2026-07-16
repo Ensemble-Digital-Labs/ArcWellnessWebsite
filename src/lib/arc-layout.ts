@@ -163,7 +163,16 @@ export const ARC_HOME_PATH_STEPS_TOP_OVERLAP_CLASS =
   "-mt-[min(6vh,3rem)] pt-[min(6vh,3rem)] md:-mt-[min(8vh,3.75rem)] md:pt-[min(8vh,3.75rem)]";
 
 /** Matched pair — Home path steps ↕ testimonials (cream on cream). */
-export const ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS = ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS;
+export const ARC_HOME_PATH_STEPS_BOTTOM_SEAM_SOFT_CLASS =
+  "pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[min(5vh,2.5rem)] bg-gradient-to-t from-arc-cream from-35% via-arc-cream/70 via-75% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_25%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_25%,transparent_100%)]";
+
+/**
+ * Desktop path steps — bottom cream lip on the photography column only
+ * (keeps step tab copy sharp; no wash over Revise / last-row text).
+ */
+export const ARC_HOME_PATH_STEPS_BOTTOM_SEAM_DESKTOP_RIGHT_CLASS =
+  "pointer-events-none absolute bottom-0 right-0 z-20 w-1/2 h-[min(6vh,3rem)] bg-gradient-to-t from-arc-cream from-35% via-arc-cream/70 via-75% to-transparent [-webkit-mask-image:linear-gradient(to_top,black_0%,black_25%,transparent_100%)] mask-image-[linear-gradient(to_top,black_0%,black_25%,transparent_100%)]";
+
 
 /**
  * Reusable top-edge feather for full-bleed photography — arc-cream blur at section handoffs.
@@ -180,9 +189,9 @@ export const ARC_IMAGE_TOP_BORDER_FEATHER_COMPACT_CLASS =
 export const ARC_IMAGE_TOP_BORDER_FEATHER_LIP_CLASS =
   `pointer-events-none absolute inset-x-0 top-0 z-[4] h-[min(6vh,3.25rem)] ${ARC_CREAM_BLUR_GRADIENT_TOP_LIP} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_TOP_LIP}`;
 
-/** Cream feather above services showcase nav — blends slide photo into tab bar. */
+/** Cream feather above services showcase nav — blends photo into the in-flow tab bar. */
 export const ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS =
-  `pointer-events-none absolute inset-x-0 bottom-full z-[1] h-[min(8vh,4.25rem)] ${ARC_CREAM_BLUR_GRADIENT_BOTTOM} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_BOTTOM}`;
+  `pointer-events-none absolute inset-x-0 bottom-full z-[1] h-[min(7vh,3.75rem)] ${ARC_CREAM_BLUR_GRADIENT_BOTTOM} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_BOTTOM}`;
 
 /** Reusable left-edge feather for full-bleed photography — arc-cream vertical split. */
 export const ARC_IMAGE_LEFT_BORDER_FEATHER_CLASS =

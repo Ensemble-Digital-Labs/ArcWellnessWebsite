@@ -10,8 +10,6 @@ import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 import {
   ARC_HOME_FOUNDER_BOTTOM_SEAM_SOFT_CLASS,
   ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS,
-  ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS,
-  ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS,
 } from "@/lib/arc-layout";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
 import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
@@ -21,12 +19,11 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Desktop resting → expanded (matches demo inset-to-bleed scrub). */
+/** Resting inset → full left–right bleed (section has no side padding). */
 const DESKTOP_WIDTH = { start: "78%", end: "100%" } as const;
-const DESKTOP_RADIUS = { start: "48px", end: "28px" } as const;
-/** Milder expand on narrow viewports so the card stays readable. */
+const DESKTOP_RADIUS = { start: "48px", end: "0px" } as const;
 const MOBILE_WIDTH = { start: "90%", end: "100%" } as const;
-const MOBILE_RADIUS = { start: "36px", end: "28px" } as const;
+const MOBILE_RADIUS = { start: "36px", end: "0px" } as const;
 
 const FOUNDER_NAME_EMPHASIS_CLASS =
   "text-[1.35em] leading-[1.01] text-arc-cream sm:text-[1.4em] md:text-[1.45em] lg:text-[1.5em]";
@@ -99,7 +96,6 @@ function lockContentRailWidth(card: HTMLElement, content: HTMLElement, restingWi
   content.style.width = "";
   content.style.maxWidth = "";
   gsap.set(card, { width: restingWidth });
-  // Measure after resting width is applied — rail fills the card, then we freeze px.
   const measured = Math.round(content.getBoundingClientRect().width);
   if (measured <= 0) return;
   content.style.width = `${measured}px`;
@@ -116,8 +112,8 @@ function clearContentRailLock(content: HTMLElement) {
 }
 
 /**
- * Physician-founder teal split card with scroll-driven inset→bleed expand
- * (width + border-radius scrub — not CSS transform scale).
+ * Physician-founder teal card — scroll expands width + radius from inset to
+ * true left–right edge (no cream gutters when fully expanded).
  */
 export function ArcFounderIntroSection({
   id,
@@ -163,7 +159,6 @@ export function ArcFounderIntroSection({
       revert?.();
       const { width, radius } = expandRange();
 
-      // Freeze copy + portrait at resting card size before shell expands.
       lockContentRailWidth(el, rail, width.start);
 
       const ctx = gsap.context(() => {
@@ -225,8 +220,8 @@ export function ArcFounderIntroSection({
       ref={sectionRef}
       id={id}
       className={cn(
-        // Flush to services — no cream strip; keep bottom soft blur on the card itself.
-        "relative scroll-mt-28 overflow-hidden bg-arc-cream px-4 pb-0 sm:px-6 lg:mt-2 lg:px-8",
+        // Cream plate shows only while inset; expanded 100% is true L–R edge.
+        "relative scroll-mt-28 overflow-hidden bg-arc-cream px-0 pb-0",
         className,
       )}
     >
@@ -240,18 +235,11 @@ export function ArcFounderIntroSection({
         />
       ) : null}
 
-      {/*
-        Only the teal SHELL scrub-expands. Inner rail is locked to resting card width in px
-        so copy/portrait never reflow during the scrub (including the start of the range).
-      */}
       <div
         ref={cardRef}
         data-scroll-section
         className="relative mx-auto w-[90%] overflow-hidden rounded-[36px] bg-arc-teal-ink md:w-[78%] md:rounded-[48px]"
       >
-        {/* Cream edge feathers — L/R on all sizes; bottom lip desktop-only. */}
-        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_LEFT_CLASS} />
-        <div aria-hidden className={ARC_HOME_FOUNDER_CARD_EDGE_RIGHT_CLASS} />
         <div aria-hidden className={cn(ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS, "max-lg:hidden")} />
 
         <div
@@ -303,7 +291,6 @@ export function ArcFounderIntroSection({
             </div>
           </div>
 
-          {/* Demo #doctor portrait: flow img, object-cover object-top, min-h 360/520 */}
           <div className="h-full">
             <Image
               src={imageSrc}

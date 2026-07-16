@@ -324,8 +324,8 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   flex: 1 1 0%;
   flex-direction: column;
   align-items: center;
-  gap: 0.95rem;
-  padding: 1.35rem 0.15rem 1.15rem;
+  gap: 0.75rem;
+  padding: 0.85rem 0.2rem 1.05rem;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -387,7 +387,7 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   display: -webkit-box;
   width: 100%;
   max-width: 12rem;
-  min-height: 3.15em;
+  min-height: 2.6em;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
@@ -395,7 +395,7 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   font-size: 0.625rem;
   font-weight: 500;
   line-height: 1.3;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--arc-teal) 22%, rgba(255, 255, 255, 0.92));
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
@@ -407,21 +407,21 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
 @media (min-width: 640px) {
   .slide-nav-title.arc-slide-nav-label {
     font-size: 0.75rem;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.17em;
   }
 }
 
 @media (min-width: 768px) {
   .slide-nav-title.arc-slide-nav-label {
     font-size: 0.8125rem;
-    letter-spacing: 0.19em;
+    letter-spacing: 0.18em;
   }
 }
 
 @media (min-width: 1024px) {
   .slide-nav-title.arc-slide-nav-label {
     font-size: 0.875rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.19em;
   }
 }
 
