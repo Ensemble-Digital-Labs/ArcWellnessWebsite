@@ -134,6 +134,12 @@ export function ArcFounderIntroSection({
   const contentRef = useRef<HTMLDivElement | null>(null);
   const split = splitHeadline(headline, headlineEmphasisWord, headlineEmphasisWord2);
 
+  /*
+   * Founder card scroll-expand motion — DISABLED per client request.
+   * The card is now statically full-bleed (see className above) and the inner
+   * rail keeps its resting width so the portrait size never changes. Kept here
+   * (not deleted) so the scrub-expand behavior can be re-enabled in the future.
+   *
   useEffect(() => {
     const section = sectionRef.current;
     const card = cardRef.current;
@@ -214,6 +220,7 @@ export function ArcFounderIntroSection({
       revert?.();
     };
   }, []);
+  */
 
   return (
     <section
@@ -238,16 +245,21 @@ export function ArcFounderIntroSection({
         Teal SHELL scrub-expands. Inner rail is locked to resting width in px
         so copy + portrait stay stable while chrome goes edge-to-edge.
       */}
+      {/*
+        Card scroll-expand motion disabled per client request — the shell is now
+        always full-bleed. Original resting inset (for future re-enable):
+        "relative mx-auto w-[90%] overflow-hidden rounded-[36px] bg-arc-teal-ink md:w-[78%] md:rounded-[48px]"
+      */}
       <div
         ref={cardRef}
         data-scroll-section
-        className="relative mx-auto w-[90%] overflow-hidden rounded-[36px] bg-arc-teal-ink md:w-[78%] md:rounded-[48px]"
+        className="relative mx-auto w-full overflow-hidden bg-arc-teal-ink"
       >
         <div aria-hidden className={cn(ARC_HOME_FOUNDER_CARD_EDGE_BOTTOM_CLASS, "max-lg:hidden")} />
 
         <div
           ref={contentRef}
-          className="relative z-10 mx-auto grid w-full max-w-[1280px] items-center justify-items-center gap-6 px-5 pb-10 pt-12 text-center sm:gap-8 sm:px-8 sm:pb-12 sm:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end lg:justify-items-stretch lg:gap-8 lg:px-8 lg:pb-11 lg:pt-14 lg:text-left xl:gap-10 xl:px-10 xl:pb-12 xl:pt-16"
+          className="relative z-10 mx-auto grid w-[90%] max-w-[1280px] items-center justify-items-center gap-6 px-5 pb-10 pt-12 text-center sm:gap-8 sm:px-8 sm:pb-12 sm:pt-16 md:w-[78%] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end lg:justify-items-stretch lg:gap-8 lg:px-8 lg:pb-11 lg:pt-14 lg:text-left xl:gap-10 xl:px-10 xl:pb-12 xl:pt-16"
         >
           <div className="relative flex w-full min-w-0 max-w-xl flex-col items-center justify-center pb-2 text-center lg:max-w-none lg:items-start lg:self-stretch lg:pb-3 lg:text-left">
             <ArcTextReveal variant="heading" className="w-full">
