@@ -313,7 +313,7 @@ export function ArcFounderIntroSection({
               width={958}
               height={1287}
               unoptimized
-              className="h-full max-h-[440px] w-full max-w-none object-contain object-bottom sm:max-h-[500px] lg:max-h-none lg:w-[128%] lg:translate-x-[12%] lg:object-right-bottom xl:w-[132%] xl:translate-x-[14%]"
+              className="h-full max-h-[440px] w-full max-w-none object-contain object-bottom sm:max-h-[500px] lg:max-h-none lg:w-[128%] lg:origin-bottom-right lg:translate-x-[12%] lg:scale-[0.85] lg:object-right-bottom xl:w-[132%] xl:translate-x-[14%]"
               sizes="(min-width: 1024px) 52vw, 520px"
               priority={false}
             />

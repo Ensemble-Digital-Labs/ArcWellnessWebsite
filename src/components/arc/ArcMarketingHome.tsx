@@ -42,10 +42,7 @@ export function ArcMarketingHome({ header, sectionBasePath }: ArcMarketingHomePr
       {header}
       <ArcScrollShell>
         <ScrollExpandHero
-          bgImageSrc={images.homeHeroMedia}
-          staticBackground
-          lightSurface
-          centerCopy
+          bgImageSrc={images.heroMedia}
           copyReveal
           title="Where Wellness, Longevity & Aesthetics Converge."
           referenceLayout

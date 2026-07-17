@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import {
-  ABOUT_HERO_COPY_AMBIENT_IMAGES,
   INSIGHTS_FEED_AMBIENT_SRC,
   PATH_SECTION_INTRO_BACKGROUND_SRC,
 } from "@/content/backgroundDecoration";
@@ -22,9 +21,8 @@ import { images } from "@/content/site";
 /** Above-the-fold art warmed while the splash holds, so the hero paints instantly on reveal. */
 const PRELOAD_SRCS: readonly string[] = [
   images.logo,
-  images.homeHeroMedia,
-  PATH_SECTION_INTRO_BACKGROUND_SRC,
   images.heroMedia,
+  PATH_SECTION_INTRO_BACKGROUND_SRC,
   images.founderPortrait,
 ];
 
@@ -32,14 +30,14 @@ const PRELOAD_SRCS: readonly string[] = [
  * Full-bleed hero plates served through next/image on inner pages. Nearly every
  * marketing page hero (Contact, Programs, Financing, Aesthetics, Treatments,
  * treatment detail) shares the same marble plate, so warming these one time
- * makes those heroes paint instantly on the first navigation. Also warms
- * `images.heroMedia` for the About page hero (`ScrollExpandHero`).
+ * makes those heroes paint instantly on the first navigation. Also warms the
+ * About page silk-floral hero plate (`ScrollChapterIntroSection`).
  *
  * These are warmed via the exact `/_next/image` variant (not the raw file) so the
  * cached URL matches what the destination pages actually request.
  */
 const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
-  ABOUT_HERO_COPY_AMBIENT_IMAGES[0]!,
+  images.aboutHeroMedia,
   INSIGHTS_FEED_AMBIENT_SRC,
   images.heroMedia,
 ];

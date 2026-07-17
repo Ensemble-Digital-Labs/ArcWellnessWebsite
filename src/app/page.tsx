@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <ArcSitePreloader />
-      <ArcMarketingHome header={<SiteHeader />} />
+      <ArcMarketingHome header={<SiteHeader hideLogoInHero />} />
     </>
   );
 }

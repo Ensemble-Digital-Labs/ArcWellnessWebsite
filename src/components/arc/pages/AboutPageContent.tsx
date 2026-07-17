@@ -6,7 +6,7 @@ import { ArcFounderNoteSection } from "@/components/arc/ArcFounderNoteSection";
 import { ArcScrollEditorialSection } from "@/components/arc/ArcScrollEditorialSection";
 import { ArcValuesRevealSection } from "@/components/arc/ArcValuesRevealSection";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { ScrollExpandHero } from "@/components/arc/ScrollExpandHero";
+import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";
 import { CLINIC_INTERIOR_ALT, CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { aboutPage } from "@/content/pages/about";
 import { images } from "@/content/site";
@@ -16,33 +16,33 @@ export function AboutPageContent() {
 
   return (
     <>
-      <ScrollExpandHero
-        bgImageSrc={images.heroMedia}
-        title="Where Wellness, Longevity & Aesthetics Converge."
-        referenceLayout
-        showCopy={false}
-        showKeywordMarquee={false}
-        overlayHeading={`${hero.headline} ${hero.headlineEmphasis}`}
+      <ScrollChapterIntroSection
+        id="about-hero"
+        layout="ambient-full"
+        heroAlign="center"
+        motion="enter-once"
+        headline={hero.headline}
+        headlineEmphasis={hero.headlineEmphasis}
+        headlineAsEmphasis
+        body=""
+        introMode="visible-on-load"
+        copyColumnAmbients={[images.aboutHeroMedia]}
+        priorityBackground
         bottomSeam
-        intro={null}
       />
 
-      {/* Pull the cream story section up a few px under the pinned hero so the GSAP
-          pin/fixed layer boundary can't leave a 1px compositing hairline at the seam. */}
-      <div className="relative z-[5] -mt-[8px] bg-arc-cream">
-        <ArcAboutNarrativePinSection
-          id="about-story"
-          motion="enter-once"
-          title={hero.title}
-          titleEmphasis={hero.titleEmphasis}
-          storyLines={hero.paragraphs}
-          sideImageSrc={hero.storySideImage}
-          sideImageAlt={hero.storySideImageAlt}
-          headlineEmphasisTone="teal"
-          topSeam
-          bottomSeam
-        />
-      </div>
+      <ArcAboutNarrativePinSection
+        id="about-story"
+        motion="enter-once"
+        title={hero.title}
+        titleEmphasis={hero.titleEmphasis}
+        storyLines={hero.paragraphs}
+        sideImageSrc={hero.storySideImage}
+        sideImageAlt={hero.storySideImageAlt}
+        headlineEmphasisTone="teal"
+        topSeam
+        bottomSeam
+      />
 
       <ArcClinicSpaceTeaserSection
         id="about-clinic"

@@ -80,6 +80,8 @@ type ScrollChapterIntroSectionProps = {
   copyTone?: "light" | "dark";
   /** Script emphasis on light plates — teal matches About; rose on dark photography. */
   headlineEmphasisTone?: "teal";
+  /** Render the whole headline (both halves) in the italic emphasis face, one uniform size + color. */
+  headlineAsEmphasis?: boolean;
   /** Soft cream feather at section bottom (About page seams). */
   bottomSeam?: boolean;
   /**
@@ -120,6 +122,7 @@ export function ScrollChapterIntroSection({
   headlineEmphasisSize = "default",
   copyTone,
   headlineEmphasisTone,
+  headlineAsEmphasis = false,
   bottomSeam = false,
   heroAlign = "left",
   priorityBackground = false,
@@ -269,6 +272,14 @@ export function ScrollChapterIntroSection({
           : ambientCount > 0 && !ambientsIncludeLightPlate;
   const resolvedEmphasisTone = headlineEmphasisTone ?? "teal";
   const lightPlateEmphasisClass = arcHeadlineEmphasisClass(resolvedEmphasisTone);
+  /** Whole headline rendered in the italic emphasis face (Radley), one uniform size + branding-teal tone. */
+  const allEmphasisClass = cn(
+    "font-title-emphasis leading-[0.95] tracking-tight",
+    "text-[clamp(3.5rem,15vw,5.5rem)] md:text-[clamp(5.25rem,13vw,9.75rem)]",
+    onDarkCopy
+      ? "text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
+      : "text-arc-teal-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5)]",
+  );
   const singleTileHero = Boolean(heroCanvasTiles?.length === 1);
 
   const ambientLayerOpacity = (index: number) => {
@@ -503,28 +514,38 @@ export function ScrollChapterIntroSection({
                     <>
                       <span
                         className={cn(
-                          "font-serif font-semibold tracking-tight",
-                          !onDarkCopy && "text-arc-charcoal",
+                          headlineAsEmphasis
+                            ? allEmphasisClass
+                            : cn(
+                                "font-serif font-semibold tracking-tight",
+                                !onDarkCopy && "text-arc-charcoal",
+                              ),
                         )}
                       >
                         {headline}
                       </span>
-                      <TitleEmphasis
-                        className={cn(
-                          compactEmphasis
-                            ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
-                            : "inline align-baseline leading-none tracking-tight",
-                          onDarkCopy
-                            ? compactEmphasis
-                              ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
-                              : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
-                            : compactEmphasis
-                              ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
-                              : lightPlateEmphasisClass,
-                        )}
-                      >
-                        {headlineEmphasis}
-                      </TitleEmphasis>
+                      {headlineAsEmphasis && !compactEmphasis ? (
+                        <span className={cn("inline align-baseline", allEmphasisClass)}>
+                          {headlineEmphasis}
+                        </span>
+                      ) : (
+                        <TitleEmphasis
+                          className={cn(
+                            compactEmphasis
+                              ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
+                              : "inline align-baseline leading-none tracking-tight",
+                            onDarkCopy
+                              ? compactEmphasis
+                                ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
+                                : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
+                              : compactEmphasis
+                                ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
+                                : lightPlateEmphasisClass,
+                          )}
+                        >
+                          {headlineEmphasis}
+                        </TitleEmphasis>
+                      )}
                     </>
                   ) : (
                     <>
@@ -571,28 +592,38 @@ export function ScrollChapterIntroSection({
                 <>
                   <span
                     className={cn(
-                      "font-serif font-semibold tracking-tight",
-                      !onDarkCopy && "text-arc-charcoal",
+                      headlineAsEmphasis
+                        ? allEmphasisClass
+                        : cn(
+                            "font-serif font-semibold tracking-tight",
+                            !onDarkCopy && "text-arc-charcoal",
+                          ),
                     )}
                   >
                     {headline}
                   </span>
-                  <TitleEmphasis
-                    className={cn(
-                      compactEmphasis
-                        ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
-                        : "inline align-baseline leading-none tracking-tight",
-                      onDarkCopy
-                        ? compactEmphasis
-                          ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
-                          : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
-                        : compactEmphasis
-                          ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
-                          : lightPlateEmphasisClass,
-                    )}
-                  >
-                    {headlineEmphasis}
-                  </TitleEmphasis>
+                  {headlineAsEmphasis && !compactEmphasis ? (
+                    <span className={cn("inline align-baseline", allEmphasisClass)}>
+                      {headlineEmphasis}
+                    </span>
+                  ) : (
+                    <TitleEmphasis
+                      className={cn(
+                        compactEmphasis
+                          ? "mt-3 block max-w-[min(100%,30rem)] text-[0.52em] font-normal leading-[1.06] sm:mt-3.5 sm:max-w-[min(100%,36rem)] sm:text-[0.54em] md:mt-4 md:max-w-[min(100%,42rem)] md:text-[0.56em] lg:text-[0.58em]"
+                          : "inline align-baseline leading-none tracking-tight",
+                        onDarkCopy
+                          ? compactEmphasis
+                            ? ARC_HEADLINE_TAGLINE_EMPHASIS_DARK_CLASS
+                            : "text-[1.42em] text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
+                          : compactEmphasis
+                            ? arcHeadlineTaglineEmphasisClass(resolvedEmphasisTone, false)
+                            : lightPlateEmphasisClass,
+                      )}
+                    >
+                      {headlineEmphasis}
+                    </TitleEmphasis>
+                  )}
                 </>
               ) : (
                 <>
