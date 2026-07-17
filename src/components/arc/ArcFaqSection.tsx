@@ -117,8 +117,8 @@ export function ArcFaqSection({
     <section
       id={id}
       className={cn(
-        "relative min-h-[100dvh] scroll-mt-32 bg-arc-cream sm:scroll-mt-40 md:scroll-mt-44 lg:scroll-mt-52",
-        !topSeam && "border-t border-arc-teal/15",
+        "relative scroll-mt-32 bg-arc-cream sm:scroll-mt-40 md:scroll-mt-44 lg:scroll-mt-52",
+        topSeam ? "min-h-[100dvh]" : "border-t border-arc-teal/15",
         topSeam && ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
         className,
       )}
@@ -129,7 +129,14 @@ export function ArcFaqSection({
       {bottomSeam ? (
         <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
       ) : null}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-start px-6 pb-16 pt-40 sm:pt-44 md:pt-48 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20 lg:pt-[13rem]">
+      <div
+        className={cn(
+          "relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-start px-6 pb-16 md:px-10 lg:flex-row lg:items-start lg:gap-14 lg:px-12 lg:pb-20",
+          topSeam
+            ? "min-h-[100dvh] pt-40 sm:pt-44 md:pt-48 lg:pt-[13rem]"
+            : "pt-16 sm:pt-20 md:pt-24 lg:pt-28",
+        )}
+      >
         <header className="mb-10 shrink-0 text-left lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 xl:top-52">
           <ArcTextReveal variant="heading">
             <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">

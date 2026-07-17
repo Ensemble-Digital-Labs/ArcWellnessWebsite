@@ -588,3 +588,77 @@ html[data-arc-intro="active"] .arc-preloader__logo {
     display: none;
   }
 }
+
+/* Exion hero halo shine spark (see ExionHeroHalo). */
+@keyframes hero-shine-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.hero-shine-spark {
+  animation: 2.8s ease-in-out infinite hero-shine-pulse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shine-spark {
+    opacity: 0.6;
+    animation: none;
+  }
+}
+
+/* Animated gold shine travelling along curved section dividers (see ArcWaveSeparator).
+   Ported 1:1 from the demo (arcwelness-service-demo.netlify.app/exion). */
+@keyframes curve-shine-sweep {
+  0% {
+    stroke-dashoffset: 1440px;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  55% {
+    opacity: 0.75;
+  }
+  100% {
+    stroke-dashoffset: -80px;
+    opacity: 0;
+  }
+}
+
+.curve-shine-sweep {
+  animation: 3.4s ease-in-out infinite curve-shine-sweep;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curve-shine-sweep {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* EXION result card hover lift (authored class so it can't be skipped by JIT). */
+.exion-lift {
+  transition:
+    transform 300ms ease-out,
+    box-shadow 300ms ease-out;
+}
+
+.exion-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(44, 44, 44, 0.13);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exion-lift {
+    transition: none;
+  }
+
+  .exion-lift:hover {
+    transform: none;
+  }
+}

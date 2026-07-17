@@ -52,9 +52,15 @@ export const images = {
    */
   founderPortrait: "/assets/sections/founder/physician-jabbar-cutout.webp?v=6",
   /**
-   * About “A Note from Our Founder” — full framed portrait (not the homepage cutout).
+   * About “A Note from Our Founder” — full-width landscape band (founder left, copy over right).
+   * Only consumed by `ArcFounderNoteSection` on the About page.
    */
-  founderNotePortrait: "/assets/sections/founder/physician-professional-01.webp",
+  founderNotePortrait: "/assets/sections/founder/founder-note-band.webp?v=20260716",
+  /**
+   * About “A Note from Our Founder” — **mobile/tablet** portrait (blurred cream frame).
+   * Desktop uses the landscape band above; narrow screens show this intimate portrait.
+   */
+  founderNotePortraitMobile: "/assets/sections/founder/physician-professional-01.webp",
   /**
    * Extra portraits for **`#founder`** mosaic only, all under **`/public/assets/sections/founder/`**.
    * (Avoids clinic / service stock used elsewhere.)

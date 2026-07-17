@@ -457,6 +457,38 @@ export const allTreatments: readonly TreatmentPage[] = [
         body: "Anyone looking to improve skin quality without the downtime of surgery or the filler look, especially those reversing signs of aging, seeking natural hydration, diminishing acne scars, or preferring a comfortable microneedling experience.",
       },
     ],
+    faqs: [
+      {
+        id: "what",
+        question: "What is EXION and how does it work?",
+        answer:
+          "EXION is an advanced skin rejuvenation treatment that combines targeted radiofrequency (RF) with ultrasound technology to stimulate your body's natural production of collagen, elastin, and hyaluronic acid — improving skin quality, elasticity, and overall appearance with little to no downtime.",
+      },
+      {
+        id: "concerns",
+        question: "What can EXION treat?",
+        answer:
+          "EXION helps improve overall skin quality and elasticity, and can target acne scars, deep wrinkles, stretch marks, and active acne, as well as boost natural hydration for those reversing early signs of aging.",
+      },
+      {
+        id: "options",
+        question: "What are the EXION treatment options?",
+        answer:
+          "There are three main options: Exion Fractional RF (microneedling) for acne scars, deep wrinkles, and stretch marks; Exion Face, a needle-free treatment for delicate areas like the eyes and forehead; and Exion Clear RF, which clears active acne and improves skin clarity.",
+      },
+      {
+        id: "needles",
+        question: "Does EXION require needles or fillers?",
+        answer:
+          "No fillers are needed — EXION can increase your skin's hyaluronic acid levels by up to 224% naturally. Exion Face is completely needle-free, and the Fractional RF (microneedling) option is designed to be more comfortable than standard microneedling.",
+      },
+      {
+        id: "downtime",
+        question: "Is there any downtime?",
+        answer:
+          "EXION is designed to improve skin quality with little to no downtime, making it a comfortable alternative to the recovery and 'filler look' associated with more invasive procedures.",
+      },
+    ],
   },
   {
     slug: "daxxify",

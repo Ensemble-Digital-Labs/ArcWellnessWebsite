@@ -20,11 +20,16 @@ export const investSectionShellClass = cn(
   "pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(5rem,env(safe-area-inset-top))]",
   "sm:py-14",
   "xl:min-h-[min(100dvh,56rem)] xl:py-16",
+  // Ultra-wide (16:9 monitors): let the band grow taller so object-cover crops
+  // far less of the 16:9 wall image top/bottom. `min(100dvh,…)` keeps shorter
+  // wide monitors capped at their own viewport height.
+  "2xl:min-h-[min(100dvh,76rem)]",
 );
 
 /** Readable panel on phone/tablet, cream type on mint wall needs a surface. */
 export const investMobilePanelClass = cn(
   "w-full max-w-lg rounded-2xl",
+  "md:max-w-xl lg:max-w-2xl",
   "bg-arc-charcoal/78 px-6 py-7",
   "sm:px-8 sm:py-9",
 );

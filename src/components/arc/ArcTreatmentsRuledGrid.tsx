@@ -148,7 +148,12 @@ function TreatmentInteractiveRow({
   };
 
   return (
-    <li className="border-b border-arc-charcoal/12">
+    <ArcTextReveal
+      as="li"
+      variant="body"
+      delayIndex={Math.min(index, 2)}
+      className="border-b border-arc-charcoal/12"
+    >
       <Link
         href={`/treatments/${treatment.slug}`}
         onMouseEnter={() => showInteractivePreview && setHovered(true)}
@@ -316,7 +321,7 @@ function TreatmentInteractiveRow({
           </>
         )}
       </Link>
-    </li>
+    </ArcTextReveal>
   );
 }
 

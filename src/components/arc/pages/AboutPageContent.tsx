@@ -113,6 +113,8 @@ export function AboutPageContent() {
         role={founder.role}
         imageSrc={images.founderNotePortrait}
         imageAlt="Dr. Danish Jabbar, Founder & Medical Director"
+        mobileImageSrc={images.founderNotePortraitMobile}
+        mobileImageAlt="Dr. Danish Jabbar, Founder & Medical Director at ARC Wellness"
         headlineEmphasisTone="teal"
         topSeam
         compactTop
