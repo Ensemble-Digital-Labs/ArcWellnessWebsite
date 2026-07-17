@@ -27,6 +27,7 @@ export function AboutPageContent() {
         body=""
         introMode="visible-on-load"
         copyColumnAmbients={[images.aboutHeroMedia]}
+        ambientObjectPositionClass="object-[78%_center] md:object-center"
         priorityBackground
         bottomSeam
       />

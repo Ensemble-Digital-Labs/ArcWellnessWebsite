@@ -72,6 +72,8 @@ type ScrollChapterIntroSectionProps = {
   imageObjectPosition?: string;
   /** Ambient art behind the left copy card (crossfades on scroll when multiple). */
   copyColumnAmbients?: readonly string[];
+  /** Object-position for the full-bleed ambient plate (default centered); e.g. "object-right md:object-center". */
+  ambientObjectPositionClass?: string;
   /** Floating clinic stills on the right for `ambient-full` heroes. */
   heroCanvasTiles?: readonly ArcChapterHeroCanvasTile[];
   /** `compact`, smaller script line for long taglines (treatment detail heroes). */
@@ -117,6 +119,7 @@ export function ScrollChapterIntroSection({
   backgroundFrame,
   imageObjectPosition,
   copyColumnAmbients,
+  ambientObjectPositionClass = "object-center",
   heroCanvasTiles,
   layout = "split-photo",
   headlineEmphasisSize = "default",
@@ -275,7 +278,7 @@ export function ScrollChapterIntroSection({
   /** Whole headline rendered in the italic emphasis face (Radley), one uniform size + branding-teal tone. */
   const allEmphasisClass = cn(
     "font-title-emphasis leading-[0.95] tracking-tight",
-    "text-[clamp(3.5rem,15vw,5.5rem)] md:text-[clamp(5.25rem,13vw,9.75rem)]",
+    "text-[clamp(6.5rem,28vw,9.5rem)] md:text-[clamp(5.25rem,13vw,9.75rem)]",
     onDarkCopy
       ? "text-arc-teal [text-shadow:0_2px_20px_rgba(0,0,0,0.4),0_0_32px_var(--arc-teal-glow)]"
       : "text-arc-teal-ink [text-shadow:0_1px_2px_rgba(255,255,255,0.5)]",
@@ -325,7 +328,7 @@ export function ScrollChapterIntroSection({
                 alt=""
                 fill
                 unoptimized={!optimizePlate}
-                className="object-cover object-center"
+                className={cn("object-cover", ambientObjectPositionClass)}
                 sizes="100vw"
                 priority={optimizePlate}
                 placeholder={optimizePlate ? "blur" : undefined}
