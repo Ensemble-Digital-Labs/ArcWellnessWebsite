@@ -15,6 +15,8 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
   uniform vec2 uResolution;
   uniform vec2 uTexture1Size;
   uniform vec2 uTexture2Size;
+  /** Cover focal (0–1). Matches CSS object-position; (0.5, 0.5) = center. */
+  uniform vec2 uCoverAnchor;
   uniform int uEffectType;
   uniform float uGlobalIntensity;
   uniform float uSpeedMultiplier;
@@ -51,7 +53,7 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
     vec2 s = uResolution / textureSize;
     float scale = max(s.x, s.y);
     vec2 scaledSize = textureSize * scale;
-    vec2 offset = (uResolution - scaledSize) * 0.5;
+    vec2 offset = (uResolution - scaledSize) * uCoverAnchor;
     return (uv * uResolution - offset) / scaledSize;
   }
 

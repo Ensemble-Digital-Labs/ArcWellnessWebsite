@@ -189,7 +189,7 @@ export const ARC_IMAGE_TOP_BORDER_FEATHER_COMPACT_CLASS =
 export const ARC_IMAGE_TOP_BORDER_FEATHER_LIP_CLASS =
   `pointer-events-none absolute inset-x-0 top-0 z-[4] h-[min(6vh,3.25rem)] ${ARC_CREAM_BLUR_GRADIENT_TOP_LIP} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_TOP_LIP}`;
 
-/** Cream feather above services showcase nav — blends photo into the in-flow tab bar. */
+/** Cream feather above services showcase nav — softens the photo into the overlaid tab bar. */
 export const ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS =
   `pointer-events-none absolute inset-x-0 bottom-full z-[1] h-[min(7vh,3.75rem)] ${ARC_CREAM_BLUR_GRADIENT_BOTTOM} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_BOTTOM}`;
 

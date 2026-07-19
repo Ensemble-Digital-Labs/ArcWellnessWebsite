@@ -7,15 +7,14 @@ type WholeBodySectionProps = {
   /** Soft cream feather from founder portrait into the slider. */
   topSeam?: boolean;
   /**
-   * Kept for API compatibility. Bottom cream exit is handled by Your Path `topSeam`
-   * so the category bar is never clipped by an overlay.
+   * Kept for API compatibility. Bottom cream exit is handled by Your Path `topSeam`.
    */
   bottomSeam?: boolean;
 };
 
 /**
- * Whole-body services showcase — ~100dvh photography stage + in-flow category bar
- * (section may be taller than one viewport so the bar stays fully visible).
+ * Whole-body services showcase — one viewport: full-bleed photography with cream
+ * category tabs overlaid at the bottom of the same stage.
  */
 export function WholeBodySection({ topSeam = false, bottomSeam: _bottomSeam = false }: WholeBodySectionProps) {
   return (
