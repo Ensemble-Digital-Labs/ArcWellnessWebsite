@@ -10,7 +10,6 @@ import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWaveSeparator } from "@/components/arc/ArcWaveSeparator";
-import { ExionHeroHalo } from "@/components/arc/ExionHeroHalo";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import type { TreatmentPage } from "@/content/pages/treatments";
 import {
@@ -24,6 +23,7 @@ import {
   exionTreatments,
 } from "@/content/pages/exion";
 import { homeInvestSupport } from "@/content/homepage";
+import { images } from "@/content/site";
 import {
   ARC_GALLERY_CLEAR_BELOW_LOGO,
   ARC_PAGE_RAIL_MAX,
@@ -135,156 +135,154 @@ function EmblemIcon({ src, className }: { src: string; className?: string }) {
 export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps) {
   return (
     <>
-      {/* ---------- Hero (cream) ---------- */}
-      <section
-        className={cn(
-          "relative overflow-hidden bg-arc-cream pb-16 sm:pb-20",
-          ARC_GALLERY_CLEAR_BELOW_LOGO,
-        )}
-      >
-        {/* Golden ripple halo behind the hero frames (ported from the demo) */}
-        <ExionHeroHalo className="inset-auto -right-[18vw] top-16 hidden h-[680px] w-[68vw] max-w-[980px] lg:block xl:-right-[10vw]" />
-        {/* Soft ambient glow, bottom-left */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-24 bottom-0 z-0 h-96 w-96 rounded-full opacity-25 blur-2xl"
-          style={{
-            background:
-              "radial-gradient(circle at center, rgba(193,154,91,0.35) 0%, transparent 70%)",
-          }}
-        />
+      {/* ---------- Hero: one viewport, full-bleed imagery into the gold wave ---------- */}
+      <div className="relative flex min-h-[100dvh] flex-col">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+          <Image
+            src={exionHero.imageSrc}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[78%_42%] sm:object-[72%_40%] md:object-[62%_45%] lg:object-center"
+          />
+          {/* Desktop: light left-edge fade only — mobile readability is handled on the text block */}
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-arc-cream/55 via-arc-cream/20 to-transparent md:block" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-arc-cream/35 to-transparent sm:h-28" />
+        </div>
 
-        <div
+        <section
           className={cn(
-            "relative z-10 mx-auto grid grid-cols-1 items-center gap-12 px-6 sm:px-10 md:grid-cols-2 md:items-start md:gap-14 md:px-12",
+            "relative z-10 flex flex-1 flex-col",
+            ARC_GALLERY_CLEAR_BELOW_LOGO,
+          )}
+        >
+          <div
+            className={cn(
+              "mx-auto flex w-full flex-1 flex-col justify-center px-6 sm:px-10 md:px-12",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:text-left">
+              {/* Soft cream halo only behind copy (mobile); fades out so the photo stays visible */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-5 -inset-y-4 z-0 rounded-[2rem] bg-arc-cream/70 blur-md md:hidden"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-3 -inset-y-2 z-0 rounded-3xl bg-arc-cream/60 md:hidden"
+              />
+              <div className="relative z-10">
+                <ArcTextReveal variant="heading" trigger="mount">
+                  <h1 className="font-serif text-[clamp(2.5rem,7.5vw,4.25rem)] font-normal leading-[1.02] tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
+                    <span className="block font-semibold">{exionHero.title}</span>
+                    <span className="mt-1 block font-serif text-[0.92em] font-semibold italic text-[#9a7340] md:font-normal md:text-arc-champagne">
+                      {exionHero.titleEmphasisLines.map((line) => (
+                        <span key={line} className="block text-balance">
+                          {line}
+                        </span>
+                      ))}
+                    </span>
+                  </h1>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
+                  <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:[text-shadow:none]">
+                    {exionHero.subhead}
+                  </p>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
+                  <p className="mt-5 font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:mt-6 sm:text-base md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]">
+                    {exionHero.intro}
+                  </p>
+                </ArcTextReveal>
+              </div>
+            </div>
+          </div>
+
+          {/* Closing chip — stays in the one-viewport hero */}
+          <ArcTextReveal
+            variant="body"
+            trigger="mount"
+            delayIndex={3}
+            className={cn(
+              "relative mx-auto mb-3 flex justify-center px-6 sm:mb-4 sm:px-10 md:px-12",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full border border-arc-champagne/30 bg-white/95 px-5 py-2.5 text-center shadow-[0_8px_24px_rgba(44,44,44,0.08)] md:backdrop-blur-sm sm:w-auto sm:max-w-none">
+              <Sparkles className="h-4 w-4 shrink-0 text-arc-champagne" aria-hidden />
+              <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/85">
+                {exionHero.closingLine}
+              </span>
+            </div>
+          </ArcTextReveal>
+        </section>
+
+        <div className="relative z-10 mt-auto">
+          <ArcWaveSeparator
+            topColor="transparent"
+            bottomColor="var(--arc-cream)"
+            shine
+          />
+        </div>
+
+        <span className="sr-only">{exionHero.imageAlt}</span>
+      </div>
+
+      {/* ---------- Pillars (brand cream) — single row of 5 ---------- */}
+      <div className="relative bg-arc-cream">
+        <section
+          className={cn(
+            "relative z-10 mx-auto px-6 py-14 sm:px-10 sm:py-16 md:px-12 md:py-20",
             ARC_PAGE_RAIL_MAX,
           )}
         >
-          {/* Copy */}
-          <div className="flex flex-col">
-            <div className="w-fit md:mx-auto">
-              <ArcTextReveal variant="heading" trigger="mount">
-                <h1 className="font-serif text-[clamp(2.75rem,8.5vw,4.5rem)] font-normal leading-[1.02] tracking-tight text-arc-charcoal">
-                  <span className="block font-semibold">{exionHero.title}</span>
-                  <span className="mt-1 block font-serif text-[0.92em] font-normal italic text-arc-champagne">
-                    {exionHero.titleEmphasisLines.map((line) => (
-                      <span key={line} className="block text-balance">
-                        {line}
-                      </span>
-                    ))}
-                  </span>
-                </h1>
-              </ArcTextReveal>
-              <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-                <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal sm:text-sm">
-                  {exionHero.subhead}
-                </p>
-              </ArcTextReveal>
-              <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
-                <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base">
-                  {exionHero.intro}
-                </p>
-              </ArcTextReveal>
-            </div>
-
-            {/* Pillars */}
-            <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-5">
-              {exionPillars.map((pillar, i) => (
-                <ArcTextReveal key={pillar.title} variant="body" trigger="mount" delayIndex={i + 3}>
-                  <div className="flex h-full flex-col items-center text-center">
-                    <EmblemIcon src={pillar.iconSrc} className="h-28 w-28 sm:h-32 sm:w-32" />
-                    <h3 className="mt-4 font-sans text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[#a87d3f]">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-2 font-sans text-[0.8125rem] leading-relaxed text-arc-charcoal/70">
-                      {pillar.body}
-                    </p>
-                  </div>
-                </ArcTextReveal>
-              ))}
-            </div>
-
-          </div>
-
-          {/* Framed hero composition */}
-          <ArcTextReveal variant="body" trigger="mount" delayIndex={1} className="md:-mt-10 lg:-mt-16 lg:pl-6">
-            <div className="relative mx-auto w-full max-w-md sm:max-w-lg">
-              {/* Main frame */}
-              <div className="rounded-[28px] border border-arc-champagne/25 bg-arc-cream/40 p-3.5 shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[18px] border-4 border-arc-champagne">
-                  <Image
-                    src={exionHero.imageSrc}
-                    alt={exionHero.imageAlt}
-                    fill
-                    priority
-                    sizes="(min-width: 768px) 45vw, 90vw"
-                    className="object-cover object-center"
-                  />
-                </div>
-              </div>
-
-              {/* Synergy badge card */}
-              <div className="absolute bottom-6 left-3 w-[52%] max-w-[13rem] rounded-2xl border border-arc-champagne/40 bg-arc-cream/95 p-4 shadow-[0_16px_44px_rgba(44,44,44,0.16)] backdrop-blur-sm sm:left-5">
-                <div className="flex items-start gap-1.5">
-                  <EmblemIcon
-                    src={exionHero.poweredByIconSrc}
-                    className="-mt-1 h-14 w-14 shrink-0"
-                  />
-                  <p className="font-sans text-[0.6875rem] font-bold uppercase leading-tight tracking-[0.16em] text-[#a87d3f]">
-                    {exionHero.poweredByEyebrow}
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 md:grid-cols-5 md:gap-x-6 lg:gap-x-8">
+            {exionPillars.map((pillar, i) => (
+              <ArcTextReveal key={pillar.title} variant="body" delayIndex={i}>
+                <div className="flex h-full flex-col items-center text-center">
+                  <EmblemIcon src={pillar.iconSrc} className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]" />
+                  <h3 className="mt-3 font-sans text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[#a87d3f] sm:mt-4 sm:text-[0.7rem]">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-2 max-w-[14rem] font-sans text-[0.75rem] leading-relaxed text-arc-charcoal/70 sm:text-[0.8125rem]">
+                    {pillar.body}
                   </p>
                 </div>
-                <p className="mt-2 font-sans text-xs font-semibold leading-snug text-arc-charcoal">
+              </ArcTextReveal>
+            ))}
+
+            <ArcTextReveal variant="body" delayIndex={4}>
+              <div className="flex h-full flex-col items-center text-center">
+                <EmblemIcon
+                  src={exionHero.poweredByIconSrc}
+                  className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
+                />
+                <h3 className="mt-3 max-w-[11rem] font-sans text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[#a87d3f] sm:mt-4 sm:text-[0.7rem]">
+                  {exionHero.poweredByEyebrow}
+                </h3>
+                <p className="mt-2 max-w-[14rem] font-sans text-[0.75rem] leading-relaxed text-arc-charcoal/70 sm:text-[0.8125rem]">
                   {exionHero.synergyLine}
                 </p>
               </div>
-
-              {/* Device frame */}
-              <div className="absolute -bottom-6 -right-2 hidden w-[36%] max-w-[11rem] rounded-2xl border border-arc-champagne/25 bg-arc-cream p-2 shadow-[0_18px_50px_rgba(44,44,44,0.2)] sm:block">
-                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border-[3px] border-arc-champagne">
-                  <Image
-                    src={exionHero.deviceImageSrc}
-                    alt={exionHero.deviceImageAlt}
-                    fill
-                    sizes="(min-width: 768px) 16vw, 40vw"
-                    className="object-cover object-center"
-                  />
-                </div>
-              </div>
-            </div>
-          </ArcTextReveal>
-        </div>
-
-        {/* Closing chip — centered across the full hero width */}
-        <ArcTextReveal
-          variant="body"
-          trigger="mount"
-          delayIndex={7}
-          className={cn("relative z-10 mx-auto mt-12 flex justify-center px-6 sm:px-10 md:px-12", ARC_PAGE_RAIL_MAX)}
-        >
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-arc-champagne/30 bg-white px-5 py-2.5 shadow-[0_8px_24px_rgba(44,44,44,0.08)]">
-            <Sparkles className="h-4 w-4 shrink-0 text-arc-champagne" aria-hidden />
-            <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/85">
-              {exionHero.closingLine}
-            </span>
+            </ArcTextReveal>
           </div>
-        </ArcTextReveal>
+        </section>
 
-      </section>
-
-      {/* Animated gold wave divider (cream -> recessed cream) */}
-      <ArcWaveSeparator
-        topColor="var(--arc-cream)"
-        bottomColor="var(--arc-cream-deep)"
-        shine
-      />
+        <ArcWaveSeparator
+          topColor="var(--arc-cream)"
+          bottomColor="var(--arc-cream-deep)"
+          shine
+        />
+      </div>
 
       {/* ---------- Mechanism + animated stats (recessed cream) ---------- */}
       <section className="relative overflow-hidden bg-arc-cream-deep px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
-        {/* Gold ambient glow, top-right (matches the demo) */}
+        {/* Gold ambient glow — solid radial on mobile (no blur-2xl; that janks Lenis scroll) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-10 top-0 z-0 h-72 w-72 rounded-full opacity-40 blur-2xl"
+          className="pointer-events-none absolute -right-10 top-0 z-0 h-72 w-72 rounded-full opacity-40 md:blur-2xl"
           style={{
             background:
               "radial-gradient(circle at center, rgba(193,154,91,0.35) 0%, transparent 70%)",
@@ -317,27 +315,26 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
 
             <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-5">
               {exionMechanism.stats.map((stat, i) => (
-                <ArcTextReveal key={stat.label} variant="body" delayIndex={i + 2}>
-                  <ArcCountUpStat
-                    value={stat.value}
-                    prefix={stat.prefix}
-                    suffix={stat.suffix}
-                    label={stat.label}
-                    align="left"
-                    durationMs={2600}
-                    startDelayMs={700 + i * 150}
-                    numberClassName="text-[2.75rem] font-normal leading-none text-arc-champagne sm:text-5xl"
-                    labelClassName="mt-2 max-w-none text-[0.7rem] text-arc-charcoal/65"
-                  />
-                </ArcTextReveal>
+                <ArcCountUpStat
+                  key={stat.label}
+                  value={stat.value}
+                  prefix={stat.prefix}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                  align="left"
+                  durationMs={1800}
+                  startDelayMs={200 + i * 60}
+                  numberClassName="text-[2.75rem] font-normal leading-none text-arc-champagne sm:text-5xl"
+                  labelClassName="mt-2 max-w-none text-[0.7rem] text-arc-charcoal/65"
+                />
               ))}
             </div>
 
           </div>
 
-          {/* Framed image — matches the hero frames on this page */}
+          {/* Framed image — lighter shadow on small screens */}
           <ArcTextReveal variant="body" delayIndex={2} className="relative">
-            <div className="rounded-[28px] border border-arc-champagne/25 bg-arc-cream/40 p-3.5 shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+            <div className="rounded-[28px] border border-arc-champagne/25 bg-arc-cream/40 p-3.5 shadow-[0_12px_36px_rgba(44,44,44,0.1)] md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] border-4 border-arc-champagne">
                 <Image
                   src={exionMechanism.imageSrc}
@@ -417,65 +414,78 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
         </div>
       </section>
 
-      {/* ---------- Wave into the dark act ---------- */}
-      <ArcWaveSeparator topColor="var(--arc-cream-deep)" bottomColor={DARK_ACT} shine />
-
-      {/* ---------- Why EXION is different (DARK act) ---------- */}
-      <section
-        className="relative overflow-hidden px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24"
-        style={darkActStyle}
-      >
-        <ExionGoldStreaks className="opacity-70" />
-        <div
-          className={cn(
-            "relative z-10 mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.6fr] lg:items-center lg:gap-16",
-            ARC_PAGE_RAIL_MAX,
-          )}
-        >
-          {/* Heading */}
-          <div>
-            <ArcTextReveal variant="heading">
-              <h2
-                className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-balance"
-                style={{ color: "#d9b878" }}
-              >
-                {exionDifferent.title} {exionDifferent.titleEmphasis}
-              </h2>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p
-                className="mt-6 max-w-sm font-sans text-sm leading-relaxed"
-                style={{ color: "rgba(247,241,232,0.82)" }}
-              >
-                {exionDifferent.intro}
-              </p>
-            </ArcTextReveal>
-          </div>
-
-          {/* Items — centered 2×2 grid */}
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2">
-            {exionDifferent.cards.map((card, i) => (
-              <ArcTextReveal key={card.title} variant="body" delayIndex={i + 1}>
-                <div className="flex flex-col items-center gap-3 text-center">
-                  <EmblemIcon src={card.iconSrc} className="h-28 w-28" />
-                  <h3
-                    className="font-sans text-xs font-semibold uppercase tracking-[0.15em]"
-                    style={{ color: "#d9b878" }}
-                  >
-                    {card.title}
-                  </h3>
-                  <p
-                    className="font-sans text-sm leading-relaxed"
-                    style={{ color: "rgba(247,241,232,0.82)" }}
-                  >
-                    {card.body}
-                  </p>
-                </div>
-              </ArcTextReveal>
-            ))}
-          </div>
+      {/* ---------- Why EXION is different: bg from top wave → end of section ---------- */}
+      <div className="relative overflow-hidden" style={darkActStyle}>
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+          <Image
+            src={exionDifferent.backgroundSrc}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+          />
         </div>
-      </section>
+
+        <div className="relative z-10">
+          <ArcWaveSeparator
+            topColor="var(--arc-cream-deep)"
+            bottomColor="transparent"
+            shine
+          />
+        </div>
+
+        <section className="relative z-10 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
+          <div
+            className={cn(
+              "relative mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.6fr] lg:items-center lg:gap-16",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            {/* Heading */}
+            <div>
+              <ArcTextReveal variant="heading">
+                <h2
+                  className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-balance"
+                  style={{ color: "#d9b878" }}
+                >
+                  {exionDifferent.title} {exionDifferent.titleEmphasis}
+                </h2>
+              </ArcTextReveal>
+              <ArcTextReveal variant="body" delayIndex={1}>
+                <p
+                  className="mt-6 max-w-sm font-sans text-sm leading-relaxed"
+                  style={{ color: "rgba(247,241,232,0.82)" }}
+                >
+                  {exionDifferent.intro}
+                </p>
+              </ArcTextReveal>
+            </div>
+
+            {/* Items — centered 2×2 grid */}
+            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2">
+              {exionDifferent.cards.map((card, i) => (
+                <ArcTextReveal key={card.title} variant="body" delayIndex={i + 1}>
+                  <div className="flex flex-col items-center gap-3 text-center">
+                    <EmblemIcon src={card.iconSrc} className="h-28 w-28" />
+                    <h3
+                      className="font-sans text-xs font-semibold uppercase tracking-[0.15em]"
+                      style={{ color: "#d9b878" }}
+                    >
+                      {card.title}
+                    </h3>
+                    <p
+                      className="font-sans text-sm leading-relaxed"
+                      style={{ color: "rgba(247,241,232,0.82)" }}
+                    >
+                      {card.body}
+                    </p>
+                  </div>
+                </ArcTextReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* ---------- The EXION experience (continues the dark act) ---------- */}
       <section
@@ -642,7 +652,7 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
 
       {/* ---------- Global CTA (then global footer via ArcMarketingShell) ---------- */}
       <InvestCTASection
-        imageSrc={exionHero.imageSrc}
+        imageSrc={images.heroMedia}
         supportingLine={exionClosing.supportingLine ?? homeInvestSupport}
         topSeam
       />

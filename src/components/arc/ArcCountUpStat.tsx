@@ -19,10 +19,19 @@ type ArcCountUpStatProps = {
   startDelayMs?: number;
 };
 
+function prefersInstantCount(): boolean {
+  if (typeof window === "undefined") return false;
+  // Phones / small viewports: skip RAF count-up — it fights touch scrolling.
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
 /**
  * In-view count-up stat. Animates from 0 to `value` the first time it scrolls
- * into view. When the user prefers reduced motion, it renders the final value
- * immediately with no animation.
+ * into view. When the user prefers reduced motion (or is on mobile), it renders
+ * the final value immediately with no animation.
+ *
+ * Desktop animation writes the number via a DOM ref (not React state per frame)
+ * so scroll stays smooth while the counter runs.
  */
 export function ArcCountUpStat({
   value,
@@ -37,22 +46,43 @@ export function ArcCountUpStat({
   startDelayMs = 0,
 }: ArcCountUpStatProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
+  const valueRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.35 });
   const reducedMotion = useReducedMotion();
-  const [count, setCount] = useState(0);
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (reducedMotion || !inView) return;
+    if (!inView) return;
+
+    const write = (n: number) => {
+      if (valueRef.current) valueRef.current.textContent = String(n);
+    };
+
+    if (reducedMotion || prefersInstantCount()) {
+      write(value);
+      setDisplay(value);
+      return;
+    }
 
     let raf = 0;
     const startCounting = () => {
       const start = performance.now();
+      let lastShown = -1;
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / durationMs);
         // easeOutQuart — gentle, smooth deceleration with a long tail.
         const eased = 1 - Math.pow(1 - t, 4);
-        setCount(Math.round(eased * value));
-        if (t < 1) raf = requestAnimationFrame(tick);
+        const next = Math.round(eased * value);
+        // Skip duplicate paints when the rounded value hasn't changed.
+        if (next !== lastShown) {
+          lastShown = next;
+          write(next);
+        }
+        if (t < 1) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          setDisplay(value);
+        }
       };
       raf = requestAnimationFrame(tick);
     };
@@ -63,8 +93,6 @@ export function ArcCountUpStat({
       cancelAnimationFrame(raf);
     };
   }, [inView, reducedMotion, value, durationMs, startDelayMs]);
-
-  const display = reducedMotion ? value : count;
 
   return (
     <div
@@ -82,7 +110,7 @@ export function ArcCountUpStat({
         )}
       >
         {prefix}
-        {display}
+        <span ref={valueRef}>{display}</span>
         {suffix}
       </span>
       {label ? (

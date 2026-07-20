@@ -9,6 +9,7 @@ import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
 /** Custom hand-drawn gold line-art emblems (see public/assets/treatments/exion/icons). */
 const EXION_ICON = "/assets/treatments/exion/icons";
+const EXION_ASSET = "/assets/treatments/exion";
 
 export type ExionIconItem = {
   iconSrc: string;
@@ -28,10 +29,9 @@ export const exionHero = {
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
   synergyLine: "Targeted ultrasound + RF, working in synergy.",
   closingLine: "Stronger skin. Smoother texture. Greater confidence.",
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
-  imageAlt: "EXION radiofrequency and ultrasound skin rejuvenation console at ARC Wellness",
-  deviceImageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
-  deviceImageAlt: "EXION treatment device console close-up at ARC Wellness",
+  /** Full-bleed hero background (4K master + WebP under public/assets/treatments/exion). */
+  imageSrc: `${EXION_ASSET}/exion-hero-treatment-4k.webp`,
+  imageAlt: "EXION radiofrequency and ultrasound facial treatment at ARC Wellness",
 } as const;
 
 export const exionPillars: readonly ExionIconItem[] = [
@@ -142,6 +142,9 @@ export const exionDifferent = {
   titleEmphasis: "different?",
   intro:
     "EXION combines the power of radiofrequency and targeted ultrasound in one platform for deeper, more effective, and longer-lasting results — without disrupting the surface of your skin.",
+  /** Dark gold-wave backdrop for this section (WebP under public/assets/treatments/exion). */
+  backgroundSrc: `${EXION_ASSET}/exion-different-background.webp`,
+  backgroundAlt: "",
   cards: [
     {
       iconSrc: `${EXION_ICON}/battery-energy.svg`,

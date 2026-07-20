@@ -17,14 +17,25 @@ type ArcWaveSeparatorProps = {
 // Ported 1:1 from the demo (arcwelness-service-demo.netlify.app/exion).
 // `WAVE` is the crest path; `RIBBON` is the tapered gold band that traces it.
 const WAVE = "M0,64 C360,120 720,0 1080,40 C1260,60 1380,80 1440,72";
+/** Fill only the band ABOVE the crest (used when `bottomColor` is transparent). */
+const WAVE_TOP_FILL =
+  "M0,0 L1440,0 L1440,72 C1380,80 1260,60 1080,40 C720,0 360,120 0,64 Z";
 const RIBBON =
   "M0,63.7 C360,119.4 720,-0.6 1080,38.2 C1260,57.5 1380,76 1440,69.5 " +
   "L1440,75 C1380,80.5 1260,62.5 1080,44 C720,5.5 360,121.2 0,64.5 Z";
+
+function isTransparentColor(color: string) {
+  const c = color.trim().toLowerCase();
+  return c === "transparent" || c === "rgba(0,0,0,0)" || c === "rgba(0, 0, 0, 0)";
+}
 
 /**
  * Decorative wave seam between "acts". When `shine` is set, a layered gold
  * ribbon with a travelling light sweep traces the crest (matches the demo).
  * The sweep is disabled under `prefers-reduced-motion` (see globals.css).
+ *
+ * Pass `bottomColor="transparent"` to let a parent background image show
+ * under the crest (top band still fills with `topColor`).
  */
 export function ArcWaveSeparator({
   topColor,
@@ -37,12 +48,13 @@ export function ArcWaveSeparator({
   const fillId = `curve-fill-${uid}`;
   const glowId = `curve-glow-${uid}`;
   const softId = `curve-soft-${uid}`;
+  const seeThroughBottom = isTransparentColor(bottomColor);
 
   return (
     <div
       className={className}
       style={{
-        background: topColor,
+        background: seeThroughBottom ? "transparent" : topColor,
         transform: flip ? "scaleY(-1)" : undefined,
         lineHeight: 0,
       }}
@@ -90,7 +102,11 @@ export function ArcWaveSeparator({
           </defs>
         ) : null}
 
-        <path d={`${WAVE} L1440,120 L0,120 Z`} fill={bottomColor} />
+        {seeThroughBottom ? (
+          <path d={WAVE_TOP_FILL} fill={topColor} />
+        ) : (
+          <path d={`${WAVE} L1440,120 L0,120 Z`} fill={bottomColor} />
+        )}
 
         {shine ? (
           <g className="curve-shine">

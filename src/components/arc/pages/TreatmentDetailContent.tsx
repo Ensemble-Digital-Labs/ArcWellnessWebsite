@@ -16,6 +16,7 @@ import {
   splitTreatmentSectionHeading,
   treatmentSectionParagraphs,
 } from "@/content/treatmentDetailHero";
+import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -139,7 +140,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
       </section>
 
       <InvestCTASection
-        imageSrc={treatment.imageSrc}
+        imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
         topSeam
       />
