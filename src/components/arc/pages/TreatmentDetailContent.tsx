@@ -17,7 +17,7 @@ import {
   treatmentSectionParagraphs,
 } from "@/content/treatmentDetailHero";
 import { images } from "@/content/site";
-import { ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
+import { ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS, ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS, ARC_PAGE_RAIL_MAX, ARC_SECTION_SEAM_OVERLAP_SM_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
 type TreatmentDetailContentProps = {
@@ -126,7 +126,6 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         )}
       >
         <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
-        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
         <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
           <ArcTextReveal variant="line">
             <Link
@@ -137,12 +136,15 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
             </Link>
           </ArcTextReveal>
         </div>
+        <div aria-hidden className={ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS} />
       </section>
 
       <InvestCTASection
         imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
         topSeam
+        topSeamOverlap={false}
+        topSeamClassName={ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS}
       />
     </>
   );

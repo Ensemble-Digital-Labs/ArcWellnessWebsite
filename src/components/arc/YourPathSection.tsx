@@ -88,9 +88,9 @@ const PATH_STEPS: PathStep[] = [
   },
 ];
 
-/** Script keywords on light path intro plate. */
+/** Script keywords on light path intro plate — bigger on mobile, slightly smaller on laptop+. */
 const PATH_INTRO_EMPHASIS_CLASS =
-  "text-[1.45em] leading-[1.01] text-arc-teal-ink sm:text-[1.5em] md:text-[1.56em] lg:text-[1.62em] xl:text-[1.66em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+  "text-[2.15em] leading-[1.0] text-arc-teal-ink sm:text-[2.05em] md:text-[1.9em] lg:text-[1.82em] xl:text-[1.78em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 
 function YourPathHeadlineTitle() {
   return (
@@ -165,7 +165,7 @@ function YourPathIntroSection({
         <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center text-center lg:max-w-3xl">
           <ArcTextReveal variant="heading" className="w-full text-center">
             <h2
-              className="mx-auto mb-5 max-w-[min(100%,22rem)] text-center font-serif text-[1.65rem] font-semibold leading-[1.12] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
+              className="mx-auto mb-5 max-w-[min(100%,24rem)] text-center font-serif text-[1.65rem] font-semibold leading-[1.15] text-balance text-arc-charcoal sm:mb-6 sm:max-w-2xl sm:text-3xl sm:leading-tight md:text-[2.1rem] lg:mb-6 lg:text-[2.25rem]"
               style={headlineMotion}
             >
               <YourPathHeadlineTitle />

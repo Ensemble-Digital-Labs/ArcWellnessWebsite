@@ -60,34 +60,45 @@ const SHOWCASE_SHELL_CLASS =
 const SHOWCASE_MEDIA_STAGE_CLASS =
   "relative h-[100dvh] min-h-[320px] w-full overflow-hidden bg-arc-cream";
 /**
- * Cover crop: center on small screens; laptop+ pins the focal point near the top so the
- * subject sits high in the same frame above the overlaid cream tabs (`object-top`).
+ * Cover crop: mobile/tablet bias toward the upper focal subject (faces / treatment),
+ * not dead center — tall phone viewports otherwise show too much lower empty frame.
+ * Laptop+ pins near the top so the subject sits high above the cream tabs.
  */
-const SHOWCASE_PHOTO_OBJECT_CLASS = "object-cover lg:object-top";
+const SHOWCASE_PHOTO_OBJECT_CLASS =
+  "object-cover object-[center_20%] sm:object-[center_18%] lg:object-top";
 /** Matches `SHOWCASE_PHOTO_OBJECT_CLASS` for the WebGL cover UV. */
-const SHOWCASE_COVER_ANCHOR_DEFAULT = { x: 0.5, y: 0.5 } as const;
+const SHOWCASE_COVER_ANCHOR_MOBILE = { x: 0.5, y: 0.2 } as const;
 const SHOWCASE_COVER_ANCHOR_LAPTOP = { x: 0.5, y: 0 } as const;
 const SHOWCASE_LAPTOP_COVER_MQ = "(min-width: 1024px)";
 /** Frosted glass chip — sits low on the photo; light type for contrast on imagery. */
 const SHOWCASE_SLIDE_GLASS_CLASS =
-  "inline-flex w-fit max-w-[min(calc(100vw-3rem),40rem)] flex-col items-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:gap-2.5 sm:px-7 sm:py-5";
+  "inline-flex w-fit max-w-[min(calc(100vw-5.5rem),40rem)] flex-col items-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:max-w-[min(calc(100vw-6rem),40rem)] sm:gap-2.5 sm:px-7 sm:py-5 md:max-w-[min(calc(100vw-3rem),40rem)]";
 /**
  * Glass title above the overlaid cream tab bar + its top feather.
- * Clearance ≈ tab bar height + feather (min(7vh,3.75rem)) + generous air gap.
+ * Below `md`: tabs hidden — sit above the bottom feather only.
+ * `md+`: clear the cream tab bar (+ feather).
  */
 const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
-  "pointer-events-auto absolute inset-x-0 z-[1] flex w-full justify-center px-4 bottom-[calc(7.25rem+min(7vh,3.75rem)+7rem)] sm:px-6 sm:bottom-[calc(7.75rem+min(7vh,3.75rem)+7.5rem)] md:px-6 md:bottom-[calc(8.25rem+min(7vh,3.75rem)+8rem)]";
+  "pointer-events-auto absolute inset-x-0 z-[1] flex w-full justify-center px-4 bottom-[calc(min(7vh,3.75rem)+2.75rem)] sm:px-6 md:px-6 md:bottom-[calc(8.25rem+min(7vh,3.75rem)+8rem)]";
 const SHOWCASE_SLIDE_TITLE_CLASS =
   "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-white";
 const SHOWCASE_SLIDE_DESC_CLASS =
   "mx-auto max-w-xl font-sans text-sm font-medium leading-relaxed text-white/92 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)] sm:text-[0.9375rem] md:leading-relaxed";
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
-/** Cream tab bar pinned to the bottom of the photo stage (same viewport). */
+/** Side arrows (mid-height). Glass sits lower; no cream tabs below md so no collision. */
+const SHOWCASE_CTRL_PREV_WRAP_CLASS =
+  "pointer-events-auto absolute left-[max(0.75rem,env(safe-area-inset-left))] top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6";
+const SHOWCASE_CTRL_NEXT_WRAP_CLASS =
+  "pointer-events-auto absolute right-[max(0.75rem,env(safe-area-inset-right))] top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6";
+/**
+ * Bottom overlay: cream feather always (blend into next section / tab bar).
+ * Cream category tabs hidden below `md`; shown from `md` up.
+ */
 const SHOWCASE_NAV_SHELL_CLASS =
   "pointer-events-none absolute inset-x-0 bottom-0 z-20 w-full";
 const SHOWCASE_NAV_CLASS =
-  "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative flex w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-visible overscroll-x-contain bg-arc-cream px-2 py-3.5 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] sm:px-4 sm:py-4 md:px-6 md:py-5 lg:px-8 lg:py-5 [&::-webkit-scrollbar]:hidden";
+  "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative hidden w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-visible overscroll-x-contain bg-arc-cream px-2 py-3.5 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] md:flex md:px-6 md:py-5 lg:px-8 lg:py-5 [&::-webkit-scrollbar]:hidden";
 /** Slide overlay inside the media stage only. */
 const SHOWCASE_SLIDE_CONTENT_CLASS =
   "slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col px-6 pb-8 pt-[calc(7rem+1.25rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(8.5rem+1.25rem+env(safe-area-inset-top,0px))] md:px-14 md:pt-[calc(9.5rem+1.25rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(10rem+1.25rem+env(safe-area-inset-top,0px))]";
@@ -101,11 +112,23 @@ function ServicesShowcaseNav({
   navRef?: RefObject<HTMLElement | null>;
   children?: ReactNode;
 }) {
+  const localNavRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const node = localNavRef.current;
+    if (!navRef) return;
+    navRef.current = node;
+    return () => {
+      navRef.current = null;
+    };
+  });
+
   return (
     <div className={SHOWCASE_NAV_SHELL_CLASS}>
+      {/* Soft cream feather — kept on mobile to blend into the next section */}
       <div aria-hidden className={ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS} />
       <nav
-        ref={navRef}
+        ref={localNavRef}
         id="slidesNav"
         className={cn(SHOWCASE_NAV_CLASS, className)}
         aria-label="Slide navigation"
@@ -128,12 +151,27 @@ function getEffectIndex(name: string): number {
 }
 
 function splitTextForTitle(text: string): string {
+  // Word wrappers keep “Wellness” intact; letter spans keep the stagger animation.
   return text
-    .split("")
-    .map((char) =>
-      `<span style="display:inline-block;opacity:0">${char === " " ? "&nbsp;" : char}</span>`,
-    )
+    .split(/(\s+)/)
+    .map((token) => {
+      if (/^\s+$/.test(token)) {
+        return token.replace(/ /g, "&nbsp;");
+      }
+      const letters = token
+        .split("")
+        .map(
+          (char) =>
+            `<span class="arc-showcase-title-char" style="display:inline-block;opacity:0">${char}</span>`,
+        )
+        .join("");
+      return `<span style="display:inline-block;white-space:nowrap">${letters}</span>`;
+    })
     .join("");
+}
+
+function titleCharNodes(titleEl: HTMLElement): HTMLElement[] {
+  return Array.from(titleEl.querySelectorAll<HTMLElement>(".arc-showcase-title-char"));
 }
 
 function escapeHtml(text: string): string {
@@ -160,6 +198,13 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
     }, SLIDER_CONFIG.settings.autoSlideSpeed);
     return () => window.clearInterval(t);
   }, [slides.length]);
+
+  useEffect(() => {
+    const active = document.querySelector<HTMLElement>(
+      ".arc-slide-nav [data-slide-nav-item][data-active='true']",
+    );
+    active?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [index]);
 
   const current = slides[index] ?? slides[0];
   if (!current) return null;
@@ -205,7 +250,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
           </div>
         </div>
 
-        <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
+        <div className={SHOWCASE_CTRL_PREV_WRAP_CLASS}>
           <button
             type="button"
             className={SHOWCASE_CTRL_BTN_CLASS}
@@ -218,7 +263,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
           </button>
         </div>
 
-        <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
+        <div className={SHOWCASE_CTRL_NEXT_WRAP_CLASS}>
           <button
             type="button"
             className={SHOWCASE_CTRL_BTN_CLASS}
@@ -376,6 +421,13 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         el.classList.toggle("active", on);
         if (on) el.setAttribute("aria-current", "true");
         else el.removeAttribute("aria-current");
+        if (on && el instanceof HTMLElement) {
+          el.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest",
+          });
+        }
       });
     };
 
@@ -428,7 +480,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
     const updateContent = (idx: number) => {
       if (!titleEl || !descEl) return;
-      gsap.to(titleEl.children, {
+      gsap.to(titleCharNodes(titleEl), {
         y: -20,
         opacity: 0,
         duration: 0.5,
@@ -446,10 +498,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         if (disposed) return;
         titleEl.innerHTML = splitTextForTitle(slideList[idx].title);
         descEl.textContent = slideList[idx].description;
-        gsap.set(titleEl.children, { opacity: 0 });
+        const children = titleCharNodes(titleEl);
+        gsap.set(children, { opacity: 0 });
         gsap.set(descEl, { y: 20, opacity: 0 });
-
-        const children = titleEl.children;
         const animIdx = idx % 6;
         switch (animIdx) {
           case 0:
@@ -729,7 +780,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     titleEl.innerHTML = splitTextForTitle(slideList[0].title);
     descEl.textContent = slideList[0].description;
     gsap.fromTo(
-      titleEl.children,
+      titleCharNodes(titleEl),
       { y: 20, opacity: 0 },
       {
         y: 0,
@@ -756,7 +807,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       const laptop = coverMq?.matches ?? false;
       const anchor = laptop
         ? SHOWCASE_COVER_ANCHOR_LAPTOP
-        : SHOWCASE_COVER_ANCHOR_DEFAULT;
+        : SHOWCASE_COVER_ANCHOR_MOBILE;
       shaderMaterial.uniforms.uCoverAnchor.value.set(anchor.x, anchor.y);
     };
 
@@ -801,8 +852,8 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           uTexture2Size: { value: new THREE.Vector2(1, 1) },
           uCoverAnchor: {
             value: new THREE.Vector2(
-              SHOWCASE_COVER_ANCHOR_DEFAULT.x,
-              SHOWCASE_COVER_ANCHOR_DEFAULT.y,
+              SHOWCASE_COVER_ANCHOR_MOBILE.x,
+              SHOWCASE_COVER_ANCHOR_MOBILE.y,
             ),
           },
           uEffectType: { value: 0 },
@@ -973,7 +1024,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           )}
           aria-hidden
         />
-        <div className="pointer-events-auto absolute left-3 top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6">
+        <div className={SHOWCASE_CTRL_PREV_WRAP_CLASS}>
           <button
             ref={prevBtnRef}
             type="button"
@@ -984,7 +1035,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           </button>
         </div>
 
-        <div className="pointer-events-auto absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6">
+        <div className={SHOWCASE_CTRL_NEXT_WRAP_CLASS}>
           <button
             ref={nextBtnRef}
             type="button"

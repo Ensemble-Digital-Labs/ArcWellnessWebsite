@@ -333,6 +333,38 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Mobile / tablet: fixed-width chips in a horizontal slider so full labels show. */
+@media (max-width: 767px) {
+  .arc-slide-nav-item.slide-nav-item {
+    flex: 0 0 auto;
+    min-width: 10.5rem;
+    max-width: 14rem;
+    padding: 0.85rem 0.75rem 1.05rem;
+    scroll-snap-align: center;
+  }
+
+  .arc-slide-nav.slides-navigation {
+    scroll-snap-type: x proximity;
+  }
+
+  .slide-nav-title.arc-slide-nav-label {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-height: 2.6em;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    white-space: normal;
+    hyphens: manual;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  .arc-slide-nav--light .slide-progress-line {
+    max-width: none;
+  }
+}
+
 .arc-slide-nav-item:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--arc-teal) 92%, transparent);
   outline-offset: 3px;

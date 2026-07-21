@@ -57,6 +57,13 @@ export const exionPillars: readonly ExionIconItem[] = [
   },
 ];
 
+/** Decorative cream plate behind pillars → mechanism → treatments (curve to curve). */
+export const exionPillarsBackground = {
+  /** Serve as-is (unoptimized) — Next/AVIF recompress washes this plate too white. */
+  src: `${EXION_ASSET}/exion-pillars-background.webp`,
+  alt: "",
+} as const;
+
 export type ExionStat = {
   value: number;
   prefix?: string;

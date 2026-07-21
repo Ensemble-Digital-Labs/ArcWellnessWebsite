@@ -956,21 +956,27 @@ export function ScrollExpandHero({
                 >
                   <div
                     className={cn(
-                      "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                      "pointer-events-auto flex w-full max-w-full flex-col items-stretch gap-2 max-md:gap-2 md:w-max md:flex-row md:flex-nowrap md:items-center md:justify-start md:gap-2",
                       centerCopy && "md:mx-auto md:justify-center",
                       referenceLayout && "mt-6 md:mt-7",
                     )}
                   >
                     <Link
                       href={siteMeta.bookingUrl}
-                      className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
+                      className={cn(
+                        lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass,
+                        "w-full justify-center md:w-auto",
+                      )}
                       {...bookingLinkExternalProps(siteMeta.bookingUrl)}
                     >
                       Begin your Journey
                     </Link>
                     <Link
                       href={homeHeroSecondaryCta.href}
-                      className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                      className={cn(
+                        lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass,
+                        "w-full justify-center md:w-auto",
+                      )}
                     >
                       {homeHeroSecondaryCta.label}
                     </Link>
@@ -979,21 +985,27 @@ export function ScrollExpandHero({
               ) : (
                 <div
                   className={cn(
-                    "pointer-events-auto flex w-max max-w-full flex-nowrap items-center justify-center gap-2 max-md:gap-1.5 md:justify-start",
+                    "pointer-events-auto flex w-full max-w-full flex-col items-stretch gap-2 max-md:gap-2 md:w-max md:flex-row md:flex-nowrap md:items-center md:justify-start md:gap-2",
                     centerCopy && "md:mx-auto md:justify-center",
                     referenceLayout && "mt-6 md:mt-7",
                   )}
                 >
                   <Link
                     href={siteMeta.bookingUrl}
-                    className={lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass}
+                    className={cn(
+                      lightSurface ? heroPrimaryCtaClassLight : heroPrimaryCtaClass,
+                      "w-full justify-center md:w-auto",
+                    )}
                     {...bookingLinkExternalProps(siteMeta.bookingUrl)}
                   >
                     Begin your Journey
                   </Link>
                   <Link
                     href={homeHeroSecondaryCta.href}
-                    className={lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass}
+                    className={cn(
+                      lightSurface ? heroSecondaryCtaClassLight : heroSecondaryCtaClass,
+                      "w-full justify-center md:w-auto",
+                    )}
                   >
                     {homeHeroSecondaryCta.label}
                   </Link>

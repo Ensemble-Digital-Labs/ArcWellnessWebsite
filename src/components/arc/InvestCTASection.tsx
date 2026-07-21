@@ -61,13 +61,16 @@ function InvestCTAContent({
     <>
       <InvestCTABackdrop imageSrc={imageSrc} />
       {topSeam ? (
-        <ArcSectionSeamBlend
-          edge="top"
-          tone="cream"
-          variant="soft"
-          scope="background"
-          className={topSeamClassName}
-        />
+        topSeamClassName ? (
+          <div aria-hidden className={topSeamClassName} />
+        ) : (
+          <ArcSectionSeamBlend
+            edge="top"
+            tone="cream"
+            variant="soft"
+            scope="background"
+          />
+        )
       ) : null}
       <div
         className={cn(
