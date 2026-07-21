@@ -103,6 +103,25 @@ const SHOWCASE_NAV_CLASS =
 const SHOWCASE_SLIDE_CONTENT_CLASS =
   "slide-content pointer-events-none absolute inset-0 z-10 flex min-h-0 flex-col px-6 pb-8 pt-[calc(7rem+1.25rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pt-[calc(8.5rem+1.25rem+env(safe-area-inset-top,0px))] md:px-14 md:pt-[calc(9.5rem+1.25rem+env(safe-area-inset-top,0px))] lg:px-16 lg:pt-[calc(10rem+1.25rem+env(safe-area-inset-top,0px))]";
 
+/**
+ * Center a nav tab horizontally inside the overflow strip only.
+ * Never use Element.scrollIntoView here — `block: "nearest"` still scrolls the
+ * page when the showcase sits near the viewport edge (slide-change jump).
+ */
+function scrollShowcaseNavItemHorizontal(item: HTMLElement) {
+  const nav = item.closest(".arc-slide-nav");
+  if (!(nav instanceof HTMLElement)) return;
+  const maxScroll = nav.scrollWidth - nav.clientWidth;
+  if (maxScroll <= 0) return;
+
+  const navRect = nav.getBoundingClientRect();
+  const itemRect = item.getBoundingClientRect();
+  const delta =
+    itemRect.left + itemRect.width / 2 - (navRect.left + navRect.width / 2);
+  const next = Math.max(0, Math.min(maxScroll, nav.scrollLeft + delta));
+  nav.scrollTo({ left: next, behavior: "smooth" });
+}
+
 function ServicesShowcaseNav({
   className,
   navRef,
@@ -203,7 +222,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
     const active = document.querySelector<HTMLElement>(
       ".arc-slide-nav [data-slide-nav-item][data-active='true']",
     );
-    active?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    if (active) scrollShowcaseNavItemHorizontal(active);
   }, [index]);
 
   const current = slides[index] ?? slides[0];
@@ -422,11 +441,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         if (on) el.setAttribute("aria-current", "true");
         else el.removeAttribute("aria-current");
         if (on && el instanceof HTMLElement) {
-          el.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest",
-          });
+          scrollShowcaseNavItemHorizontal(el);
         }
       });
     };
