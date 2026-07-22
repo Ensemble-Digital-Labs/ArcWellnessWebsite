@@ -61,34 +61,6 @@ function DrawerDropdownCue({ open }: { open: boolean }) {
   );
 }
 
-function DrawerDropdownToggle({
-  open,
-  onToggle,
-  panelId,
-  itemLabel,
-}: {
-  open: boolean;
-  onToggle: () => void;
-  panelId: string;
-  itemLabel: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-expanded={open}
-      aria-controls={panelId}
-      aria-label={open ? `Collapse ${itemLabel} menu` : `Expand ${itemLabel} menu`}
-      className={cn(
-        "relative z-20 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40",
-        DROPDOWN_TOGGLE_ZONE_CLASS,
-      )}
-    >
-      <DrawerDropdownCue open={open} />
-    </button>
-  );
-}
-
 const navRowRootVariants = { initial: {}, hover: {} };
 const navTitleStagger = {
   initial: {},
@@ -232,7 +204,6 @@ function DrawerTopLinkRow({
   reducedMotion,
   canHover,
   assignRef,
-  hideTrailingArrow = false,
   rowIndex = 0,
   className,
 }: {
@@ -241,7 +212,6 @@ function DrawerTopLinkRow({
   reducedMotion: boolean;
   canHover: boolean;
   assignRef?: (el: HTMLAnchorElement | null) => void;
-  hideTrailingArrow?: boolean;
   /** Used to keep hover previews below the fixed Close control on first rows. */
   rowIndex?: number;
   className?: string;
@@ -340,9 +310,7 @@ function DrawerTopLinkRow({
       {!showRichMotion ? (
         <>
           <span className="relative z-10 min-w-0 flex-1">{item.label}</span>
-          {!hideTrailingArrow ? (
-            <ArrowRight className="relative z-10 size-7 shrink-0 text-arc-teal sm:size-9" strokeWidth={1.75} />
-          ) : null}
+          <ArrowRight className="relative z-10 size-7 shrink-0 text-arc-teal sm:size-9" strokeWidth={1.75} />
         </>
       ) : (
         <motion.div
@@ -358,13 +326,11 @@ function DrawerTopLinkRow({
               </motion.span>
             ))}
           </motion.span>
-          {!hideTrailingArrow ? (
-            <div className="shrink-0 overflow-hidden py-1">
-              <motion.span variants={navArrowVariants} className="flex" aria-hidden>
-                <ArrowRight className="size-7 text-arc-teal sm:size-9" strokeWidth={1.75} />
-              </motion.span>
-            </div>
-          ) : null}
+          <div className="shrink-0 overflow-hidden py-1">
+            <motion.span variants={navArrowVariants} className="flex" aria-hidden>
+              <ArrowRight className="size-7 text-arc-teal sm:size-9" strokeWidth={1.75} />
+            </motion.span>
+          </div>
         </motion.div>
       )}
     </Link>
@@ -397,6 +363,7 @@ function DrawerNavItem({
     if (!menuOpen) setOpen(false);
   }, [menuOpen]);
 
+  // Match desktop: plain links navigate; dropdown items only expand (never navigate).
   if (!hasPanel && item.href) {
     return (
       <li className="arc-nav-menu-item" data-shape={meta.shape}>
@@ -414,45 +381,24 @@ function DrawerNavItem({
 
   return (
     <li className="arc-nav-menu-item flex flex-col" data-shape={meta.shape}>
-      {item.href ? (
-        <div
-          ref={(el) => registerTopLinkRef?.(index, el)}
-          className="flex w-full items-stretch border-b border-arc-charcoal/10"
-        >
-          <DrawerTopLinkRow
-            item={item}
-            closeMenu={closeMenu}
-            reducedMotion={reducedMotion}
-            canHover={canHover}
-            hideTrailingArrow
-            rowIndex={index}
-            className="min-w-0 flex-1 border-b-0"
-          />
-          <DrawerDropdownToggle
-            open={open}
-            onToggle={() => setOpen((v) => !v)}
-            panelId={panelId}
-            itemLabel={item.label}
-          />
-        </div>
-      ) : (
-        <button
-          type="button"
-          ref={(el) => registerTopLinkRef?.(index, el)}
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls={panelId}
-          className={cn(
-            TOP_ROW_CLASS,
-            "w-full items-stretch border-arc-charcoal/10 text-arc-charcoal",
-          )}
-        >
-          <span className="relative z-10 min-w-0 flex-1 self-center text-left">{item.label}</span>
-          <span className={cn("relative z-10", DROPDOWN_TOGGLE_ZONE_CLASS)} aria-hidden>
-            <DrawerDropdownCue open={open} />
-          </span>
-        </button>
-      )}
+      <button
+        type="button"
+        ref={(el) => registerTopLinkRef?.(index, el)}
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={panelId}
+        className={cn(
+          TOP_ROW_CLASS,
+          "w-full items-stretch border-arc-charcoal/10 text-arc-charcoal",
+        )}
+      >
+        <span className="relative z-10 min-w-0 flex-1 self-center text-left">
+          {item.label}
+        </span>
+        <span className={cn("relative z-10", DROPDOWN_TOGGLE_ZONE_CLASS)} aria-hidden>
+          <DrawerDropdownCue open={open} />
+        </span>
+      </button>
       {item.columns ? (
         <DrawerExpandable panelId={panelId} open={open} reducedMotion={reducedMotion}>
           <DrawerColumnGroups

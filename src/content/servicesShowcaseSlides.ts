@@ -6,6 +6,12 @@ export type ServicesShowcaseSlide = {
   eyebrow?: string;
   /** Bottom nav chip text (often shorter); defaults to `title`. */
   navLabel?: string;
+  /**
+   * Mobile/tablet cover focal (0–1), like CSS object-position.
+   * `(0.5, 0.2)` is the default (center, upper). Higher `x` pans the crop right.
+   * Laptop+ ignores this and uses the shared top crop.
+   */
+  coverAnchorMobile?: { x: number; y: number };
 };
 
 export const SERVICES_SHOWCASE_DEFAULT_EYEBROW = "Whole-body care";
@@ -27,16 +33,20 @@ export const SERVICES_SHOWCASE_SLIDES: readonly ServicesShowcaseSlide[] = [
     title: "Longevity",
     description: "Healthy Aging • Hormone Balance • Metabolic Health",
     imageSrc: "/assets/sections/whole-body/longevity.webp",
+    // Mobile: pan crop right of default center so the subject reads better in tall frames.
+    coverAnchorMobile: { x: 0.72, y: 0.2 },
   },
   {
     title: "Strength & Performance",
     description: "Core Strength • Pelvic Health • Mental Performance",
     imageSrc: "/assets/sections/whole-body/strength-and-performance.webp",
+    coverAnchorMobile: { x: 0.72, y: 0.2 },
   },
   {
     title: "Advanced Therapies",
     description: "IV Infusions • Peptides • Targeted Supplements",
     imageSrc: "/assets/sections/whole-body/advanced-therapies.webp",
+    coverAnchorMobile: { x: 0.88, y: 0.2 },
   },
   {
     title: "Aesthetic Rejuvenation",

@@ -1,5 +1,3 @@
-import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-
 /**
  * Bespoke EXION landing content — translated from the demo Exion page
  * (arcwelness-service-demo.netlify.app/exion) into structured, on-brand
@@ -30,8 +28,8 @@ export const exionHero = {
   synergyLine: "Targeted ultrasound + RF, working in synergy.",
   closingLine: "Stronger skin. Smoother texture. Greater confidence.",
   /** Full-bleed hero background (4K master + WebP under public/assets/treatments/exion). */
-  imageSrc: `${EXION_ASSET}/exion-hero-treatment-4k.webp`,
-  imageAlt: "EXION radiofrequency and ultrasound facial treatment at ARC Wellness",
+  imageSrc: `${EXION_ASSET}/exion-hero-diverse-patient-4k.webp`,
+  imageAlt: "EXION facial treatment with diverse patient at ARC Wellness",
 } as const;
 
 export const exionPillars: readonly ExionIconItem[] = [
@@ -71,6 +69,11 @@ export type ExionStat = {
   label: string;
 };
 
+/** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
+const EXION_BUNNY_LIBRARY_ID = "710568";
+const EXION_BUNNY_VIDEO_ID = "5fbd5594-ac2f-4472-8c54-94513a9e3abc";
+const EXION_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${EXION_BUNNY_LIBRARY_ID}/${EXION_BUNNY_VIDEO_ID}`;
+
 export const exionMechanism = {
   titleLines: ["Beautiful skin", "begins beneath", "the surface"],
   body: "EXION delivers controlled thermal energy deep into the skin, activating fibroblasts and stimulating collagen and elastin production — where true renewal happens.",
@@ -80,8 +83,12 @@ export const exionMechanism = {
     { value: 31, prefix: "+", suffix: "%", label: "Increase in hyaluronic acid" },
     { value: 28, prefix: "+", suffix: "%", label: "Improvement in overall skin texture and tone" },
   ] as readonly ExionStat[],
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceCheekApplicatorTreatment,
-  imageAlt: "Woman with refined, healthy skin after an EXION treatment at ARC Wellness",
+  /**
+   * Stable Bunny embed (Player.js play/pause on scroll — do not swap src or the
+   * iframe remounts and resets). `playerjs=true` enables the control bridge.
+   */
+  videoEmbedSrc: `${EXION_BUNNY_EMBED_BASE}?autoplay=false&loop=true&muted=true&preload=true&responsive=true&playerjs=true`,
+  videoTitle: "EXION treatment sizzle at ARC Wellness",
 } as const;
 
 export type ExionTreatmentCard = {
@@ -110,8 +117,8 @@ export const exionTreatments = {
         "Reduces fine lines and wrinkles",
         "No needles, no downtime",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceCheekApplicatorTreatment,
-      imageAlt: "EMFACE facial muscle toning applicator at ARC Wellness",
+      imageSrc: `${EXION_ASSET}/exion-card-emface-device-4k.webp`,
+      imageAlt: "EMFACE facial muscle toning device at ARC Wellness",
     },
     {
       eyebrow: "Collagen renewal",
@@ -124,8 +131,8 @@ export const exionTreatments = {
         "Refines texture and minimizes pores",
         "Enhances overall skin tone",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceForeheadRedLightTreatment,
-      imageAlt: "EXION RF microneedling skin treatment at ARC Wellness",
+      imageSrc: `${EXION_ASSET}/exion-card-rf-microneedling-4k.webp`,
+      imageAlt: "EXION RF microneedling handpiece at ARC Wellness",
     },
     {
       eyebrow: "Surface resurfacing",
@@ -138,8 +145,8 @@ export const exionTreatments = {
         "Enhances clarity and radiance",
         "Improves healthy skin renewal",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
-      imageAlt: "EXION laser resurfacing treatment at ARC Wellness",
+      imageSrc: `${EXION_ASSET}/exion-card-clear-laser-resurfacing-4k.webp`,
+      imageAlt: "EXION Clear Laser resurfacing handpiece at ARC Wellness",
     },
   ] as readonly ExionTreatmentCard[],
 } as const;
@@ -212,11 +219,27 @@ export const exionResults = {
   title: "Real results.",
   titleEmphasis: "Refined confidence.",
   intro: "See the difference advanced technology can make.",
-  disclaimer: "*Individual results may vary.",
-  cards: [
-    { label: "EXION Result 1", caption: "Improved firmness and facial contour*" },
-    { label: "EXION Result 2", caption: "Refined texture and smoother skin*" },
-    { label: "EXION Result 3", caption: "Brighter, healthier-looking skin*" },
+  slides: [
+    {
+      src: `${EXION_ASSET}/results/exion-ba-cheek-female-040.webp`,
+      alt: "EXION before and after — female cheek, refined texture and contour",
+    },
+    {
+      src: `${EXION_ASSET}/results/exion-ba-cheek-female-004.webp`,
+      alt: "EXION before and after — female cheek, smoother skin texture",
+    },
+    {
+      src: `${EXION_ASSET}/results/exion-ba-forehead-male-022.webp`,
+      alt: "EXION before and after — male forehead, clearer smoother skin",
+    },
+    {
+      src: `${EXION_ASSET}/results/exion-ba-face-male-112.webp`,
+      alt: "EXION Clear RF before and after — male face",
+    },
+    {
+      src: `${EXION_ASSET}/results/exion-ba-face-male-113.webp`,
+      alt: "EXION Clear RF before and after — male face, refined results",
+    },
   ],
 } as const;
 

@@ -70,27 +70,48 @@ const SHOWCASE_PHOTO_OBJECT_CLASS =
 const SHOWCASE_COVER_ANCHOR_MOBILE = { x: 0.5, y: 0.2 } as const;
 const SHOWCASE_COVER_ANCHOR_LAPTOP = { x: 0.5, y: 0 } as const;
 const SHOWCASE_LAPTOP_COVER_MQ = "(min-width: 1024px)";
+
+function showcaseCoverAnchorForSlide(
+  slide: ServicesShowcaseSlide | undefined,
+  laptop: boolean,
+): { x: number; y: number } {
+  if (laptop) return SHOWCASE_COVER_ANCHOR_LAPTOP;
+  return slide?.coverAnchorMobile ?? SHOWCASE_COVER_ANCHOR_MOBILE;
+}
+
+/** CSS object-position for reduced-motion / poster fallbacks. */
+function showcasePhotoObjectPosition(
+  slide: ServicesShowcaseSlide | undefined,
+  laptop: boolean,
+): string | undefined {
+  if (laptop || !slide?.coverAnchorMobile) return undefined;
+  const { x, y } = slide.coverAnchorMobile;
+  return `${Math.round(x * 100)}% ${Math.round(y * 100)}%`;
+}
 /** Frosted glass chip — sits low on the photo; light type for contrast on imagery. */
 const SHOWCASE_SLIDE_GLASS_CLASS =
   "inline-flex w-fit max-w-[min(calc(100vw-5.5rem),40rem)] flex-col items-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:max-w-[min(calc(100vw-6rem),40rem)] sm:gap-2.5 sm:px-7 sm:py-5 md:max-w-[min(calc(100vw-3rem),40rem)]";
 /**
  * Glass title above the overlaid cream tab bar + its top feather.
- * Below `md`: tabs hidden — sit above the bottom feather only.
+ * Below `md`: raised so arrow row can sit under the glass chip.
  * `md+`: clear the cream tab bar (+ feather).
  */
 const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
-  "pointer-events-auto absolute inset-x-0 z-[1] flex w-full justify-center px-4 bottom-[calc(min(7vh,3.75rem)+2.75rem)] sm:px-6 md:px-6 md:bottom-[calc(8.25rem+min(7vh,3.75rem)+8rem)]";
+  "pointer-events-auto absolute inset-x-0 z-[1] flex w-full justify-center px-4 bottom-[calc(min(7vh,3.75rem)+12.5rem)] sm:px-6 md:px-6 md:bottom-[calc(8.25rem+min(7vh,3.75rem)+8rem)]";
 const SHOWCASE_SLIDE_TITLE_CLASS =
   "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-white";
 const SHOWCASE_SLIDE_DESC_CLASS =
   "mx-auto max-w-xl font-sans text-sm font-medium leading-relaxed text-white/92 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)] sm:text-[0.9375rem] md:leading-relaxed";
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
-/** Side arrows (mid-height). Glass sits lower; no cream tabs below md so no collision. */
+/**
+ * Mobile: left/right under the glass chip (not centered).
+ * `md+`: mid-height side arrows.
+ */
 const SHOWCASE_CTRL_PREV_WRAP_CLASS =
-  "pointer-events-auto absolute left-[max(0.75rem,env(safe-area-inset-left))] top-1/2 z-20 -translate-y-1/2 sm:left-4 md:left-6";
+  "pointer-events-auto absolute z-20 left-[max(0.75rem,env(safe-area-inset-left))] bottom-[calc(min(7vh,3.75rem)+4.25rem)] sm:left-4 md:left-6 md:top-1/2 md:bottom-auto md:-translate-y-1/2";
 const SHOWCASE_CTRL_NEXT_WRAP_CLASS =
-  "pointer-events-auto absolute right-[max(0.75rem,env(safe-area-inset-right))] top-1/2 z-20 -translate-y-1/2 sm:right-4 md:right-6";
+  "pointer-events-auto absolute z-20 right-[max(0.75rem,env(safe-area-inset-right))] bottom-[calc(min(7vh,3.75rem)+4.25rem)] sm:right-4 md:right-6 md:top-1/2 md:bottom-auto md:-translate-y-1/2";
 /**
  * Bottom overlay: cream feather always (blend into next section / tab bar).
  * Cream category tabs hidden below `md`; shown from `md` up.
@@ -250,6 +271,9 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
                 alt=""
                 fill
                 className={SHOWCASE_PHOTO_OBJECT_CLASS}
+                style={{
+                  objectPosition: showcasePhotoObjectPosition(s, false),
+                }}
                 sizes="100vw"
                 priority={i === 0}
               />
@@ -665,6 +689,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       if (!currentTexture || !targetTexture) return;
 
       isTransitioning = true;
+      applyCoverAnchors(currentSlideIndex, targetIndex);
       shaderMaterial.uniforms.uTexture1.value = currentTexture;
       shaderMaterial.uniforms.uTexture2.value = targetTexture;
       shaderMaterial.uniforms.uTexture1Size.value =
@@ -690,6 +715,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
             shaderMaterial.uniforms.uTexture1.value = targetTexture;
             shaderMaterial.uniforms.uTexture1Size.value =
               targetTexture.userData.size as THREE.Vector2;
+            applyCoverAnchors(targetIndex, targetIndex);
             isTransitioning = false;
             safeStartTimer(100);
           },
@@ -817,13 +843,13 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         ? window.matchMedia(SHOWCASE_LAPTOP_COVER_MQ)
         : null;
 
-    const applyCoverAnchor = () => {
+    const applyCoverAnchors = (fromIndex: number, toIndex = fromIndex) => {
       if (disposed || !shaderMaterial) return;
       const laptop = coverMq?.matches ?? false;
-      const anchor = laptop
-        ? SHOWCASE_COVER_ANCHOR_LAPTOP
-        : SHOWCASE_COVER_ANCHOR_MOBILE;
-      shaderMaterial.uniforms.uCoverAnchor.value.set(anchor.x, anchor.y);
+      const a1 = showcaseCoverAnchorForSlide(slideList[fromIndex], laptop);
+      const a2 = showcaseCoverAnchorForSlide(slideList[toIndex], laptop);
+      shaderMaterial.uniforms.uCoverAnchor1.value.set(a1.x, a1.y);
+      shaderMaterial.uniforms.uCoverAnchor2.value.set(a2.x, a2.y);
     };
 
     const resize = () => {
@@ -832,12 +858,14 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       const h = root.clientHeight;
       renderer.setSize(w, h, false);
       shaderMaterial.uniforms.uResolution.value.set(w, h);
-      applyCoverAnchor();
+      applyCoverAnchors(currentSlideIndex, currentSlideIndex);
     };
 
     const ro = new ResizeObserver(() => resize());
     ro.observe(root);
-    coverMq?.addEventListener("change", applyCoverAnchor);
+    const onCoverMqChange = () =>
+      applyCoverAnchors(currentSlideIndex, currentSlideIndex);
+    coverMq?.addEventListener("change", onCoverMqChange);
 
     (async () => {
       scene = new THREE.Scene();
@@ -865,7 +893,13 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           uResolution: { value: new THREE.Vector2(w0, h0) },
           uTexture1Size: { value: new THREE.Vector2(1, 1) },
           uTexture2Size: { value: new THREE.Vector2(1, 1) },
-          uCoverAnchor: {
+          uCoverAnchor1: {
+            value: new THREE.Vector2(
+              SHOWCASE_COVER_ANCHOR_MOBILE.x,
+              SHOWCASE_COVER_ANCHOR_MOBILE.y,
+            ),
+          },
+          uCoverAnchor2: {
             value: new THREE.Vector2(
               SHOWCASE_COVER_ANCHOR_MOBILE.x,
               SHOWCASE_COVER_ANCHOR_MOBILE.y,
@@ -938,7 +972,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
           slideTextures[1].userData.size as THREE.Vector2;
         if (disposed) return;
 
-        applyCoverAnchor();
+        applyCoverAnchors(0, 0);
         texturesLoaded = true;
         sliderEnabled = true;
         updateShaderUniforms();
@@ -992,7 +1026,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       nextEl?.removeEventListener("click", onNext);
       cancelAnimationFrame(rafId);
       document.removeEventListener("visibilitychange", onVisibility);
-      coverMq?.removeEventListener("change", applyCoverAnchor);
+      coverMq?.removeEventListener("change", onCoverMqChange);
       ro.disconnect();
       stopAutoSlideTimer();
       gsapCtx.revert();
@@ -1026,6 +1060,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
               alt=""
               fill
               className={SHOWCASE_PHOTO_OBJECT_CLASS}
+              style={{
+                objectPosition: showcasePhotoObjectPosition(slides[0], false),
+              }}
               sizes="100vw"
               priority
             />

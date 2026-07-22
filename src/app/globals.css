@@ -685,12 +685,40 @@ html[data-arc-intro="active"] .arc-preloader__logo {
   box-shadow: 0 30px 60px rgba(44, 44, 44, 0.13);
 }
 
+/* Results slider: lift only on true hover (not sticky iOS tap hover). */
+.exion-results-lift {
+  transition: transform 300ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .exion-results-lift:hover {
+    transform: translateY(-8px);
+  }
+}
+
+/* Phones: never “pop” on tap — sticky :hover / :active would block swipe feel. */
+@media (hover: none), (pointer: coarse) {
+  .exion-results-lift,
+  .exion-results-lift:hover,
+  .exion-results-lift:active {
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .exion-lift {
     transition: none;
   }
 
   .exion-lift:hover {
+    transform: none;
+  }
+
+  .exion-results-lift {
+    transition: none;
+  }
+
+  .exion-results-lift:hover {
     transform: none;
   }
 }

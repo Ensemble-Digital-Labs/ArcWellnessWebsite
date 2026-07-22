@@ -22,6 +22,8 @@ type ArcFaqSectionProps = {
   faqByCategory: Readonly<Record<string, readonly ArcFaqItem[]>>;
   topSeam?: boolean;
   bottomSeam?: boolean;
+  /** Branding teal cursive “FAQ” (EXION / treatment pages). Default serif charcoal. */
+  emphasisHeading?: boolean;
 };
 
 function ArcFaqAccordionRow({
@@ -104,6 +106,7 @@ export function ArcFaqSection({
   faqByCategory,
   topSeam = false,
   bottomSeam = false,
+  emphasisHeading = false,
 }: ArcFaqSectionProps) {
   const reduceMotion = useReducedMotion();
   const categoryKeys = Object.keys(categories);
@@ -137,17 +140,34 @@ export function ArcFaqSection({
             : "pt-16 sm:pt-20 md:pt-24 lg:pt-28",
         )}
       >
-        <header className="mb-10 shrink-0 text-left lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 xl:top-52">
+        <header className="mb-10 shrink-0 text-center lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 lg:text-left xl:top-52">
           <ArcTextReveal variant="heading">
-            <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">
-              FAQ
-            </h2>
+            {emphasisHeading ? (
+              <h2 className="leading-[0.92] tracking-tight">
+                <span
+                  className={cn(
+                    "font-title-emphasis inline-block text-arc-teal-ink",
+                    "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                  )}
+                  style={{
+                    fontSize: "clamp(4rem, 14vw, 7.5rem)",
+                    fontSizeAdjust: "none",
+                  }}
+                >
+                  FAQ
+                </span>
+              </h2>
+            ) : (
+              <h2 className="font-serif text-[clamp(2.5rem,12vw,4.5rem)] font-semibold leading-[0.92] tracking-tight text-arc-charcoal md:text-[clamp(3.25rem,10vw,5.75rem)] lg:text-[clamp(3.5rem,7vw,5.25rem)]">
+                FAQ
+              </h2>
+            )}
           </ArcTextReveal>
         </header>
 
-        <div className="relative min-w-0 flex-1 lg:pt-2">
+        <div className="relative mx-auto min-w-0 w-full max-w-xl flex-1 lg:mx-0 lg:max-w-none lg:pt-2">
           <div
-            className="pointer-events-none absolute -right-1 top-10 z-0 max-w-[min(100%,100vw-2rem)] select-none overflow-hidden text-right font-serif text-[clamp(1.65rem,7vw,4.25rem)] font-semibold leading-none tracking-tight text-arc-charcoal/[0.06] sm:-right-2 sm:top-12 lg:right-0 lg:top-16"
+            className="pointer-events-none absolute -right-1 top-10 z-0 hidden max-w-[min(100%,100vw-2rem)] select-none overflow-hidden text-right font-serif text-[clamp(1.65rem,7vw,4.25rem)] font-semibold leading-none tracking-tight text-arc-charcoal/[0.06] lg:block lg:right-0 lg:top-16"
             aria-hidden
           >
             <span className="whitespace-nowrap">ARC WELLNESS</span>
@@ -155,7 +175,7 @@ export function ArcFaqSection({
 
           <div className="relative z-10 space-y-5">
             {categoryKeys.length > 1 ? (
-              <div className="flex flex-wrap gap-2 sm:gap-3">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 lg:justify-start">
                 {Object.entries(categories).map(([key, label]) => {
                   const selected = selectedCategory === key;
                   return (

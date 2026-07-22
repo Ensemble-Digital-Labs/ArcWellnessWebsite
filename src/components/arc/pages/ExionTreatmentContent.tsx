@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type CSSProperties } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 
 import { ArcCountUpStat } from "@/components/arc/ArcCountUpStat";
@@ -12,7 +12,12 @@ import {
   ArcWaveSeparator,
   ARC_WAVE_TOP_FILL_D,
 } from "@/components/arc/ArcWaveSeparator";
+import { ExionResultsSlider } from "@/components/arc/ExionResultsSlider";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import {
+  TitleEmphasis,
+  arcHeadlineEmphasisClass,
+} from "@/components/arc/TitleEmphasis";
 import type { TreatmentPage } from "@/content/pages/treatments";
 import {
   exionClosing,
@@ -79,21 +84,200 @@ const exionAboveCrestBottomMaskStyle: CSSProperties = {
 /** Same plate asset per cream section — shorter box → tighter object-cover (sharper). */
 const EXION_PLATE_OBJECT_CLASS = "object-cover object-[center_30%]";
 
-function ExionSectionPlate({ maskBottom = true }: { maskBottom?: boolean }) {
+/** Bunny Player.js control surface (loaded from CDN). */
+type BunnyPlayerJs = {
+  play: () => void;
+  pause: () => void;
+  on: (event: string, cb: () => void) => void;
+};
+
+type BunnyPlayerJsCtor = {
+  Player: new (el: HTMLIFrameElement | string) => BunnyPlayerJs;
+};
+
+declare global {
+  interface Window {
+    playerjs?: BunnyPlayerJsCtor;
+  }
+}
+
+const BUNNY_PLAYERJS_SRC =
+  "https://assets.mediadelivery.net/playerjs/playerjs-latest.min.js";
+
+function loadBunnyPlayerJs(): Promise<BunnyPlayerJsCtor> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("no window"));
+  }
+  if (window.playerjs) return Promise.resolve(window.playerjs);
+
+  const existing = document.querySelector<HTMLScriptElement>(
+    `script[src="${BUNNY_PLAYERJS_SRC}"]`,
+  );
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener("load", () => {
+        if (window.playerjs) resolve(window.playerjs);
+        else reject(new Error("playerjs missing after load"));
+      });
+      existing.addEventListener("error", () => reject(new Error("playerjs load failed")));
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = BUNNY_PLAYERJS_SRC;
+    script.async = true;
+    script.onload = () => {
+      if (window.playerjs) resolve(window.playerjs);
+      else reject(new Error("playerjs missing after load"));
+    };
+    script.onerror = () => reject(new Error("playerjs load failed"));
+    document.body.appendChild(script);
+  });
+}
+
+/**
+ * Bunny iframe: play when in view, pause when leaving — same iframe instance
+ * (no src swap / remount, which was resetting playback on every scroll).
+ */
+function ExionMechanismScrollVideo() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const playerRef = useRef<BunnyPlayerJs | null>(null);
+  const inViewRef = useRef(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    let cancelled = false;
+
+    loadBunnyPlayerJs()
+      .then((playerjs) => {
+        if (cancelled || !iframeRef.current) return;
+        const player = new playerjs.Player(iframeRef.current);
+        player.on("ready", () => {
+          if (cancelled) return;
+          playerRef.current = player;
+          if (inViewRef.current) player.play();
+          else player.pause();
+        });
+      })
+      .catch(() => {
+        /* Embed still works without Player.js; scroll control is best-effort. */
+      });
+
+    return () => {
+      cancelled = true;
+      playerRef.current = null;
+    };
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el || reduceMotion) return;
+
+    const ENTER = 0.45;
+    const LEAVE = 0.18;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const ratio = entry.intersectionRatio;
+        const intersecting = entry.isIntersecting;
+
+        let next = inViewRef.current;
+        if (!inViewRef.current && intersecting && ratio >= ENTER) next = true;
+        else if (inViewRef.current && (!intersecting || ratio <= LEAVE)) next = false;
+
+        if (next === inViewRef.current) return;
+        inViewRef.current = next;
+
+        const player = playerRef.current;
+        if (!player) return;
+        if (next) player.play();
+        else player.pause();
+      },
+      { threshold: [0, 0.18, 0.3, 0.45, 0.6, 1] },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduceMotion]);
+
   return (
     <div
-      className="pointer-events-none absolute inset-0 z-0 bg-arc-cream"
+      ref={frameRef}
+      className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none border-0 border-arc-champagne bg-arc-charcoal sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] sm:border-4 lg:aspect-video"
+    >
+      <iframe
+        ref={iframeRef}
+        id="exion-mechanism-bunny"
+        src={exionMechanism.videoEmbedSrc}
+        title={exionMechanism.videoTitle}
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowFullScreen
+        className="absolute inset-0 h-full w-full border-0"
+      />
+    </div>
+  );
+}
+
+/**
+ * Cream plate photo. `stableMedia` (FAQ): pin photo to a tall fixed height so
+ * accordion expand doesn't rescale the waves; soft fade into cream if content
+ * ever exceeds that band (avoids a hard cut mid-section).
+ */
+function ExionSectionPlate({
+  maskBottom = true,
+  stableMedia = false,
+}: {
+  maskBottom?: boolean;
+  stableMedia?: boolean;
+}) {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-arc-cream"
       style={maskBottom ? exionAboveCrestBottomMaskStyle : undefined}
       aria-hidden
     >
-      <Image
-        src={exionPillarsBackground.src}
-        alt=""
-        fill
-        sizes="100vw"
-        unoptimized
-        className={EXION_PLATE_OBJECT_CLASS}
-      />
+      {stableMedia ? (
+        <>
+          <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
+            <Image
+              src={exionPillarsBackground.src}
+              alt=""
+              fill
+              sizes="100vw"
+              unoptimized
+              className="object-cover object-top"
+            />
+            <div
+              className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-arc-cream sm:h-40"
+              aria-hidden
+            />
+          </div>
+        </>
+      ) : (
+        <div className="absolute inset-0">
+          <Image
+            src={exionPillarsBackground.src}
+            alt=""
+            fill
+            sizes="100vw"
+            unoptimized
+            className={EXION_PLATE_OBJECT_CLASS}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -215,15 +399,28 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
               />
               <div className="relative z-10">
                 <ArcTextReveal variant="heading" trigger="mount">
-                  <h1 className="font-serif text-[clamp(2.5rem,7.5vw,4.25rem)] font-normal leading-[1.02] tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
-                    <span className="block font-semibold">{exionHero.title}</span>
-                    <span className="mt-1 block font-serif text-[0.92em] font-semibold italic text-[#9a7340] md:font-normal md:text-arc-champagne">
-                      {exionHero.titleEmphasisLines.map((line) => (
-                        <span key={line} className="block text-balance">
+                  <h1 className="font-serif text-[clamp(2.5rem,7.5vw,4.25rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
+                    <span className="block font-semibold leading-none">
+                      {exionHero.title}
+                    </span>
+                    <TitleEmphasis
+                      className={cn(
+                        arcHeadlineEmphasisClass("teal"),
+                        "mt-0.5 block leading-[0.82]",
+                      )}
+                    >
+                      {exionHero.titleEmphasisLines.map((line, i) => (
+                        <span
+                          key={line}
+                          className={cn(
+                            "block text-balance leading-[0.82]",
+                            i > 0 && "-mt-[0.18em]",
+                          )}
+                        >
                           {line}
                         </span>
                       ))}
-                    </span>
+                    </TitleEmphasis>
                   </h1>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
@@ -298,26 +495,34 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
               <ArcTextReveal key={pillar.title} variant="body" delayIndex={i}>
                 <div className="flex h-full flex-col items-center text-center">
                   <EmblemIcon src={pillar.iconSrc} className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]" />
-                  <h3 className="mt-3 font-sans text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[#a87d3f] sm:mt-4 sm:text-[0.7rem]">
-                    {pillar.title}
+                  <h3 className="mt-2 sm:mt-3">
+                    <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                      {pillar.title}
+                    </TitleEmphasis>
                   </h3>
-                  <p className="mt-2 max-w-[14rem] font-sans text-[0.75rem] leading-relaxed text-arc-charcoal/70 sm:text-[0.8125rem]">
+                  <p className="mt-1.5 max-w-[14rem] font-sans text-sm leading-relaxed text-arc-charcoal/70 sm:mt-2 sm:text-[0.9375rem]">
                     {pillar.body}
                   </p>
                 </div>
               </ArcTextReveal>
             ))}
 
-            <ArcTextReveal variant="body" delayIndex={4}>
+            <ArcTextReveal
+              variant="body"
+              delayIndex={4}
+              className="col-span-2 justify-self-center sm:col-span-1 md:col-span-1"
+            >
               <div className="flex h-full flex-col items-center text-center">
                 <EmblemIcon
                   src={exionHero.poweredByIconSrc}
                   className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
                 />
-                <h3 className="mt-3 max-w-[11rem] font-sans text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[#a87d3f] sm:mt-4 sm:text-[0.7rem]">
-                  {exionHero.poweredByEyebrow}
+                <h3 className="mt-2 max-w-[13rem] sm:mt-3">
+                  <TitleEmphasis className="block text-[clamp(1.55rem,3.8vw,2rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                    {exionHero.poweredByEyebrow}
+                  </TitleEmphasis>
                 </h3>
-                <p className="mt-2 max-w-[14rem] font-sans text-[0.75rem] leading-relaxed text-arc-charcoal/70 sm:text-[0.8125rem]">
+                <p className="mt-1.5 max-w-[14rem] font-sans text-sm leading-relaxed text-arc-charcoal/70 sm:mt-2 sm:text-[0.9375rem]">
                   {exionHero.synergyLine}
                 </p>
               </div>
@@ -357,29 +562,41 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
           />
           <div
             className={cn(
-              "relative z-10 mx-auto grid items-center gap-12 lg:grid-cols-2 lg:gap-16",
+              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16",
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div>
-              <div className="w-fit lg:mx-auto">
+            <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <div>
                 <ArcTextReveal variant="heading">
-                  <h2 className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-balance text-arc-charcoal">
-                    {exionMechanism.titleLines.map((line) => (
-                      <span key={line} className="block">
+                  <h2 className="text-balance leading-[0.88] text-arc-teal-ink">
+                    {exionMechanism.titleLines.map((line, i) => (
+                      <span
+                        key={line}
+                        className={cn(
+                          "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                          "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                          i > 0 && "-mt-[0.12em]",
+                        )}
+                        /* Override Radley site-wide font-size-adjust so the stack reads large. */
+                        style={{
+                          fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                          fontSizeAdjust: "none",
+                        }}
+                      >
                         {line}
                       </span>
                     ))}
                   </h2>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" delayIndex={1}>
-                  <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base">
+                  <p className="mx-auto mt-6 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base lg:mx-0">
                     {exionMechanism.body}
                   </p>
                 </ArcTextReveal>
               </div>
 
-              <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-5">
+              <div className="mt-10 grid grid-cols-2 gap-8 justify-items-center sm:grid-cols-4 lg:justify-items-start lg:gap-5">
                 {exionMechanism.stats.map((stat, i) => (
                   <ArcCountUpStat
                     key={stat.label}
@@ -387,27 +604,25 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                     prefix={stat.prefix}
                     suffix={stat.suffix}
                     label={stat.label}
-                    align="left"
+                    align="center"
+                    className="lg:items-start lg:text-left"
                     durationMs={1800}
                     startDelayMs={200 + i * 60}
-                    numberClassName="text-[2.75rem] font-normal leading-none text-arc-champagne sm:text-5xl"
-                    labelClassName="mt-2 max-w-none text-[0.7rem] text-arc-charcoal/65"
+                    numberClassName="text-[2.75rem] font-normal leading-none text-arc-teal-ink sm:text-5xl"
+                    labelClassName="mt-2 max-w-none text-sm leading-snug text-arc-charcoal/70 sm:text-[0.9375rem]"
                   />
                 ))}
               </div>
             </div>
 
-            <ArcTextReveal variant="body" delayIndex={2} className="relative">
-              <div className="rounded-[28px] border border-arc-champagne/25 bg-arc-cream/40 p-3.5 shadow-[0_12px_36px_rgba(44,44,44,0.1)] md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] border-4 border-arc-champagne">
-                  <Image
-                    src={exionMechanism.imageSrc}
-                    alt={exionMechanism.imageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 45vw, 90vw"
-                    className="object-cover object-center"
-                  />
-                </div>
+            {/* Full-bleed on phone for presence; sits below copy (natural grid order). */}
+            <ArcTextReveal
+              variant="body"
+              delayIndex={2}
+              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
+            >
+              <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                <ExionMechanismScrollVideo />
               </div>
             </ArcTextReveal>
           </div>
@@ -438,13 +653,24 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
           <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
             <div className="mx-auto max-w-4xl text-center">
               <ArcTextReveal variant="heading">
-                <h2 className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-arc-charcoal sm:whitespace-nowrap">
-                  {exionTreatments.title} {exionTreatments.titleEmphasis}
+                <h2 className="text-balance leading-[0.92] sm:whitespace-nowrap">
+                  <span
+                    className={cn(
+                      "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                      "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                    )}
+                    style={{
+                      fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                      fontSizeAdjust: "none",
+                    }}
+                  >
+                    {exionTreatments.title} {exionTreatments.titleEmphasis}
+                  </span>
                 </h2>
               </ArcTextReveal>
               <GoldRule className="mx-auto mt-6" />
               <ArcTextReveal variant="body" delayIndex={1}>
-                <p className="mt-6 font-serif text-lg italic leading-relaxed text-[#a87d3f] sm:text-xl">
+                <p className="mt-6 font-serif text-lg italic leading-relaxed text-arc-charcoal sm:text-xl">
                   {exionTreatments.intro}
                 </p>
               </ArcTextReveal>
@@ -465,8 +691,10 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                     </div>
                     <div className="flex flex-1 flex-col gap-4 p-7">
                       <div className="text-center">
-                        <h3 className="font-serif text-xl tracking-tight text-arc-charcoal">
-                          {card.title}
+                        <h3>
+                          <TitleEmphasis className="block text-[clamp(1.85rem,4.2vw,2.35rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                            {card.title}
+                          </TitleEmphasis>
                         </h3>
                         <p className="mt-1 font-serif text-lg italic text-arc-champagne">
                           {card.tagline}
@@ -531,18 +759,28 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                 ARC_PAGE_RAIL_MAX,
               )}
             >
-              <div>
+              <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
                 <ArcTextReveal variant="heading">
-                  <h2
-                    className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-balance"
-                    style={{ color: "#d9b878" }}
-                  >
-                    {exionDifferent.title} {exionDifferent.titleEmphasis}
+                  <h2 className="text-balance leading-[0.92]">
+                    <span
+                      className={cn(
+                        "font-title-emphasis block tracking-tight text-[#d9b878]",
+                        "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+                        "[text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      /* Override Radley site-wide font-size-adjust so this reads larger. */
+                      style={{
+                        fontSize: "clamp(2.5rem, 8.5vw, 5rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exionDifferent.title} {exionDifferent.titleEmphasis}
+                    </span>
                   </h2>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" delayIndex={1}>
                   <p
-                    className="mt-6 max-w-sm font-sans text-sm leading-relaxed"
+                    className="mx-auto mt-6 max-w-md font-sans text-base leading-relaxed sm:text-lg lg:mx-0"
                     style={{ color: "rgba(247,241,232,0.82)" }}
                   >
                     {exionDifferent.intro}
@@ -555,14 +793,13 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                   <ArcTextReveal key={card.title} variant="body" delayIndex={i + 1}>
                     <div className="flex flex-col items-center gap-3 text-center">
                       <EmblemIcon src={card.iconSrc} className="h-28 w-28" />
-                      <h3
-                        className="font-sans text-xs font-semibold uppercase tracking-[0.15em]"
-                        style={{ color: "#d9b878" }}
-                      >
-                        {card.title}
+                      <h3 className="max-w-[16rem]">
+                        <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                          {card.title}
+                        </TitleEmphasis>
                       </h3>
                       <p
-                        className="font-sans text-sm leading-relaxed"
+                        className="font-sans text-base leading-relaxed sm:text-lg"
                         style={{ color: "rgba(247,241,232,0.82)" }}
                       >
                         {card.body}
@@ -601,11 +838,20 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
             <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
               <div className="mx-auto max-w-2xl text-center">
                 <ArcTextReveal variant="heading">
-                  <h2
-                    className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight"
-                    style={{ color: "#d9b878" }}
-                  >
-                    {exionExperience.title} {exionExperience.titleEmphasis}
+                  <h2 className="text-balance leading-[0.92]">
+                    <span
+                      className={cn(
+                        "font-title-emphasis block tracking-tight text-[#d9b878]",
+                        "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+                        "[text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      style={{
+                        fontSize: "clamp(3rem, 9vw, 5rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exionExperience.title} {exionExperience.titleEmphasis}
+                    </span>
                   </h2>
                 </ArcTextReveal>
               </div>
@@ -617,17 +863,20 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                     key={step.title}
                     variant="body"
                     delayIndex={i + 1}
-                    className="flex flex-col items-center text-center"
+                    className={cn(
+                      "flex flex-col items-center text-center",
+                      i === exionExperience.steps.length - 1 &&
+                        "col-span-2 justify-self-center sm:col-span-1",
+                    )}
                   >
                     <EmblemIcon src={step.iconSrc} className="h-24 w-24 sm:h-28 sm:w-28" />
-                    <h3
-                      className="mt-5 font-sans text-xs font-semibold uppercase tracking-[0.15em]"
-                      style={{ color: "#d9b878" }}
-                    >
-                      {step.title}
+                    <h3 className="mt-4 max-w-[12rem]">
+                      <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                        {step.title}
+                      </TitleEmphasis>
                     </h3>
                     <p
-                      className="mt-2 max-w-[15rem] font-sans text-sm leading-relaxed"
+                      className="mt-2 max-w-[15rem] font-sans text-base leading-relaxed sm:text-lg"
                       style={{ color: "rgba(247,241,232,0.72)" }}
                     >
                       {step.body}
@@ -656,7 +905,7 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
         {/* ---------- Real results. Refined confidence. ---------- */}
         <div
           className={cn(
-            "relative z-[1] overflow-x-clip",
+            "relative z-[1] overflow-x-clip overflow-y-visible",
             EXION_WAVE_MT_CLASS,
             EXION_WAVE_H_VAR_CLASS,
           )}
@@ -667,76 +916,48 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
           <section className="relative z-10 px-6 pb-10 pt-12 sm:px-10 sm:pb-12 sm:pt-16 md:px-12 md:pt-20">
             <div
               className={cn(
-                "relative z-10 mx-auto flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-10",
+                "relative z-10 mx-auto flex flex-col gap-8 sm:gap-12 lg:flex-row lg:items-center lg:gap-10",
                 ARC_PAGE_RAIL_MAX,
               )}
             >
-              <div className="max-w-md lg:w-1/3 lg:shrink-0">
+              <div className="mx-auto max-w-md text-center lg:mx-0 lg:w-1/3 lg:shrink-0 lg:text-left">
                 <ArcTextReveal variant="heading">
-                  <h2 className="font-serif text-4xl font-semibold leading-[1.05] tracking-tight text-arc-charcoal sm:text-5xl">
-                    {exionResults.title}{" "}
-                    <span className="block">{exionResults.titleEmphasis}</span>
+                  <h2 className="text-balance leading-[0.9]">
+                    <span
+                      className={cn(
+                        "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                        "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      style={{
+                        fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exionResults.title}
+                    </span>
+                    <span
+                      className={cn(
+                        "font-title-emphasis mt-0 block tracking-tight text-arc-teal-ink",
+                        "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      style={{
+                        fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exionResults.titleEmphasis}
+                    </span>
                   </h2>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" delayIndex={1}>
-                  <p className="mt-5 font-sans text-base leading-relaxed text-arc-charcoal/70">
+                  <p className="mt-5 font-serif text-lg italic leading-relaxed text-arc-charcoal sm:text-xl">
                     {exionResults.intro}
                   </p>
                 </ArcTextReveal>
               </div>
 
-              <div className="min-w-0 lg:flex-1">
-                <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {exionResults.cards.map((card, i) => (
-                    <ArcTextReveal
-                      as="li"
-                      key={card.label}
-                      variant="body"
-                      delayIndex={i + 1}
-                      className="min-w-0"
-                    >
-                      <div className="exion-lift overflow-hidden rounded-2xl border border-arc-teal/12 bg-white p-3 shadow-[0_20px_50px_rgba(44,44,44,0.07)]">
-                        <div
-                          className="relative flex min-w-0 flex-col rounded-xl p-4"
-                          style={{
-                            height: "13rem",
-                            width: "100%",
-                            border: "1px solid rgba(197,168,120,0.45)",
-                            borderTop: "2px solid #b8935a",
-                            background:
-                              "linear-gradient(135deg, #ece0cf 0%, #d8c19b 55%, #cbb083 100%)",
-                          }}
-                        >
-                          <div className="flex min-w-0 flex-1 flex-col items-center justify-center text-center">
-                            <p className="font-serif text-xl font-semibold text-arc-charcoal">
-                              {card.label}
-                            </p>
-                            <p className="mt-1 font-sans text-xs text-arc-charcoal/60">
-                              Temporary placeholder image
-                            </p>
-                          </div>
-                          <div className="flex items-center justify-between gap-2">
-                            <span
-                              className="rounded-full bg-arc-charcoal px-3 py-1 font-sans font-semibold uppercase tracking-[0.14em] text-arc-cream"
-                              style={{ fontSize: "0.625rem" }}
-                            >
-                              Before
-                            </span>
-                            <span
-                              className="rounded-full bg-arc-champagne px-3 py-1 font-sans font-semibold uppercase tracking-[0.14em] text-arc-charcoal"
-                              style={{ fontSize: "0.625rem" }}
-                            >
-                              After
-                            </span>
-                          </div>
-                        </div>
-                        <p className="whitespace-nowrap px-1 pb-4 pt-3 text-center font-sans text-xs font-medium text-arc-charcoal/80">
-                          {card.caption}
-                        </p>
-                      </div>
-                    </ArcTextReveal>
-                  ))}
-                </ol>
+              <div className="min-w-0 -mx-6 w-[calc(100%+3rem)] sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-auto lg:flex-1">
+                <ExionResultsSlider slides={exionResults.slides} />
               </div>
             </div>
           </section>
@@ -784,7 +1005,7 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
               EXION_WAVE_H_VAR_CLASS,
             )}
           >
-            <ExionSectionPlate maskBottom={false} />
+            <ExionSectionPlate maskBottom={false} stableMedia />
             <div className={cn("relative z-10", EXION_WAVE_H_CLASS)} aria-hidden />
 
             <div className="relative z-10">
@@ -793,6 +1014,7 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
                 className="border-t-0 bg-transparent pb-0"
                 categories={{ treatment: treatment.title }}
                 faqByCategory={{ treatment: treatment.faqs }}
+                emphasisHeading
               />
               <div
                 className={cn(

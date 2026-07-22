@@ -15,8 +15,9 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
   uniform vec2 uResolution;
   uniform vec2 uTexture1Size;
   uniform vec2 uTexture2Size;
-  /** Cover focal (0–1). Matches CSS object-position; (0.5, 0.5) = center. */
-  uniform vec2 uCoverAnchor;
+  /** Per-texture cover focals (0–1). Matches CSS object-position; (0.5, 0.5) = center. */
+  uniform vec2 uCoverAnchor1;
+  uniform vec2 uCoverAnchor2;
   uniform int uEffectType;
   uniform float uGlobalIntensity;
   uniform float uSpeedMultiplier;
@@ -49,18 +50,18 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
   uniform float uTimeshiftTurbulence;
   varying vec2 vUv;
 
-  vec2 getCoverUV(vec2 uv, vec2 textureSize) {
+  vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 coverAnchor) {
     vec2 s = uResolution / textureSize;
     float scale = max(s.x, s.y);
     vec2 scaledSize = textureSize * scale;
-    vec2 offset = (uResolution - scaledSize) * uCoverAnchor;
+    vec2 offset = (uResolution - scaledSize) * coverAnchor;
     return (uv * uResolution - offset) / scaledSize;
   }
 
   vec4 glassEffect(vec2 uv, float progress) {
     float time = progress * 5.0 * uSpeedMultiplier;
-    vec2 uv1 = getCoverUV(uv, uTexture1Size);
-    vec2 uv2 = getCoverUV(uv, uTexture2Size);
+    vec2 uv1 = getCoverUV(uv, uTexture1Size, uCoverAnchor1);
+    vec2 uv2 = getCoverUV(uv, uTexture2Size, uCoverAnchor2);
     float maxR = length(uResolution) * 0.85;
     float br = progress * maxR;
     vec2 p = uv * uResolution;
@@ -97,29 +98,29 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
 
   vec4 frostEffect(vec2 uv, float progress) {
     return mix(
-      texture2D(uTexture1, getCoverUV(uv, uTexture1Size)),
-      texture2D(uTexture2, getCoverUV(uv, uTexture2Size)),
+      texture2D(uTexture1, getCoverUV(uv, uTexture1Size, uCoverAnchor1)),
+      texture2D(uTexture2, getCoverUV(uv, uTexture2Size, uCoverAnchor2)),
       progress
     );
   }
   vec4 rippleEffect(vec2 uv, float progress) {
     return mix(
-      texture2D(uTexture1, getCoverUV(uv, uTexture1Size)),
-      texture2D(uTexture2, getCoverUV(uv, uTexture2Size)),
+      texture2D(uTexture1, getCoverUV(uv, uTexture1Size, uCoverAnchor1)),
+      texture2D(uTexture2, getCoverUV(uv, uTexture2Size, uCoverAnchor2)),
       progress
     );
   }
   vec4 plasmaEffect(vec2 uv, float progress) {
     return mix(
-      texture2D(uTexture1, getCoverUV(uv, uTexture1Size)),
-      texture2D(uTexture2, getCoverUV(uv, uTexture2Size)),
+      texture2D(uTexture1, getCoverUV(uv, uTexture1Size, uCoverAnchor1)),
+      texture2D(uTexture2, getCoverUV(uv, uTexture2Size, uCoverAnchor2)),
       progress
     );
   }
   vec4 timeshiftEffect(vec2 uv, float progress) {
     return mix(
-      texture2D(uTexture1, getCoverUV(uv, uTexture1Size)),
-      texture2D(uTexture2, getCoverUV(uv, uTexture2Size)),
+      texture2D(uTexture1, getCoverUV(uv, uTexture1Size, uCoverAnchor1)),
+      texture2D(uTexture2, getCoverUV(uv, uTexture2Size, uCoverAnchor2)),
       progress
     );
   }
