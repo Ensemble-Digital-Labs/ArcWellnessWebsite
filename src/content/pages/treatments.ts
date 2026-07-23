@@ -598,15 +598,15 @@ export const allTreatments: readonly TreatmentPage[] = [
     ],
   },
   {
-    slug: "nutrient-therapy",
-    title: "Nutrient Therapy",
-    tagline: "Thoughtful Support for Modern Fatigue",
+    slug: "infusion-therapy",
+    title: "Infusion Therapy",
+    tagline: "Nourish. Restore. Thrive.",
     category: "wellness",
     categoryLabel: "IV therapy",
     imageSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
     imageAlt: CLINIC_INTERIOR_ALT.ivTherapyReclinerRoom,
     intro:
-      "Nutrient Therapy delivers fluids, vitamins, antioxidants, and amino acids directly into the bloodstream to support hydration, nutrient balance, and overall physiological function, especially helpful when the body needs support for recovery, resilience, or restoration.",
+      "IV therapies deliver vitamins, minerals, and essential nutrients directly into your bloodstream for maximum absorption — supporting energy, immunity, hydration, and overall wellness.",
     highlights: [
       "Intravenous infusions for deeper hydration and systemic support",
       "Targeted intramuscular injections for quick supplementation",
@@ -648,7 +648,7 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
       {
         id: "safe",
-        question: "Is Nutrient Therapy safe?",
+        question: "Is Infusion Therapy safe?",
         answer:
           "Yes. All infusions are administered by licensed medical professionals in a carefully controlled, sterile environment.",
       },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArcMarketingShell } from "@/components/arc/ArcMarketingShell";
 import { ExionTreatmentContent } from "@/components/arc/pages/ExionTreatmentContent";
+import { InfusionTreatmentContent } from "@/components/arc/pages/InfusionTreatmentContent";
 import { TreatmentDetailContent } from "@/components/arc/pages/TreatmentDetailContent";
 import { getAllTreatmentSlugs, getTreatmentBySlug } from "@/content/pages/treatments";
 
@@ -30,6 +31,8 @@ export default async function TreatmentDetailPage({ params }: Props) {
     <ArcMarketingShell>
       {treatment.slug === "exion" ? (
         <ExionTreatmentContent treatment={treatment} />
+      ) : treatment.slug === "infusion-therapy" ? (
+        <InfusionTreatmentContent treatment={treatment} />
       ) : (
         <TreatmentDetailContent treatment={treatment} />
       )}

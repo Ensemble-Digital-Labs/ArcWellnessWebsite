@@ -198,7 +198,7 @@ const HERO_REF_WHERE_CLASS = cn(
 );
 
 const HERO_REF_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
+  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(3.5rem,7.2vw,6.35rem)] md:leading-[0.86] lg:leading-[0.84]",
   HERO_REF_LINE_ALIGN,
   HERO_REF_CONNECTOR_SHADOW,
 );
@@ -230,7 +230,7 @@ const HERO_REF_WHERE_LIGHT_CLASS = cn(
 );
 
 const HERO_REF_KEYWORD_LINE_LIGHT_CLASS = cn(
-  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-teal md:text-[clamp(3.5rem,7.2vw,6.35rem)]",
+  "block font-title-emphasis text-[clamp(3.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-teal md:text-[clamp(3.5rem,7.2vw,6.35rem)] md:leading-[0.86] lg:leading-[0.84]",
   HERO_REF_LINE_ALIGN,
 );
 
@@ -271,9 +271,13 @@ function HeroReferenceHeadline({
   const stacked = (
     <>
       <span className={whereClass}>Where</span>
-      <TitleEmphasis className={cn(keywordClass, "mt-1")}>Wellness,</TitleEmphasis>
-      <TitleEmphasis className={cn(keywordClass, "mt-0.5")}>Longevity &</TitleEmphasis>
-      <TitleEmphasis className={cn(keywordClass, "mt-0.5")}>Aesthetics</TitleEmphasis>
+      <TitleEmphasis className={cn(keywordClass, "mt-1 md:mt-0.5")}>Wellness,</TitleEmphasis>
+      <TitleEmphasis className={cn(keywordClass, "mt-0.5 md:-mt-1 lg:-mt-1.5")}>
+        Longevity &
+      </TitleEmphasis>
+      <TitleEmphasis className={cn(keywordClass, "mt-0.5 md:-mt-1 lg:-mt-1.5")}>
+        Aesthetics
+      </TitleEmphasis>
       <span className={convergeClass}>Converge.</span>
     </>
   );

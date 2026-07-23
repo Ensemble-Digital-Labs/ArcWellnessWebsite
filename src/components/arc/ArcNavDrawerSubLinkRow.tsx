@@ -44,7 +44,7 @@ const thumbByHrefExtra: Record<string, string> = {
 };
 
 const thumbByLabelAlias: Record<string, string> = {
-  infusions: thumbByLabel["nutrient therapy"],
+  infusions: thumbByLabel["infusion therapy"],
   peptides: thumbByLabel["peptide therapy"],
   fillers: thumbByLabel["rha fillers"],
   "book a consultation": CLINIC_INTERIOR_IMAGES.consultationLounge,

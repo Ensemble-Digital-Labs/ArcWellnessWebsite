@@ -100,8 +100,8 @@ export const ARC_TREATMENT_NAV_LINKS = [
     thumbSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay,
   },
   {
-    label: "Nutrient Therapy",
-    href: "/treatments/nutrient-therapy",
+    label: "Infusion Therapy",
+    href: "/treatments/infusion-therapy",
     thumbSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
   },
   {

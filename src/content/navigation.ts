@@ -92,7 +92,7 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Advanced Therapies",
         items: [
-          leaf("Infusions", treatmentHrefByLabel["Nutrient Therapy"]),
+          leaf("Infusions", treatmentHrefByLabel["Infusion Therapy"]),
           leaf("Peptides", treatmentHrefByLabel["Peptide Therapy"]),
           soon("Injections"),
           leaf("Supplements", treatmentHrefByLabel["Supplements"]),

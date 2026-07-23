@@ -76,6 +76,11 @@ const nextConfig: NextConfig = {
         destination: "https://booking.mangomint.com/892312",
         permanent: true,
       },
+      {
+        source: "/treatments/nutrient-therapy",
+        destination: "/treatments/infusion-therapy",
+        permanent: true,
+      },
     ];
   },
 };
