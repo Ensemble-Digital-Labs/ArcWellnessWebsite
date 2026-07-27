@@ -3,13 +3,11 @@
  * Icons temporarily reuse EXION SVGs; swap for EmSella-specific emblems later.
  */
 
-import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
 const EMSELLA_ASSET = "/assets/treatments/emsella";
 /** Bump when replacing EmSella rasters so next/image + browser drop stale caches. */
-const EMSELLA_ASSETS_VERSION = "20260727-hero";
+const EMSELLA_ASSETS_VERSION = "20260727-inside-out-card";
 
 function emsellaAsset(file: string) {
   return `${EMSELLA_ASSET}/${file}?v=${EMSELLA_ASSETS_VERSION}`;
@@ -140,8 +138,8 @@ export const emsellaTreatments = {
         "Comfortable, seated treatment",
         "FDA-cleared technology",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
-      imageAlt: "EmSella BTL chair in treatment room",
+      imageSrc: emsellaAsset("emsella-card-hifem.webp"),
+      imageAlt: "EmSella chair and console — HIFEM technology",
     },
     {
       eyebrow: "Session",
@@ -154,8 +152,8 @@ export const emsellaTreatments = {
         "No surgery or downtime",
         "Easy to schedule and sustain",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaChairPatientLifestyle,
-      imageAlt: "EmSella lifestyle treatment session",
+      imageSrc: emsellaAsset("emsella-card-28-minutes.webp"),
+      imageAlt: "Comfortable EmSella session — about 28 minutes",
     },
     {
       eyebrow: "Outcome",
@@ -168,8 +166,8 @@ export const emsellaTreatments = {
         "Enhances confidence day to day",
         "Helps through life’s changes",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
-      imageAlt: "EmSella care environment at ARC Wellness",
+      imageSrc: emsellaAsset("emsella-card-inside-out-strength.webp"),
+      imageAlt: "Inside-out strength with EmSella pelvic floor support",
     },
   ] as readonly EmsellaTreatmentCard[],
 } as const;

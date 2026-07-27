@@ -4,13 +4,11 @@
  * reuse EXION assets.
  */
 
-import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
 const EMSCULPT_NEO_ASSET = "/assets/treatments/emsculpt-neo";
 /** Bump when replacing EmSculpt Neo rasters so next/image + browser drop stale caches. */
-const EMSCULPT_NEO_ASSETS_VERSION = "20260727-hero";
+const EMSCULPT_NEO_ASSETS_VERSION = "20260727-build-burn-card";
 
 function emsculptNeoAsset(file: string) {
   return `${EMSCULPT_NEO_ASSET}/${file}?v=${EMSCULPT_NEO_ASSETS_VERSION}`;
@@ -37,6 +35,8 @@ export type EmsculptNeoTreatmentCard = {
   bullets: readonly string[];
   imageSrc: string;
   imageAlt: string;
+  /** Optional object-position utilities for card crop (defaults to center). */
+  imageObjectClass?: string;
 };
 
 export const emsculptNeoHero = {
@@ -141,8 +141,9 @@ export const emsculptNeoTreatments = {
         "Enhances core definition",
         "Non-invasive, no downtime",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoAbdominalTreatmentMale,
-      imageAlt: "EmSculpt Neo muscle-building treatment",
+      imageSrc: emsculptNeoAsset("emsculpt-neo-card-build-muscle.webp"),
+      imageAlt: "EmSculpt Neo Build Muscle — HIFEM+ muscle toning",
+      imageObjectClass: "object-[center_95%]",
     },
     {
       eyebrow: "Radiofrequency",
@@ -155,8 +156,8 @@ export const emsculptNeoTreatments = {
         "Improves body contour",
         "Comfortable and effective",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoArmTreatmentLifestyle,
-      imageAlt: "EmSculpt Neo fat-reduction treatment",
+      imageSrc: emsculptNeoAsset("emsculpt-neo-card-burn-fat.webp"),
+      imageAlt: "EmSculpt Neo Burn Fat — RF body contouring",
     },
     {
       eyebrow: "Combined",
@@ -169,8 +170,8 @@ export const emsculptNeoTreatments = {
         "Transforms your body",
         "30-minute treatment",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
-      imageAlt: "EmSculpt Neo console at ARC Wellness",
+      imageSrc: emsculptNeoAsset("emsculpt-neo-card-build-burn.webp"),
+      imageAlt: "EmSculpt Neo Build + Burn — dual RF and HIFEM+",
     },
   ] as readonly EmsculptNeoTreatmentCard[],
 } as const;

@@ -652,7 +652,10 @@ export function EmsculptNeoTreatmentContent({
                         alt={card.imageAlt}
                         fill
                         sizes="(min-width: 1024px) 30vw, 100vw"
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                        className={cn(
+                          "object-cover transition-transform duration-700 ease-out group-hover:scale-105",
+                          card.imageObjectClass ?? "object-center",
+                        )}
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-4 p-7">

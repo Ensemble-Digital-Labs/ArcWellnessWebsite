@@ -383,7 +383,7 @@ export function EmsellaTreatmentContent({
                       <span className="block whitespace-nowrap leading-[0.82]">
                         {emsellaHero.titleEmphasisLines[0]}
                       </span>
-                      <span className="-mt-[0.18em] block text-center whitespace-nowrap leading-[0.82]">
+                      <span className="-mt-[0.18em] block text-center whitespace-nowrap leading-[0.82] md:text-left">
                         {emsellaHero.titleEmphasisLines[1]}
                       </span>
                     </TitleEmphasis>

@@ -4,13 +4,11 @@
  * reuse EXION assets.
  */
 
-import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
 const EXOMIND_ASSET = "/assets/treatments/exomind";
 /** Bump when replacing ExoMind rasters so next/image + browser drop stale caches. */
-const EXOMIND_ASSETS_VERSION = "20260727-hero";
+const EXOMIND_ASSETS_VERSION = "20260727-lasting-card";
 
 function exomindAsset(file: string) {
   return `${EXOMIND_ASSET}/${file}?v=${EXOMIND_ASSETS_VERSION}`;
@@ -149,8 +147,8 @@ export const exomindTreatments = {
         "Comfortable, controlled sessions",
         "No medication required",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
-      imageAlt: "ExoMind treatment session at ARC Wellness",
+      imageSrc: exomindAsset("exomind-card-targeted-stimulation.webp"),
+      imageAlt: "ExoMind Targeted Stimulation — TMS delivery",
     },
     {
       eyebrow: "Step two",
@@ -163,8 +161,8 @@ export const exomindTreatments = {
         "Builds on your brain’s plasticity",
         "Science-backed mechanism",
       ],
-      imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindPromotionalDisplayCounter,
-      imageAlt: "ExoMind console and technology display",
+      imageSrc: exomindAsset("exomind-card-neural-communication.webp"),
+      imageAlt: "ExoMind Neural Communication — brain pathway stimulation",
     },
     {
       eyebrow: "Step three",
@@ -177,8 +175,8 @@ export const exomindTreatments = {
         "Encourages emotional balance",
         "Complements daily performance",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-emface-device-4k.webp`,
-      imageAlt: "Advanced treatment technology at ARC Wellness",
+      imageSrc: exomindAsset("exomind-card-optimized-performance.webp"),
+      imageAlt: "ExoMind Optimized Performance — sharper focus and clarity",
     },
     {
       eyebrow: "Step four",
@@ -191,8 +189,8 @@ export const exomindTreatments = {
         "Fits into a 30-minute visit",
         "Paired with physician oversight",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-rf-microneedling-4k.webp`,
-      imageAlt: "Personalized wellness care at ARC Wellness",
+      imageSrc: exomindAsset("exomind-card-lasting-benefits.webp"),
+      imageAlt: "ExoMind Lasting Benefits — cumulative cognitive wellness",
     },
   ] as readonly ExoMindTreatmentCard[],
 } as const;
