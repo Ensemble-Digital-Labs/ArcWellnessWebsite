@@ -8,7 +8,11 @@ import { ExionTreatmentContent } from "@/components/arc/pages/ExionTreatmentCont
 import { ExoMindTreatmentContent } from "@/components/arc/pages/ExoMindTreatmentContent";
 import { InfusionTreatmentContent } from "@/components/arc/pages/InfusionTreatmentContent";
 import { TreatmentDetailContent } from "@/components/arc/pages/TreatmentDetailContent";
+import { emsculptNeoHero } from "@/content/pages/emsculpt-neo";
+import { emsellaHero } from "@/content/pages/emsella";
 import { exionHero } from "@/content/pages/exion";
+import { exomindHero } from "@/content/pages/exomind";
+import { infusionHero } from "@/content/pages/infusion";
 import { getAllTreatmentSlugs, getTreatmentBySlug } from "@/content/pages/treatments";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -32,10 +36,18 @@ export default async function TreatmentDetailPage({ params }: Props) {
   const treatment = getTreatmentBySlug(slug);
   if (!treatment) notFound();
 
-  // EXION-first: kick the LCP hero early on cold / direct loads (raw WebP).
+  // Kick LCP heroes early on cold / direct loads (raw WebP).
   // Homepage idle warm still uses the matching `/_next/image` variant for SPA nav.
   if (treatment.slug === "exion") {
     preload(exionHero.imageSrc, { as: "image", fetchPriority: "high" });
+  } else if (treatment.slug === "infusion-therapy") {
+    preload(infusionHero.imageSrc, { as: "image", fetchPriority: "high" });
+  } else if (treatment.slug === "emsella") {
+    preload(emsellaHero.imageSrc, { as: "image", fetchPriority: "high" });
+  } else if (treatment.slug === "emsculpt-neo") {
+    preload(emsculptNeoHero.imageSrc, { as: "image", fetchPriority: "high" });
+  } else if (treatment.slug === "exomind") {
+    preload(exomindHero.imageSrc, { as: "image", fetchPriority: "high" });
   }
 
   return (

@@ -1,12 +1,20 @@
 /**
  * ExoMind landing content — EXION section stack, ExoMind copy from client brief.
- * Imagery/icons temporarily reuse EXION plates + ExoMind medical-spa photos.
+ * Hero under public/assets/treatments/exomind; plates/icons still temporarily
+ * reuse EXION assets.
  */
 
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
+const EXOMIND_ASSET = "/assets/treatments/exomind";
+/** Bump when replacing ExoMind rasters so next/image + browser drop stale caches. */
+const EXOMIND_ASSETS_VERSION = "20260727-hero";
+
+function exomindAsset(file: string) {
+  return `${EXOMIND_ASSET}/${file}?v=${EXOMIND_ASSETS_VERSION}`;
+}
 
 export type ExoMindIconItem = {
   iconSrc: string;
@@ -42,7 +50,7 @@ export const exomindHero = {
   poweredByEyebrow: "Next-generation TMS",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
   synergyLine: "Safe. Non-invasive. Drug-free. Backed by science.",
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
+  imageSrc: exomindAsset("exomind-hero.webp"),
   imageAlt: "ExoMind TMS treatment at ARC Wellness",
 } as const;
 
@@ -81,6 +89,11 @@ export const exomindDarkPlate = {
   alt: "",
 } as const;
 
+/** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
+const EXOMIND_BUNNY_LIBRARY_ID = "710568";
+const EXOMIND_BUNNY_VIDEO_ID = "131b65ba-e119-4427-bd07-5a4454367c21";
+const EXOMIND_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${EXOMIND_BUNNY_LIBRARY_ID}/${EXOMIND_BUNNY_VIDEO_ID}`;
+
 export const exomindMechanism = {
   titleLines: ["A better brain.", "Real results."],
   body: "Clinical studies show EXOMIND can improve cognitive function, mood, and quality of life — helping you think clearer, feel calmer, and perform at your best.",
@@ -110,8 +123,12 @@ export const exomindMechanism = {
       label: "Better mood & emotional well-being*",
     },
   ] as readonly ExoMindStat[],
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindPromotionalDisplayCounter,
-  imageAlt: "ExoMind technology at ARC Wellness",
+  /**
+   * Stable Bunny embed (Player.js play/pause on scroll — do not swap src or the
+   * iframe remounts and resets). `playerjs=true` enables the control bridge.
+   */
+  videoEmbedSrc: `${EXOMIND_BUNNY_EMBED_BASE}?autoplay=false&loop=true&muted=true&preload=true&responsive=true&playerjs=true`,
+  videoTitle: "ExoMind treatment at ARC Wellness",
 } as const;
 
 /** Maps to EXION treatment cards — How EXOMIND Works. */

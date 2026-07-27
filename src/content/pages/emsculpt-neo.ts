@@ -1,12 +1,20 @@
 /**
  * EmSculpt Neo landing content — EXION section stack, copy from client brief.
- * Imagery/icons temporarily reuse EXION plates + EmSculpt medical-spa photos.
+ * Hero under public/assets/treatments/emsculpt-neo; plates/icons still temporarily
+ * reuse EXION assets.
  */
 
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
+const EMSCULPT_NEO_ASSET = "/assets/treatments/emsculpt-neo";
+/** Bump when replacing EmSculpt Neo rasters so next/image + browser drop stale caches. */
+const EMSCULPT_NEO_ASSETS_VERSION = "20260727-hero";
+
+function emsculptNeoAsset(file: string) {
+  return `${EMSCULPT_NEO_ASSET}/${file}?v=${EMSCULPT_NEO_ASSETS_VERSION}`;
+}
 
 export type EmsculptNeoIconItem = {
   iconSrc: string;
@@ -42,8 +50,8 @@ export const emsculptNeoHero = {
   poweredByEyebrow: "Next-generation technology",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
   synergyLine: "RF + HIFEM+ energy, working in synergy.",
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoVanityRoomConsole,
-  imageAlt: "EmSculpt Neo treatment room at ARC Wellness",
+  imageSrc: emsculptNeoAsset("emsculpt-neo-hero.webp"),
+  imageAlt: "EmSculpt Neo treatment at ARC Wellness",
 } as const;
 
 export const emsculptNeoPillars: readonly EmsculptNeoIconItem[] = [
@@ -75,6 +83,11 @@ export const emsculptNeoCreamPlate = {
   alt: "",
 } as const;
 
+/** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
+const EMSCULPT_NEO_BUNNY_LIBRARY_ID = "710568";
+const EMSCULPT_NEO_BUNNY_VIDEO_ID = "73b9a4ca-fd47-4159-8acf-a4662a50dc1d";
+const EMSCULPT_NEO_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${EMSCULPT_NEO_BUNNY_LIBRARY_ID}/${EMSCULPT_NEO_BUNNY_VIDEO_ID}`;
+
 export const emsculptNeoMechanism = {
   titleLines: ["Real results", "beneath the", "surface."],
   body: "EMSCULPT NEO goes beyond surface-level changes — strengthening muscles and reducing fat for a leaner, stronger, more confident you.",
@@ -104,8 +117,12 @@ export const emsculptNeoMechanism = {
       label: "Improvement in overall body shape*",
     },
   ] as readonly EmsculptNeoStat[],
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoAbdominalTreatmentMale,
-  imageAlt: "EmSculpt Neo abdominal treatment at ARC Wellness",
+  /**
+   * Stable Bunny embed (Player.js play/pause on scroll — do not swap src or the
+   * iframe remounts and resets). `playerjs=true` enables the control bridge.
+   */
+  videoEmbedSrc: `${EMSCULPT_NEO_BUNNY_EMBED_BASE}?autoplay=false&loop=true&muted=true&preload=true&responsive=true&playerjs=true`,
+  videoTitle: "EmSculpt Neo treatment at ARC Wellness",
 } as const;
 
 export const emsculptNeoTreatments = {

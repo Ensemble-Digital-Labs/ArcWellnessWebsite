@@ -1,10 +1,18 @@
 /**
  * Infusion Therapy landing content — EXION section stack, infusion copy.
- * Imagery/icons temporarily reuse EXION assets until infusion kit is ready.
+ * Card imagery under public/assets/treatments/infusion-therapy; plates/icons
+ * still temporarily reuse EXION assets.
  */
 
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
+const INFUSION_ASSET = "/assets/treatments/infusion-therapy";
+/** Bump when replacing infusion rasters so next/image + browser drop stale caches. */
+const INFUSION_ASSETS_VERSION = "20260727-lowered";
+
+function infusionAsset(file: string) {
+  return `${INFUSION_ASSET}/${file}?v=${INFUSION_ASSETS_VERSION}`;
+}
 
 export type InfusionIconItem = {
   iconSrc: string;
@@ -40,9 +48,9 @@ export const infusionHero = {
   poweredByEyebrow: "Physician-guided care",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
   synergyLine: "Custom infusions. Meaningful results.",
-  /** Temporary stand-in — swap when infusion hero WebP is ready. */
-  imageSrc: `${EXION_ASSET}/exion-hero-diverse-patient-4k.webp`,
-  imageAlt: "Infusion therapy at ARC Wellness",
+  imageSrc: infusionAsset("infusion-hero.webp"),
+  imageAlt:
+    "Patient receiving IV infusion therapy at ARC Wellness, with ARC WELLNESS IV bag visible",
 } as const;
 
 export const infusionPillars: readonly InfusionIconItem[] = [
@@ -89,9 +97,8 @@ export const infusionMechanism = {
     { value: 20, prefix: "+", suffix: "%", label: "Stronger immune response*" },
     { value: 15, prefix: "+", suffix: "%", label: "Improved mental clarity & focus*" },
   ] as readonly InfusionStat[],
-  /** Temporary still — swap for infusion media / video later. */
-  imageSrc: "/assets/sections/clinic-interiors/iv-therapy-recliner-room.webp",
-  imageAlt: "IV therapy recliner room at ARC Wellness",
+  imageSrc: infusionAsset("infusion-mechanism-drip.webp"),
+  imageAlt: "Close-up of an IV drip chamber delivering nutrients",
 } as const;
 
 export const infusionTreatments = {
@@ -110,8 +117,8 @@ export const infusionTreatments = {
         "Helps ease fatigue from depletion",
         "Ideal after travel, heat, or exertion",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-emface-device-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-hydrator.webp"),
+      imageAlt: "The Hydrator IV infusion — fluids and electrolytes",
     },
     {
       eyebrow: "Immunity",
@@ -124,8 +131,8 @@ export const infusionTreatments = {
         "Helps during seasonal stress",
         "Physician-guided dosing",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-rf-microneedling-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-immune-support.webp"),
+      imageAlt: "Immune Support IV infusion",
     },
     {
       eyebrow: "Vitality",
@@ -138,8 +145,8 @@ export const infusionTreatments = {
         "Complements an active lifestyle",
         "Customizable to your goals",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-clear-laser-resurfacing-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-energy-boost.webp"),
+      imageAlt: "Energy Boost IV infusion",
     },
     {
       eyebrow: "Cognition",
@@ -152,8 +159,8 @@ export const infusionTreatments = {
         "Complements recovery protocols",
         "Guided by your care team",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-emface-device-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-focus-clarity.webp"),
+      imageAlt: "Focus & Clarity IV infusion",
     },
     {
       eyebrow: "Renewal",
@@ -166,8 +173,8 @@ export const infusionTreatments = {
         "Helps you feel reset",
         "Paired with medical oversight",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-rf-microneedling-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-detox-renew.webp"),
+      imageAlt: "Detox & Renew IV infusion",
     },
     {
       eyebrow: "Radiance",
@@ -180,8 +187,8 @@ export const infusionTreatments = {
         "Complements aesthetic care",
         "Personalized to your needs",
       ],
-      imageSrc: `${EXION_ASSET}/exion-card-clear-laser-resurfacing-4k.webp`,
-      imageAlt: "Infusion therapy at ARC Wellness",
+      imageSrc: infusionAsset("infusion-card-beauty-glow.webp"),
+      imageAlt: "Beauty Glow IV infusion",
     },
   ] as readonly InfusionTreatmentCard[],
 } as const;

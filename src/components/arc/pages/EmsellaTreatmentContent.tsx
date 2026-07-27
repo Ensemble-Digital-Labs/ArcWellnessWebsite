@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type CSSProperties } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 
 import { ArcCountUpStat } from "@/components/arc/ArcCountUpStat";
@@ -48,6 +48,156 @@ const WAVE_H_CLASS = "h-[60px] sm:h-[90px] lg:h-[120px]";
 const WAVE_MT_CLASS = "-mt-[60px] sm:-mt-[90px] lg:-mt-[120px]";
 const WAVE_H_VAR_CLASS =
   "[--service-wave-h:60px] sm:[--service-wave-h:90px] lg:[--service-wave-h:120px]";
+
+/** Bunny Player.js control surface (loaded from CDN). */
+type BunnyPlayerJs = {
+  play: () => void;
+  pause: () => void;
+  on: (event: string, cb: () => void) => void;
+};
+
+type BunnyPlayerJsCtor = {
+  Player: new (el: HTMLIFrameElement | string) => BunnyPlayerJs;
+};
+
+declare global {
+  interface Window {
+    playerjs?: BunnyPlayerJsCtor;
+  }
+}
+
+const BUNNY_PLAYERJS_SRC =
+  "https://assets.mediadelivery.net/playerjs/playerjs-latest.min.js";
+
+function loadBunnyPlayerJs(): Promise<BunnyPlayerJsCtor> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("no window"));
+  }
+  if (window.playerjs) return Promise.resolve(window.playerjs);
+
+  const existing = document.querySelector<HTMLScriptElement>(
+    `script[src="${BUNNY_PLAYERJS_SRC}"]`,
+  );
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener("load", () => {
+        if (window.playerjs) resolve(window.playerjs);
+        else reject(new Error("playerjs missing after load"));
+      });
+      existing.addEventListener("error", () =>
+        reject(new Error("playerjs load failed")),
+      );
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = BUNNY_PLAYERJS_SRC;
+    script.async = true;
+    script.onload = () => {
+      if (window.playerjs) resolve(window.playerjs);
+      else reject(new Error("playerjs missing after load"));
+    };
+    script.onerror = () => reject(new Error("playerjs load failed"));
+    document.body.appendChild(script);
+  });
+}
+
+/**
+ * Bunny iframe: play when in view, pause when leaving — same iframe instance
+ * (no src swap / remount, which was resetting playback on every scroll).
+ */
+function EmsellaMechanismScrollVideo() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const playerRef = useRef<BunnyPlayerJs | null>(null);
+  const inViewRef = useRef(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    let cancelled = false;
+
+    loadBunnyPlayerJs()
+      .then((playerjs) => {
+        if (cancelled || !iframeRef.current) return;
+        const player = new playerjs.Player(iframeRef.current);
+        player.on("ready", () => {
+          if (cancelled) return;
+          playerRef.current = player;
+          if (inViewRef.current) player.play();
+          else player.pause();
+        });
+      })
+      .catch(() => {
+        /* Embed still works without Player.js; scroll control is best-effort. */
+      });
+
+    return () => {
+      cancelled = true;
+      playerRef.current = null;
+    };
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el || reduceMotion) return;
+
+    const ENTER = 0.45;
+    const LEAVE = 0.18;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const ratio = entry.intersectionRatio;
+        const intersecting = entry.isIntersecting;
+
+        let next = inViewRef.current;
+        if (!inViewRef.current && intersecting && ratio >= ENTER) next = true;
+        else if (inViewRef.current && (!intersecting || ratio <= LEAVE))
+          next = false;
+
+        if (next === inViewRef.current) return;
+        inViewRef.current = next;
+
+        const player = playerRef.current;
+        if (!player) return;
+        if (next) player.play();
+        else player.pause();
+      },
+      { threshold: [0, 0.18, 0.3, 0.45, 0.6, 1] },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduceMotion]);
+
+  return (
+    <div
+      ref={frameRef}
+      className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none border-0 border-arc-champagne bg-arc-charcoal sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] sm:border-4 lg:aspect-video"
+    >
+      <iframe
+        ref={iframeRef}
+        id="emsella-mechanism-bunny"
+        src={emsellaMechanism.videoEmbedSrc}
+        title={emsellaMechanism.videoTitle}
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowFullScreen
+        className="absolute inset-0 h-full w-full border-0"
+      />
+    </div>
+  );
+}
 
 const ABOVE_CREST_BOTTOM_MASK = [
   `linear-gradient(#fff 0%, #fff calc(100% - var(--service-wave-h)), transparent calc(100% - var(--service-wave-h)))`,
@@ -180,7 +330,7 @@ export function EmsellaTreatmentContent({
         )}
       >
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-arc-cream"
           style={aboveCrestBottomMaskStyle}
           aria-hidden
         >
@@ -189,8 +339,9 @@ export function EmsellaTreatmentContent({
             alt=""
             fill
             priority
+            fetchPriority="high"
             sizes="100vw"
-            className="object-cover object-[center_40%] sm:object-[55%_42%] md:object-center"
+            className="object-cover object-[88%_45%] sm:object-[72%_42%] md:object-[62%_45%] lg:object-[58%_center]"
           />
           <div className="absolute inset-0 hidden bg-gradient-to-r from-arc-cream/55 via-arc-cream/20 to-transparent md:block" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-arc-cream/40 to-transparent sm:h-32" />
@@ -432,15 +583,7 @@ export function EmsellaTreatmentContent({
               className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
             >
               <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                <div className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] lg:aspect-video">
-                  <Image
-                    src={emsellaMechanism.imageSrc}
-                    alt={emsellaMechanism.imageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 40vw, 100vw"
-                    className="object-cover object-center"
-                  />
-                </div>
+                <EmsellaMechanismScrollVideo />
               </div>
             </ArcTextReveal>
           </div>

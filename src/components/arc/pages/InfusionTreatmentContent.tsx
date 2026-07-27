@@ -180,7 +180,7 @@ export function InfusionTreatmentContent({
         )}
       >
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-arc-cream"
           style={aboveCrestBottomMaskStyle}
           aria-hidden
         >
@@ -189,8 +189,9 @@ export function InfusionTreatmentContent({
             alt=""
             fill
             priority
+            fetchPriority="high"
             sizes="100vw"
-            className="object-cover object-[78%_42%] sm:object-[72%_40%] md:object-[62%_45%] lg:object-center"
+            className="object-cover object-[92%_42%] sm:object-[78%_45%] md:object-[65%_45%] lg:object-[58%_center]"
           />
           <div className="absolute inset-0 hidden bg-gradient-to-r from-arc-cream/55 via-arc-cream/20 to-transparent md:block" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-arc-cream/40 to-transparent sm:h-32" />

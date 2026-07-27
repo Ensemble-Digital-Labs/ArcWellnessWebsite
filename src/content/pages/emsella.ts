@@ -7,6 +7,13 @@ import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
 const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
+const EMSELLA_ASSET = "/assets/treatments/emsella";
+/** Bump when replacing EmSella rasters so next/image + browser drop stale caches. */
+const EMSELLA_ASSETS_VERSION = "20260727-hero";
+
+function emsellaAsset(file: string) {
+  return `${EMSELLA_ASSET}/${file}?v=${EMSELLA_ASSETS_VERSION}`;
+}
 
 export type EmsellaIconItem = {
   iconSrc: string;
@@ -42,7 +49,7 @@ export const emsellaHero = {
   poweredByEyebrow: "Powered by HIFEM®",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
   synergyLine: "Non-invasive. No downtime. Real strength from within.",
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
+  imageSrc: emsellaAsset("emsella-hero.webp"),
   imageAlt: "EmSella treatment chair and console at ARC Wellness",
 } as const;
 
@@ -75,6 +82,11 @@ export const emsellaCreamPlate = {
   alt: "",
 } as const;
 
+/** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
+const EMSELLA_BUNNY_LIBRARY_ID = "710568";
+const EMSELLA_BUNNY_VIDEO_ID = "73b9a4ca-fd47-4159-8acf-a4662a50dc1d";
+const EMSELLA_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${EMSELLA_BUNNY_LIBRARY_ID}/${EMSELLA_BUNNY_VIDEO_ID}`;
+
 export const emsellaMechanism = {
   titleLines: ["The power of", "HIFEM®"],
   body: "High-intensity focused electromagnetic energy triggers thousands of deep pelvic floor contractions in a single session — far beyond what most people can achieve with Kegels alone.",
@@ -104,8 +116,12 @@ export const emsellaMechanism = {
       label: "Downtime — walk in, walk out*",
     },
   ] as readonly EmsellaStat[],
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaChairPatientLifestyle,
-  imageAlt: "Patient seated on an EmSella chair during treatment",
+  /**
+   * Stable Bunny embed (Player.js play/pause on scroll — do not swap src or the
+   * iframe remounts and resets). `playerjs=true` enables the control bridge.
+   */
+  videoEmbedSrc: `${EMSELLA_BUNNY_EMBED_BASE}?autoplay=false&loop=true&muted=true&preload=true&responsive=true&playerjs=true`,
+  videoTitle: "EmSella treatment at ARC Wellness",
 } as const;
 
 export const emsellaTreatments = {
