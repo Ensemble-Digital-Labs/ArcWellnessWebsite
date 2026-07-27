@@ -1,157 +1,255 @@
-import {
-  Armchair,
-  BatteryLow,
-  CloudFog,
-  Flower2,
-  Gem,
-  Heart,
-  HeartHandshake,
-  HeartPulse,
-  Leaf,
-  Microscope,
-  Moon,
-  Shuffle,
-  ShieldCheck,
-  Sprout,
-  Sun,
-  Target,
-  TreePine,
-  Waves,
-  Wind,
-  type LucideIcon,
-} from "lucide-react";
-import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-
 /**
- * Bespoke ExoMind landing content — translated from the client's ExoMind infographic
- * into structured, responsive, on-brand sections (see `ExoMindTreatmentContent`).
+ * ExoMind landing content — EXION section stack, ExoMind copy from client brief.
+ * Imagery/icons temporarily reuse EXION plates + ExoMind medical-spa photos.
  */
 
-export type ExoMindIconItem = { icon: LucideIcon; label: string };
+import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 
-export const exomindHero = {
-  eyebrow: "Neuromodulation",
-  title: "ExoMind",
-  subhead: "Supporting your brain. Through every phase.",
-  intro:
-    "ExoMind uses safe, non-invasive neurostimulation to support brain activity and encourage neuroplasticity — the brain's ability to adapt, reorganize, and form new, healthier connections.",
-  badge: {
-    lines: ["Safe.", "Non-invasive.", "Transformative."],
-    note: "Work with your brain — not against it.",
-  },
-  imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
-  imageAlt: "ExoMind BTL neurostimulation console and treatment bed at ARC Wellness",
-} as const;
+const EXION_ICON = "/assets/treatments/exion/icons";
+const EXION_ASSET = "/assets/treatments/exion";
 
-export const exomindBenefitPills: readonly ExoMindIconItem[] = [
-  { icon: Waves, label: "Calm" },
-  { icon: Target, label: "Focus" },
-  { icon: Sun, label: "Clarity" },
-  { icon: Flower2, label: "Resilience" },
-  { icon: Gem, label: "Confidence" },
-];
-
-export const exomindWhatIs = {
-  title: "What is",
-  titleEmphasis: "ExoMind?",
-  body: "ExoMind is an advanced technology that uses targeted electromagnetic stimulation to activate key areas of the brain involved in focus, mood, memory, and overall cognitive performance.",
-  features: [
-    { icon: ShieldCheck, title: "Drug-Free", body: "No medication. No downtime." },
-    { icon: Microscope, title: "Science-Backed", body: "Clinically studied technology." },
-    { icon: Armchair, title: "Comfortable", body: "Relax, unwind, and restore." },
-    { icon: HeartHandshake, title: "Real Support", body: "For how you think, feel, and live." },
-  ],
-} as const;
-
-export type ExoMindDecadeTier = {
-  icon: LucideIcon;
-  range: string;
-  theme: string;
+export type ExoMindIconItem = {
+  iconSrc: string;
+  title: string;
   body: string;
-  supports: readonly string[];
-  note: string;
 };
 
-export const exomindDecades = {
-  title: "Supporting you through",
-  titleEmphasis: "the decades",
-  intro: "Supporting brain health at every age. For every season of life.",
-  tiers: [
-    {
-      icon: Sprout,
-      range: "20s & 30s",
-      theme: "Foundation & Focus",
-      body: "Build a strong foundation for your future by supporting focus, balance, and emotional well-being.",
-      supports: [
-        "Focus, motivation & mental clarity",
-        "Emotional balance & stress resilience",
-        "Better sleep & nervous system regulation",
-      ],
-      note: "Helping you stay grounded, focused, and future-ready.",
-    },
-    {
-      icon: Sun,
-      range: "40s",
-      theme: "Clarity & Adaptability",
-      body: "Life brings change. Your brain can too. Support mental clarity, emotional balance, and overall adaptability.",
-      supports: [
-        "Mental clarity & focus",
-        "Emotional steadiness & reduced stress",
-        "Cognitive performance & memory",
-        "Restful sleep & nervous system balance",
-      ],
-      note: "Supporting clarity, balance, and brain health through change.",
-    },
-    {
-      icon: TreePine,
-      range: "50s & Beyond",
-      theme: "Resilience & Vitality",
-      body: "Stay sharp, independent, and resilient as you continue to pursue what matters most in your life.",
-      supports: [
-        "Cognitive function & memory",
-        "Motivation & mental drive",
-        "Emotional resilience & calm",
-        "Confidence & connection",
-      ],
-      note: "Helping you stay sharp, resilient, and connected — for life.",
-    },
-  ] as readonly ExoMindDecadeTier[],
+export type ExoMindStat = {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+};
+
+export type ExoMindTreatmentCard = {
+  eyebrow: string;
+  title: string;
+  tagline: string;
+  body: string;
+  bullets: readonly string[];
+  imageSrc: string;
+  imageAlt: string;
+};
+
+export const exomindHero = {
+  title: "EXOMIND",
+  titleEmphasis: "Elevate your mind. Enhance your life.",
+  titleEmphasisLines: ["Elevate your mind.", "Enhance your life."],
+  subhead: "Focus. Clarity. Balance. All in 30 minutes.",
+  intro:
+    "EXOMIND is a non-invasive technology that uses transcranial magnetic stimulation (TMS) to improve cognitive performance, elevate mood, and reduce stress — naturally.",
+  closingLine: "Better thinking. Better feeling. Better you.",
+  poweredByEyebrow: "Next-generation TMS",
+  poweredByIconSrc: `${EXION_ICON}/atom.svg`,
+  synergyLine: "Safe. Non-invasive. Drug-free. Backed by science.",
+  imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
+  imageAlt: "ExoMind TMS treatment at ARC Wellness",
 } as const;
 
-export const exomindNeuroplasticity = {
-  title: "The power of",
-  titleEmphasis: "neuroplasticity",
-  lede: "Your brain is not fixed. It is adaptable.",
-  body: "Neuroplasticity is your brain's ability to adapt, reorganize, and strengthen connections. Hormonal changes, stress, inflammation, and poor sleep can impact these pathways.",
-  center: {
-    words: ["Hope.", "Possibility.", "Adaptability."],
-    body: "Your brain has the ability to heal, adapt, and thrive.",
+export const exomindPillars: readonly ExoMindIconItem[] = [
+  {
+    iconSrc: `${EXION_ICON}/brain.svg`,
+    title: "Sharper Focus",
+    body: "Improve attention, memory, and mental clarity.",
   },
-  helpsTitle: "ExoMind helps support:",
-  helps: [
-    { icon: Waves, label: "Overwhelm" },
-    { icon: HeartPulse, label: "Anxiety" },
-    { icon: CloudFog, label: "Brain Fog" },
-    { icon: BatteryLow, label: "Mental Fatigue" },
-    { icon: Moon, label: "Poor Sleep" },
-  ],
-  networkTitle: "Supports healthier brain network activity & neuroplasticity:",
-  network: [
-    { icon: Wind, label: "Calm Regulation" },
-    { icon: Target, label: "Focus Pathways" },
-    { icon: Leaf, label: "Healthy Stress Responses" },
-    { icon: Shuffle, label: "Cognitive Flexibility" },
-    { icon: Heart, label: "Emotional Resilience" },
-  ],
+  {
+    iconSrc: `${EXION_ICON}/lotus.svg`,
+    title: "Stress Relief",
+    body: "Reduce stress and anxiety with gentle neurostimulation.",
+  },
+  {
+    iconSrc: `${EXION_ICON}/sun.svg`,
+    title: "Elevated Mood",
+    body: "Boost mood and emotional well-being.",
+  },
+  {
+    iconSrc: `${EXION_ICON}/battery-energy.svg`,
+    title: "More Energy",
+    body: "Enhance mental energy and overall brain performance.",
+  },
+];
+
+/** Temporary cream plate (EXION asset). */
+export const exomindCreamPlate = {
+  src: `${EXION_ASSET}/exion-pillars-background.webp`,
+  alt: "",
+} as const;
+
+/** Temporary dark plate (EXION asset). */
+export const exomindDarkPlate = {
+  src: `${EXION_ASSET}/exion-different-background.webp`,
+  alt: "",
+} as const;
+
+export const exomindMechanism = {
+  titleLines: ["A better brain.", "Real results."],
+  body: "Clinical studies show EXOMIND can improve cognitive function, mood, and quality of life — helping you think clearer, feel calmer, and perform at your best.",
+  stats: [
+    {
+      value: 25,
+      prefix: "+",
+      suffix: "%",
+      label: "Improvement in cognitive function*",
+    },
+    {
+      value: 30,
+      prefix: "−",
+      suffix: "%",
+      label: "Reduction in stress levels*",
+    },
+    {
+      value: 24,
+      prefix: "+",
+      suffix: "%",
+      label: "Improvement in focus & attention*",
+    },
+    {
+      value: 19,
+      prefix: "+",
+      suffix: "%",
+      label: "Better mood & emotional well-being*",
+    },
+  ] as readonly ExoMindStat[],
+  imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindPromotionalDisplayCounter,
+  imageAlt: "ExoMind technology at ARC Wellness",
+} as const;
+
+/** Maps to EXION treatment cards — How EXOMIND Works. */
+export const exomindTreatments = {
+  title: "How EXOMIND",
+  titleEmphasis: "works?",
+  intro:
+    "EXOMIND uses advanced transcranial magnetic stimulation (TMS) to safely activate key areas of the brain. These magnetic pulses help improve communication between brain cells, supporting better focus, mood, memory and mental performance—without medication or downtime.",
+  cards: [
+    {
+      eyebrow: "Step one",
+      title: "Targeted Stimulation",
+      tagline: "Reach. Activate. Engage.",
+      body: "Gentle magnetic pulses reach the brain areas responsible for focus, mood, and cognitive performance.",
+      bullets: [
+        "Non-invasive TMS delivery",
+        "Targets key cognitive regions",
+        "Comfortable, controlled sessions",
+        "No medication required",
+      ],
+      imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
+      imageAlt: "ExoMind treatment session at ARC Wellness",
+    },
+    {
+      eyebrow: "Step two",
+      title: "Neural Communication",
+      tagline: "Connect. Strengthen. Sync.",
+      body: "Stimulation strengthens communication between brain cells so pathways work more efficiently together.",
+      bullets: [
+        "Supports healthier neural pathways",
+        "Encourages adaptive connectivity",
+        "Builds on your brain’s plasticity",
+        "Science-backed mechanism",
+      ],
+      imageSrc: MEDICAL_SPA_NAMED_IMAGES.exomindPromotionalDisplayCounter,
+      imageAlt: "ExoMind console and technology display",
+    },
+    {
+      eyebrow: "Step three",
+      title: "Optimized Performance",
+      tagline: "Sharper. Calmer. Clearer.",
+      body: "As pathways strengthen, many people notice sharper thinking, steadier mood, and lower stress.",
+      bullets: [
+        "Supports focus and clarity",
+        "Helps ease mental fatigue",
+        "Encourages emotional balance",
+        "Complements daily performance",
+      ],
+      imageSrc: `${EXION_ASSET}/exion-card-emface-device-4k.webp`,
+      imageAlt: "Advanced treatment technology at ARC Wellness",
+    },
+    {
+      eyebrow: "Step four",
+      title: "Lasting Benefits",
+      tagline: "Consistent. Cumulative. Enduring.",
+      body: "Regular sessions help reinforce improvements so clarity and calm can become your new baseline.",
+      bullets: [
+        "Builds with a guided plan",
+        "Supports lasting mental resilience",
+        "Fits into a 30-minute visit",
+        "Paired with physician oversight",
+      ],
+      imageSrc: `${EXION_ASSET}/exion-card-rf-microneedling-4k.webp`,
+      imageAlt: "Personalized wellness care at ARC Wellness",
+    },
+  ] as readonly ExoMindTreatmentCard[],
+} as const;
+
+/** Maps to EXION “Why different” — Who Can Benefit. */
+export const exomindDifferent = {
+  title: "Who can",
+  titleEmphasis: "benefit?",
+  intro:
+    "EXOMIND is ideal for anyone looking to optimize mental performance and emotional well-being — without invasive procedures or medication.",
+  backgroundSrc: `${EXION_ASSET}/exion-different-background.webp`,
+  backgroundAlt: "",
+  cards: [
+    {
+      iconSrc: `${EXION_ICON}/mind.svg`,
+      title: "Professionals & High Performers",
+      body: "Sharpen focus, productivity, and mental clarity when demand is high.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/book.svg`,
+      title: "Students",
+      body: "Support memory, concentration, and learning when every hour counts.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/lotus.svg`,
+      title: "Stress or Anxiety",
+      body: "Find more balance, calm, and resilience when life feels overwhelming.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/sun.svg`,
+      title: "Mood Support",
+      body: "Support mood and emotional well-being with drug-free care.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/brain-front.svg`,
+      title: "Mental Optimization",
+      body: "Stay sharp, focused, and energized — whatever your goals.",
+    },
+  ] as readonly ExoMindIconItem[],
+} as const;
+
+export const exomindExperience = {
+  title: "The EXOMIND",
+  titleEmphasis: "experience",
+  steps: [
+    {
+      iconSrc: `${EXION_ICON}/chat.svg`,
+      title: "Consultation",
+      body: "Discuss your goals and create a personalized plan.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/meditation.svg`,
+      title: "Your Treatment",
+      body: "Relax in a comfortable suite while we prepare your session.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/clock.svg`,
+      title: "30 Minutes",
+      body: "A painless, non-invasive, and relaxing session.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/mind.svg`,
+      title: "Feel the Difference",
+      body: "Leave feeling refreshed, clearer, and recharged.",
+    },
+    {
+      iconSrc: `${EXION_ICON}/calendar-check.svg`,
+      title: "Lasting Results",
+      body: "Consistent sessions help lock in lasting benefits.",
+    },
+  ] as readonly ExoMindIconItem[],
 } as const;
 
 export const exomindClosing = {
-  title: "You deserve to feel like",
-  titleEmphasis: "you again.",
-  words: "Calm. Clear. Confident. Connected.",
-  support: "We're here to support you — through every phase of life.",
-  ctaLabel: "Book a consultation",
+  supportingLine:
+    "Unlock your brain’s potential with EXOMIND at ARC Wellness.",
 } as const;
-
-export const exomindDisclaimer =
-  "ExoMind is a wellness technology, not intended to treat, cure, or diagnose any condition. Ask our team how ExoMind can support your unique needs.";

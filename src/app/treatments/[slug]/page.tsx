@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { preload } from "react-dom";
 import { ArcMarketingShell } from "@/components/arc/ArcMarketingShell";
+import { EmsculptNeoTreatmentContent } from "@/components/arc/pages/EmsculptNeoTreatmentContent";
+import { EmsellaTreatmentContent } from "@/components/arc/pages/EmsellaTreatmentContent";
 import { ExionTreatmentContent } from "@/components/arc/pages/ExionTreatmentContent";
+import { ExoMindTreatmentContent } from "@/components/arc/pages/ExoMindTreatmentContent";
 import { InfusionTreatmentContent } from "@/components/arc/pages/InfusionTreatmentContent";
 import { TreatmentDetailContent } from "@/components/arc/pages/TreatmentDetailContent";
+import { exionHero } from "@/content/pages/exion";
 import { getAllTreatmentSlugs, getTreatmentBySlug } from "@/content/pages/treatments";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -27,10 +32,22 @@ export default async function TreatmentDetailPage({ params }: Props) {
   const treatment = getTreatmentBySlug(slug);
   if (!treatment) notFound();
 
+  // EXION-first: kick the LCP hero early on cold / direct loads (raw WebP).
+  // Homepage idle warm still uses the matching `/_next/image` variant for SPA nav.
+  if (treatment.slug === "exion") {
+    preload(exionHero.imageSrc, { as: "image", fetchPriority: "high" });
+  }
+
   return (
     <ArcMarketingShell>
       {treatment.slug === "exion" ? (
         <ExionTreatmentContent treatment={treatment} />
+      ) : treatment.slug === "exomind" ? (
+        <ExoMindTreatmentContent treatment={treatment} />
+      ) : treatment.slug === "emsella" ? (
+        <EmsellaTreatmentContent treatment={treatment} />
+      ) : treatment.slug === "emsculpt-neo" ? (
+        <EmsculptNeoTreatmentContent treatment={treatment} />
       ) : treatment.slug === "infusion-therapy" ? (
         <InfusionTreatmentContent treatment={treatment} />
       ) : (

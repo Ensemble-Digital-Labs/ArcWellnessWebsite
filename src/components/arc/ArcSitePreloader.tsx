@@ -5,6 +5,7 @@ import {
   INSIGHTS_FEED_AMBIENT_SRC,
   PATH_SECTION_INTRO_BACKGROUND_SRC,
 } from "@/content/backgroundDecoration";
+import { SERVICE_PAGE_LCP_HERO_SRCS } from "@/content/servicePageLcpHeroes";
 import { images } from "@/content/site";
 
 /**
@@ -31,7 +32,8 @@ const PRELOAD_SRCS: readonly string[] = [
  * marketing page hero (Contact, Programs, Financing, Aesthetics, Treatments,
  * treatment detail) shares the same marble plate, so warming these one time
  * makes those heroes paint instantly on the first navigation. Also warms the
- * About page silk-floral hero plate (`ScrollChapterIntroSection`).
+ * About page silk-floral hero plate (`ScrollChapterIntroSection`), plus curated
+ * **service-page LCP** heroes (EXION first — see `servicePageLcpHeroes.ts`).
  *
  * These are warmed via the exact `/_next/image` variant (not the raw file) so the
  * cached URL matches what the destination pages actually request.
@@ -40,6 +42,7 @@ const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
   images.aboutHeroMedia,
   INSIGHTS_FEED_AMBIENT_SRC,
   images.heroMedia,
+  ...SERVICE_PAGE_LCP_HERO_SRCS,
 ];
 
 /** Next.js default `deviceSizes` — used to pick the same width next/image would for `sizes="100vw"`. */
@@ -71,9 +74,9 @@ function nextImageVariantUrl(src: string, quality = 75): string {
 }
 
 /**
- * Warm shared inner-page hero plates in the background (idle, non-blocking) so
- * navigation from the homepage lands on an already-cached hero. Skipped on
- * Save-Data connections.
+ * Warm shared inner-page + service LCP hero plates in the background (idle,
+ * non-blocking) so navigation from the homepage lands on an already-cached
+ * hero. Skipped on Save-Data connections. Does not gate the splash.
  */
 function warmInnerPageHeroAssets() {
   const connection = (
@@ -105,7 +108,13 @@ export function ArcSitePreloader() {
 
   useEffect(() => {
     const html = document.documentElement;
-    if (html.getAttribute("data-arc-intro") !== "active") {
+    const splashActive = html.getAttribute("data-arc-intro") === "active";
+
+    // Idle-warm inner + service LCP heroes on every homepage mount (splash or
+    // not). Splash itself stays gated to first visit; this never blocks it.
+    warmInnerPageHeroAssets();
+
+    if (!splashActive) {
       setRendered(false);
       return;
     }
@@ -114,9 +123,6 @@ export function ArcSitePreloader() {
     let exitTimer: ReturnType<typeof setTimeout> | undefined;
     let removeTimer: ReturnType<typeof setTimeout> | undefined;
     const startedAt = performance.now();
-
-    // Warm shared inner-page hero plates in the background — never gates the splash.
-    warmInnerPageHeroAssets();
 
     const assetsReady = Promise.all(PRELOAD_SRCS.map(preloadImage));
     const maxWait = new Promise<void>((resolve) => setTimeout(resolve, MAX_WAIT_MS));

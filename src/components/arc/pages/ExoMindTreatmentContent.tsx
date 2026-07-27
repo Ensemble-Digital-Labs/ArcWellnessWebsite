@@ -1,30 +1,40 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { Brain, Flower, type LucideIcon } from "lucide-react";
+import { type CSSProperties } from "react";
+import { Check, Sparkles } from "lucide-react";
 
+import { ArcCountUpStat } from "@/components/arc/ArcCountUpStat";
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
-import { ArcPrimaryCta } from "@/components/arc/ArcPrimaryCta";
-import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
-import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+import {
+  ArcWaveSeparator,
+  ARC_WAVE_TOP_FILL_D,
+} from "@/components/arc/ArcWaveSeparator";
+import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import {
+  TitleEmphasis,
+  arcHeadlineEmphasisClass,
+} from "@/components/arc/TitleEmphasis";
 import type { TreatmentPage } from "@/content/pages/treatments";
 import {
-  exomindBenefitPills,
   exomindClosing,
-  exomindDecades,
-  exomindDisclaimer,
+  exomindCreamPlate,
+  exomindDifferent,
+  exomindExperience,
   exomindHero,
-  exomindNeuroplasticity,
-  exomindWhatIs,
-  type ExoMindIconItem,
+  exomindMechanism,
+  exomindPillars,
+  exomindTreatments,
 } from "@/content/pages/exomind";
-import { siteMeta } from "@/content/siteMeta";
+import { homeInvestSupport } from "@/content/homepage";
+import { images } from "@/content/site";
 import {
+  ARC_GALLERY_CLEAR_BELOW_LOGO,
+  ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS,
+  ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS,
   ARC_PAGE_RAIL_MAX,
-  ARC_PINNED_CLEAR_BELOW_LOGO,
-  ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
 } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -32,10 +42,104 @@ type ExoMindTreatmentContentProps = {
   treatment: TreatmentPage;
 };
 
-const EYEBROW_CLASS =
-  "font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal-ink";
+const DARK_ACT = "color-mix(in srgb, var(--arc-charcoal) 82%, #000000)";
 
-/** Small gold divider ornament used between heading blocks (echoes the infographic). */
+const WAVE_H_CLASS = "h-[60px] sm:h-[90px] lg:h-[120px]";
+const WAVE_MT_CLASS = "-mt-[60px] sm:-mt-[90px] lg:-mt-[120px]";
+const WAVE_H_VAR_CLASS =
+  "[--service-wave-h:60px] sm:[--service-wave-h:90px] lg:[--service-wave-h:120px]";
+
+const ABOVE_CREST_BOTTOM_MASK = [
+  `linear-gradient(#fff 0%, #fff calc(100% - var(--service-wave-h)), transparent calc(100% - var(--service-wave-h)))`,
+  `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none"><path fill="#fff" d="${ARC_WAVE_TOP_FILL_D}"/></svg>`,
+  )}")`,
+].join(", ");
+
+const aboveCrestBottomMaskStyle: CSSProperties = {
+  maskImage: ABOVE_CREST_BOTTOM_MASK,
+  WebkitMaskImage: ABOVE_CREST_BOTTOM_MASK,
+  maskSize: "100% 100%, 100% var(--service-wave-h)",
+  WebkitMaskSize: "100% 100%, 100% var(--service-wave-h)",
+  maskPosition: "0 0, 0 100%",
+  WebkitMaskPosition: "0 0, 0 100%",
+  maskRepeat: "no-repeat",
+  WebkitMaskRepeat: "no-repeat",
+};
+
+const PLATE_OBJECT_CLASS = "object-cover object-[center_30%]";
+
+const experienceStyle: CSSProperties = {
+  paddingTop: "clamp(1.5rem, 3vw, 3rem)",
+  paddingBottom: "clamp(3.5rem, 7vw, 7rem)",
+};
+
+function CreamPlate({
+  maskBottom = true,
+  stableMedia = false,
+}: {
+  maskBottom?: boolean;
+  stableMedia?: boolean;
+}) {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-arc-cream"
+      style={maskBottom ? aboveCrestBottomMaskStyle : undefined}
+      aria-hidden
+    >
+      {stableMedia ? (
+        <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
+          <Image
+            src={exomindCreamPlate.src}
+            alt=""
+            fill
+            sizes="100vw"
+            unoptimized
+            className="object-cover object-top"
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-arc-cream sm:h-40"
+            aria-hidden
+          />
+        </div>
+      ) : (
+        <div className="absolute inset-0">
+          <Image
+            src={exomindCreamPlate.src}
+            alt=""
+            fill
+            sizes="100vw"
+            unoptimized
+            className={PLATE_OBJECT_CLASS}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DarkPlate({ maskBottom = true }: { maskBottom?: boolean }) {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-0"
+      style={
+        maskBottom
+          ? { backgroundColor: DARK_ACT, ...aboveCrestBottomMaskStyle }
+          : { backgroundColor: DARK_ACT }
+      }
+      aria-hidden
+    >
+      <Image
+        src={exomindDifferent.backgroundSrc}
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+    </div>
+  );
+}
+
 function GoldRule({ className }: { className?: string }) {
   return (
     <span
@@ -48,405 +152,655 @@ function GoldRule({ className }: { className?: string }) {
   );
 }
 
-function IconBadge({
-  icon: Icon,
-  size = "md",
-}: {
-  icon: LucideIcon;
-  size?: "sm" | "md";
-}) {
+function EmblemIcon({ src, className }: { src: string; className?: string }) {
   return (
-    <span
-      className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full border border-arc-champagne/45 bg-arc-cream text-arc-teal-ink",
-        size === "md" ? "h-14 w-14" : "h-11 w-11",
-      )}
-    >
-      <Icon
-        className={size === "md" ? "h-6 w-6" : "h-5 w-5"}
-        strokeWidth={1.5}
-        aria-hidden
-      />
-    </span>
+    <Image
+      src={src}
+      alt=""
+      aria-hidden
+      width={128}
+      height={128}
+      unoptimized
+      className={cn("select-none object-contain", className)}
+    />
   );
 }
 
-function IconStat({ item }: { item: ExoMindIconItem }) {
-  const { icon: Icon, label } = item;
-  return (
-    <div className="flex flex-col items-center gap-2 text-center">
-      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-arc-champagne/45 bg-arc-cream text-arc-teal-ink sm:h-12 sm:w-12">
-        <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
-      </span>
-      <span className="font-sans text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/80 sm:text-[0.6875rem]">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-export function ExoMindTreatmentContent({ treatment }: ExoMindTreatmentContentProps) {
-  const bookHref = siteMeta.bookingUrl;
-
+/** ExoMind — EXION design template (content/assets swap). */
+export function ExoMindTreatmentContent({
+  treatment,
+}: ExoMindTreatmentContentProps) {
   return (
     <>
       {/* ---------- Hero ---------- */}
-      <section
+      <div
         className={cn(
-          "relative overflow-hidden bg-arc-cream pb-16 sm:pb-20",
-          ARC_PINNED_CLEAR_BELOW_LOGO,
+          "relative z-20 flex min-h-[100dvh] flex-col",
+          WAVE_H_VAR_CLASS,
         )}
       >
         <div
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+          style={aboveCrestBottomMaskStyle}
+          aria-hidden
+        >
+          <Image
+            src={exomindHero.imageSrc}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[center_45%] sm:object-[center_40%] md:object-center"
+          />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-arc-cream/55 via-arc-cream/20 to-transparent md:block" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-arc-cream/40 to-transparent sm:h-32" />
+        </div>
+
+        <section
           className={cn(
-            "relative z-10 mx-auto grid grid-cols-1 items-center gap-10 px-6 sm:px-10 md:grid-cols-2 md:gap-12 md:px-12",
+            "relative z-10 flex flex-1 flex-col",
+            ARC_GALLERY_CLEAR_BELOW_LOGO,
+          )}
+        >
+          <div
+            className={cn(
+              "mx-auto flex w-full flex-1 flex-col justify-center px-6 sm:px-10 md:px-12",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:text-left">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-5 -inset-y-4 z-0 rounded-[2rem] bg-arc-cream/70 blur-md md:hidden"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-3 -inset-y-2 z-0 rounded-3xl bg-arc-cream/60 md:hidden"
+              />
+              <div className="relative z-10">
+                <ArcTextReveal variant="heading" trigger="mount">
+                  <h1 className="font-serif text-[clamp(2.25rem,6.5vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
+                    <span className="block whitespace-nowrap font-semibold leading-none">
+                      {exomindHero.title}
+                    </span>
+                    <TitleEmphasis
+                      className={cn(
+                        arcHeadlineEmphasisClass("teal"),
+                        "mt-0.5 inline-block leading-[0.82]",
+                      )}
+                    >
+                      <span className="block whitespace-nowrap leading-[0.82]">
+                        {exomindHero.titleEmphasisLines[0]}
+                      </span>
+                      <span className="-mt-[0.18em] block text-center whitespace-nowrap leading-[0.82]">
+                        {exomindHero.titleEmphasisLines[1]}
+                      </span>
+                    </TitleEmphasis>
+                  </h1>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
+                  <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:[text-shadow:none]">
+                    {exomindHero.subhead}
+                  </p>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
+                  <p className="mt-5 font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:mt-6 sm:text-base md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]">
+                    {exomindHero.intro}
+                  </p>
+                </ArcTextReveal>
+              </div>
+            </div>
+          </div>
+
+          <ArcTextReveal
+            variant="body"
+            trigger="mount"
+            delayIndex={3}
+            className={cn(
+              "relative z-30 mx-auto mb-3 flex justify-center px-6 sm:mb-4 sm:px-10 md:px-12",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full border border-[#d9b878]/70 bg-[color-mix(in_srgb,#c19a5b_48%,#2c2c2c)] px-6 py-3.5 text-center shadow-[0_16px_48px_rgba(44,44,44,0.22),0_0_0_1px_rgba(255,248,231,0.35)_inset] ring-1 ring-[#c19a5b]/40 backdrop-blur-xl supports-[backdrop-filter]:bg-[color-mix(in_srgb,#c19a5b_42%,rgba(44,44,44,0.35))] sm:w-auto sm:max-w-none sm:px-8">
+              <Sparkles className="h-4 w-4 shrink-0 text-white" aria-hidden />
+              <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-white">
+                {exomindHero.closingLine}
+              </span>
+            </div>
+          </ArcTextReveal>
+        </section>
+
+        <div className={cn("relative z-30 mt-auto", WAVE_H_CLASS)}>
+          <ArcWaveSeparator
+            topColor="transparent"
+            bottomColor="transparent"
+            shine
+            tone="pearl"
+          />
+        </div>
+
+        <span className="sr-only">{exomindHero.imageAlt}</span>
+      </div>
+
+      {/* ---------- Pillars ---------- */}
+      <div
+        className={cn(
+          "relative z-10 overflow-x-clip",
+          WAVE_MT_CLASS,
+          WAVE_H_VAR_CLASS,
+        )}
+      >
+        <CreamPlate />
+        <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+
+        <section
+          className={cn(
+            "relative z-10 mx-auto px-6 pb-14 pt-2 sm:px-10 sm:pb-16 md:px-12 md:pb-20",
             ARC_PAGE_RAIL_MAX,
           )}
         >
-          {/* Copy */}
-          <div className="flex flex-col">
-            <ArcTextReveal variant="body" trigger="mount">
-              <p className={EYEBROW_CLASS}>{exomindHero.eyebrow}</p>
-            </ArcTextReveal>
-            <ArcTextReveal variant="heading" trigger="mount" delayIndex={1}>
-              <h1 className="mt-4 font-serif text-[clamp(2.75rem,9vw,4.5rem)] font-semibold leading-[1.02] tracking-tight text-arc-charcoal">
-                {exomindHero.title}
-                <sup className="ml-1 align-super font-sans text-[0.28em] font-semibold text-arc-teal-ink">
-                  ®
-                </sup>
-              </h1>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
-              <p className="mt-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-champagne sm:text-base">
-                {exomindHero.subhead}
-              </p>
-            </ArcTextReveal>
-            <GoldRule className="mt-6" />
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={3}>
-              <p className="mt-6 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base">
-                {exomindHero.intro}
-              </p>
-            </ArcTextReveal>
-
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={4}>
-              <div className="mt-8 grid grid-cols-5 gap-1.5 sm:max-w-md sm:gap-3">
-                {exomindBenefitPills.map((pill) => (
-                  <IconStat key={pill.label} item={pill} />
-                ))}
-              </div>
-            </ArcTextReveal>
-
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={5}>
-              <div className="mt-9">
-                <ArcPrimaryCta href={bookHref}>{exomindClosing.ctaLabel}</ArcPrimaryCta>
-              </div>
-            </ArcTextReveal>
-          </div>
-
-          {/* Device photo + badge */}
-          <div className="relative lg:pl-8">
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
-              <ArcWindowFrame
-                src={exomindHero.imageSrc}
-                alt={exomindHero.imageAlt}
-                feather
-                priority
-                className="aspect-[4/5] w-full sm:aspect-[5/6]"
-                imageClassName="object-cover object-center"
-                sizes="(min-width: 768px) 45vw, 100vw"
-              />
-            </ArcTextReveal>
-
-            <div className="mx-auto mt-6 flex h-36 w-36 flex-col items-center justify-center rounded-full border border-arc-champagne/50 bg-arc-cream/95 px-5 text-center shadow-[0_12px_40px_rgba(44,44,44,0.12)] sm:h-40 sm:w-40 lg:absolute lg:-bottom-8 lg:left-0 lg:mt-0">
-              <p className="font-serif text-sm font-semibold leading-tight text-arc-charcoal sm:text-base">
-                {exomindHero.badge.lines.join(" ")}
-              </p>
-              <p className="mt-2 font-sans text-[0.625rem] leading-snug text-arc-charcoal/70">
-                {exomindHero.badge.note}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
-      </section>
-
-      {/* ---------- What is ExoMind ---------- */}
-      <section
-        className={cn(
-          "relative overflow-hidden bg-arc-cream-deep px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24",
-          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
-        )}
-      >
-        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
-        <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
-          <div className="max-w-2xl">
-            <ArcTextReveal variant="heading">
-              <h2 className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-arc-charcoal">
-                {exomindWhatIs.title}{" "}
-                <TitleEmphasis className="text-arc-teal-ink">
-                  {exomindWhatIs.titleEmphasis}
-                </TitleEmphasis>
-              </h2>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p className="mt-6 font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base">
-                {exomindWhatIs.body}
-              </p>
-            </ArcTextReveal>
-          </div>
-
-          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:mt-14 lg:grid-cols-4 lg:gap-x-8">
-            {exomindWhatIs.features.map((feature, i) => (
-              <ArcTextReveal key={feature.title} variant="body" delayIndex={i + 1}>
-                <div className="flex flex-col items-start gap-4 lg:border-l lg:border-arc-charcoal/12 lg:pl-6">
-                  <IconBadge icon={feature.icon} />
-                  <div>
-                    <h3 className="font-sans text-sm font-bold uppercase tracking-[0.12em] text-arc-charcoal">
-                      {feature.title}
-                    </h3>
-                    <p className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/78">
-                      {feature.body}
-                    </p>
-                  </div>
-                </div>
-              </ArcTextReveal>
-            ))}
-          </div>
-        </div>
-        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
-      </section>
-
-      {/* ---------- Supporting you through the decades ---------- */}
-      <section
-        className={cn(
-          "relative overflow-hidden bg-arc-cream px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24",
-          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
-        )}
-      >
-        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
-        <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
-          <div className="mx-auto max-w-2xl text-center">
-            <ArcTextReveal variant="heading">
-              <h2 className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-arc-charcoal">
-                {exomindDecades.title}{" "}
-                <TitleEmphasis className="text-arc-teal-ink">
-                  {exomindDecades.titleEmphasis}
-                </TitleEmphasis>
-              </h2>
-            </ArcTextReveal>
-            <GoldRule className="mx-auto mt-6" />
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p className="mt-6 font-serif text-lg italic leading-relaxed text-arc-charcoal/80 sm:text-xl">
-                {exomindDecades.intro}
-              </p>
-            </ArcTextReveal>
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 md:grid-cols-3">
-            {exomindDecades.tiers.map((tier, i) => (
-              <ArcTextReveal key={tier.range} variant="body" delayIndex={i + 1}>
-                <article className="flex h-full flex-col rounded-2xl border border-arc-teal/15 bg-arc-cream/60 p-6 sm:p-7">
-                  <IconBadge icon={tier.icon} />
-                  <h3 className="mt-5 font-serif text-2xl font-semibold tracking-tight text-arc-charcoal">
-                    {tier.range}
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 md:grid-cols-5 md:gap-x-6 lg:gap-x-8">
+            {exomindPillars.map((pillar, i) => (
+              <ArcTextReveal key={pillar.title} variant="body" delayIndex={i}>
+                <div className="flex h-full flex-col items-center text-center">
+                  <EmblemIcon
+                    src={pillar.iconSrc}
+                    className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
+                  />
+                  <h3 className="mt-2 sm:mt-3">
+                    <TitleEmphasis className="block text-[clamp(1.55rem,3.8vw,2.15rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                      {pillar.title}
+                    </TitleEmphasis>
                   </h3>
-                  <p className="mt-1 font-sans text-xs font-bold uppercase tracking-[0.14em] text-arc-champagne">
-                    {tier.theme}
+                  <p className="mt-1.5 max-w-[14rem] font-sans text-sm leading-relaxed text-arc-charcoal/70 sm:mt-2 sm:text-[0.9375rem]">
+                    {pillar.body}
                   </p>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-arc-charcoal/80">
-                    {tier.body}
-                  </p>
-
-                  <p className="mt-6 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-arc-teal-ink">
-                    ExoMind may help support:
-                  </p>
-                  <ul className="mt-3 space-y-2">
-                    {tier.supports.map((support) => (
-                      <li
-                        key={support}
-                        className="flex items-start gap-2.5 font-sans text-sm leading-snug text-arc-charcoal/80"
-                      >
-                        <span
-                          aria-hidden
-                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal"
-                        />
-                        {support}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="mt-6 rounded-xl bg-arc-teal-muted/60 px-4 py-3 font-serif text-sm italic leading-snug text-arc-charcoal/78 md:mt-auto md:pt-4">
-                    {tier.note}
-                  </p>
-                </article>
-              </ArcTextReveal>
-            ))}
-          </div>
-        </div>
-        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
-      </section>
-
-      {/* ---------- The power of neuroplasticity ---------- */}
-      <section
-        className={cn(
-          "relative overflow-hidden bg-arc-teal-muted/40 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24",
-          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
-        )}
-      >
-        <ArcSectionSeamBlend edge="top" tone="muted" variant="soft" scope="background" />
-        <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
-          <div className="mx-auto max-w-2xl text-center">
-            <ArcTextReveal variant="heading">
-              <h2 className="font-serif text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.1] tracking-tight text-arc-charcoal">
-                {exomindNeuroplasticity.title}{" "}
-                <TitleEmphasis className="text-arc-teal-ink">
-                  {exomindNeuroplasticity.titleEmphasis}
-                </TitleEmphasis>
-              </h2>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p className="mt-5 font-serif text-lg italic text-arc-charcoal/85 sm:text-xl">
-                {exomindNeuroplasticity.lede}
-              </p>
-            </ArcTextReveal>
-            <ArcTextReveal variant="body" delayIndex={2}>
-              <p className="mt-4 font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-base">
-                {exomindNeuroplasticity.body}
-              </p>
-            </ArcTextReveal>
-          </div>
-
-          {/* Focal brain block */}
-          <ArcTextReveal variant="body" delayIndex={1}>
-            <div className="mx-auto mt-12 flex max-w-xl flex-col items-center rounded-3xl border border-arc-teal/20 bg-arc-cream/70 px-6 py-10 text-center sm:mt-14 sm:px-10">
-              <span className="inline-flex h-20 w-20 items-center justify-center rounded-full border border-arc-champagne/45 bg-arc-cream text-arc-teal-ink">
-                <Brain className="h-10 w-10" strokeWidth={1.25} aria-hidden />
-              </span>
-              <p className="mt-6 font-serif text-2xl font-semibold leading-tight tracking-tight text-arc-charcoal sm:text-3xl">
-                {exomindNeuroplasticity.center.words.map((word) => (
-                  <span key={word} className="block">
-                    {word}
-                  </span>
-                ))}
-              </p>
-              <p className="mt-4 max-w-sm font-sans text-sm leading-relaxed text-arc-charcoal/78">
-                {exomindNeuroplasticity.center.body}
-              </p>
-            </div>
-          </ArcTextReveal>
-
-          {/* Two support lists */}
-          <div className="mt-12 grid grid-cols-1 gap-8 sm:mt-14 sm:grid-cols-2 sm:gap-10">
-            {[
-              {
-                title: exomindNeuroplasticity.helpsTitle,
-                items: exomindNeuroplasticity.helps,
-              },
-              {
-                title: exomindNeuroplasticity.networkTitle,
-                items: exomindNeuroplasticity.network,
-              },
-            ].map((group, gi) => (
-              <ArcTextReveal key={group.title} variant="body" delayIndex={gi + 1}>
-                <div className="rounded-2xl border border-arc-teal/12 bg-arc-cream/55 p-6 sm:p-7">
-                  <p className="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-arc-teal-ink">
-                    {group.title}
-                  </p>
-                  <ul className="mt-5 grid grid-cols-1 gap-4">
-                    {group.items.map((item) => (
-                      <li key={item.label} className="flex items-center gap-3">
-                        <IconBadge icon={item.icon} size="sm" />
-                        <span className="font-sans text-sm font-medium text-arc-charcoal/85">
-                          {item.label}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </ArcTextReveal>
             ))}
+
+            <ArcTextReveal
+              variant="body"
+              delayIndex={4}
+              className="col-span-2 justify-self-center sm:col-span-1 md:col-span-1"
+            >
+              <div className="flex h-full flex-col items-center text-center">
+                <EmblemIcon
+                  src={exomindHero.poweredByIconSrc}
+                  className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
+                />
+                <h3 className="mt-2 max-w-[13rem] sm:mt-3">
+                  <TitleEmphasis className="block text-[clamp(1.55rem,3.8vw,2rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                    {exomindHero.poweredByEyebrow}
+                  </TitleEmphasis>
+                </h3>
+                <p className="mt-1.5 max-w-[14rem] font-sans text-sm leading-relaxed text-arc-charcoal/70 sm:mt-2 sm:text-[0.9375rem]">
+                  {exomindHero.synergyLine}
+                </p>
+              </div>
+            </ArcTextReveal>
+          </div>
+        </section>
+
+        <div className={cn("relative z-30", WAVE_H_CLASS)}>
+          <ArcWaveSeparator
+            topColor="transparent"
+            bottomColor="transparent"
+            shine
+            tone="pearl"
+          />
+        </div>
+      </div>
+
+      {/* ---------- Mechanism / Real nutrients ---------- */}
+      <div
+        className={cn(
+          "relative z-[5] overflow-x-clip",
+          WAVE_MT_CLASS,
+          WAVE_H_VAR_CLASS,
+        )}
+      >
+        <CreamPlate />
+        <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+
+        <section className="relative z-10 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-10 top-0 z-0 h-72 w-72 rounded-full opacity-40 md:blur-2xl"
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(193,154,91,0.35) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className={cn(
+              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16",
+              ARC_PAGE_RAIL_MAX,
+            )}
+          >
+            <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <div>
+                <ArcTextReveal variant="heading">
+                  <h2 className="text-balance leading-[0.88] text-arc-teal-ink">
+                    {exomindMechanism.titleLines.map((line, i) => (
+                      <span
+                        key={line}
+                        className={cn(
+                          "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                          "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                          i > 0 && "-mt-[0.12em]",
+                        )}
+                        style={{
+                          fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                          fontSizeAdjust: "none",
+                        }}
+                      >
+                        {line}
+                      </span>
+                    ))}
+                  </h2>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" delayIndex={1}>
+                  <p className="mx-auto mt-6 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base lg:mx-0">
+                    {exomindMechanism.body}
+                  </p>
+                </ArcTextReveal>
+              </div>
+
+              <div className="mt-10 grid grid-cols-2 gap-8 justify-items-center sm:grid-cols-4 lg:justify-items-start lg:gap-5">
+                {exomindMechanism.stats.map((stat, i) => (
+                  <ArcCountUpStat
+                    key={stat.label}
+                    value={stat.value}
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                    label={stat.label}
+                    align="center"
+                    className="lg:items-start lg:text-left"
+                    durationMs={1800}
+                    startDelayMs={200 + i * 60}
+                    numberClassName="text-[2.75rem] font-normal leading-none text-arc-teal-ink sm:text-5xl"
+                    labelClassName="mt-2 max-w-none text-sm leading-snug text-arc-charcoal/70 sm:text-[0.9375rem]"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <ArcTextReveal
+              variant="body"
+              delayIndex={2}
+              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
+            >
+              <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                <div className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] lg:aspect-video">
+                  <Image
+                    src={exomindMechanism.imageSrc}
+                    alt={exomindMechanism.imageAlt}
+                    fill
+                    sizes="(min-width: 1024px) 40vw, 100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              </div>
+            </ArcTextReveal>
+          </div>
+        </section>
+
+        <div className={cn("relative z-30", WAVE_H_CLASS)}>
+          <ArcWaveSeparator
+            topColor="transparent"
+            bottomColor="transparent"
+            shine
+            tone="pearl"
+          />
+        </div>
+      </div>
+
+      {/* ---------- How EXOMIND works ---------- */}
+      <div
+        className={cn(
+          "relative z-[2] overflow-x-clip",
+          WAVE_MT_CLASS,
+          WAVE_H_VAR_CLASS,
+        )}
+      >
+        <CreamPlate />
+        <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+
+        <section className="relative z-10 px-6 pb-16 pt-4 sm:px-10 sm:pb-20 md:px-12 md:pb-24">
+          <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
+            <div className="mx-auto max-w-4xl text-center">
+              <ArcTextReveal variant="heading">
+                <h2 className="text-balance leading-[0.92]">
+                  <span
+                    className={cn(
+                      "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                      "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                    )}
+                    style={{
+                      fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                      fontSizeAdjust: "none",
+                    }}
+                  >
+                    {exomindTreatments.title} {exomindTreatments.titleEmphasis}
+                  </span>
+                </h2>
+              </ArcTextReveal>
+              <GoldRule className="mx-auto mt-6" />
+              <ArcTextReveal variant="body" delayIndex={1}>
+                <p className="mx-auto mt-6 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base">
+                  {exomindTreatments.intro}
+                </p>
+              </ArcTextReveal>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 md:grid-cols-2">
+              {exomindTreatments.cards.map((card, i) => (
+                <ArcTextReveal
+                  key={card.title}
+                  variant="body"
+                  delayIndex={i + 1}
+                  className="h-full"
+                >
+                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border-4 border-arc-champagne bg-white shadow-[0_20px_50px_-30px_rgba(120,90,40,0.35)] transition-transform duration-500 ease-out hover:-translate-y-2">
+                    <div className="relative h-64 w-full overflow-hidden sm:h-72">
+                      <Image
+                        src={card.imageSrc}
+                        alt={card.imageAlt}
+                        fill
+                        sizes="(min-width: 1024px) 30vw, 100vw"
+                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="flex flex-1 flex-col gap-4 p-7">
+                      <div className="text-center">
+                        <h3>
+                          <TitleEmphasis className="block text-[clamp(1.85rem,4.2vw,2.35rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                            {card.title}
+                          </TitleEmphasis>
+                        </h3>
+                        <p className="mt-1 font-serif text-lg italic text-arc-champagne">
+                          {card.tagline}
+                        </p>
+                      </div>
+                      <p className="text-center font-sans text-sm leading-relaxed text-arc-charcoal/70">
+                        {card.body}
+                      </p>
+                      <ul className="mt-auto flex flex-col gap-2.5 pt-2">
+                        {card.bullets.map((bullet) => (
+                          <li
+                            key={bullet}
+                            className="flex items-start gap-2.5 font-sans text-sm text-arc-charcoal/80"
+                          >
+                            <Check
+                              className="mt-0.5 h-4 w-4 shrink-0 text-arc-champagne"
+                              strokeWidth={2}
+                              aria-hidden
+                            />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+                </ArcTextReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className={cn("relative z-30", WAVE_H_CLASS)}>
+          <ArcWaveSeparator
+            topColor="transparent"
+            bottomColor="transparent"
+            shine
+            tone="pearl"
+          />
+        </div>
+      </div>
+
+      {/* ---------- Dark acts: Who can benefit + Experience ---------- */}
+      <div className="relative z-[1] isolate">
+        <div
+          className={cn(
+            "relative z-[1] overflow-hidden",
+            WAVE_MT_CLASS,
+            WAVE_H_VAR_CLASS,
+          )}
+        >
+          <DarkPlate />
+          <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+
+          <section className="relative z-10 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
+            <div
+              className={cn(
+                "relative mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.6fr] lg:items-center lg:gap-16",
+                ARC_PAGE_RAIL_MAX,
+              )}
+            >
+              <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
+                <ArcTextReveal variant="heading">
+                  <h2 className="text-balance leading-[0.92]">
+                    <span
+                      className={cn(
+                        "font-title-emphasis block tracking-tight text-[#d9b878]",
+                        "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+                        "[text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      style={{
+                        fontSize: "clamp(2.5rem, 8.5vw, 5rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exomindDifferent.title} {exomindDifferent.titleEmphasis}
+                    </span>
+                  </h2>
+                </ArcTextReveal>
+                <ArcTextReveal variant="body" delayIndex={1}>
+                  <p
+                    className="mx-auto mt-6 max-w-md font-sans text-base leading-relaxed sm:text-lg lg:mx-0"
+                    style={{ color: "rgba(247,241,232,0.82)" }}
+                  >
+                    {exomindDifferent.intro}
+                  </p>
+                </ArcTextReveal>
+              </div>
+
+              {/* ExoMind: 5 audience cards; last centered on narrow grids */}
+              <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                {exomindDifferent.cards.map((card, i) => (
+                  <ArcTextReveal
+                    key={card.title}
+                    variant="body"
+                    delayIndex={i + 1}
+                    className={cn(
+                      i === exomindDifferent.cards.length - 1 &&
+                        "sm:col-span-2 sm:justify-self-center lg:col-span-1 lg:justify-self-auto",
+                    )}
+                  >
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <EmblemIcon src={card.iconSrc} className="h-28 w-28" />
+                      <h3 className="max-w-[16rem]">
+                        <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                          {card.title}
+                        </TitleEmphasis>
+                      </h3>
+                      <p
+                        className="font-sans text-base leading-relaxed sm:text-lg"
+                        style={{ color: "rgba(247,241,232,0.82)" }}
+                      >
+                        {card.body}
+                      </p>
+                    </div>
+                  </ArcTextReveal>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <div className={cn("relative z-30", WAVE_H_CLASS)}>
+            <ArcWaveSeparator
+              topColor="transparent"
+              bottomColor="transparent"
+              shine
+            />
           </div>
         </div>
-        <ArcSectionSeamBlend edge="bottom" tone="muted" variant="soft" scope="background" />
-      </section>
 
-      {/* ---------- Closing CTA ---------- */}
-      <section
-        className={cn(
-          "relative overflow-hidden bg-arc-cream px-6 py-20 text-center sm:px-10 sm:py-24 md:px-12",
-          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
-        )}
-      >
-        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
-        <div className={cn("relative z-10 mx-auto max-w-2xl", ARC_PAGE_RAIL_MAX)}>
-          <ArcTextReveal variant="body">
-            <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-arc-champagne/45 bg-arc-cream text-arc-teal-ink">
-              <Flower className="h-6 w-6" strokeWidth={1.5} aria-hidden />
-            </span>
-          </ArcTextReveal>
-          <ArcTextReveal variant="heading" delayIndex={1}>
-            <h2 className="mt-6 font-serif text-[clamp(1.9rem,5.5vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-arc-charcoal">
-              {exomindClosing.title}{" "}
-              <TitleEmphasis className="text-arc-teal-ink">
-                {exomindClosing.titleEmphasis}
-              </TitleEmphasis>
-            </h2>
-          </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={2}>
-            <p className="mt-5 font-sans text-base font-semibold uppercase tracking-[0.18em] text-arc-champagne">
-              {exomindClosing.words}
-            </p>
-          </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={3}>
-            <p className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-base">
-              {exomindClosing.support}
-            </p>
-          </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={4}>
-            <div className="mt-9 flex justify-center">
-              <ArcPrimaryCta href={bookHref}>{exomindClosing.ctaLabel}</ArcPrimaryCta>
+        <div
+          className={cn(
+            "relative z-0 overflow-hidden",
+            WAVE_MT_CLASS,
+            WAVE_H_VAR_CLASS,
+          )}
+        >
+          <DarkPlate />
+          <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+
+          <section
+            className="relative z-10 px-6 sm:px-10 md:px-12"
+            style={experienceStyle}
+          >
+            <div className={cn("relative z-10 mx-auto", ARC_PAGE_RAIL_MAX)}>
+              <div className="mx-auto max-w-2xl text-center">
+                <ArcTextReveal variant="heading">
+                  <h2 className="text-balance leading-[0.92]">
+                    <span
+                      className={cn(
+                        "font-title-emphasis block tracking-tight text-[#d9b878]",
+                        "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+                        "[text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                      )}
+                      style={{
+                        fontSize: "clamp(3rem, 9vw, 5rem)",
+                        fontSizeAdjust: "none",
+                      }}
+                    >
+                      {exomindExperience.title}{" "}
+                      {exomindExperience.titleEmphasis}
+                    </span>
+                  </h2>
+                </ArcTextReveal>
+              </div>
+
+              <ol className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+                {exomindExperience.steps.map((step, i) => (
+                  <ArcTextReveal
+                    as="li"
+                    key={step.title}
+                    variant="body"
+                    delayIndex={i + 1}
+                    className={cn(
+                      "flex flex-col items-center text-center",
+                      i === exomindExperience.steps.length - 1 &&
+                        "col-span-2 justify-self-center sm:col-span-1",
+                    )}
+                  >
+                    <EmblemIcon
+                      src={step.iconSrc}
+                      className="h-24 w-24 sm:h-28 sm:w-28"
+                    />
+                    <h3 className="mt-4 max-w-[12rem]">
+                      <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
+                        {step.title}
+                      </TitleEmphasis>
+                    </h3>
+                    <p
+                      className="mt-2 max-w-[15rem] font-sans text-base leading-relaxed sm:text-lg"
+                      style={{ color: "rgba(247,241,232,0.72)" }}
+                    >
+                      {step.body}
+                    </p>
+                  </ArcTextReveal>
+                ))}
+              </ol>
             </div>
-          </ArcTextReveal>
-          <ArcTextReveal variant="body" delayIndex={5}>
-            <p className="mx-auto mt-10 max-w-lg font-sans text-xs leading-relaxed text-arc-charcoal/55">
-              {exomindDisclaimer}
-            </p>
-          </ArcTextReveal>
+          </section>
+
+          <div className={cn("relative z-30", WAVE_H_CLASS)}>
+            <ArcWaveSeparator
+              topColor="transparent"
+              bottomColor="transparent"
+              shine
+              tone="pearl"
+            />
+          </div>
         </div>
-        <ArcSectionSeamBlend edge="bottom" tone="cream" variant="soft" scope="background" />
-      </section>
+      </div>
 
-      {/* ---------- FAQ (reuse existing treatment FAQs) ---------- */}
-      {treatment.faqs?.length ? (
-        <ArcFaqSection
-          id="treatment-faq"
-          categories={{ treatment: treatment.title }}
-          faqByCategory={{ treatment: treatment.faqs }}
-          topSeam
-          bottomSeam
-        />
-      ) : null}
+      {/* ---------- FAQ → Invest (no BA yet) ---------- */}
+      <div className="relative z-0 isolate">
+        {treatment.faqs?.length ? (
+          <div
+            className={cn("relative z-0", WAVE_MT_CLASS, WAVE_H_VAR_CLASS)}
+          >
+            <CreamPlate maskBottom={false} stableMedia />
+            <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
 
-      {/* ---------- Back link ---------- */}
-      <section
-        className={cn(
-          "relative bg-arc-cream px-6 py-12 sm:px-10 md:px-12",
-          ARC_SECTION_SEAM_OVERLAP_SM_CLASS,
-        )}
-      >
-        <ArcSectionSeamBlend edge="top" tone="cream" variant="soft" scope="background" />
-        <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
-          <ArcTextReveal variant="line">
-            <Link
-              href="/treatments"
-              className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
+            <div className="relative z-10">
+              <ArcFaqSection
+                id="treatment-faq"
+                className="border-t-0 bg-transparent pb-0"
+                categories={{ treatment: treatment.title }}
+                faqByCategory={{ treatment: treatment.faqs }}
+                emphasisHeading
+              />
+              <div
+                className={cn(
+                  "relative z-10 mx-auto px-6 pb-10 text-center sm:px-10 sm:pb-12 md:px-12",
+                  ARC_PAGE_RAIL_MAX,
+                )}
+              >
+                <ArcTextReveal variant="line">
+                  <Link
+                    href="/treatments"
+                    className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
+                  >
+                    ← All treatments
+                  </Link>
+                </ArcTextReveal>
+              </div>
+            </div>
+
+            <div
+              aria-hidden
+              className={ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS}
+            />
+          </div>
+        ) : (
+          <div
+            className={cn("relative z-0", WAVE_MT_CLASS, WAVE_H_VAR_CLASS)}
+          >
+            <CreamPlate maskBottom={false} />
+            <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
+            <div
+              className={cn(
+                "relative z-10 mx-auto px-6 py-16 text-center sm:px-10 md:px-12",
+                ARC_PAGE_RAIL_MAX,
+              )}
             >
-              ← All treatments
-            </Link>
-          </ArcTextReveal>
-        </div>
-      </section>
+              <Link
+                href="/treatments"
+                className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
+              >
+                ← All treatments
+              </Link>
+            </div>
+            <div
+              aria-hidden
+              className={ARC_HOME_TESTIMONIALS_BOTTOM_SEAM_SOFT_CLASS}
+            />
+          </div>
+        )}
+      </div>
+
+      <InvestCTASection
+        imageSrc={images.heroMedia}
+        supportingLine={exomindClosing.supportingLine ?? homeInvestSupport}
+        topSeam
+        topSeamOverlap={false}
+        topSeamClassName={ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS}
+      />
     </>
   );
 }
