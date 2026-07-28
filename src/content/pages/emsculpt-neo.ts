@@ -85,7 +85,7 @@ export const emsculptNeoCreamPlate = {
 
 /** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
 const EMSCULPT_NEO_BUNNY_LIBRARY_ID = "710568";
-const EMSCULPT_NEO_BUNNY_VIDEO_ID = "73b9a4ca-fd47-4159-8acf-a4662a50dc1d";
+const EMSCULPT_NEO_BUNNY_VIDEO_ID = "2b9bf242-6842-4f13-a542-8fa97eed8e1f";
 const EMSCULPT_NEO_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${EMSCULPT_NEO_BUNNY_LIBRARY_ID}/${EMSCULPT_NEO_BUNNY_VIDEO_ID}`;
 
 export const emsculptNeoMechanism = {
