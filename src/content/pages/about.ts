@@ -4,9 +4,9 @@ import { RETAIL_IMAGES } from "@/content/retailImages";
 
 export const aboutPage = {
   seo: {
-    title: "About Arc Wellness | Physician-Led Wellness in St. Louis",
+    title: "About Arc Wellness | Physician-Led Care in St. Louis, MO",
     description:
-      "Mission, values, and founder story, whole-person wellness combining medical expertise, innovation, and restorative therapies.",
+      "Meet the physician-led team behind Arc Wellness. Learn our approach to personalized wellness, longevity, and aesthetic medicine in St. Louis, MO.",
   },
   hero: {
     eyebrow: "Our story",

@@ -5,6 +5,8 @@ import { siteMeta } from "@/content/siteMeta";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | Arc Wellness",
+  description:
+    "Review the terms and conditions for using the Arc Wellness website and booking treatments at our St. Louis, MO clinic.",
   robots: { index: false },
 };
 

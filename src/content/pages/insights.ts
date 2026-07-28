@@ -16,9 +16,9 @@ export type InsightEntry = {
 
 export const insightsPage = {
   seo: {
-    title: "Insights | Blogs & Case Studies | Arc Wellness",
+    title: "Patient Stories & Case Studies | Arc Wellness, St. Louis",
     description:
-      "Patient stories, clinical insights, and wellness education from the ARC Wellness team in St. Louis.",
+      "Real patient stories and outcomes from Arc Wellness in St. Louis, covering EmSculpt Neo, Daxxify, peptide therapy, and more. Results vary by patient.",
   },
   hero: {
     eyebrow: "Insights",

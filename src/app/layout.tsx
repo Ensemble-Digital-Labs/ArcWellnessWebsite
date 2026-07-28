@@ -43,9 +43,9 @@ const radley = Radley({
 });
 
 export const metadata: Metadata = {
-  title: "ARC Wellness | Aesthetics, Wellness & Longevity",
+  title: "Arc Wellness | Enhance Your Wellness Today",
   description:
-    "Where aesthetics, wellness, and longevity converge. Elevated care for intentional results.",
+    "Discover cutting-edge, personalized wellness treatments including body sculpting, cognitive renewal, and vitamin therapy at Arc Wellness in St. Louis.",
 };
 
 /**

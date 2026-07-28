@@ -1,8 +1,8 @@
 export const financingPage = {
   seo: {
-    title: "Financing | Discover Financing Options Today | Arc Wellness",
+    title: "Financing Options for Wellness & Aesthetic Care | Arc Wellness",
     description:
-      "Explore flexible financing options for wellness treatments at Arc Wellness. Contact us for support with your payment plan and treatment investments.",
+      "Flexible financing for Arc Wellness treatments in St. Louis, including PatientFi monthly plans and HSA/FSA payment options. See what fits your budget.",
   },
   hero: {
     eyebrow: "Financing",

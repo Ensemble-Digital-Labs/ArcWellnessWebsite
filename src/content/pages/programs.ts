@@ -1,8 +1,8 @@
 export const programsPage = {
   seo: {
-    title: "Arc Programs | Arc Wellness",
+    title: "Arc Programs | Wellness Memberships & Signature Plans | St. Louis",
     description:
-      "Signature programs and memberships, more than treatments, a strategy for visible, lasting results.",
+      "Signature Arc Wellness programs and memberships built around your goals, more than single treatments, a strategy for visible, lasting results.",
   },
   hero: {
     eyebrow: "Signature Programs & Membership",

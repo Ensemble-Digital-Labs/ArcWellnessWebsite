@@ -1,8 +1,8 @@
 export const contactPage = {
   seo: {
-    title: "Contact | Get Wellness Guidance Now | Arc Wellness",
+    title: "Contact Arc Wellness | Book a Consultation in St. Louis, MO",
     description:
-      "Contact Arc Wellness for personalized health solutions, consultations, and innovative therapies in St. Louis. Get in touch today to start your wellness journey.",
+      "Reach Arc Wellness at our St. Louis, MO clinic. Call 636-400-5500 or book online to schedule your wellness or aesthetics consultation today.",
   },
   hero: {
     eyebrow: "Contact",
