@@ -61,12 +61,12 @@ function future(label: string): NavLeaf {
   return { label, future: true };
 }
 
-/** SERVICES — The Arc Method hub + four service groups (client IA). */
+/** SERVICES — Arc 360 hub + four service groups (client IA). */
 const servicesMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        heading: "The Arc Method",
+        heading: "Arc 360",
         headingHref: "/treatments",
         items: [],
       },
@@ -77,12 +77,12 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Restore & Optimize",
         items: [
-          soon("Hormone Health"),
-          soon("Metabolic Health"),
-          soon("Gut Health"),
-          soon("Brain Health"),
-          soon("Longevity"),
-          soon("Medical Weight Loss"),
+          leaf("Hormone Health", "/treatments/hormone-health"),
+          leaf("Metabolic Health", "/treatments/metabolic-health"),
+          leaf("Gut Health", "/treatments/gut-health"),
+          leaf("Brain Health", "/treatments/brain-health"),
+          leaf("Longevity", "/treatments/longevity"),
+          leaf("Medical Weight Loss", "/treatments/medical-weight-loss"),
         ],
       },
     ],
@@ -94,7 +94,6 @@ const servicesMenu: readonly NavColumn[] = [
         items: [
           leaf("Infusions", treatmentHrefByLabel["Infusion Therapy"]),
           leaf("Peptides", treatmentHrefByLabel["Peptide Therapy"]),
-          soon("Injections"),
           leaf("Supplements", treatmentHrefByLabel["Supplements"]),
         ],
       },
@@ -105,13 +104,12 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Aesthetics",
         items: [
-          soon("Injectables"),
+          soon("Neuromodulators"),
           leaf("Fillers", treatmentHrefByLabel["RHA Fillers"]),
           leaf("Exion", treatmentHrefByLabel["Exion"]),
           leaf("EmFace", treatmentHrefByLabel["EmFace"]),
           soon("RF Microneedling"),
           soon("Clear RF"),
-          soon("Genesis Z"),
         ],
       },
     ],

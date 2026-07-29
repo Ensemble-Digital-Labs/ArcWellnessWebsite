@@ -56,7 +56,7 @@ const thumbByLabelAlias: Record<string, string> = {
   "hsa / fsa information": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "how financing works": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "contact our team": CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-  "the arc method": NAV_PREVIEW.facialAesthetic,
+  "arc 360": NAV_PREVIEW.facialAesthetic,
 };
 
 const DEFAULT_SUBLINK_THUMB = CLINIC_INTERIOR_IMAGES.consultationLounge;

@@ -188,7 +188,7 @@ const testimonialCopyRows = [
   },
   {
     attribution: "Olivia H.",
-    context: "Injectables",
+    context: "Neuromodulators",
     quote:
       "Natural movement was non-negotiable for me. The approach was conservative in the best way:I look refreshed, not ‘done.’",
   },

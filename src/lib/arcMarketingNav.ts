@@ -114,4 +114,34 @@ export const ARC_TREATMENT_NAV_LINKS = [
     href: "/treatments/supplements",
     thumbSrc: RETAIL_IMAGES.arcSupplementShelvingUnits,
   },
+  {
+    label: "Hormone Health",
+    href: "/treatments/hormone-health",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+  },
+  {
+    label: "Metabolic Health",
+    href: "/treatments/metabolic-health",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+  },
+  {
+    label: "Gut Health",
+    href: "/treatments/gut-health",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+  },
+  {
+    label: "Brain Health",
+    href: "/treatments/brain-health",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+  },
+  {
+    label: "Longevity",
+    href: "/treatments/longevity",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.heroLobbyLounge,
+  },
+  {
+    label: "Medical Weight Loss",
+    href: "/treatments/medical-weight-loss",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+  },
 ] as const;

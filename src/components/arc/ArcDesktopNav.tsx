@@ -79,32 +79,48 @@ function DesktopMegaPanel({
   return (
     <div className="flex flex-wrap justify-center gap-x-4 gap-y-8">
       {columns.map((column, colIndex) =>
-        column.groups.map((group, groupIndex) => (
-          <div key={`${colIndex}-${groupIndex}`} className="min-w-[11rem] space-y-2">
-            {group.heading ? (
-              group.headingHref ? (
-                <Link
-                  href={group.headingHref}
-                  onClick={onNavigate}
-                  className="block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal transition-colors duration-200 hover:text-arc-teal"
-                >
-                  {group.heading}
-                </Link>
-              ) : (
-                <p className="border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal">
-                  {group.heading}
-                </p>
-              )
-            ) : null}
-            <ul className="space-y-0.5">
-              {group.items.map((leaf) => (
-                <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
-                  <DesktopLeaf leaf={leaf} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )),
+        column.groups.map((group, groupIndex) => {
+          const hubOnly = group.items.length === 0;
+          return (
+            <div
+              key={`${colIndex}-${groupIndex}`}
+              className={cn("min-w-[11rem] space-y-2", hubOnly && "text-center")}
+            >
+              {group.heading ? (
+                group.headingHref ? (
+                  <Link
+                    href={group.headingHref}
+                    onClick={onNavigate}
+                    className={cn(
+                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal transition-colors duration-200 hover:text-arc-teal",
+                      hubOnly ? "inline-block" : "block",
+                    )}
+                  >
+                    {group.heading}
+                  </Link>
+                ) : (
+                  <p
+                    className={cn(
+                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal",
+                      hubOnly ? "inline-block" : "block",
+                    )}
+                  >
+                    {group.heading}
+                  </p>
+                )
+              ) : null}
+              {!hubOnly ? (
+                <ul className="space-y-0.5">
+                  {group.items.map((leaf) => (
+                    <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
+                      <DesktopLeaf leaf={leaf} />
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          );
+        }),
       )}
     </div>
   );

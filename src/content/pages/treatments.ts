@@ -34,7 +34,7 @@ export const treatmentCategories: Record<
   },
   aesthetics: {
     label: "Arc aesthetics",
-    description: "Injectables, skin technology, and elevated treatment experiences.",
+    description: "Neuromodulators, skin technology, and elevated treatment experiences.",
   },
   wellness: {
     label: "Foundational therapies",
@@ -495,7 +495,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     title: "DAXXIFY®",
     tagline: "Long-lasting neuromodulator",
     category: "aesthetics",
-    categoryLabel: "Injectables",
+    categoryLabel: "Neuromodulators",
     imageSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
     imageAlt: "Daxxify consultation at ARC Wellness",
     intro:
@@ -529,7 +529,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     title: "RHA®",
     tagline: "Experience the next generation of dermal fillers",
     category: "aesthetics",
-    categoryLabel: "Injectables",
+    categoryLabel: "Fillers",
     imageSrc: images.services[0],
     imageAlt: "RHA filler treatment at ARC Wellness",
     intro:
@@ -770,6 +770,294 @@ export const allTreatments: readonly TreatmentPage[] = [
         question: "How do I know which supplements are right for me?",
         answer:
           "During your free consultation, your provider will review your health history, lifestyle, and wellness goals. Together, you'll select supplements that are safe, effective, and tailored to you.",
+      },
+    ],
+  },
+  {
+    slug: "hormone-health",
+    title: "Hormone Health",
+    tagline: "Feel Like Yourself Again.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Your energy has changed. Sleep isn't the same. Your body responds differently. At Arc Wellness, we listen to what your body is telling you—combining your story, comprehensive labs, and physician-guided evaluation to restore balance, function, and quality of life.",
+    highlights: [
+      "Physician-guided hormone evaluation",
+      "Care for women through perimenopause and menopause",
+      "Men's hormone health in metabolic context",
+    ],
+    sections: [
+      {
+        heading: "Hormones Influence More Than You Think",
+        body: "Hormones are woven into energy, metabolism, sleep, cognition, muscle, bone, mood, and sexual wellness. We look at the bigger picture—not simply one number on a lab report.",
+      },
+    ],
+    faqs: [
+      {
+        id: "normal-labs",
+        question: "My labs were \"normal.\" Can hormones still be involved?",
+        answer:
+          "Yes. Feeling different despite \"normal\" labs is a common reason people seek care. We combine your symptoms, history, and comprehensive testing—interpreted by a physician—to understand the bigger picture, not a single number in isolation.",
+      },
+      {
+        id: "women-hrt",
+        question: "Do you offer hormone therapy for perimenopause and menopause?",
+        answer:
+          "When appropriate, bioidentical hormone replacement therapy may become part of a personalized plan. We take time to understand your symptoms, hormones, health history, and goals before recommending treatment.",
+      },
+      {
+        id: "men-testosterone",
+        question: "How do you approach testosterone for men?",
+        answer:
+          "We evaluate testosterone alongside the broader hormonal and metabolic picture. When treatment is appropriate, your plan is carefully personalized and monitored over time—with the goal of helping you move forward feeling stronger.",
+      },
+      {
+        id: "what-to-bring",
+        question: "Do I need to know which hormone is low before I come in?",
+        answer:
+          "No. You simply need to know that something feels different. Uncovering which hormones and systems are involved is our job.",
+      },
+    ],
+  },
+  {
+    slug: "metabolic-health",
+    title: "Metabolic Health",
+    tagline: "Your Metabolism Is Telling a Bigger Story.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Stubborn weight, afternoon crashes, cravings, rising blood sugar, and changing cholesterol often signal a metabolism under strain. At Arc, we don't begin with restriction—we begin with understanding your physiology.",
+    highlights: [
+      "Comprehensive metabolic evaluation",
+      "Muscle preservation as part of care",
+      "GLP-1 therapy when medically appropriate",
+    ],
+    sections: [
+      {
+        heading: "More Than a Number on the Scale",
+        body: "Metabolic health is how your body creates, uses, and stores energy. Blood sugar, hormones, muscle, inflammation, nutrition, sleep, and stress all influence the way your metabolism functions.",
+      },
+    ],
+    faqs: [
+      {
+        id: "scale",
+        question: "Is metabolic health only about weight?",
+        answer:
+          "No. Weight may be part of the story, but it isn't the whole story. We look at glucose and insulin, cholesterol, inflammation, hormones, nutrients, body composition, and lifestyle factors that shape how you feel and function.",
+      },
+      {
+        id: "glp1",
+        question: "Do you use GLP-1 medications for metabolic health?",
+        answer:
+          "When medically appropriate, medical weight management and GLP-1 therapy may be incorporated. Medication isn't the plan—it's one tool within a broader strategy that prioritizes muscle, metabolism, and long-term health.",
+      },
+      {
+        id: "muscle",
+        question: "Why does muscle matter for metabolism?",
+        answer:
+          "Muscle supports glucose regulation, metabolism, strength, mobility, and healthy aging. Preserving lean muscle is an important part of our approach, especially during weight loss.",
+      },
+      {
+        id: "early",
+        question: "Can you help if I don't have a diagnosis yet?",
+        answer:
+          "Yes. Metabolic changes often begin quietly, long before they become a diagnosis. Understanding those signals early helps us protect long-term health and function.",
+      },
+    ],
+  },
+  {
+    slug: "gut-health",
+    title: "Gut Health",
+    tagline: "Your Gut Is Talking. Are You Listening?",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Bloating, unpredictable digestion, new food sensitivities, fatigue, brain fog, or skin changes can all point back to the gut. At Arc, we look beyond the symptom to understand what your gut may be signaling.",
+    highlights: [
+      "Physician-guided gut evaluation",
+      "Advanced testing when appropriate",
+      "Personalized plans—not endless elimination",
+    ],
+    sections: [
+      {
+        heading: "More Than Digestion",
+        body: "Your gut influences nutrient absorption, immune function, brain communication, metabolism, hormones, and inflammation. When that environment is disrupted, effects may reach far beyond your stomach.",
+      },
+    ],
+    faqs: [
+      {
+        id: "symptoms",
+        question: "Can gut issues show up as fatigue or brain fog?",
+        answer:
+          "Yes. Sometimes symptoms are obvious digestive changes; sometimes they show up as fatigue, brain fog, skin changes, or simply feeling uncomfortable in your body. We look beyond the symptom to understand the connections.",
+      },
+      {
+        id: "testing",
+        question: "Do you start with another elimination diet?",
+        answer:
+          "We prefer understanding first. Physician-guided evaluation may include advanced testing for microbiome health, food sensitivities, nutrient absorption, inflammation, intestinal function, and gut–brain connections before guessing which food or supplement to try next.",
+      },
+      {
+        id: "goal",
+        question: "Will I have to avoid foods forever?",
+        answer:
+          "The goal isn't to spend your life avoiding food. It's to create an internal environment where your body can digest, absorb, restore, and function more effectively—with less guessing and more understanding.",
+      },
+      {
+        id: "plan",
+        question: "What might a gut plan include?",
+        answer:
+          "Supporting gut health may involve nutrition, targeted supplementation, lifestyle changes, and medical treatment when appropriate—personalized to what your evaluation shows.",
+      },
+    ],
+  },
+  {
+    slug: "brain-health",
+    title: "Brain Health",
+    tagline: "When Your Mind Doesn't Feel Like You.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Brain fog, slower recall, harder focus, and fading mental energy deserve curiosity—not dismissal. At Arc, we evaluate the whole-body systems that influence how you think, feel, and stay present.",
+    highlights: [
+      "Whole-body cognitive evaluation",
+      "Personalized brain-support strategies",
+      "ExoMind™ when it complements the plan",
+    ],
+    sections: [
+      {
+        heading: "Your Brain Is Connected to Everything",
+        body: "Hormones, blood sugar, inflammation, cardiovascular health, nutrients, sleep, stress, and gut health can all influence cognition. Improving brain health often means looking beyond the obvious.",
+      },
+    ],
+    faqs: [
+      {
+        id: "fog",
+        question: "Is brain fog something you take seriously?",
+        answer:
+          "Yes. We don't dismiss changes in memory, focus, or mental energy. We get curious about what may be influencing them—hormones, metabolism, sleep, stress, gut health, and more.",
+      },
+      {
+        id: "exomind",
+        question: "How does ExoMind™ fit into brain health?",
+        answer:
+          "For some patients, ExoMind™ may complement a broader plan by supporting areas associated with mood, focus, and emotional wellness. It is considered when clinically appropriate—not as a one-size replacement for whole-body care.",
+      },
+      {
+        id: "age",
+        question: "Is brain care only for later in life?",
+        answer:
+          "No. Caring for your brain isn't something that has to begin later. The best time to protect your future is while you're living it.",
+      },
+      {
+        id: "plan",
+        question: "What might a brain health plan include?",
+        answer:
+          "Plans may include nutrition, supplementation, hormone or metabolic optimization, lifestyle strategies, and advanced therapies when appropriate—designed for how your brain feels today and how we protect it for tomorrow.",
+      },
+    ],
+  },
+  {
+    slug: "longevity",
+    title: "Longevity",
+    tagline: "It Isn't About Living Forever.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.heroLobbyLounge,
+    imageAlt: "ARC Wellness lobby lounge",
+    intro:
+      "Longevity at Arc is about living well for as long as possible—protecting strength, clarity, independence, and the ability to keep living the life you've built. Not simply lifespan. Healthspan.",
+    highlights: [
+      "Function-focused longevity evaluation",
+      "Early recognition of change",
+      "Whole-person plans for healthspan",
+    ],
+    sections: [
+      {
+        heading: "Look Beyond \"Normal.\"",
+        body: "Traditional care often asks whether you have disease. Longevity medicine also asks how well you are functioning—and how we protect it before change begins limiting your life.",
+      },
+    ],
+    faqs: [
+      {
+        id: "forever",
+        question: "Is longevity about living forever?",
+        answer:
+          "No. It's about living well for as long as possible—moving through life with strength, clarity, and independence, and remaining present for the people and plans that matter.",
+      },
+      {
+        id: "normal",
+        question: "How is this different from a regular checkup?",
+        answer:
+          "We look deeper into markers that influence how you age—not only to screen for disease, but to understand function, recognize change earlier, and make informed decisions about protecting healthspan.",
+      },
+      {
+        id: "plan",
+        question: "What does a longevity plan include?",
+        answer:
+          "Plans may bring together nutrition, movement, hormone and metabolic optimization, supplementation, preventive strategies, and advanced therapies based on what your body needs. Healthy aging isn't one treatment.",
+      },
+      {
+        id: "when",
+        question: "When should I start thinking about longevity?",
+        answer:
+          "Your future health is being built today. The best time to protect independence, clarity, and strength is while you are living the life you want to keep.",
+      },
+    ],
+  },
+  {
+    slug: "medical-weight-loss",
+    title: "Medical Weight Loss",
+    tagline: "Weight Loss Should Be About More Than Losing Weight.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "When your body no longer responds the way it used to, we look underneath the scale—hormones, insulin resistance, muscle, sleep, stress, and more—then build a physician-guided plan that protects strength while improving composition.",
+    highlights: [
+      "Physician-guided weight-loss evaluation",
+      "GLP-1 therapy when medically appropriate",
+      "Muscle preservation throughout the journey",
+    ],
+    sections: [
+      {
+        heading: "Medication With Intention",
+        body: "When medically appropriate, GLP-1 and other medications can be powerful tools. At Arc, they sit inside a fuller program—nutrition, metabolic and hormone optimization, body composition monitoring, and strategies to preserve lean muscle.",
+      },
+    ],
+    faqs: [
+      {
+        id: "calories",
+        question: "Is weight loss just calories in and calories out?",
+        answer:
+          "Not for everyone. Hormones, insulin resistance, declining muscle, sleep, stress, inflammation, medications, and aging can all influence how your body stores and uses energy. We look at what's happening underneath.",
+      },
+      {
+        id: "glp1",
+        question: "Will I just get a GLP-1 prescription?",
+        answer:
+          "When medically appropriate, GLP-1 and other medications can be powerful tools—but the medication isn't the program. Your plan may also include nutrition, metabolic and hormone optimization, body composition monitoring, supplementation, movement, and muscle-preservation strategies.",
+      },
+      {
+        id: "muscle",
+        question: "Why do you focus on muscle during weight loss?",
+        answer:
+          "Losing pounds while losing strength isn't the outcome we're looking for. Muscle supports metabolism, blood sugar regulation, strength, mobility, bone health, and long-term independence—especially during significant weight loss and as we age.",
+      },
+      {
+        id: "after",
+        question: "What happens after I reach my goal weight?",
+        answer:
+          "Reaching a number on the scale isn't where the journey ends. We help you understand what your body needs to stay well—and what your healthier body allows you to do next.",
       },
     ],
   },
