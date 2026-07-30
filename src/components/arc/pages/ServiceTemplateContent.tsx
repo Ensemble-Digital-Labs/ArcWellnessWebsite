@@ -8,11 +8,18 @@ import { Check, Sparkles } from "lucide-react";
 import { ArcCountUpStat } from "@/components/arc/ArcCountUpStat";
 import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
-import {
-  ArcWaveSeparator,
-  ARC_WAVE_TOP_FILL_D,
-} from "@/components/arc/ArcWaveSeparator";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import {
+  ServiceCreamPlate as CreamPlate,
+  ServiceDarkPlate as DarkPlate,
+  ServiceEmblemIcon as EmblemIcon,
+  ServiceGoldRule as GoldRule,
+  ServiceWave,
+  serviceAboveCrestBottomMaskStyle as aboveCrestBottomMaskStyle,
+  SERVICE_WAVE_H_CLASS as WAVE_H_CLASS,
+  SERVICE_WAVE_H_VAR_CLASS as WAVE_H_VAR_CLASS,
+  SERVICE_WAVE_MT_CLASS as WAVE_MT_CLASS,
+} from "@/components/arc/servicePlate";
 import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -34,33 +41,6 @@ type ServiceTemplateContentProps = {
   content: ServicePageContent;
 };
 
-const DARK_ACT = "color-mix(in srgb, var(--arc-charcoal) 82%, #000000)";
-
-const WAVE_H_CLASS = "h-[60px] sm:h-[90px] lg:h-[120px]";
-const WAVE_MT_CLASS = "-mt-[60px] sm:-mt-[90px] lg:-mt-[120px]";
-const WAVE_H_VAR_CLASS =
-  "[--service-wave-h:60px] sm:[--service-wave-h:90px] lg:[--service-wave-h:120px]";
-
-const ABOVE_CREST_BOTTOM_MASK = [
-  `linear-gradient(#fff 0%, #fff calc(100% - var(--service-wave-h)), transparent calc(100% - var(--service-wave-h)))`,
-  `url("data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none"><path fill="#fff" d="${ARC_WAVE_TOP_FILL_D}"/></svg>`,
-  )}")`,
-].join(", ");
-
-const aboveCrestBottomMaskStyle: CSSProperties = {
-  maskImage: ABOVE_CREST_BOTTOM_MASK,
-  WebkitMaskImage: ABOVE_CREST_BOTTOM_MASK,
-  maskSize: "100% 100%, 100% var(--service-wave-h)",
-  WebkitMaskSize: "100% 100%, 100% var(--service-wave-h)",
-  maskPosition: "0 0, 0 100%",
-  WebkitMaskPosition: "0 0, 0 100%",
-  maskRepeat: "no-repeat",
-  WebkitMaskRepeat: "no-repeat",
-};
-
-const PLATE_OBJECT_CLASS = "object-cover object-[center_30%]";
-
 const experienceStyle: CSSProperties = {
   paddingTop: "clamp(1.5rem, 3vw, 3rem)",
   paddingBottom: "clamp(3.5rem, 7vw, 7rem)",
@@ -68,106 +48,6 @@ const experienceStyle: CSSProperties = {
 
 const DEFAULT_HERO_OBJECT =
   "object-cover object-[92%_42%] sm:object-[78%_45%] md:object-[65%_45%] lg:object-[58%_center]";
-
-function CreamPlate({
-  src,
-  maskBottom = true,
-  stableMedia = false,
-}: {
-  src: string;
-  maskBottom?: boolean;
-  stableMedia?: boolean;
-}) {
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-arc-cream"
-      style={maskBottom ? aboveCrestBottomMaskStyle : undefined}
-      aria-hidden
-    >
-      {stableMedia ? (
-        <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
-          <Image
-            src={src}
-            alt=""
-            fill
-            sizes="100vw"
-            unoptimized
-            className="object-cover object-top"
-          />
-          <div
-            className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-arc-cream sm:h-40"
-            aria-hidden
-          />
-        </div>
-      ) : (
-        <div className="absolute inset-0">
-          <Image
-            src={src}
-            alt=""
-            fill
-            sizes="100vw"
-            unoptimized
-            className={PLATE_OBJECT_CLASS}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DarkPlate({
-  src,
-  maskBottom = true,
-}: {
-  src: string;
-  maskBottom?: boolean;
-}) {
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 z-0"
-      style={
-        maskBottom
-          ? { backgroundColor: DARK_ACT, ...aboveCrestBottomMaskStyle }
-          : { backgroundColor: DARK_ACT }
-      }
-      aria-hidden
-    >
-      <Image
-        src={src}
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-    </div>
-  );
-}
-
-function GoldRule({ className }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        "block h-px w-16 bg-gradient-to-r from-transparent via-arc-champagne to-transparent",
-        className,
-      )}
-    />
-  );
-}
-
-function EmblemIcon({ src, className }: { src: string; className?: string }) {
-  return (
-    <Image
-      src={src}
-      alt=""
-      aria-hidden
-      width={128}
-      height={128}
-      unoptimized
-      className={cn("select-none object-contain", className)}
-    />
-  );
-}
 
 /** Shared EXION-template service page — content/assets only differ per treatment. */
 export function ServiceTemplateContent({
@@ -231,7 +111,7 @@ export function ServiceTemplateContent({
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:text-left">
+            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:max-w-none md:text-left">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-5 -inset-y-4 z-0 rounded-[2rem] bg-arc-cream/70 blur-md md:hidden"
@@ -243,7 +123,7 @@ export function ServiceTemplateContent({
               <div className="relative z-10">
                 <ArcTextReveal variant="heading" trigger="mount">
                   <h1 className="font-serif text-[clamp(2.25rem,6.5vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
-                    <span className="block font-semibold leading-none">
+                    <span className="block font-semibold leading-none md:whitespace-nowrap">
                       {hero.title}
                     </span>
                     <TitleEmphasis
@@ -252,22 +132,27 @@ export function ServiceTemplateContent({
                         "mt-0.5 inline-block leading-[0.82]",
                       )}
                     >
-                      <span className="block whitespace-nowrap leading-[0.82]">
-                        {hero.titleEmphasisLines[0]}
-                      </span>
-                      <span className="-mt-[0.18em] block text-center whitespace-nowrap leading-[0.82]">
-                        {hero.titleEmphasisLines[1]}
-                      </span>
+                      {hero.titleEmphasisLines.map((line, i) => (
+                        <span
+                          key={line}
+                          className={cn(
+                            "block whitespace-nowrap leading-[0.82]",
+                            i > 0 && "-mt-[0.18em] text-center",
+                          )}
+                        >
+                          {line}
+                        </span>
+                      ))}
                     </TitleEmphasis>
                   </h1>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-                  <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:[text-shadow:none]">
+                  <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:max-w-md md:[text-shadow:none]">
                     {hero.subhead}
                   </p>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
-                  <p className="mt-5 font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:mt-6 sm:text-base md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]">
+                  <p className="mt-5 font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:mt-6 sm:text-base md:max-w-md md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]">
                     {hero.intro}
                   </p>
                 </ArcTextReveal>
@@ -293,14 +178,7 @@ export function ServiceTemplateContent({
           </ArcTextReveal>
         </section>
 
-        <div className={cn("relative z-30 mt-auto", WAVE_H_CLASS)}>
-          <ArcWaveSeparator
-            topColor="transparent"
-            bottomColor="transparent"
-            shine
-            tone="pearl"
-          />
-        </div>
+        <ServiceWave tone="pearl" className="mt-auto" />
 
         <span className="sr-only">{hero.imageAlt}</span>
       </div>
@@ -365,14 +243,7 @@ export function ServiceTemplateContent({
           </div>
         </section>
 
-        <div className={cn("relative z-30", WAVE_H_CLASS)}>
-          <ArcWaveSeparator
-            topColor="transparent"
-            bottomColor="transparent"
-            shine
-            tone="pearl"
-          />
-        </div>
+        <ServiceWave tone="pearl" />
       </div>
 
       {/* ---------- Mechanism ---------- */}
@@ -434,7 +305,7 @@ export function ServiceTemplateContent({
                     className={cn(
                       "mt-6 font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base",
                       hasMechanismMedia
-                        ? "mx-auto max-w-md lg:mx-0"
+                        ? "mx-auto max-w-md lg:mx-0 lg:max-w-xl"
                         : "mx-auto max-w-2xl",
                     )}
                   >
@@ -468,7 +339,7 @@ export function ServiceTemplateContent({
                   className={cn(
                     "mt-8 flex flex-col gap-2.5",
                     hasMechanismMedia
-                      ? "mx-auto max-w-md text-left lg:mx-0"
+                      ? "mx-auto max-w-md text-left lg:mx-0 lg:max-w-xl"
                       : "mx-auto max-w-xl text-left",
                   )}
                 >
@@ -478,7 +349,7 @@ export function ServiceTemplateContent({
                       className="flex items-start gap-2.5 font-sans text-sm text-arc-charcoal/80 sm:text-[0.9375rem]"
                     >
                       <Check
-                        className="mt-0.5 h-4 w-4 shrink-0 text-arc-champagne"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-arc-teal-ink"
                         strokeWidth={2}
                         aria-hidden
                       />
@@ -522,14 +393,7 @@ export function ServiceTemplateContent({
           </div>
         </section>
 
-        <div className={cn("relative z-30", WAVE_H_CLASS)}>
-          <ArcWaveSeparator
-            topColor="transparent"
-            bottomColor="transparent"
-            shine
-            tone="pearl"
-          />
-        </div>
+        <ServiceWave tone="pearl" />
       </div>
 
       {/* ---------- Treatment / pathway cards ---------- */}
@@ -597,10 +461,12 @@ export function ServiceTemplateContent({
                     </div>
                     <div className="flex flex-1 flex-col gap-4 p-7">
                       <div className="text-center">
-                        <p className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/45">
-                          {card.eyebrow}
-                        </p>
-                        <h3 className="mt-1">
+                        {card.eyebrow ? (
+                          <p className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal/45">
+                            {card.eyebrow}
+                          </p>
+                        ) : null}
+                        <h3 className={card.eyebrow ? "mt-1" : undefined}>
                           <TitleEmphasis className="block text-[clamp(1.85rem,4.2vw,2.35rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                             {card.title}
                           </TitleEmphasis>
@@ -609,10 +475,12 @@ export function ServiceTemplateContent({
                           {card.tagline}
                         </p>
                       </div>
-                      <p className="text-center font-sans text-sm leading-relaxed text-arc-charcoal/70">
+                      {/* my-auto centers the body in whatever slack the tallest card
+                          creates, keeping titles top-aligned and bullets bottom-aligned. */}
+                      <p className="my-auto text-center font-sans text-sm leading-relaxed text-arc-charcoal/70">
                         {card.body}
                       </p>
-                      <ul className="mt-auto flex flex-col gap-2.5 pt-2">
+                      <ul className="flex flex-col gap-2.5 pt-2">
                         {card.bullets.map((bullet) => (
                           <li
                             key={bullet}
@@ -635,14 +503,7 @@ export function ServiceTemplateContent({
           </div>
         </section>
 
-        <div className={cn("relative z-30", WAVE_H_CLASS)}>
-          <ArcWaveSeparator
-            topColor="transparent"
-            bottomColor="transparent"
-            shine
-            tone="pearl"
-          />
-        </div>
+        <ServiceWave tone="pearl" />
       </div>
 
       {/* ---------- Dark acts: Why different + Experience ---------- */}
@@ -726,13 +587,7 @@ export function ServiceTemplateContent({
             </div>
           </section>
 
-          <div className={cn("relative z-30", WAVE_H_CLASS)}>
-            <ArcWaveSeparator
-              topColor="transparent"
-              bottomColor="transparent"
-              shine
-            />
-          </div>
+          <ServiceWave />
         </div>
 
         <div
@@ -804,14 +659,7 @@ export function ServiceTemplateContent({
             </div>
           </section>
 
-          <div className={cn("relative z-30", WAVE_H_CLASS)}>
-            <ArcWaveSeparator
-              topColor="transparent"
-              bottomColor="transparent"
-              shine
-              tone="pearl"
-            />
-          </div>
+          <ServiceWave tone="pearl" />
         </div>
       </div>
 
@@ -838,7 +686,7 @@ export function ServiceTemplateContent({
               >
                 <ArcTextReveal variant="line">
                   <Link
-                    href="/treatments"
+                    href="/treatments#treatments-index"
                     className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
                   >
                     ← All treatments
@@ -863,7 +711,7 @@ export function ServiceTemplateContent({
               )}
             >
               <Link
-                href="/treatments"
+                href="/treatments#treatments-index"
                 className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
               >
                 ← All treatments

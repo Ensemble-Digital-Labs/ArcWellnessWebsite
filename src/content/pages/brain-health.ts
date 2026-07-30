@@ -1,5 +1,6 @@
 /**
- * Brain Health — EXION section stack; temporary EXION plates/icons + clinic heroes.
+ * Brain Health: EXION section stack; dedicated hero + temporary EXION plates/icons
+ * and clinic-interior card photography.
  */
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
@@ -10,6 +11,13 @@ import {
 } from "@/content/pages/serviceTemplate";
 
 const ICON = SERVICE_EXION_ICON;
+const BRAIN_HEALTH_ASSET = "/assets/treatments/brain-health";
+/** Bump when replacing Brain Health rasters so next/image + browser drop stale caches. */
+const BRAIN_HEALTH_ASSETS_VERSION = "20260730-hero";
+
+function brainHealthAsset(file: string) {
+  return `${BRAIN_HEALTH_ASSET}/${file}?v=${BRAIN_HEALTH_ASSETS_VERSION}`;
+}
 
 export const brainHealthContent: ServicePageContent = {
   hero: {
@@ -23,8 +31,13 @@ export const brainHealthContent: ServicePageContent = {
     poweredByEyebrow: "Physician-guided care",
     poweredByIconSrc: `${ICON}/atom.svg`,
     synergyLine: "Support today. Protect tomorrow.",
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-    imageAlt: "Consultation lounge at ARC Wellness for cognitive wellness conversations",
+    imageSrc: brainHealthAsset("brain-health-hero.webp"),
+    imageAlt:
+      "Glowing anatomical brain sculpture on a marble table in a warm, sunlit ARC Wellness room",
+    // Brain sits lower-right: anchor the zoom to the bottom-right so it lifts into the
+    // empty right half instead of sitting low under the copy.
+    imageObjectClass:
+      "object-cover object-[82%_center] origin-[78%_100%] scale-[1.06] md:object-[70%_center] md:scale-[1.12] lg:object-[64%_center] lg:scale-[1.16]",
   },
   pillars: [
     {
@@ -51,7 +64,7 @@ export const brainHealthContent: ServicePageContent = {
   creamPlate: serviceSharedCreamPlate,
   mechanism: {
     titleLines: ["Your brain is", "connected to", "everything"],
-    body: "Brain health doesn't begin and end with the brain. Hormones, blood sugar, inflammation, cardiovascular health, nutrient status, sleep, stress, and gut health can all influence the way you think, feel, focus, and function. Through physician consultation and comprehensive testing, we look for patterns—then create a personalized strategy for how your brain feels today and how we protect it for tomorrow.",
+    body: "Brain health doesn't begin and end with the brain. Hormones, blood sugar, inflammation, cardiovascular health, nutrient status, sleep, stress, and gut health can all influence the way you think, feel, focus, and function. Through physician consultation and comprehensive testing, we look for patterns, then create a personalized strategy for how your brain feels today and how we protect it for tomorrow.",
     evaluationBullets: [
       "Hormonal and metabolic health",
       "Inflammation and cardiovascular / vascular risk",
@@ -64,10 +77,9 @@ export const brainHealthContent: ServicePageContent = {
   treatments: {
     title: "Support the brain.",
     titleEmphasis: "Strengthen the mind.",
-    intro: "Personalized strategies—and advanced therapies when they fit.",
+    intro: "Personalized strategies, and advanced therapies when they fit.",
     cards: [
       {
-        eyebrow: "Whole-body lens",
         title: "Connected Systems",
         tagline: "Look beyond the obvious.",
         body: "Improving cognitive wellness often means looking beyond the brain alone. We evaluate the systems that influence how you think, feel, and stay present.",
@@ -81,7 +93,6 @@ export const brainHealthContent: ServicePageContent = {
         imageAlt: "Calm seating at ARC Wellness",
       },
       {
-        eyebrow: "Care plan",
         title: "Personalized Support",
         tagline: "Nutrition. Lifestyle. Optimization.",
         body: "Your plan may include nutrition, supplementation, hormone or metabolic optimization, lifestyle strategies, and advanced therapies when appropriate.",
@@ -95,7 +106,6 @@ export const brainHealthContent: ServicePageContent = {
         imageAlt: "ARC Wellness care environment",
       },
       {
-        eyebrow: "Technology",
         title: "ExoMind™",
         tagline: "When it complements the plan.",
         body: "For some patients, technologies such as ExoMind™ may complement the broader plan by supporting areas associated with mood, focus, and emotional wellness.",
@@ -126,7 +136,7 @@ export const brainHealthContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/cell.svg`,
         title: "Whole-Body Story",
-        body: "Hormones, metabolism, gut, sleep—and the brain together.",
+        body: "Hormones, metabolism, gut, sleep, and the brain together.",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
@@ -157,7 +167,7 @@ export const brainHealthContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/meditation.svg`,
         title: "Personalize",
-        body: "A strategy for how your brain feels today—and tomorrow.",
+        body: "A strategy for how your brain feels today, and tomorrow.",
       },
       {
         iconSrc: `${ICON}/mind.svg`,

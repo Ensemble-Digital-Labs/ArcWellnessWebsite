@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Superseded: `/treatments` now renders `Arc360PageContent`, which keeps the
+ * "Every pathway" grid as its third act. Kept as the pre-Arc-360 hub layout in
+ * case the client wants the slim directory page back.
+ */
+
 import { ArcTreatmentsRuledGrid } from "@/components/arc/ArcTreatmentsRuledGrid";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { ScrollChapterIntroSection } from "@/components/arc/ScrollChapterIntroSection";

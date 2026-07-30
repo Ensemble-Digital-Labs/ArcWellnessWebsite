@@ -1061,6 +1061,132 @@ export const allTreatments: readonly TreatmentPage[] = [
       },
     ],
   },
+  {
+    slug: "neuromodulators",
+    title: "Neuromodulators",
+    tagline: "Still You. Just a Little More Refreshed.",
+    category: "aesthetics",
+    categoryLabel: "Neuromodulators",
+    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
+    imageAlt: CLINIC_INTERIOR_ALT.hallwayDaxxifyBannerWaveArt,
+    intro:
+      "Neuromodulators, including DAXXIFY®, soften the appearance of dynamic lines while preserving what matters most: you still look like you.",
+    highlights: [
+      "Soften dynamic expression lines",
+      "Preserve natural facial movement",
+      "DAXXIFY® when it fits your goals",
+    ],
+    sections: [
+      {
+        heading: "Soften the Lines. Keep the Expression.",
+        body: "Thoughtful placement and intentional dosing create a smoother, rested appearance that still moves naturally with you.",
+      },
+    ],
+    faqs: [
+      {
+        id: "frozen",
+        question: "Will I look frozen?",
+        answer:
+          "That isn't the goal. We focus on thoughtful placement and intentional dosing so your face looks smoother and rested while still moving naturally with you.",
+      },
+      {
+        id: "daxxify",
+        question: "What is DAXXIFY®?",
+        answer:
+          "DAXXIFY® is a peptide-powered neuromodulator designed to temporarily improve the appearance of moderate to severe expression lines. For some patients, results may last longer than many traditional neuromodulators, which can mean more time between treatments.",
+      },
+      {
+        id: "when-to-stop",
+        question: "Do I always need treatment?",
+        answer:
+          "Not always. We consider your facial structure, natural movement, symmetry, and goals first. Sometimes that means treating less, combining thoughtfully, or deciding you don't need something at all.",
+      },
+    ],
+  },
+  {
+    slug: "rf-microneedling",
+    title: "RF Microneedling",
+    tagline: "Renew What Time Has Changed.",
+    category: "aesthetics",
+    categoryLabel: "Skin Rejuvenation",
+    imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
+    imageAlt: CLINIC_INTERIOR_ALT.waitingRoomArmchairGoldArt,
+    intro:
+      "RF Microneedling works beneath the surface to encourage something your skin already knows how to do: renew itself through collagen and elastin remodeling.",
+    highlights: [
+      "Collagen and elastin stimulation",
+      "Face and body treatment areas",
+      "Results that continue to evolve",
+    ],
+    sections: [
+      {
+        heading: "Collagen, Reawakened",
+        body: "Precision microneedling with radiofrequency energy activates your skin's natural healing response for firmer, smoother, more resilient skin over time.",
+      },
+    ],
+    faqs: [
+      {
+        id: "concerns",
+        question: "What can RF Microneedling help with?",
+        answer:
+          "It can be customized for fine lines and wrinkles, skin laxity, uneven texture, acne scars, enlarged pores, crepey skin, and overall skin quality on the face and body.",
+      },
+      {
+        id: "timing",
+        question: "When will I see results?",
+        answer:
+          "RF Microneedling isn't an overnight transformation. As collagen rebuilds and tissue remodels, improvements continue over the weeks and months after treatment.",
+      },
+      {
+        id: "cover",
+        question: "Is this just another surface treatment?",
+        answer:
+          "No. Rather than only treating what you see on the surface, RF Microneedling supports change from within the skin itself, so you're rebuilding, not only covering.",
+      },
+    ],
+  },
+  {
+    slug: "clear-rf",
+    title: "Clear RF",
+    tagline: "Clearer. Smoother. Healthier-Looking Skin.",
+    category: "aesthetics",
+    categoryLabel: "Skin Rejuvenation",
+    imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+    imageAlt: CLINIC_INTERIOR_ALT.plantBonsaiWindowSill,
+    intro:
+      "Clear RF uses controlled radiofrequency energy to refine tone, texture, pores, redness, and overall skin quality, so your skin looks healthy, not treated.",
+    highlights: [
+      "Tone, texture, and pore refinement",
+      "Support for redness and acne-related concerns",
+      "Alone or layered into a broader plan",
+    ],
+    sections: [
+      {
+        heading: "Refine What's on the Surface. Renew What's Beneath It.",
+        body: "Treatments are customized to the details that change how your skin looks and feels, with the goal of healthier-looking skin before makeup ever goes on.",
+      },
+    ],
+    faqs: [
+      {
+        id: "concerns",
+        question: "What skin concerns can Clear RF address?",
+        answer:
+          "Treatments can be customized for uneven tone and texture, enlarged pores, redness, acne and acne-related concerns, fine lines, uneven pigmentation, and overall skin quality.",
+      },
+      {
+        id: "perfect",
+        question: "Is the goal perfect skin?",
+        answer:
+          "No. Aesthetic care at Arc isn't about erasing every line, pore, or imperfection. It's about understanding what bothers you and choosing treatments intentionally so your skin looks beautifully healthy.",
+      },
+      {
+        id: "combo",
+        question: "Can Clear RF be combined with other treatments?",
+        answer:
+          "Yes. Clear RF may be used alone or incorporated into a broader skin rejuvenation plan alongside other technologies when a layered approach serves your skin.",
+      },
+    ],
+  },
 ];
 
 export function getTreatmentBySlug(slug: string): TreatmentPage | undefined {

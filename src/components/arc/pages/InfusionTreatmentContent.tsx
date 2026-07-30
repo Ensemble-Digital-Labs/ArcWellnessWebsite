@@ -750,7 +750,7 @@ export function InfusionTreatmentContent({
               >
                 <ArcTextReveal variant="line">
                   <Link
-                    href="/treatments"
+                    href="/treatments#treatments-index"
                     className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
                   >
                     ← All treatments
@@ -777,7 +777,7 @@ export function InfusionTreatmentContent({
               )}
             >
               <Link
-                href="/treatments"
+                href="/treatments#treatments-index"
                 className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
               >
                 ← All treatments

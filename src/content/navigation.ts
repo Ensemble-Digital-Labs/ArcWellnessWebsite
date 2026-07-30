@@ -104,12 +104,12 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Aesthetics",
         items: [
-          soon("Neuromodulators"),
+          leaf("Neuromodulators", "/treatments/neuromodulators"),
           leaf("Fillers", treatmentHrefByLabel["RHA Fillers"]),
           leaf("Exion", treatmentHrefByLabel["Exion"]),
           leaf("EmFace", treatmentHrefByLabel["EmFace"]),
-          soon("RF Microneedling"),
-          soon("Clear RF"),
+          leaf("RF Microneedling", "/treatments/rf-microneedling"),
+          leaf("Clear RF", "/treatments/clear-rf"),
         ],
       },
     ],
@@ -502,4 +502,35 @@ export function flattenNavColumns(columns: readonly NavColumn[]): NavLeaf[] {
 
 export function navItemHasPanel(item: NavTopItem): boolean {
   return Boolean(item.columns?.length);
+}
+
+/** Exact for `/`; otherwise exact or nested path under `href`. */
+export function isNavHrefActive(href: string, pathname: string | null): boolean {
+  if (!pathname) return false;
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Exact route match only (mega-menu leaves / hub headings). */
+export function isNavHrefExact(href: string, pathname: string | null): boolean {
+  if (!pathname) return false;
+  return pathname === href;
+}
+
+/** True when the current route matches this top item or any link in its mega-menu. */
+export function isNavItemActive(item: NavTopItem, pathname: string | null): boolean {
+  if (!pathname) return false;
+  if (item.href && isNavHrefActive(item.href, pathname)) return true;
+  if (!item.columns) return false;
+  for (const column of item.columns) {
+    for (const group of column.groups) {
+      if (group.headingHref && isNavHrefExact(group.headingHref, pathname)) {
+        return true;
+      }
+      for (const leaf of group.items) {
+        if (leaf.href && isNavHrefExact(leaf.href, pathname)) return true;
+      }
+    }
+  }
+  return false;
 }

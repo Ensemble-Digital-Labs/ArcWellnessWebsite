@@ -1,5 +1,5 @@
 /**
- * Longevity — EXION section stack; temporary EXION plates/icons + clinic heroes.
+ * Longevity: EXION section stack; temporary EXION plates/icons + clinic heroes.
  */
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
@@ -10,23 +10,29 @@ import {
 } from "@/content/pages/serviceTemplate";
 
 const ICON = SERVICE_EXION_ICON;
+const LONGEVITY_ASSET = "/assets/treatments/longevity";
+/** Bump when replacing Longevity rasters so next/image + browser drop stale caches. */
+const LONGEVITY_ASSETS_VERSION = "20260730-hero";
+
+function longevityAsset(file: string) {
+  return `${LONGEVITY_ASSET}/${file}?v=${LONGEVITY_ASSETS_VERSION}`;
+}
 
 export const longevityContent: ServicePageContent = {
   hero: {
     title: "Longevity",
     titleEmphasis: "Living well, longer.",
-    titleEmphasisLines: ["Living well,", "longer."],
+    titleEmphasisLines: ["Living well, longer."],
     subhead: "Strength. Clarity. Independence.",
     intro:
-      "It isn't about living forever. It's about living well for as long as possible—to move through life with strength, clarity, and independence. To remain present for the people you love. To keep experiencing, contributing, exploring, and participating fully in the life you've built. At Arc Wellness, longevity isn't simply about adding years to your life. It's about protecting your ability to truly live them.",
+      "It isn't about living forever. It's about living well for as long as possible: to move through life with strength, clarity, and independence. To remain present for the people you love. To keep experiencing, contributing, exploring, and participating fully in the life you've built. At Arc Wellness, longevity isn't simply about adding years to your life. It's about protecting your ability to truly live them.",
     closingLine: "Not just lifespan. Healthspan.",
     poweredByEyebrow: "Physician-guided care",
     poweredByIconSrc: `${ICON}/atom.svg`,
     synergyLine: "Understand today. Protect tomorrow.",
-    imageSrc: CLINIC_INTERIOR_IMAGES.heroLobbyLounge,
-    imageAlt: "ARC Wellness lobby lounge — calm space for longevity conversations",
-    imageObjectClass:
-      "object-cover object-[center_40%] sm:object-[center_45%] lg:object-center",
+    imageSrc: longevityAsset("longevity-hero.webp"),
+    imageAlt:
+      "Sculpted infinity form with a golden tree of life on a marble table in a warm, sunlit ARC Wellness room",
   },
   pillars: [
     {
@@ -53,12 +59,12 @@ export const longevityContent: ServicePageContent = {
   creamPlate: serviceSharedCreamPlate,
   mechanism: {
     titleLines: ["Look beyond", "\"normal.\""],
-    body: "Traditional healthcare often asks: Do you have disease? Longevity medicine asks another important question: How well are you functioning—and how do we protect it? Through physician-guided evaluation and comprehensive testing, we look deeper into the markers that influence how you age—not to chase perfection, but to recognize change earlier and make informed decisions before those changes begin limiting your life.",
+    body: "Traditional healthcare often asks: Do you have disease? Longevity medicine asks another important question: How well are you functioning, and how do we protect it? Through physician-guided evaluation and comprehensive testing, we look deeper into the markers that influence how you age, not to chase perfection, but to recognize change earlier and make informed decisions before those changes begin limiting your life.",
     evaluationBullets: [
       "Metabolic health, hormones, and cardiovascular function",
       "Brain health, muscle, and inflammation",
       "Nutrition, sleep, movement, and genetics",
-      "Risk recognition earlier—before function is limited",
+      "Risk recognition earlier, before function is limited",
     ],
     imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
     imageAlt: "Consultation lounge at ARC Wellness",
@@ -69,7 +75,6 @@ export const longevityContent: ServicePageContent = {
     intro: "Your future health is being built today.",
     cards: [
       {
-        eyebrow: "Today",
         title: "Built Today",
         tagline: "How we age isn't one thing.",
         body: "Metabolic health, hormones, cardiovascular function, brain health, muscle, inflammation, nutrition, sleep, movement, and genetics all become part of the story. Some factors we inherit. Many we can influence.",
@@ -83,12 +88,11 @@ export const longevityContent: ServicePageContent = {
         imageAlt: "ARC Wellness hallway seating",
       },
       {
-        eyebrow: "Function",
         title: "Beyond Disease",
         tagline: "How well are you functioning?",
-        body: "We look deeper into the markers that influence aging—to better understand risk, recognize change earlier, and make informed decisions about your health.",
+        body: "We look deeper into the markers that influence aging to better understand risk, recognize change earlier, and make informed decisions about your health.",
         bullets: [
-          "Function—not only disease screening",
+          "Function, not only disease screening",
           "Comprehensive physician-guided testing",
           "Earlier recognition of change",
           "Informed decisions before limits set in",
@@ -97,7 +101,6 @@ export const longevityContent: ServicePageContent = {
         imageAlt: "Calm seating at ARC Wellness",
       },
       {
-        eyebrow: "Plan",
         title: "Whole-Person Care",
         tagline: "Healthy aging isn't one treatment.",
         body: "Your longevity plan may bring together nutrition, movement, hormone and metabolic optimization, supplementation, preventive strategies, and advanced therapies based on what your body needs.",
@@ -116,7 +119,7 @@ export const longevityContent: ServicePageContent = {
     title: "Don't just",
     titleEmphasis: "add years",
     intro:
-      "Imagine growing older without automatically surrendering the things that make life yours—moving independently, preparing a meal, traveling if you choose, getting down on the floor with a grandchild and getting back up.",
+      "Imagine growing older without automatically surrendering the things that make life yours: moving independently, preparing a meal, traveling if you choose, getting down on the floor with a grandchild and getting back up.",
     backgroundSrc: serviceSharedDarkPlate.src,
     backgroundAlt: "",
     cards: [
@@ -133,7 +136,7 @@ export const longevityContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Stay Independent",
-        body: "Driving, cooking, traveling, playing—on your terms.",
+        body: "Driving, cooking, traveling, playing on your terms.",
       },
       {
         iconSrc: `${ICON}/sun.svg`,
@@ -149,7 +152,7 @@ export const longevityContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/chat.svg`,
         title: "Consult",
-        body: "Share the life you want to keep living—and what concerns you.",
+        body: "Share the life you want to keep living, and what concerns you.",
       },
       {
         iconSrc: `${ICON}/book.svg`,
@@ -159,7 +162,7 @@ export const longevityContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/meditation.svg`,
         title: "Strategize",
-        body: "A plan for healthspan—not only lifespan.",
+        body: "A plan for healthspan, not only lifespan.",
       },
       {
         iconSrc: `${ICON}/mind.svg`,

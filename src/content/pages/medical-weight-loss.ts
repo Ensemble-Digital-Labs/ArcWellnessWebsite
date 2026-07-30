@@ -1,5 +1,6 @@
 /**
- * Medical Weight Loss — EXION section stack; temporary EXION plates/icons + clinic heroes.
+ * Medical Weight Loss: EXION section stack; dedicated hero + temporary EXION plates/icons
+ * and clinic-interior card photography.
  */
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
@@ -10,6 +11,13 @@ import {
 } from "@/content/pages/serviceTemplate";
 
 const ICON = SERVICE_EXION_ICON;
+const MEDICAL_WEIGHT_LOSS_ASSET = "/assets/treatments/medical-weight-loss";
+/** Bump when replacing Medical Weight Loss rasters so next/image + browser drop stale caches. */
+const MEDICAL_WEIGHT_LOSS_ASSETS_VERSION = "20260730-hero";
+
+function medicalWeightLossAsset(file: string) {
+  return `${MEDICAL_WEIGHT_LOSS_ASSET}/${file}?v=${MEDICAL_WEIGHT_LOSS_ASSETS_VERSION}`;
+}
 
 export const medicalWeightLossContent: ServicePageContent = {
   hero: {
@@ -18,14 +26,14 @@ export const medicalWeightLossContent: ServicePageContent = {
     titleEmphasisLines: ["More than", "the scale."],
     subhead: "Understand. Strengthen. Keep the health.",
     intro:
-      "You've tried eating less. Cutting carbs. Exercising more. Starting over on Monday. And maybe those things worked once—but your body doesn't respond the way it used to. At Arc Wellness, we don't see weight as a simple equation of calories in and calories out. We look at what's happening underneath it.",
+      "You've tried eating less. Cutting carbs. Exercising more. Starting over on Monday. And maybe those things worked once, but your body doesn't respond the way it used to. At Arc Wellness, we don't see weight as a simple equation of calories in and calories out. We look at what's happening underneath it.",
     closingLine: "The medication isn't the program.",
     poweredByEyebrow: "Physician-guided care",
     poweredByIconSrc: `${ICON}/atom.svg`,
     synergyLine: "Lose weight. Keep strength. Gain health.",
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageSrc: medicalWeightLossAsset("medical-weight-loss-hero.webp"),
     imageAlt:
-      "Consultation lounge at ARC Wellness for medical weight loss evaluation",
+      "GLP-1 pen, measuring tape, and a balanced salmon and vegetable plate on a sunlit ARC Wellness table",
   },
   pillars: [
     {
@@ -36,7 +44,7 @@ export const medicalWeightLossContent: ServicePageContent = {
     {
       iconSrc: `${ICON}/cell.svg`,
       title: "Intention",
-      body: "GLP-1 and other tools used with purpose—inside a fuller plan.",
+      body: "GLP-1 and other tools used with purpose, inside a fuller plan.",
     },
     {
       iconSrc: `${ICON}/magnet.svg`,
@@ -52,7 +60,7 @@ export const medicalWeightLossContent: ServicePageContent = {
   creamPlate: serviceSharedCreamPlate,
   mechanism: {
     titleLines: ["Understand", "the why"],
-    body: "Hormones change. Insulin resistance develops. Muscle mass declines. Sleep, stress, inflammation, medications, and aging can all influence the way your body stores and uses energy. That's why your weight-loss journey begins with more than a prescription—through physician-guided evaluation and laboratory testing that look at the factors making weight loss more difficult.",
+    body: "Hormones change. Insulin resistance develops. Muscle mass declines. Sleep, stress, inflammation, medications, and aging can all influence the way your body stores and uses energy. That's why your weight-loss journey begins with more than a prescription: through physician-guided evaluation and laboratory testing that look at the factors making weight loss more difficult.",
     evaluationBullets: [
       "Hormonal and metabolic contributors",
       "Insulin resistance and body composition",
@@ -68,10 +76,9 @@ export const medicalWeightLossContent: ServicePageContent = {
     intro: "Powerful tools. A stronger program around them.",
     cards: [
       {
-        eyebrow: "Why first",
         title: "Understand the Why",
         tagline: "More than a prescription.",
-        body: "We look at the factors that may be making weight loss more difficult—then build a plan around your body, your health, and your goals.",
+        body: "We look at the factors that may be making weight loss more difficult, then build a plan around your body, your health, and your goals.",
         bullets: [
           "Physician-guided evaluation and labs",
           "Hormones, insulin, and muscle considered",
@@ -82,7 +89,6 @@ export const medicalWeightLossContent: ServicePageContent = {
         imageAlt: "Calm seating at ARC Wellness",
       },
       {
-        eyebrow: "Tools",
         title: "GLP-1 & Beyond",
         tagline: "When medically appropriate.",
         body: "GLP-1 and other weight-loss medications can be powerful tools. At Arc, medical weight loss may also include nutrition guidance, metabolic and hormone optimization, body composition monitoring, supplementation, movement, and strategies to preserve lean muscle.",
@@ -96,10 +102,9 @@ export const medicalWeightLossContent: ServicePageContent = {
         imageAlt: "ARC Wellness care environment",
       },
       {
-        eyebrow: "Outcome",
         title: "Protect the Muscle",
         tagline: "Change the composition.",
-        body: "The scale only tells part of the story. Muscle supports metabolism, blood sugar regulation, strength, mobility, bone health, and long-term independence. Our focus isn't simply on becoming smaller—it's on creating a healthier, stronger body composition.",
+        body: "The scale only tells part of the story. Muscle supports metabolism, blood sugar regulation, strength, mobility, bone health, and long-term independence. Our focus isn't simply on becoming smaller. It's on creating a healthier, stronger body composition.",
         bullets: [
           "Preserve lean muscle during loss",
           "Support strength and mobility",
@@ -115,14 +120,14 @@ export const medicalWeightLossContent: ServicePageContent = {
     title: "Lose the weight.",
     titleEmphasis: "Gain something bigger.",
     intro:
-      "More energy. More confidence. Better movement. Improved metabolic health. A body that feels easier to live in—and a deeper understanding of what your body needs to stay well after the weight comes off.",
+      "More energy. More confidence. Better movement. Improved metabolic health. A body that feels easier to live in, and a deeper understanding of what your body needs to stay well after the weight comes off.",
     backgroundSrc: serviceSharedDarkPlate.src,
     backgroundAlt: "",
     cards: [
       {
         iconSrc: `${ICON}/battery-energy.svg`,
         title: "More Energy",
-        body: "A body that fuels your day—not one that fights it.",
+        body: "A body that fuels your day, not one that fights it.",
       },
       {
         iconSrc: `${ICON}/mind.svg`,
@@ -168,7 +173,7 @@ export const medicalWeightLossContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/meditation.svg`,
         title: "Plan",
-        body: "Medication with intention—inside a fuller program.",
+        body: "Medication with intention, inside a fuller program.",
       },
       {
         iconSrc: `${ICON}/mind.svg`,

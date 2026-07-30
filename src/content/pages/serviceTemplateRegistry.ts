@@ -1,4 +1,5 @@
 import { brainHealthContent, brainHealthHero } from "@/content/pages/brain-health";
+import { clearRfContent, clearRfHero } from "@/content/pages/clear-rf";
 import { gutHealthContent, gutHealthHero } from "@/content/pages/gut-health";
 import {
   hormoneHealthContent,
@@ -13,6 +14,14 @@ import {
   metabolicHealthContent,
   metabolicHealthHero,
 } from "@/content/pages/metabolic-health";
+import {
+  neuromodulatorsContent,
+  neuromodulatorsHero,
+} from "@/content/pages/neuromodulators";
+import {
+  rfMicroneedlingContent,
+  rfMicroneedlingHero,
+} from "@/content/pages/rf-microneedling";
 import type { ServiceHero, ServicePageContent } from "@/content/pages/serviceTemplate";
 
 const SERVICE_TEMPLATE_BY_SLUG: Record<
@@ -31,6 +40,15 @@ const SERVICE_TEMPLATE_BY_SLUG: Record<
     content: medicalWeightLossContent,
     hero: medicalWeightLossHero,
   },
+  neuromodulators: {
+    content: neuromodulatorsContent,
+    hero: neuromodulatorsHero,
+  },
+  "rf-microneedling": {
+    content: rfMicroneedlingContent,
+    hero: rfMicroneedlingHero,
+  },
+  "clear-rf": { content: clearRfContent, hero: clearRfHero },
 };
 
 export function getServiceTemplateBySlug(slug: string) {

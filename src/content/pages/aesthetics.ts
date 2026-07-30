@@ -17,10 +17,13 @@ export const aestheticsPage = {
     "Real, visible results, from neuromodulators and RHA fillers to EmFace, Exion, and KNESKO rituals",
   ],
   linkedTreatments: [
+    { slug: "neuromodulators", label: "Neuromodulators" },
     { slug: "daxxify", label: "Daxxify" },
     { slug: "rha", label: "RHA Fillers" },
     { slug: "emface", label: "EmFace" },
     { slug: "exion", label: "Exion" },
+    { slug: "rf-microneedling", label: "RF Microneedling" },
+    { slug: "clear-rf", label: "Clear RF" },
     { slug: "knesko", label: "Knesko" },
   ],
 } as const;

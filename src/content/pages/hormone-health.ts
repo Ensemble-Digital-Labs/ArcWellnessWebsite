@@ -1,5 +1,6 @@
 /**
- * Hormone Health — EXION section stack; temporary EXION plates/icons + clinic heroes.
+ * Hormone Health: EXION section stack; dedicated hero + temporary EXION plates/icons
+ * and clinic-interior card photography.
  */
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
@@ -10,6 +11,13 @@ import {
 } from "@/content/pages/serviceTemplate";
 
 const ICON = SERVICE_EXION_ICON;
+const HORMONE_HEALTH_ASSET = "/assets/treatments/hormone-health";
+/** Bump when replacing Hormone Health rasters so next/image + browser drop stale caches. */
+const HORMONE_HEALTH_ASSETS_VERSION = "20260730-hero";
+
+function hormoneHealthAsset(file: string) {
+  return `${HORMONE_HEALTH_ASSET}/${file}?v=${HORMONE_HEALTH_ASSETS_VERSION}`;
+}
 
 export const hormoneHealthContent: ServicePageContent = {
   hero: {
@@ -18,14 +26,14 @@ export const hormoneHealthContent: ServicePageContent = {
     titleEmphasisLines: ["Feel like", "yourself again."],
     subhead: "Balance. Clarity. Vitality restored.",
     intro:
-      "Your energy has changed. Sleep isn't the same. Your body responds differently. Maybe your mood, focus, weight, strength, or desire feels unfamiliar. You know something has shifted—even if you've been told everything looks \"normal.\" At Arc Wellness, we listen to what your body is telling you.",
+      "Your energy has changed. Sleep isn't the same. Your body responds differently. Maybe your mood, focus, weight, strength, or desire feels unfamiliar. You know something has shifted, even if you've been told everything looks \"normal.\" At Arc Wellness, we listen to what your body is telling you.",
     closingLine: "Hormone health isn't about chasing a number.",
     poweredByEyebrow: "Physician-guided care",
     poweredByIconSrc: `${ICON}/atom.svg`,
     synergyLine: "Your story. Your labs. Your plan.",
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageSrc: hormoneHealthAsset("hormone-health-hero.webp"),
     imageAlt:
-      "Consultation lounge at ARC Wellness — a calm space for hormone health conversations",
+      "Woman resting calmly in a sunlit ARC Wellness lounge chair as warm golden light flows through her",
   },
   pillars: [
     {
@@ -52,31 +60,31 @@ export const hormoneHealthContent: ServicePageContent = {
   creamPlate: serviceSharedCreamPlate,
   mechanism: {
     titleLines: ["Hormones influence", "more than", "you think"],
-    body: "Hormones are woven into nearly every part of how you feel and function—from energy, metabolism, and sleep to cognition, muscle, bone, mood, and sexual wellness. Our approach combines your story, comprehensive laboratory testing, and physician-guided evaluation to understand the bigger picture—not simply one number on a lab report.",
+    body: "Hormones are woven into nearly every part of how you feel and function, from energy, metabolism, and sleep to cognition, muscle, bone, mood, and sexual wellness. Our approach combines your story, comprehensive laboratory testing, and physician-guided evaluation to understand the bigger picture, not simply one number on a lab report.",
     evaluationBullets: [
-      "Your symptoms, history, and goals—not a single lab value",
+      "Your symptoms, history, and goals, not a single lab value",
       "Comprehensive laboratory testing with physician interpretation",
       "Thyroid, metabolic health, nutrients, inflammation, and cardiovascular markers when relevant",
       "A plan designed to restore balance, function, and quality of life",
     ],
     imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "ARC Wellness hallway seating — thoughtful, unhurried care",
+    imageAlt: "ARC Wellness hallway seating: thoughtful, unhurried care",
   },
   treatments: {
     title: "Care shaped",
     titleEmphasis: "for you",
-    intro: "Women, men, and the systems that surround hormones—each deserves a precise lens.",
+    intro: "Women, men, and the systems that surround hormones, each deserves a precise lens.",
     cards: [
       {
         eyebrow: "For women",
         title: "Perimenopause & Menopause",
         tagline: "Your body is changing. Your care should too.",
-        body: "Perimenopause and menopause can bring changes that reach far beyond hot flashes—brain fog, interrupted sleep, shifting weight, mood, energy, muscle, skin, and intimacy. When appropriate, bioidentical hormone replacement therapy may become part of a personalized plan.",
+        body: "Perimenopause and menopause can bring changes that reach far beyond hot flashes, brain fog, interrupted sleep, shifting weight, mood, energy, muscle, skin, and intimacy. When appropriate, bioidentical hormone replacement therapy may become part of a personalized plan.",
         bullets: [
           "Symptoms understood in full context",
           "Hormones, history, and goals reviewed together",
           "Bioidentical HRT when medically appropriate",
-          "Menopause is a transition—not your identity",
+          "Menopause is a transition, not your identity",
         ],
         imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
         imageAlt: "Calm waiting room at ARC Wellness",
@@ -85,12 +93,12 @@ export const hormoneHealthContent: ServicePageContent = {
         eyebrow: "For men",
         title: "Men's Hormone Health",
         tagline: "When \"slowing down\" doesn't feel like you.",
-        body: "Hormonal changes in men often happen quietly—less energy, longer recovery, decreased strength, shifts in body composition, motivation, focus, libido, or performance. We evaluate testosterone alongside the broader hormonal and metabolic picture.",
+        body: "Hormonal changes in men often happen quietly, less energy, longer recovery, decreased strength, shifts in body composition, motivation, focus, libido, or performance. We evaluate testosterone alongside the broader hormonal and metabolic picture.",
         bullets: [
           "Testosterone in metabolic context",
           "Personalized plans when treatment is appropriate",
           "Careful monitoring over time",
-          "Move forward stronger—not turn back the clock",
+          "Move forward stronger, not turn back the clock",
         ],
         imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
         imageAlt: "ARC Wellness lobby and care environment",
@@ -132,7 +140,7 @@ export const hormoneHealthContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/battery-energy.svg`,
         title: "Steadier Energy",
-        body: "Energy that feels more even—not borrowed from caffeine alone.",
+        body: "Energy that feels more even, not borrowed from caffeine alone.",
       },
       {
         iconSrc: `${ICON}/magnet.svg`,
@@ -168,7 +176,7 @@ export const hormoneHealthContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/meditation.svg`,
         title: "Personalize",
-        body: "A plan built around balance, function, and quality of life—not a single number.",
+        body: "A plan built around balance, function, and quality of life, not a single number.",
       },
       {
         iconSrc: `${ICON}/mind.svg`,
@@ -178,7 +186,7 @@ export const hormoneHealthContent: ServicePageContent = {
       {
         iconSrc: `${ICON}/calendar-check.svg`,
         title: "Feel Better",
-        body: "Understanding changes everything—and feeling better can follow.",
+        body: "Understanding changes everything, and feeling better can follow.",
       },
     ],
   },

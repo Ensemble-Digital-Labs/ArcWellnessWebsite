@@ -9,6 +9,8 @@ import {
   ARC_NAV_HOME_ITEM,
   ARC_NAV_TOP_ITEMS,
   ARC_NAV_BOOK_CTA,
+  isNavHrefExact,
+  isNavItemActive,
   navItemHasPanel,
   type NavColumn,
   type NavLeaf,
@@ -43,13 +45,19 @@ function readScrollY(): number {
   return window.scrollY || document.documentElement.scrollTop || 0;
 }
 
-function DesktopLeaf({ leaf }: { leaf: NavLeaf }) {
+function DesktopLeaf({ leaf, active }: { leaf: NavLeaf; active: boolean }) {
   if (leaf.href) {
     return (
       <Link
         href={leaf.href}
         {...bookingLinkExternalProps(leaf.href)}
-        className="block rounded-md py-1 font-sans text-[0.9375rem] leading-snug text-arc-charcoal/72 transition-colors duration-200 hover:text-arc-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40"
+        aria-current={active ? "page" : undefined}
+        className={cn(
+          "block rounded-md py-1 font-sans text-[0.9375rem] leading-snug transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40",
+          active
+            ? "font-semibold text-arc-teal"
+            : "text-arc-charcoal/72 hover:text-arc-teal",
+        )}
       >
         {leaf.label}
       </Link>
@@ -71,9 +79,11 @@ function DesktopLeaf({ leaf }: { leaf: NavLeaf }) {
 
 function DesktopMegaPanel({
   columns,
+  pathname,
   onNavigate,
 }: {
   columns: readonly NavColumn[];
+  pathname: string | null;
   onNavigate: () => void;
 }) {
   return (
@@ -81,6 +91,9 @@ function DesktopMegaPanel({
       {columns.map((column, colIndex) =>
         column.groups.map((group, groupIndex) => {
           const hubOnly = group.items.length === 0;
+          const headingActive = Boolean(
+            group.headingHref && isNavHrefExact(group.headingHref, pathname),
+          );
           return (
             <div
               key={`${colIndex}-${groupIndex}`}
@@ -91,9 +104,11 @@ function DesktopMegaPanel({
                   <Link
                     href={group.headingHref}
                     onClick={onNavigate}
+                    aria-current={headingActive ? "page" : undefined}
                     className={cn(
-                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal transition-colors duration-200 hover:text-arc-teal",
+                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
                       hubOnly ? "inline-block" : "block",
+                      headingActive ? "text-arc-teal" : "text-arc-charcoal",
                     )}
                   >
                     {group.heading}
@@ -113,7 +128,10 @@ function DesktopMegaPanel({
                 <ul className="space-y-0.5">
                   {group.items.map((leaf) => (
                     <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
-                      <DesktopLeaf leaf={leaf} />
+                      <DesktopLeaf
+                        leaf={leaf}
+                        active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
+                      />
                     </li>
                   ))}
                 </ul>
@@ -143,11 +161,13 @@ function DesktopNavTrigger({
   const triggerClass = cn(
     "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-2 font-sans text-[0.875rem] font-medium tracking-tight transition-colors duration-200",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent",
-    open
-      ? "bg-white/70 text-arc-teal"
-      : active
-        ? "bg-arc-teal font-semibold text-white shadow-[0_4px_12px_rgba(131,208,187,0.4)]"
-        : "text-arc-charcoal hover:bg-white/50 hover:text-arc-teal",
+    open && active
+      ? "bg-arc-teal/20 font-semibold text-arc-teal ring-1 ring-arc-teal/35"
+      : open
+        ? "bg-white/70 text-arc-teal"
+        : active
+          ? "bg-arc-teal font-semibold text-white shadow-[0_4px_12px_rgba(131,208,187,0.4)]"
+          : "text-arc-charcoal hover:bg-white/50 hover:text-arc-teal",
   );
 
   const chevron = hasPanel ? (
@@ -189,13 +209,6 @@ function DesktopNavTrigger({
  * logo is rendered separately by `ArcSiteHeader`. Hides on scroll down, fades in on scroll up
  * (always visible near page top). Mobile keeps the existing logo + drawer.
  */
-/** True when the current route matches this nav item (exact for "/", prefix otherwise). */
-function isNavItemActive(item: NavTopItem, pathname: string | null): boolean {
-  if (!pathname || !item.href) return false;
-  if (item.href === "/") return pathname === "/";
-  return pathname === item.href || pathname.startsWith(`${item.href}/`);
-}
-
 export function ArcDesktopNav() {
   const pathname = usePathname();
   const [openId, setOpenId] = useState<string | null>(null);
@@ -349,7 +362,11 @@ export function ArcDesktopNav() {
                   key={panelItem.id}
                   className={cn(reducedMotion ? "" : "animate-[arc-nav-fade_160ms_ease-out]")}
                 >
-                  <DesktopMegaPanel columns={panelItem.columns} onNavigate={closeMenu} />
+                  <DesktopMegaPanel
+                    columns={panelItem.columns}
+                    pathname={pathname}
+                    onNavigate={closeMenu}
+                  />
                 </div>
               </div>
             </div>

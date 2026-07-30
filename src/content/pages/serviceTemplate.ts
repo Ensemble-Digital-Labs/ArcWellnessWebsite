@@ -17,7 +17,7 @@ export type ServiceStat = {
 };
 
 export type ServiceTreatmentCard = {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   tagline: string;
   body: string;
@@ -29,7 +29,7 @@ export type ServiceTreatmentCard = {
 export type ServiceHero = {
   title: string;
   titleEmphasis: string;
-  titleEmphasisLines: readonly [string, string];
+  titleEmphasisLines: readonly [string] | readonly [string, string];
   subhead: string;
   intro: string;
   closingLine: string;

@@ -36,23 +36,34 @@ type ArcTreatmentsRuledGridProps = {
   className?: string;
 };
 
-const ROMAN_NUMERALS = [
-  "I",
-  "II",
-  "III",
-  "IV",
-  "V",
-  "VI",
-  "VII",
-  "VIII",
-  "IX",
-  "X",
-  "XI",
-  "XII",
+const ROMAN_UNITS = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
 ] as const;
 
 function treatmentRomanNumeral(index: number): string {
-  return ROMAN_NUMERALS[index] ?? String(index + 1);
+  let remaining = index + 1;
+  let numeral = "";
+
+  for (const [value, symbol] of ROMAN_UNITS) {
+    while (remaining >= value) {
+      numeral += symbol;
+      remaining -= value;
+    }
+  }
+
+  return numeral;
 }
 
 const rowRootVariants = {
@@ -204,7 +215,8 @@ function TreatmentInteractiveRow({
 
         <p
           className={cn(
-            "relative z-10 shrink-0 font-serif text-[clamp(2.75rem,7vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:pt-0.5",
+            // em-based rail keeps titles aligned as numerals widen (I → XVIII).
+            "relative z-10 shrink-0 font-serif text-[clamp(2.75rem,7vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:min-w-[2.6em] sm:pt-0.5",
             showInteractivePreview && hovered
               ? cn(
                   accentBright,

@@ -90,6 +90,21 @@ export const ARC_TREATMENT_NAV_LINKS = [
     thumbSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
   },
   {
+    label: "Neuromodulators",
+    href: "/treatments/neuromodulators",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
+  },
+  {
+    label: "RF Microneedling",
+    href: "/treatments/rf-microneedling",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
+  },
+  {
+    label: "Clear RF",
+    href: "/treatments/clear-rf",
+    thumbSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+  },
+  {
     label: "RHA Fillers",
     href: "/treatments/rha",
     thumbSrc: NAV_PREVIEW.facialAesthetic,
