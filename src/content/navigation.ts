@@ -35,6 +35,11 @@ export type NavTopItem = {
   href?: string;
   /** Mega-menu columns (desktop) / accordion sections (mobile). */
   columns?: readonly NavColumn[];
+  /**
+   * Pin the desktop panel to this many columns per row. Without it, columns wrap
+   * on their own content width, which gives ragged rows on long lists.
+   */
+  panelColumnsPerRow?: number;
 };
 
 export const ARC_NAV_BOOK_CTA = {
@@ -137,7 +142,7 @@ const conditionsMenu: readonly NavColumn[] = [
           soon("Brain Fog"),
           soon("Food Sensitivities"),
           soon("Fine Lines & Wrinkles"),
-          soon("Low Testosterone"),
+          soon("Male Hormonal Changes"),
         ],
       },
     ],
@@ -149,7 +154,7 @@ const conditionsMenu: readonly NavColumn[] = [
           soon("Chronic Fatigue"),
           soon("Gut Health"),
           soon("Hair Loss"),
-          soon("Menopause"),
+          soon("Women's Hormones"),
         ],
       },
     ],
@@ -158,10 +163,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Poor Focus / ADHD"),
+          soon("Poor Focus"),
+          soon("ADHD"),
           soon("Inflammation"),
           soon("Hyperpigmentation"),
-          soon("Hormonal Imbalance"),
         ],
       },
     ],
@@ -173,19 +178,7 @@ const conditionsMenu: readonly NavColumn[] = [
           soon("Memory Concerns"),
           soon("Insulin Resistance"),
           soon("Loose Skin"),
-          soon("Low Libido"),
-        ],
-      },
-    ],
-  },
-  {
-    groups: [
-      {
-        items: [
           soon("Sleep Concerns"),
-          soon("Liver Health"),
-          soon("Acne"),
-          soon("Sexual Wellness"),
         ],
       },
     ],
@@ -194,10 +187,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
+          soon("Acne"),
           soon("Anxiety"),
           soon("Oxidative Stress"),
           soon("Acne Scars"),
-          soon("Weight Gain"),
         ],
       },
     ],
@@ -206,10 +199,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
+          soon("Weight Gain"),
           soon("Depression"),
           soon("Immune Health"),
           soon("Rosacea"),
-          soon("Food Noise"),
         ],
       },
     ],
@@ -218,10 +211,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
+          soon("Food Noise"),
           soon("Stress & Burnout"),
           soon("Longevity"),
           soon("Large Pores"),
-          soon("Medical Weight Loss"),
         ],
       },
     ],
@@ -230,22 +223,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Low Energy"),
           soon("Cellular Health"),
           soon("Double Chin"),
           soon("Muscle Loss"),
-        ],
-      },
-    ],
-  },
-  {
-    groups: [
-      {
-        items: [
           soon("Poor Recovery"),
-          soon("Healthy Aging"),
-          soon("Facial Volume Loss"),
-          soon("Strength & Performance"),
         ],
       },
     ],
@@ -254,10 +235,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
+          soon("Facial Volume Loss"),
+          soon("Physical Performance"),
           soon("Cognitive Health"),
           soon("Parkinson's Support"),
-          soon("Thin Lips"),
-          soon("Pelvic Floor Weakness"),
         ],
       },
     ],
@@ -266,10 +247,20 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Mental Clarity"),
-          soon("Chronic UTIs"),
           soon("Sun Damage"),
+          soon("Pelvic Floor Weakness"),
+          soon("Recurrent UTIs"),
+        ],
+      },
+    ],
+  },
+  {
+    groups: [
+      {
+        items: [
           soon("Urinary Incontinence"),
+          soon("Post Prostatectomy Incontinence"),
+          soon("Intimacy and Sexual Wellness"),
         ],
       },
     ],
@@ -478,7 +469,7 @@ const shopMenu: readonly NavColumn[] = [
 export const ARC_NAV_TOP_ITEMS: readonly NavTopItem[] = [
   { id: "about", label: "About", href: "/about" },
   { id: "services", label: "Services", href: "/treatments", columns: servicesMenu },
-  { id: "conditions", label: "Conditions", columns: conditionsMenu },
+  { id: "conditions", label: "Conditions", columns: conditionsMenu, panelColumnsPerRow: 4 },
   { id: "start-here", label: "Start Here", columns: startHereMenu },
   { id: "arc-library", label: "Arc Library", columns: arcLibraryMenu },
   { id: "financing", label: "Financing", href: "/financing", columns: financingMenu },

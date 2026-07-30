@@ -13,6 +13,7 @@ import {
   isNavItemActive,
   navItemHasPanel,
   type NavColumn,
+  type NavGroup,
   type NavLeaf,
   type NavTopItem,
 } from "@/content/navigation";
@@ -77,69 +78,97 @@ function DesktopLeaf({ leaf, active }: { leaf: NavLeaf; active: boolean }) {
   );
 }
 
+type PanelCell = { group: NavGroup; key: string };
+
+/** Flatten columns → groups, then optionally slice into fixed-length rows. */
+function panelRows(
+  columns: readonly NavColumn[],
+  columnsPerRow: number | undefined,
+): PanelCell[][] {
+  const cells: PanelCell[] = [];
+  columns.forEach((column, colIndex) => {
+    column.groups.forEach((group, groupIndex) => {
+      cells.push({ group, key: `${colIndex}-${groupIndex}` });
+    });
+  });
+  if (!columnsPerRow) return [cells];
+
+  const rows: PanelCell[][] = [];
+  for (let i = 0; i < cells.length; i += columnsPerRow) {
+    rows.push(cells.slice(i, i + columnsPerRow));
+  }
+  return rows;
+}
+
 function DesktopMegaPanel({
   columns,
+  columnsPerRow,
   pathname,
   onNavigate,
 }: {
   columns: readonly NavColumn[];
+  columnsPerRow?: number;
   pathname: string | null;
   onNavigate: () => void;
 }) {
+  const rows = panelRows(columns, columnsPerRow);
+
   return (
-    <div className="flex flex-wrap justify-center gap-x-4 gap-y-8">
-      {columns.map((column, colIndex) =>
-        column.groups.map((group, groupIndex) => {
-          const hubOnly = group.items.length === 0;
-          const headingActive = Boolean(
-            group.headingHref && isNavHrefExact(group.headingHref, pathname),
-          );
-          return (
-            <div
-              key={`${colIndex}-${groupIndex}`}
-              className={cn("min-w-[11rem] space-y-2", hubOnly && "text-center")}
-            >
-              {group.heading ? (
-                group.headingHref ? (
-                  <Link
-                    href={group.headingHref}
-                    onClick={onNavigate}
-                    aria-current={headingActive ? "page" : undefined}
-                    className={cn(
-                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
-                      hubOnly ? "inline-block" : "block",
-                      headingActive ? "text-arc-teal" : "text-arc-charcoal",
-                    )}
-                  >
-                    {group.heading}
-                  </Link>
-                ) : (
-                  <p
-                    className={cn(
-                      "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal",
-                      hubOnly ? "inline-block" : "block",
-                    )}
-                  >
-                    {group.heading}
-                  </p>
-                )
-              ) : null}
-              {!hubOnly ? (
-                <ul className="space-y-0.5">
-                  {group.items.map((leaf) => (
-                    <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
-                      <DesktopLeaf
-                        leaf={leaf}
-                        active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          );
-        }),
-      )}
+    <div className="space-y-8">
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex flex-wrap justify-center gap-x-4 gap-y-8">
+          {row.map(({ group, key }) => {
+            const hubOnly = group.items.length === 0;
+            const headingActive = Boolean(
+              group.headingHref && isNavHrefExact(group.headingHref, pathname),
+            );
+            return (
+              <div
+                key={key}
+                className={cn("min-w-[11rem] space-y-2", hubOnly && "text-center")}
+              >
+                {group.heading ? (
+                  group.headingHref ? (
+                    <Link
+                      href={group.headingHref}
+                      onClick={onNavigate}
+                      aria-current={headingActive ? "page" : undefined}
+                      className={cn(
+                        "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
+                        hubOnly ? "inline-block" : "block",
+                        headingActive ? "text-arc-teal" : "text-arc-charcoal",
+                      )}
+                    >
+                      {group.heading}
+                    </Link>
+                  ) : (
+                    <p
+                      className={cn(
+                        "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal",
+                        hubOnly ? "inline-block" : "block",
+                      )}
+                    >
+                      {group.heading}
+                    </p>
+                  )
+                ) : null}
+                {!hubOnly ? (
+                  <ul className="space-y-0.5">
+                    {group.items.map((leaf) => (
+                      <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
+                        <DesktopLeaf
+                          leaf={leaf}
+                          active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 }
@@ -364,6 +393,7 @@ export function ArcDesktopNav() {
                 >
                   <DesktopMegaPanel
                     columns={panelItem.columns}
+                    columnsPerRow={panelItem.panelColumnsPerRow}
                     pathname={pathname}
                     onNavigate={closeMenu}
                   />
