@@ -33,7 +33,7 @@ const PRELOAD_SRCS: readonly string[] = [
  * treatment detail) shares the same marble plate, so warming these one time
  * makes those heroes paint instantly on the first navigation. Also warms the
  * About page silk-floral hero plate (`ScrollChapterIntroSection`), plus curated
- * **service-page LCP** heroes (EXION first — see `servicePageLcpHeroes.ts`).
+ * **service + shared condition LCP** heroes (see `servicePageLcpHeroes.ts`).
  *
  * These are warmed via the exact `/_next/image` variant (not the raw file) so the
  * cached URL matches what the destination pages actually request.

@@ -1,16 +1,18 @@
 /**
- * Service-page LCP heroes warmed during homepage idle (see `ArcSitePreloader`).
+ * Service + condition LCP heroes warmed during homepage idle (see `ArcSitePreloader`).
  *
  * Curated: **one** first-viewport plate per service — not every section plate.
- * Start with EXION + Infusion; append other services as their templates ship.
+ * Conditions share a single hero plate (`CONDITION_HERO_IMAGE_SRC`), so one entry
+ * covers every `/conditions/[slug]` landing.
  *
- * Paths must match what `next/image` requests on the service page (`sizes="100vw"`),
+ * Paths must match what `next/image` requests on the destination page (`sizes="100vw"`),
  * so the warmer uses `/_next/image` variants — not a separate raw URL.
  */
 
 import { arc360Hero } from "@/content/pages/arc-360";
 import { brainHealthHero } from "@/content/pages/brain-health";
 import { clearRfHero } from "@/content/pages/clear-rf";
+import { CONDITION_HERO_IMAGE_SRC } from "@/content/pages/conditions/assets";
 import { emsculptNeoHero } from "@/content/pages/emsculpt-neo";
 import { emsellaHero } from "@/content/pages/emsella";
 import { exionHero } from "@/content/pages/exion";
@@ -24,7 +26,7 @@ import { metabolicHealthHero } from "@/content/pages/metabolic-health";
 import { neuromodulatorsHero } from "@/content/pages/neuromodulators";
 import { rfMicroneedlingHero } from "@/content/pages/rf-microneedling";
 
-/** Idle-warmed service LCP backgrounds (homepage → service navigation). */
+/** Idle-warmed service + shared condition LCP backgrounds (homepage → inner nav). */
 export const SERVICE_PAGE_LCP_HERO_SRCS: readonly string[] = [
   arc360Hero.imageSrc,
   exionHero.imageSrc,
@@ -41,4 +43,5 @@ export const SERVICE_PAGE_LCP_HERO_SRCS: readonly string[] = [
   neuromodulatorsHero.imageSrc,
   rfMicroneedlingHero.imageSrc,
   clearRfHero.imageSrc,
+  CONDITION_HERO_IMAGE_SRC,
 ];
