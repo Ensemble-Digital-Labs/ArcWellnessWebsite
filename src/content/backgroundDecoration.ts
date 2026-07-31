@@ -69,9 +69,12 @@ export const TESTIMONIALS_SECTION_BACKGROUND_SRC =
 export const TESTIMONIALS_SECTION_BACKGROUND_PREVIOUS_SRC =
   "/assets/sections/testimonials/testimonials-background--previous.webp" as const;
 
-/** Full-bleed art behind `#path` sticky intro only (per-step backgrounds can be wired separately later). */
+/**
+ * Full-bleed art behind `#path` sticky intro only (per-step backgrounds can be wired separately later).
+ * Shares the About page hero plate (`images.aboutHeroMedia`).
+ */
 export const PATH_SECTION_INTRO_BACKGROUND_SRC =
-  "/assets/sections/your-path/path-intro-background.webp?v=20260716" as const;
+  "/assets/hero/about-hero-silk-gold.webp" as const;
 
 /** Photography for each journey step panel in `#path` (after intro). See `public/assets/sections/your-path/steps/`. */
 export const PATH_STEP_IMAGE_SRC = {

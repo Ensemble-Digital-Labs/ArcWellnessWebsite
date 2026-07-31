@@ -139,10 +139,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Brain Fog"),
-          soon("Food Sensitivities"),
-          soon("Fine Lines & Wrinkles"),
-          soon("Male Hormonal Changes"),
+          leaf("Brain Fog", "/conditions/brain-fog"),
+          leaf("Food Sensitivities", "/conditions/food-sensitivities"),
+          leaf("Fine Lines & Wrinkles", "/conditions/fine-lines-wrinkles"),
+          leaf("Male Hormonal Changes", "/conditions/male-hormonal-changes"),
         ],
       },
     ],
@@ -151,10 +151,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Chronic Fatigue"),
-          soon("Gut Health"),
-          soon("Hair Loss"),
-          soon("Women's Hormones"),
+          leaf("Chronic Fatigue", "/conditions/chronic-fatigue"),
+          leaf("Gut Health", "/conditions/gut-health"),
+          leaf("Hair Loss", "/conditions/hair-loss"),
+          leaf("Women's Hormones", "/conditions/womens-hormones"),
         ],
       },
     ],
@@ -163,10 +163,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Poor Focus"),
-          soon("ADHD"),
-          soon("Inflammation"),
-          soon("Hyperpigmentation"),
+          leaf("Poor Focus", "/conditions/poor-focus"),
+          leaf("ADHD", "/conditions/adhd"),
+          leaf("Inflammation", "/conditions/inflammation"),
+          leaf("Hyperpigmentation", "/conditions/hyperpigmentation"),
         ],
       },
     ],
@@ -175,10 +175,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Memory Concerns"),
-          soon("Insulin Resistance"),
-          soon("Loose Skin"),
-          soon("Sleep Concerns"),
+          leaf("Memory Concerns", "/conditions/memory-concerns"),
+          leaf("Insulin Resistance", "/conditions/insulin-resistance"),
+          leaf("Loose Skin", "/conditions/loose-skin"),
+          leaf("Sleep Concerns", "/conditions/sleep-concerns"),
         ],
       },
     ],
@@ -187,10 +187,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Acne"),
-          soon("Anxiety"),
-          soon("Oxidative Stress"),
-          soon("Acne Scars"),
+          leaf("Acne", "/conditions/acne"),
+          leaf("Anxiety", "/conditions/anxiety"),
+          leaf("Oxidative Stress", "/conditions/oxidative-stress"),
+          leaf("Acne Scars", "/conditions/acne-scars"),
         ],
       },
     ],
@@ -199,10 +199,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Weight Gain"),
-          soon("Depression"),
-          soon("Immune Health"),
-          soon("Rosacea"),
+          leaf("Weight Gain", "/conditions/weight-gain"),
+          leaf("Depression", "/conditions/depression"),
+          leaf("Immune Health", "/conditions/immune-health"),
+          leaf("Rosacea", "/conditions/rosacea"),
         ],
       },
     ],
@@ -211,10 +211,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Food Noise"),
-          soon("Stress & Burnout"),
-          soon("Longevity"),
-          soon("Large Pores"),
+          leaf("Food Noise", "/conditions/food-noise"),
+          leaf("Stress & Burnout", "/conditions/stress-burnout"),
+          leaf("Longevity", "/conditions/longevity"),
+          leaf("Large Pores", "/conditions/large-pores"),
         ],
       },
     ],
@@ -223,10 +223,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Cellular Health"),
-          soon("Double Chin"),
-          soon("Muscle Loss"),
-          soon("Poor Recovery"),
+          leaf("Cellular Health", "/conditions/cellular-health"),
+          leaf("Double Chin", "/conditions/double-chin"),
+          leaf("Muscle Loss", "/conditions/muscle-loss"),
+          leaf("Poor Recovery", "/conditions/poor-recovery"),
         ],
       },
     ],
@@ -235,10 +235,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Facial Volume Loss"),
-          soon("Physical Performance"),
-          soon("Cognitive Health"),
-          soon("Parkinson's Support"),
+          leaf("Facial Volume Loss", "/conditions/facial-volume-loss"),
+          leaf("Physical Performance", "/conditions/physical-performance"),
+          leaf("Cognitive Health", "/conditions/cognitive-health"),
+          leaf("Parkinson's Support", "/conditions/parkinsons-support"),
         ],
       },
     ],
@@ -247,9 +247,9 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Sun Damage"),
-          soon("Pelvic Floor Weakness"),
-          soon("Recurrent UTIs"),
+          leaf("Sun Damage", "/conditions/sun-damage"),
+          leaf("Pelvic Floor Weakness", "/conditions/pelvic-floor-weakness"),
+          leaf("Recurrent UTIs", "/conditions/recurrent-utis"),
         ],
       },
     ],
@@ -258,9 +258,15 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Urinary Incontinence"),
-          soon("Post Prostatectomy Incontinence"),
-          soon("Intimacy and Sexual Wellness"),
+          leaf("Urinary Incontinence", "/conditions/urinary-incontinence"),
+          leaf(
+            "Post Prostatectomy Incontinence",
+            "/conditions/post-prostatectomy-incontinence",
+          ),
+          leaf(
+            "Intimacy and Sexual Wellness",
+            "/conditions/intimacy-sexual-wellness",
+          ),
         ],
       },
     ],

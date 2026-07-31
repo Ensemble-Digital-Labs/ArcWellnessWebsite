@@ -146,7 +146,7 @@ function YourPathIntroSection({
           src={PATH_SECTION_INTRO_BACKGROUND_SRC}
           alt=""
           fill
-          className="object-cover object-center"
+          className="object-cover object-[78%_center] md:object-center"
           sizes="100vw"
         />
       </div>

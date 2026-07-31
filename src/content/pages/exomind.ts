@@ -8,7 +8,7 @@ const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
 const EXOMIND_ASSET = "/assets/treatments/exomind";
 /** Bump when replacing ExoMind rasters so next/image + browser drop stale caches. */
-const EXOMIND_ASSETS_VERSION = "20260727-lasting-card";
+const EXOMIND_ASSETS_VERSION = "20260730-target-card";
 
 function exomindAsset(file: string) {
   return `${EXOMIND_ASSET}/${file}?v=${EXOMIND_ASSETS_VERSION}`;
