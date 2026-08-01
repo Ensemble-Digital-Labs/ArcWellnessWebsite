@@ -34,18 +34,24 @@ export const investSectionShellClass = cn(
 export const investMobileStackClass = cn(
   "w-full max-w-lg",
   "md:max-w-xl lg:max-w-2xl",
-  "mt-12 translate-y-8 px-1 py-2 sm:mt-14 sm:translate-y-10 sm:px-2",
+  "mt-16 translate-y-12 px-1 py-2 sm:mt-20 sm:translate-y-14 sm:px-2",
 );
 
 export const investCopyBlockClass = "relative w-full max-w-full";
 
 /** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
-/** Large on phone; `md+` restores the prior laptop/desktop scale. */
+/** Large + tight stack on phone; `md+` restores the prior laptop/desktop scale. */
 const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis font-normal not-italic leading-[0.98] tracking-tight text-arc-cream",
-  "text-[clamp(3.2rem,9.8vw,3.85rem)]",
+  "block font-title-emphasis font-normal not-italic tracking-tight text-arc-cream",
+  "text-[clamp(3.2rem,9.8vw,3.85rem)] leading-[0.82]",
   "md:text-[clamp(2.5rem,7.2vw,6.35rem)] md:leading-[1.02]",
   "[text-shadow:0_2px_22px_rgba(0,0,0,0.58),0_1px_6px_rgba(0,0,0,0.45)]",
+);
+
+/** Pull follow-on lines closer on mobile only. */
+const INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS = cn(
+  "mt-0 max-md:-mt-1.5",
+  "md:mt-0.5",
 );
 
 export function InvestCTAHeadline({
@@ -61,10 +67,14 @@ export function InvestCTAHeadline({
       style={headlineMotion}
     >
       <TitleEmphasis className={INVEST_CTA_KEYWORD_LINE_CLASS}>Invest in You.</TitleEmphasis>
-      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+      <TitleEmphasis
+        className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS)}
+      >
         Live Fully.
       </TitleEmphasis>
-      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+      <TitleEmphasis
+        className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS)}
+      >
         Age Intentionally.
       </TitleEmphasis>
     </h2>
@@ -115,22 +125,22 @@ export function InvestCTASignoffBlock({
     >
       <p
         className={cn(
-          "font-title-emphasis leading-[1.2] text-arc-cream",
+          "font-title-emphasis text-arc-cream",
           "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.55rem,5.8vw,1.95rem)]"
-            : "whitespace-nowrap text-[clamp(1.75rem,3.6vw,3rem)]",
+            ? "text-[clamp(1.55rem,5.8vw,1.95rem)] leading-[1.05]"
+            : "whitespace-nowrap text-[clamp(1.75rem,3.6vw,3rem)] leading-[1.2]",
         )}
       >
         {signoff.preamble}
       </p>
       <p
         className={cn(
-          "mt-1 font-title-emphasis leading-none text-arc-cream",
+          "font-title-emphasis leading-none text-arc-cream",
           "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.7rem,6.2vw,2.15rem)]"
-            : "text-[clamp(1.95rem,3.9vw,3.2rem)]",
+            ? "-mt-0.5 text-[clamp(1.7rem,6.2vw,2.15rem)]"
+            : "mt-1 text-[clamp(1.95rem,3.9vw,3.2rem)]",
         )}
       >
         {signoff.name}
