@@ -86,17 +86,7 @@ function InvestCTAContent({
               className="mx-auto text-center"
             />
           </ArcTextReveal>
-          {supportingLine ? (
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p
-                className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)] sm:text-[15px]"
-                style={staticMotion}
-              >
-                {supportingLine}
-              </p>
-            </ArcTextReveal>
-          ) : null}
-          <ArcTextReveal variant="body" delayIndex={supportingLine ? 2 : 1}>
+          <ArcTextReveal variant="body" delayIndex={1}>
             <InvestCTAActions
               motionStyle={staticMotion}
               ctaLabel={ctaLabel}
@@ -105,7 +95,7 @@ function InvestCTAContent({
             />
           </ArcTextReveal>
           <div className="mt-8">
-            <ArcTextReveal variant="heading" delayIndex={supportingLine ? 3 : 2}>
+            <ArcTextReveal variant="heading" delayIndex={2}>
               <InvestCTASignoffBlock
                 signoff={signoff}
                 motionStyle={staticMotion}

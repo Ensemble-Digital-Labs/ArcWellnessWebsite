@@ -29,18 +29,19 @@ export const investSectionShellClass = cn(
 /**
  * Mobile/tablet copy stack — no dark card.
  * Legibility comes from `InvestCTABackdrop` veil + cream text shadows.
+ * Nudge below true center so the group clears the sticky logo/menu band.
  */
 export const investMobileStackClass = cn(
   "w-full max-w-lg",
   "md:max-w-xl lg:max-w-2xl",
-  "px-1 py-2 sm:px-2",
+  "mt-12 translate-y-8 px-1 py-2 sm:mt-14 sm:translate-y-10 sm:px-2",
 );
 
 export const investCopyBlockClass = "relative w-full max-w-full";
 
 /** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
 const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(2.55rem,8vw,6.5rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(2.9rem,8.2vw,7rem)]",
+  "block font-title-emphasis text-[clamp(3.45rem,10.5vw,8rem)] font-normal not-italic leading-[0.98] tracking-tight text-arc-cream md:text-[clamp(3.85rem,10.8vw,8.5rem)]",
   "[text-shadow:0_2px_22px_rgba(0,0,0,0.58),0_1px_6px_rgba(0,0,0,0.45)]",
 );
 
