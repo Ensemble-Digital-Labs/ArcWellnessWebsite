@@ -40,8 +40,11 @@ export const investMobileStackClass = cn(
 export const investCopyBlockClass = "relative w-full max-w-full";
 
 /** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
+/** Large on phone; `md+` restores the prior laptop/desktop scale. */
 const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(3.45rem,10.5vw,8rem)] font-normal not-italic leading-[0.98] tracking-tight text-arc-cream md:text-[clamp(3.85rem,10.8vw,8.5rem)]",
+  "block font-title-emphasis font-normal not-italic leading-[0.98] tracking-tight text-arc-cream",
+  "text-[clamp(3.2rem,9.8vw,3.85rem)]",
+  "md:text-[clamp(2.5rem,7.2vw,6.35rem)] md:leading-[1.02]",
   "[text-shadow:0_2px_22px_rgba(0,0,0,0.58),0_1px_6px_rgba(0,0,0,0.45)]",
 );
 
