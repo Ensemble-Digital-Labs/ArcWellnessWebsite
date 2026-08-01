@@ -26,20 +26,22 @@ export const investSectionShellClass = cn(
   "2xl:min-h-[min(100dvh,76rem)]",
 );
 
-/** Readable panel on phone/tablet, cream type on mint wall needs a surface. */
-export const investMobilePanelClass = cn(
-  "w-full max-w-lg rounded-2xl",
+/**
+ * Mobile/tablet copy stack — no dark card.
+ * Legibility comes from `InvestCTABackdrop` veil + cream text shadows.
+ */
+export const investMobileStackClass = cn(
+  "w-full max-w-lg",
   "md:max-w-xl lg:max-w-2xl",
-  "bg-arc-charcoal/78 px-6 py-7",
-  "sm:px-8 sm:py-9",
+  "px-1 py-2 sm:px-2",
 );
 
 export const investCopyBlockClass = "relative w-full max-w-full";
 
 /** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
 const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(2.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(2.5rem,7.2vw,6.35rem)]",
-  "[text-shadow:0_1px_8px_rgba(0,0,0,0.32)]",
+  "block font-title-emphasis text-[clamp(2.55rem,8vw,6.5rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(2.9rem,8.2vw,7rem)]",
+  "[text-shadow:0_2px_22px_rgba(0,0,0,0.58),0_1px_6px_rgba(0,0,0,0.45)]",
 );
 
 export function InvestCTAHeadline({
@@ -110,10 +112,10 @@ export function InvestCTASignoffBlock({
       <p
         className={cn(
           "font-title-emphasis leading-[1.2] text-arc-cream",
-          "[text-shadow:0_2px_20px_rgba(0,0,0,0.4)]",
+          "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.25rem,4.8vw,1.55rem)]"
-            : "whitespace-nowrap text-[clamp(1.5rem,3.2vw,2.65rem)]",
+            ? "text-[clamp(1.55rem,5.8vw,1.95rem)]"
+            : "whitespace-nowrap text-[clamp(1.75rem,3.6vw,3rem)]",
         )}
       >
         {signoff.preamble}
@@ -121,9 +123,10 @@ export function InvestCTASignoffBlock({
       <p
         className={cn(
           "mt-1 font-title-emphasis leading-none text-arc-cream",
+          "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.4rem,5.2vw,1.7rem)]"
-            : "text-[clamp(1.7rem,3.5vw,2.85rem)]",
+            ? "text-[clamp(1.7rem,6.2vw,2.15rem)]"
+            : "text-[clamp(1.95rem,3.9vw,3.2rem)]",
         )}
       >
         {signoff.name}
@@ -143,9 +146,14 @@ export function InvestCTABackdrop({ imageSrc }: { imageSrc: string }) {
         sizes="100vw"
         priority={false}
       />
+      {/* Mobile/tablet: soft full-bleed veil (no card) so cream type stays readable. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/28 via-black/10 to-black/35 xl:hidden"
+        className="absolute inset-0 bg-gradient-to-b from-black/48 via-black/32 to-black/55 xl:hidden"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42)_0%,transparent_72%)] xl:hidden"
       />
       <div
         aria-hidden

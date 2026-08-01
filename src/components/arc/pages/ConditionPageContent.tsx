@@ -313,12 +313,12 @@ export function ConditionPageContent({ content }: ConditionPageContentProps) {
               <div className="relative z-10">
                 <div className="-translate-y-3 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
                   <ArcTextReveal variant="heading" trigger="mount">
-                    <h1 className="font-serif text-[clamp(2.25rem,6.5vw,4rem)] font-semibold leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
+                    <h1 className="font-serif text-[clamp(2.75rem,7.5vw,4.75rem)] font-bold leading-none tracking-tight text-black [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
                       {hero.title}
                     </h1>
                   </ArcTextReveal>
                   <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-                    <p className="mx-auto mt-5 max-w-2xl font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:[text-shadow:none]">
+                    <p className="mx-auto mt-5 max-w-2xl font-sans text-sm font-bold uppercase tracking-[0.22em] text-black [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-base md:text-lg md:[text-shadow:none]">
                       {hero.subhead}
                     </p>
                   </ArcTextReveal>
@@ -331,7 +331,7 @@ export function ConditionPageContent({ content }: ConditionPageContentProps) {
                       trigger="mount"
                       delayIndex={i + 2}
                     >
-                      <p className="font-sans text-sm leading-relaxed text-arc-charcoal/82 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:text-base md:[text-shadow:none]">
+                      <p className="font-sans text-sm font-semibold leading-relaxed text-black [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:text-base md:[text-shadow:none]">
                         {paragraph}
                       </p>
                     </ArcTextReveal>
@@ -344,7 +344,7 @@ export function ConditionPageContent({ content }: ConditionPageContentProps) {
                     delayIndex={hero.paragraphs.length + 2}
                   >
                     <div className="mx-auto mt-8 inline-flex max-w-md rounded-full border-2 border-arc-champagne bg-arc-cream/90 px-6 py-3 shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)] backdrop-blur-[3px] md:bg-arc-cream/85">
-                      <p className="font-sans text-sm font-semibold leading-snug text-arc-charcoal sm:text-[0.9375rem]">
+                      <p className="font-sans text-sm font-bold leading-snug text-black sm:text-[0.9375rem]">
                         {hero.closingLine}
                       </p>
                     </div>

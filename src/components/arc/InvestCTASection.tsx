@@ -9,7 +9,7 @@ import {
   InvestCTAHeadline,
   InvestCTASignoffBlock,
   investCopyBlockClass,
-  investMobilePanelClass,
+  investMobileStackClass,
   type InvestCTASignoff,
   investSectionShellClass,
 } from "@/components/arc/investCtaShared";
@@ -79,7 +79,7 @@ function InvestCTAContent({
           "xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,0.34fr)_minmax(0,1fr)] xl:items-center xl:justify-normal xl:gap-8",
         )}
       >
-        <div className={cn(investMobilePanelClass, "text-center xl:hidden")}>
+        <div className={cn(investMobileStackClass, "text-center xl:hidden")}>
           <ArcTextReveal variant="heading">
             <InvestCTAHeadline
               headlineMotion={staticMotion}
@@ -89,7 +89,7 @@ function InvestCTAContent({
           {supportingLine ? (
             <ArcTextReveal variant="body" delayIndex={1}>
               <p
-                className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)] sm:text-[15px]"
+                className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)] sm:text-[15px]"
                 style={staticMotion}
               >
                 {supportingLine}
