@@ -7,6 +7,7 @@
  * - `href` omitted       → non-clickable label (page not built)
  * - `comingSoon: true`   → disabled + "Coming soon"
  * - `future: true`       → disabled + "Future"
+ * - `hidden: true`       → omitted from desktop bar + mobile drawer (IA kept)
  */
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
@@ -40,6 +41,11 @@ export type NavTopItem = {
    * on their own content width, which gives ragged rows on long lists.
    */
   panelColumnsPerRow?: number;
+  /**
+   * When true, the tab is filtered out of `ARC_NAV_TOP_ITEMS` (desktop + mobile).
+   * Keep the entry + its `*Menu` IA here so it can be restored without rewriting.
+   */
+  hidden?: boolean;
 };
 
 export const ARC_NAV_BOOK_CTA = {
@@ -472,16 +478,32 @@ const shopMenu: readonly NavColumn[] = [
   },
 ];
 
-export const ARC_NAV_TOP_ITEMS: readonly NavTopItem[] = [
+/**
+ * Full top-bar IA (including temporarily hidden tabs).
+ * Public export `ARC_NAV_TOP_ITEMS` filters out `hidden` entries.
+ */
+const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   { id: "about", label: "About", href: "/about" },
   { id: "services", label: "Services", href: "/treatments", columns: servicesMenu },
   { id: "conditions", label: "Conditions", columns: conditionsMenu, panelColumnsPerRow: 4 },
   { id: "start-here", label: "Start Here", columns: startHereMenu },
   { id: "arc-library", label: "Arc Library", columns: arcLibraryMenu },
   { id: "financing", label: "Financing", href: "/financing", columns: financingMenu },
-  { id: "shop", label: "Shop", columns: shopMenu },
+  {
+    id: "shop",
+    label: "Shop",
+    columns: shopMenu,
+    // NOTE (Chinh): Shop tab hidden until shop pages / ecommerce are ready.
+    // To show again: set `hidden: false` (or remove this flag). Column IA stays in `shopMenu`.
+    hidden: true,
+  },
   { id: "contact", label: "Contact", href: "/contact" },
-] as const;
+];
+
+/** Top-bar items actually rendered in desktop nav + mobile drawer. */
+export const ARC_NAV_TOP_ITEMS: readonly NavTopItem[] = ARC_NAV_TOP_ITEMS_SOURCE.filter(
+  (item) => !item.hidden,
+);
 
 /** Flatten columns for simple horizontal submenus when mega grid is too wide. */
 export function flattenNavColumns(columns: readonly NavColumn[]): NavLeaf[] {
