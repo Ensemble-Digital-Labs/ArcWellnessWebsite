@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 
 import {
   ArcWaveSeparator,
@@ -47,15 +52,123 @@ export const serviceAboveCrestBottomMaskStyle: CSSProperties = {
 
 const PLATE_OBJECT_CLASS = "object-cover object-[center_30%]";
 
+/** Soft overlap between tiled cream-plate repeats (~18% of each tile). */
+const TILE_OVERLAP = 0.18;
+/** Fallback aspect if the plate hasn’t loaded yet (exion pillars ≈ 1672×941). */
+const TILE_FALLBACK_ASPECT = 941 / 1672;
+
+function tileMask(index: number, count: number): string {
+  if (count <= 1) return "none";
+  if (index === 0) {
+    return "linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%)";
+  }
+  if (index === count - 1) {
+    return "linear-gradient(to bottom, transparent 0%, #000 22%, #000 100%)";
+  }
+  return "linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%)";
+}
+
+/**
+ * Vertically tiles a cream plate at natural aspect, with overlapping soft fades
+ * so seams between duplicates blend instead of hard-cutting.
+ * Used by `ServiceCreamPlate` (`tileMedia`) and service-page FAQ plates.
+ */
+export function CreamPlateTiledMedia({ src }: { src: string }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [tileHeight, setTileHeight] = useState(0);
+  const [tileCount, setTileCount] = useState(1);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    let cancelled = false;
+    let naturalAspect = TILE_FALLBACK_ASPECT;
+
+    const img = new window.Image();
+    img.decoding = "async";
+
+    const layout = () => {
+      if (cancelled || !root) return;
+      const width = root.clientWidth || window.innerWidth;
+      const sectionHeight = root.clientHeight || window.innerHeight;
+      const height = Math.max(1, width * naturalAspect);
+      const step = height * (1 - TILE_OVERLAP);
+      const count = Math.max(1, Math.ceil(sectionHeight / step) + 1);
+      setTileHeight(height);
+      setTileCount(count);
+    };
+
+    img.onload = () => {
+      if (cancelled) return;
+      if (img.naturalWidth > 0) {
+        naturalAspect = img.naturalHeight / img.naturalWidth;
+      }
+      layout();
+    };
+    img.onerror = () => {
+      if (!cancelled) layout();
+    };
+    img.src = src;
+
+    const ro = new ResizeObserver(() => layout());
+    ro.observe(root);
+    layout();
+
+    return () => {
+      cancelled = true;
+      ro.disconnect();
+    };
+  }, [src]);
+
+  const step = tileHeight * (1 - TILE_OVERLAP);
+
+  return (
+    <div ref={rootRef} className="absolute inset-0">
+      {tileHeight > 0
+        ? Array.from({ length: tileCount }, (_, index) => {
+            const mask = tileMask(index, tileCount);
+            return (
+              <div
+                key={index}
+                className="absolute inset-x-0"
+                style={{
+                  top: index * step,
+                  height: tileHeight,
+                  backgroundImage: `url("${src}")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "100% auto",
+                  backgroundPosition: "center top",
+                  maskImage: mask,
+                  WebkitMaskImage: mask,
+                  maskSize: "100% 100%",
+                  WebkitMaskSize: "100% 100%",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskRepeat: "no-repeat",
+                }}
+              />
+            );
+          })
+        : null}
+    </div>
+  );
+}
+
 export function ServiceCreamPlate({
   src,
   maskBottom = true,
   stableMedia = false,
+  tileMedia = false,
 }: {
   src: string;
   maskBottom?: boolean;
   /** Tall pinned plate for very long acts (FAQ) so the art does not stretch. */
   stableMedia?: boolean;
+  /**
+   * Repeat the plate vertically at natural aspect with soft crossfades between
+   * tiles (Arc 360 “Every pathway” and other very long cream acts).
+   */
+  tileMedia?: boolean;
 }) {
   return (
     <div
@@ -63,7 +176,9 @@ export function ServiceCreamPlate({
       style={maskBottom ? serviceAboveCrestBottomMaskStyle : undefined}
       aria-hidden
     >
-      {stableMedia ? (
+      {tileMedia ? (
+        <CreamPlateTiledMedia src={src} />
+      ) : stableMedia ? (
         <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
           <Image
             src={src}

@@ -45,6 +45,11 @@ function triangleHero(
   ];
 }
 
+/**
+ * NOTE (Financing): 3-window arc set kept for possible restore — Financing hero no longer
+ * mounts these (see `FinancingPageContent` → Contact-style silk plate + pearl crest).
+ * To bring the windows back: pass `heroCanvasTiles={FINANCING_HERO_CANVAS_TILES}` again.
+ */
 export const FINANCING_HERO_CANVAS_TILES = triangleHero(
   {
     src: RETAIL_IMAGES.patientFiFinancingBrochure,
@@ -90,6 +95,11 @@ export const AESTHETICS_HERO_CANVAS_TILES = triangleHero(
   },
 );
 
+/**
+ * NOTE (Contact): 3-window arc set kept for possible restore — Contact hero no longer
+ * mounts these (see `ContactPageContent` → plate-only `ArcMarketingChapterHero`).
+ * To bring the windows back: pass `heroCanvasTiles={CONTACT_HERO_CANVAS_TILES}` again.
+ */
 export const CONTACT_HERO_CANVAS_TILES = triangleHero(
   {
     src: CLINIC_INTERIOR_IMAGES.receptionBacklitLogoWall,

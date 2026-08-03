@@ -29,6 +29,10 @@ import {
 } from "@/lib/arcScrollMode";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
+import {
+  serviceAboveCrestBottomMaskStyle,
+  SERVICE_WAVE_H_VAR_CLASS,
+} from "@/components/arc/servicePlate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,6 +91,11 @@ type ScrollChapterIntroSectionProps = {
   /** Soft cream feather at section bottom (About page seams). */
   bottomSeam?: boolean;
   /**
+   * Mask the ambient plate to the service pearl-wave crest path so a following
+   * `ServiceWave` can overlap cleanly (Contact → Reach out, etc.).
+   */
+  bottomCrestMask?: boolean;
+  /**
    * Eager-load the first background plate (above-the-fold page heroes) so it
    * paints immediately on navigation instead of lazy-loading after ~1s.
    */
@@ -127,6 +136,7 @@ export function ScrollChapterIntroSection({
   headlineEmphasisTone,
   headlineAsEmphasis = false,
   bottomSeam = false,
+  bottomCrestMask = false,
   heroAlign = "left",
   priorityBackground = false,
 }: ScrollChapterIntroSectionProps) {
@@ -308,13 +318,18 @@ export function ScrollChapterIntroSection({
             )
           : "overflow-hidden bg-arc-cream",
         pinScrub ? "min-h-[100dvh]" : "min-h-[min(90dvh,840px)]",
+        bottomCrestMask && SERVICE_WAVE_H_VAR_CLASS,
         className,
       )}
     >
       {pinScrub ? <ArcPinProgressRail progress={p} /> : null}
 
       {ambientFullBleed && ambientCount > 0 ? (
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={bottomCrestMask ? serviceAboveCrestBottomMaskStyle : undefined}
+          aria-hidden
+        >
           {copyColumnAmbients!.map((src, index) => {
             // The above-the-fold page-hero plate is heavy (~700KB raw); let Next
             // serve an optimized, viewport-sized AVIF/WebP so it loads fast on

@@ -14,7 +14,7 @@ export const aestheticsPage = {
     "Long-term skin health over quick fixes",
     "Subtle enhancements that preserve what makes you unique",
     "Advanced technologies with physician-led oversight",
-    "Real, visible results, from neuromodulators and RHA fillers to EmFace, Exion, and KNESKO rituals",
+    "Real, visible results, from neuromodulators and RHA fillers to EmFace, Exion, and Clear RF",
   ],
   linkedTreatments: [
     { slug: "neuromodulators", label: "Neuromodulators" },
@@ -24,6 +24,6 @@ export const aestheticsPage = {
     { slug: "exion", label: "Exion" },
     { slug: "rf-microneedling", label: "RF Microneedling" },
     { slug: "clear-rf", label: "Clear RF" },
-    { slug: "knesko", label: "Knesko" },
+    // NOTE: Knesko link removed — not an active offering. Restore: { slug: "knesko", label: "Knesko" },
   ],
 } as const;

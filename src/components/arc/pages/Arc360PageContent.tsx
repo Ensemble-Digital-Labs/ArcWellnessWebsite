@@ -341,7 +341,8 @@ export function Arc360PageContent() {
           SERVICE_WAVE_H_VAR_CLASS,
         )}
       >
-        <ServiceCreamPlate src={creamPlate.src} />
+        {/* Tall treatment list: tile the cream plate so streaks don't stretch. */}
+        <ServiceCreamPlate src={creamPlate.src} tileMedia />
         <ServiceWaveInset />
 
         <ArcTreatmentsRuledGrid

@@ -303,7 +303,8 @@ const startHereMenu: readonly NavColumn[] = [
           soon("Patient Portal"),
           soon("Forms"),
           soon("Prescription Refills"),
-          leaf("Contact Your Care Team", "/contact"),
+          // NOTE: "Contact Your Care Team" removed — Contact is a top-bar tab.
+          // Restore: leaf("Contact Your Care Team", "/contact"),
         ],
       },
     ],
@@ -409,7 +410,8 @@ const financingMenu: readonly NavColumn[] = [
           leaf("How Financing Works", "/financing"),
           soon("Frequently Asked Questions"),
           future("Financing Calculator"),
-          leaf("Contact Our Team", "/contact"),
+          // NOTE: "Contact Our Team" removed — Contact is a top-bar tab.
+          // Restore: leaf("Contact Our Team", "/contact"),
         ],
       },
     ],

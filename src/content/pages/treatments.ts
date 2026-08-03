@@ -21,6 +21,11 @@ export type TreatmentPage = {
     bullets?: readonly string[];
   }[];
   faqs?: readonly { id: string; question: string; answer: string }[];
+  /**
+   * When true, omitted from Every pathway, nav treatment lists, sitemap, and
+   * static treatment routes. Keep the entry so it can be restored later.
+   */
+  hidden?: boolean;
 };
 
 export const treatmentCategories: Record<
@@ -216,8 +221,8 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Realign Your Core to Its Natural Strength",
     category: "body",
     categoryLabel: "Pelvic health",
-    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaChairPatientLifestyle,
-    imageAlt: "Patient seated on an EmSella chair during pelvic floor treatment",
+    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
+    imageAlt: "EmSella chair and console in an ARC Wellness treatment room",
     intro:
       "Emsella is an advanced, non-invasive treatment that uses High Intensity Focused Electromagnetic Energy (HIFEM) to strengthen the pelvic floor muscles, all while you remain fully clothed.",
     sections: [
@@ -308,8 +313,8 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Restore Your Body to Its Natural Form",
     category: "body",
     categoryLabel: "Body contouring",
-    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoAbdominalTreatmentMale,
-    imageAlt: "EmSculpt Neo abdominal treatment in a wellness clinic",
+    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
+    imageAlt: "EmSculpt Neo console in an ARC Wellness treatment room",
     intro:
       "Emsculpt Neo is an advanced non-invasive treatment that combines two technologies to simultaneously reduce fat and build muscle.",
     highlights: ["No Pain. No Sweat. No downtime.", "~30 minutes per session", "Often 4 weekly sessions"],
@@ -568,6 +573,9 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Elevate your skin and spirit with KNESKO Skin",
     category: "aesthetics",
     categoryLabel: "Skincare",
+    // NOTE: Knesko is not an active offering in nav / Every pathway for now.
+    // Set `hidden: false` (or remove) to restore listings + `/treatments/knesko`.
+    hidden: true,
     imageSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay,
     imageAlt: CLINIC_INTERIOR_ALT.retailKneskoSkinProductDisplay,
     intro:
@@ -1190,9 +1198,17 @@ export const allTreatments: readonly TreatmentPage[] = [
 ];
 
 export function getTreatmentBySlug(slug: string): TreatmentPage | undefined {
-  return allTreatments.find((t) => t.slug === slug);
+  return allTreatments.find((t) => t.slug === slug && !t.hidden);
 }
 
+/** Public treatment slugs (excludes overview hub + hidden entries like Knesko). */
 export function getAllTreatmentSlugs(): string[] {
-  return allTreatments.map((t) => t.slug);
+  return allTreatments
+    .filter((t) => t.slug !== "overview" && !t.hidden)
+    .map((t) => t.slug);
+}
+
+/** Treatments shown in Every pathway / treatment indexes. */
+export function getPublishedTreatments(): readonly TreatmentPage[] {
+  return allTreatments.filter((t) => t.slug !== "overview" && !t.hidden);
 }

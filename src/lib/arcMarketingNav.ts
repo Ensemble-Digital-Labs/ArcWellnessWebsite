@@ -67,12 +67,12 @@ export const ARC_TREATMENT_NAV_LINKS = [
   {
     label: "EmSella",
     href: "/treatments/emsella",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaChairPatientLifestyle,
+    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
   },
   {
     label: "EmSculpt Neo",
     href: "/treatments/emsculpt-neo",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoAbdominalTreatmentMale,
+    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
   },
   {
     label: "EmFace",
@@ -109,11 +109,8 @@ export const ARC_TREATMENT_NAV_LINKS = [
     href: "/treatments/rha",
     thumbSrc: NAV_PREVIEW.facialAesthetic,
   },
-  {
-    label: "Knesko",
-    href: "/treatments/knesko",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay,
-  },
+  // NOTE: Knesko nav leaf removed — offering not active. Restore with:
+  // { label: "Knesko", href: "/treatments/knesko", thumbSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay },
   {
     label: "Infusion Therapy",
     href: "/treatments/infusion-therapy",

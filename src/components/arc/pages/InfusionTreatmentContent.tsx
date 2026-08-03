@@ -13,6 +13,7 @@ import {
   ARC_WAVE_TOP_FILL_D,
 } from "@/components/arc/ArcWaveSeparator";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import { CreamPlateTiledMedia } from "@/components/arc/servicePlate";
 import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -77,9 +78,11 @@ const experienceStyle: CSSProperties = {
 function CreamPlate({
   maskBottom = true,
   stableMedia = false,
+  tileMedia = false,
 }: {
   maskBottom?: boolean;
   stableMedia?: boolean;
+  tileMedia?: boolean;
 }) {
   return (
     <div
@@ -87,7 +90,9 @@ function CreamPlate({
       style={maskBottom ? aboveCrestBottomMaskStyle : undefined}
       aria-hidden
     >
-      {stableMedia ? (
+      {tileMedia ? (
+        <CreamPlateTiledMedia src={infusionCreamPlate.src} />
+      ) : stableMedia ? (
         <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
           <Image
             src={infusionCreamPlate.src}
@@ -731,7 +736,7 @@ export function InfusionTreatmentContent({
           <div
             className={cn("relative z-0", WAVE_MT_CLASS, WAVE_H_VAR_CLASS)}
           >
-            <CreamPlate maskBottom={false} stableMedia />
+            <CreamPlate maskBottom={false} tileMedia />
             <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
 
             <div className="relative z-10">

@@ -667,7 +667,7 @@ export function ServiceTemplateContent({
       <div className="relative z-0 isolate">
         {treatment.faqs?.length ? (
           <div className={cn("relative z-0", WAVE_MT_CLASS, WAVE_H_VAR_CLASS)}>
-            <CreamPlate src={creamPlate.src} maskBottom={false} stableMedia />
+            <CreamPlate src={creamPlate.src} maskBottom={false} tileMedia />
             <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
 
             <div className="relative z-10">

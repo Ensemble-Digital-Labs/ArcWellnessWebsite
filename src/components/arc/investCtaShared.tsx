@@ -116,20 +116,21 @@ export function InvestCTASignoffBlock({
   stacked?: boolean;
   centered?: boolean;
 }) {
+  const alignClass = stacked
+    ? centered
+      ? "text-center"
+      : "text-left"
+    : "text-right";
+
   return (
-    <div
-      className={cn(
-        stacked ? (centered ? "text-center" : "text-left") : "text-right",
-      )}
-      style={motionStyle}
-    >
+    <div className={alignClass} style={motionStyle}>
       <p
         className={cn(
           "font-title-emphasis text-arc-cream",
           "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
             ? "text-[clamp(1.55rem,5.8vw,1.95rem)] leading-[1.05]"
-            : "whitespace-nowrap text-[clamp(1.75rem,3.6vw,3rem)] leading-[1.2]",
+            : "text-[clamp(1.65rem,3.2vw,2.65rem)] leading-[1.2]",
         )}
       >
         {signoff.preamble}
@@ -140,7 +141,7 @@ export function InvestCTASignoffBlock({
           "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
             ? "-mt-0.5 text-[clamp(1.7rem,6.2vw,2.15rem)]"
-            : "mt-1 text-[clamp(1.95rem,3.9vw,3.2rem)]",
+            : "mt-1 text-[clamp(1.85rem,3.5vw,2.85rem)]",
         )}
       >
         {signoff.name}

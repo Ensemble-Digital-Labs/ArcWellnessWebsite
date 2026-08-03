@@ -188,29 +188,13 @@ function ServiceRow({
         {service.href ? (
           <Link
             href={service.href}
-            className="group relative flex min-h-[3.25rem] flex-col items-center justify-center gap-1 py-3.5 text-center transition-colors sm:min-h-[3.5rem] sm:py-4"
+            className="group relative flex min-h-[3.25rem] items-center justify-center gap-3 py-3.5 text-center transition-colors sm:min-h-[3.5rem] sm:py-4"
           >
-            <span className="inline-flex items-center gap-3">{inner}</span>
-            {service.body ? (
-              <span
-                className="max-w-md font-sans text-sm leading-relaxed"
-                style={{ color: "rgba(217,184,120,0.72)" }}
-              >
-                {service.body}
-              </span>
-            ) : null}
+            {inner}
           </Link>
         ) : (
-          <div className="flex min-h-[3.25rem] flex-col items-center justify-center gap-1 py-3.5 text-center sm:min-h-[3.5rem] sm:py-4">
-            <span className="inline-flex items-center gap-3">{inner}</span>
-            {service.body ? (
-              <span
-                className="max-w-md font-sans text-sm leading-relaxed"
-                style={{ color: "rgba(217,184,120,0.72)" }}
-              >
-                {service.body}
-              </span>
-            ) : null}
+          <div className="flex min-h-[3.25rem] items-center justify-center gap-3 py-3.5 text-center sm:min-h-[3.5rem] sm:py-4">
+            {inner}
           </div>
         )}
       </ArcTextReveal>
@@ -219,28 +203,14 @@ function ServiceRow({
 }
 
 function DiscoverGroups({ groups }: { groups: readonly ConditionServiceGroup[] }) {
+  const services = groups.flatMap((group) => group.services);
+
   return (
-    <div className="mx-auto mt-10 max-w-2xl space-y-10 sm:mt-12">
-      {groups.map((group) => (
-        <div key={group.heading ?? group.services[0]?.label}>
-          {group.heading ? (
-            <ArcTextReveal variant="heading">
-              <h3
-                className="mb-4 text-center font-serif text-xl tracking-tight sm:text-2xl"
-                style={{ color: "#d9b878" }}
-              >
-                {group.heading}
-              </h3>
-            </ArcTextReveal>
-          ) : null}
-          <ul className="divide-y divide-[#d9b878]/25 border-y border-[#d9b878]/25">
-            {group.services.map((service, i) => (
-              <ServiceRow key={service.label} service={service} index={i} />
-            ))}
-          </ul>
-        </div>
+    <ul className="mx-auto mt-10 max-w-2xl divide-y divide-[#d9b878]/25 border-y border-[#d9b878]/25 sm:mt-12">
+      {services.map((service, i) => (
+        <ServiceRow key={`${service.label}-${i}`} service={service} index={i} />
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -371,7 +341,11 @@ export function ConditionPageContent({ content }: ConditionPageContentProps) {
           key={section.title}
           section={section}
           plateSrc={creamPlateSrc}
-          zClass={i % 2 === 0 ? "z-[9]" : "z-[8]"}
+          // Descend z so each pearl crest stays above the next cream plate
+          // (alternating z buried the wave on odd→even extras — hard seam).
+          zClass={
+            (["z-[9]", "z-[8]", "z-[7]", "z-[6]", "z-[5]"] as const)[i] ?? "z-[5]"
+          }
           withExitWave
         />
       ))}

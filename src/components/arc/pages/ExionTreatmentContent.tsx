@@ -14,6 +14,7 @@ import {
 } from "@/components/arc/ArcWaveSeparator";
 import { ExionResultsSlider } from "@/components/arc/ExionResultsSlider";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import { CreamPlateTiledMedia } from "@/components/arc/servicePlate";
 import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -232,16 +233,17 @@ function ExionMechanismScrollVideo() {
 }
 
 /**
- * Cream plate photo. `stableMedia` (FAQ): pin photo to a tall fixed height so
- * accordion expand doesn't rescale the waves; soft fade into cream if content
- * ever exceeds that band (avoids a hard cut mid-section).
+ * Cream plate photo. `tileMedia` (FAQ): repeat + soft-blend like Arc 360 Every pathway
+ * so tall accordion bands don’t stretch the plate.
  */
 function ExionSectionPlate({
   maskBottom = true,
   stableMedia = false,
+  tileMedia = false,
 }: {
   maskBottom?: boolean;
   stableMedia?: boolean;
+  tileMedia?: boolean;
 }) {
   return (
     <div
@@ -249,7 +251,9 @@ function ExionSectionPlate({
       style={maskBottom ? exionAboveCrestBottomMaskStyle : undefined}
       aria-hidden
     >
-      {stableMedia ? (
+      {tileMedia ? (
+        <CreamPlateTiledMedia src={exionPillarsBackground.src} />
+      ) : stableMedia ? (
         <>
           <div className="absolute inset-x-0 top-0 h-[min(280dvh,160rem)] w-full">
             <Image
@@ -1006,7 +1010,7 @@ export function ExionTreatmentContent({ treatment }: ExionTreatmentContentProps)
               EXION_WAVE_H_VAR_CLASS,
             )}
           >
-            <ExionSectionPlate maskBottom={false} stableMedia />
+            <ExionSectionPlate maskBottom={false} tileMedia />
             <div className={cn("relative z-10", EXION_WAVE_H_CLASS)} aria-hidden />
 
             <div className="relative z-10">

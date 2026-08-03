@@ -131,8 +131,8 @@ function InvestCTAContent({
 
         <div aria-hidden className="hidden xl:block xl:col-start-2" />
 
-        <div className="hidden xl:col-start-3 xl:flex xl:items-end xl:justify-end">
-          <div className={cn(investCopyBlockClass, "max-w-sm")}>
+        <div className="hidden xl:col-start-3 xl:flex xl:items-end xl:justify-end xl:pr-10 xl:pl-4">
+          <div className={cn(investCopyBlockClass, "max-w-md")}>
             <ArcTextReveal variant="heading">
               <InvestCTASignoffBlock signoff={signoff} motionStyle={staticMotion} />
             </ArcTextReveal>

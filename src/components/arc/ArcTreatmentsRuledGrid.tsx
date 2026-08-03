@@ -240,19 +240,9 @@ function TreatmentInteractiveRow({
             variants={rowRootVariants}
           >
             <div className="min-w-0 flex-1 pr-2 sm:pr-4">
-              <p
-                className={cn(
-                  "font-sans text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors duration-300",
-                  hovered
-                    ? cn(accentBright, "[text-shadow:0_1px_10px_rgba(0,0,0,0.35)]")
-                    : accentInk,
-                )}
-              >
-                {treatment.categoryLabel}
-              </p>
               <motion.h3
                 className={cn(
-                  "mt-1.5 flex flex-wrap font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
+                  "flex flex-wrap font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
                   hovered
                     ? "text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.45)]"
                     : "text-arc-charcoal",
@@ -297,12 +287,9 @@ function TreatmentInteractiveRow({
         ) : (
           <>
             <div className="relative z-10 min-w-0 flex-1">
-              <p className={cn("font-sans text-[10px] font-semibold uppercase tracking-[0.22em]", accentInk)}>
-                {treatment.categoryLabel}
-              </p>
               <h3
                 className={cn(
-                  "mt-1.5 break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
+                  "break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
                   "group-hover:text-arc-teal-ink",
                 )}
               >
@@ -351,7 +338,7 @@ export function ArcTreatmentsRuledGrid({
   bottomSeam = false,
   className,
 }: ArcTreatmentsRuledGridProps) {
-  const rows = treatments.filter((t) => t.slug !== "overview");
+  const rows = treatments.filter((t) => t.slug !== "overview" && !t.hidden);
   const emphasisClass = arcHeadlineEmphasisClass(accentTone);
 
   return (

@@ -65,12 +65,14 @@ export function ContactForm() {
           placeholder="A few words is enough, we’ll take it from there."
         />
       </label>
-      <button
-        type="submit"
-        className="w-full rounded-full bg-arc-teal py-3.5 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-105 sm:w-auto sm:px-10"
-      >
-        Send message
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="w-full rounded-full bg-arc-teal py-3.5 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-105 sm:w-auto sm:px-10"
+        >
+          Send message
+        </button>
+      </div>
       {submitted ? (
         <p className="font-sans text-sm text-arc-charcoal" role="status">
           Opening your email app, if it didn’t open, write us at {siteMeta.email}.
