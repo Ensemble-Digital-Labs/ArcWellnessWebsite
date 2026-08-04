@@ -4,14 +4,17 @@ import { cn } from "@/lib/utils";
 
 /**
  * ARC brand image frame — clips content into the signature "arch window" silhouette
- * (domed top, straight jambs, softly rounded base), echoing the logo's arch.
+ * (domed head, straight jambs, softly rounded base), echoing the logo's arch.
  *
  * Reusable across the site as the brand photography frame. The arch is produced with
  * elliptical `border-radius` (not SVG/clip-path), so it scales responsively at any size,
  * plays nicely with `next/image` `fill`, and keeps hover motion cheap.
  *
- * Usage — framed photo:
+ * Usage — framed photo (dome on top):
  *   <ArcWindowFrame src={img} alt="" className="aspect-[4/5] w-full" interactive />
+ *
+ * Usage — sideways window (dome on the right):
+ *   <ArcWindowFrame archFacing="right" bordered className="w-full" />
  *
  * Usage — empty decorative frame (brand outline):
  *   <ArcWindowFrame bordered className="aspect-[3/4] w-full" />
@@ -28,11 +31,17 @@ export type ArcWindowFrameProps = {
   sizes?: string;
   priority?: boolean;
   /**
-   * Height of the domed top as a % of the frame height. Higher = taller arch.
-   * ~42 reads as a classic window; lower (~28) suits short/wide frames. Default 42.
+   * Depth of the domed head as a % of the facing axis.
+   * - `archFacing="top"` (default): % of height — higher = taller arch. ~42 classic; ~28 short/wide.
+   * - `archFacing="right"`: % of width — higher = deeper side dome.
    */
   archDepth?: number;
-  /** Radius (px) of the two bottom corners. Default 14. */
+  /**
+   * Which edge carries the arch dome. Default `top` (upright window).
+   * `right` turns the silhouette sideways — curve head on the right.
+   */
+  archFacing?: "top" | "right";
+  /** Radius (px) of the two non-arch corners. Default 14. */
   baseRadius?: number;
   /** Thin brand outline tracing the arch (also used for empty frames). */
   bordered?: boolean;
@@ -52,6 +61,21 @@ export type ArcWindowFrameProps = {
   children?: ReactNode;
 };
 
+function archBorderRadius(
+  archFacing: "top" | "right",
+  archDepth: number,
+  baseRadius: number,
+): string {
+  if (archFacing === "right") {
+    // Right dome: TR/BR share 50% vertical radius so curves meet mid-right;
+    // horizontal radius = archDepth of the width.
+    return `${baseRadius}px ${archDepth}% ${archDepth}% ${baseRadius}px / ${baseRadius}px 50% 50% ${baseRadius}px`;
+  }
+  // Top dome: TL/TR share 50% horizontal radius so curves meet mid-top;
+  // vertical radius = archDepth of the height.
+  return `50% 50% ${baseRadius}px ${baseRadius}px / ${archDepth}% ${archDepth}% ${baseRadius}px ${baseRadius}px`;
+}
+
 export function ArcWindowFrame({
   src,
   alt = "",
@@ -60,6 +84,7 @@ export function ArcWindowFrame({
   sizes = "(max-width: 768px) 90vw, 33vw",
   priority = false,
   archDepth = 42,
+  archFacing = "top",
   baseRadius = 14,
   bordered = false,
   feather = false,
@@ -68,9 +93,7 @@ export function ArcWindowFrame({
   media,
   children,
 }: ArcWindowFrameProps) {
-  // Elliptical corners: top corners share a 50% horizontal radius so the two curves
-  // meet at center into one continuous dome; vertical radius = archDepth of the height.
-  const archRadius = `50% 50% ${baseRadius}px ${baseRadius}px / ${archDepth}% ${archDepth}% ${baseRadius}px ${baseRadius}px`;
+  const archRadius = archBorderRadius(archFacing, archDepth, baseRadius);
   const archStyle: CSSProperties = { borderRadius: archRadius };
 
   // Inset cream vignette follows `border-radius`, so the fade hugs the arch on every edge.

@@ -206,7 +206,18 @@ export function ServiceTemplateContent({
                 <div className="flex h-full flex-col items-center text-center">
                   <EmblemIcon
                     src={pillar.iconSrc}
+                    plate
                     className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
+                    iconClassName={
+                      pillar.title === "Digestion" ||
+                      pillar.title === "Immunity"
+                        ? "origin-center scale-[1.45]"
+                        : pillar.title === "Sleep"
+                          ? "origin-center scale-[1.28]"
+                          : pillar.title === "Muscle"
+                            ? "origin-center scale-[1.35]"
+                            : undefined
+                    }
                   />
                   <h3 className="mt-2 sm:mt-3">
                     <TitleEmphasis className="block text-[clamp(1.55rem,3.8vw,2.15rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
@@ -228,6 +239,7 @@ export function ServiceTemplateContent({
               <div className="flex h-full flex-col items-center text-center">
                 <EmblemIcon
                   src={hero.poweredByIconSrc}
+                  plate
                   className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
                 />
                 <h3 className="mt-2 max-w-[13rem] sm:mt-3">
@@ -366,8 +378,15 @@ export function ServiceTemplateContent({
                 delayIndex={2}
                 className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
               >
-                <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                  <div className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] lg:aspect-video">
+                <div className="rounded-none bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                  <div
+                    className={cn(
+                      "relative w-full min-h-[14.5rem] overflow-hidden rounded-none ring-1 ring-arc-champagne/30 sm:min-h-0 sm:rounded-[18px]",
+                      mechanism.videoEmbedSrc
+                        ? "aspect-video"
+                        : (mechanism.imageAspectClass ?? "aspect-[3/2]"),
+                    )}
+                  >
                     {mechanism.videoEmbedSrc ? (
                       <iframe
                         src={mechanism.videoEmbedSrc}
@@ -383,7 +402,10 @@ export function ServiceTemplateContent({
                         alt={mechanism.imageAlt ?? ""}
                         fill
                         sizes="(min-width: 1024px) 40vw, 100vw"
-                        className="object-cover object-center"
+                        className={
+                          mechanism.imageObjectClass ??
+                          "object-cover object-center scale-[1.01]"
+                        }
                       />
                     ) : null}
                   </div>
@@ -450,7 +472,7 @@ export function ServiceTemplateContent({
                   className="h-full"
                 >
                   <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border-4 border-arc-champagne bg-white shadow-[0_20px_50px_-30px_rgba(120,90,40,0.35)] transition-transform duration-500 ease-out hover:-translate-y-2">
-                    <div className="relative h-64 w-full overflow-hidden sm:h-72">
+                    <div className="relative h-64 w-full shrink-0 overflow-hidden bg-arc-champagne/20 sm:h-72">
                       <Image
                         src={card.imageSrc}
                         alt={card.imageAlt}
@@ -568,7 +590,18 @@ export function ServiceTemplateContent({
                     delayIndex={i + 1}
                   >
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <EmblemIcon src={card.iconSrc} className="h-28 w-28" />
+                      <EmblemIcon
+                        src={card.iconSrc}
+                        className="h-28 w-28"
+                        iconClassName={
+                          card.title === "Whole Picture"
+                            ? "origin-center scale-[1.65]"
+                            : card.title === "Restorative Sleep" ||
+                                card.title === "Muscle Protected"
+                              ? "origin-center scale-[1.35]"
+                              : undefined
+                        }
+                      />
                       <h3 className="max-w-[16rem]">
                         <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                           {card.title}
@@ -638,10 +671,17 @@ export function ServiceTemplateContent({
                         "col-span-2 justify-self-center sm:col-span-1",
                     )}
                   >
-                    <EmblemIcon
-                      src={step.iconSrc}
-                      className="h-24 w-24 sm:h-28 sm:w-28"
-                    />
+                    <div className="flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
+                      <EmblemIcon
+                        src={step.iconSrc}
+                        className="h-full w-full origin-center"
+                        iconClassName={
+                          step.title === "Strengthen"
+                            ? "origin-center scale-[1.55]"
+                            : undefined
+                        }
+                      />
+                    </div>
                     <h3 className="mt-4 max-w-[12rem]">
                       <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                         {step.title}

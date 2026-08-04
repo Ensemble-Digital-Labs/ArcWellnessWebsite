@@ -7,6 +7,8 @@ Serves the Arc 360 concierge membership page at `/treatments`
 |------|---------|
 | `arc-360-hero.png` | 4K master (editing only) |
 | `arc-360-hero.webp` | hero background — `arc360Content.hero.imageSrc` |
+| `arc-360-connected.png` | master for connected section photo |
+| `arc-360-connected.webp` | “Your health is connected” — `arc360Content.connected.imageSrc` |
 
 The hero art is an **abstract plate**, not a photo: cream/gold marbling with teal
 veining and a deliberately open centre. The hero copy is centre-aligned over that

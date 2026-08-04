@@ -8,7 +8,6 @@
  * Temporary clinic-interior hero + EXION plates/icons until dedicated Arc 360
  * assets ship.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -18,7 +17,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const ARC_360_ASSET = "/assets/treatments/arc-360";
 /** Bump when replacing Arc 360 rasters so next/image + browser drop stale caches. */
-const ARC_360_ASSETS_VERSION = "20260730-hero";
+const ARC_360_ASSETS_VERSION = "20260803-connected";
 
 function arc360Asset(file: string) {
   return `${ARC_360_ASSET}/${file}?v=${ARC_360_ASSETS_VERSION}`;
@@ -141,17 +140,17 @@ export const arc360Content: Arc360Content = {
       "And sometimes the right answer is: let's treat it.",
       "At Arc Wellness, we believe there is room for both.",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-    imageAlt: "Quiet seating at ARC Wellness for unhurried physician conversation",
+    imageSrc: arc360Asset("arc-360-connected.webp"),
+    imageAlt: "Whole-body health systems connected through Arc 360 care",
   },
   pillars: [
     {
-      iconSrc: `${ICON}/cell.svg`,
+      iconSrc: `${ICON}/book.svg`,
       title: "Functional",
       body: "Look deeper, recognize patterns, and ask why something is happening.",
     },
     {
-      iconSrc: `${ICON}/atom.svg`,
+      iconSrc: `${ICON}/checklist.svg`,
       title: "Traditional",
       body: "Proven diagnostic and treatment tools when medical care is needed.",
     },
@@ -275,7 +274,7 @@ export const arc360Content: Arc360Content = {
     titleEmphasis: "protecting?",
     items: [
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/bicep.svg?v=zoom`,
         title: "Strength",
         facets: ["Muscle", "Bone", "Mobility"],
       },
@@ -295,7 +294,7 @@ export const arc360Content: Arc360Content = {
         facets: ["Cognition", "Clarity", "Connection"],
       },
       {
-        iconSrc: `${ICON}/sun.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Independence",
         facets: ["Function", "Capability", "Quality of life"],
       },
@@ -308,12 +307,12 @@ export const arc360Content: Arc360Content = {
     body: "Health is not static, and your care should not be either. Arc 360 is a membership-based concierge wellness model built around continuity. We follow your progress, revisit meaningful markers, adjust your Blueprint, and pay attention as your body and priorities change. Over time, your physician and wellness team come to know your history, your patterns, your goals, and what matters most to you. You are not expected to navigate every new chapter alone.",
     triad: [
       {
-        iconSrc: `${ICON}/cell.svg`,
+        iconSrc: `${ICON}/lotus.svg`,
         title: "Wellness",
         body: "Functional wellness helps us look deeper, recognize patterns, and ask why.",
       },
       {
-        iconSrc: `${ICON}/atom.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Medicine",
         body: "Traditional medicine gives us proven diagnostic and treatment tools when medical care is needed.",
       },

@@ -1,5 +1,10 @@
 import { brainHealthContent, brainHealthHero } from "@/content/pages/brain-health";
 import { clearRfContent, clearRfHero } from "@/content/pages/clear-rf";
+import {
+  dermalFillersContent,
+  dermalFillersHero,
+} from "@/content/pages/dermal-fillers";
+import { emfaceContent, emfaceHero } from "@/content/pages/emface";
 import { gutHealthContent, gutHealthHero } from "@/content/pages/gut-health";
 import {
   hormoneHealthContent,
@@ -49,6 +54,8 @@ const SERVICE_TEMPLATE_BY_SLUG: Record<
     hero: rfMicroneedlingHero,
   },
   "clear-rf": { content: clearRfContent, hero: clearRfHero },
+  emface: { content: emfaceContent, hero: emfaceHero },
+  rha: { content: dermalFillersContent, hero: dermalFillersHero },
 };
 
 export function getServiceTemplateBySlug(slug: string) {

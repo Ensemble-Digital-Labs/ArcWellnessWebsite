@@ -17,7 +17,7 @@ import {
   SERVICE_WAVE_H_VAR_CLASS,
   SERVICE_WAVE_MT_CLASS,
 } from "@/components/arc/servicePlate";
-import { TitleEmphasis, arcHeadlineEmphasisClass } from "@/components/arc/TitleEmphasis";
+import { ARC_ABOUT_COMPACT_BODY_CLASS } from "@/components/arc/TitleEmphasis";
 import type {
   ConditionNarrativeSection,
   ConditionPageContent as ConditionContent,
@@ -37,9 +37,11 @@ import { cn } from "@/lib/utils";
 const DEFAULT_HERO_OBJECT =
   "object-cover object-[92%_42%] sm:object-[78%_45%] md:object-[65%_45%] lg:object-[58%_center]";
 
-const CREAM_HEADLINE_CLASS = cn(
-  arcHeadlineEmphasisClass("teal"),
-  "font-serif font-semibold tracking-tight text-arc-teal-ink",
+/** Cream-plate twin of Discover’s gold title-emphasis (teal ink on cream). */
+const CREAM_DISCOVER_HEADLINE = cn(
+  "font-title-emphasis block font-normal not-italic tracking-tight text-arc-teal-ink",
+  "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+  "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
 );
 
 const DARK_GOLD_HEADLINE =
@@ -82,11 +84,15 @@ function CreamNarrative({
           <div className="mx-auto max-w-3xl text-center">
             <ArcTextReveal variant="heading">
               <h2 className="text-balance leading-[0.92]">
-                <TitleEmphasis className={CREAM_HEADLINE_CLASS}>
-                  <span className="block text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[0.92]">
-                    {section.title}
-                  </span>
-                </TitleEmphasis>
+                <span
+                  className={CREAM_DISCOVER_HEADLINE}
+                  style={{
+                    fontSize: "clamp(2rem, 6.5vw, 3.5rem)",
+                    fontSizeAdjust: "none",
+                  }}
+                >
+                  {section.title}
+                </span>
               </h2>
             </ArcTextReveal>
             <ServiceGoldRule className="mx-auto mt-6" />
@@ -99,9 +105,7 @@ function CreamNarrative({
                   variant="body"
                   delayIndex={i + 1}
                 >
-                  <p className="font-sans text-sm leading-relaxed text-arc-charcoal/78 sm:text-base">
-                    {paragraph}
-                  </p>
+                  <p className={ARC_ABOUT_COMPACT_BODY_CLASS}>{paragraph}</p>
                 </ArcTextReveal>
               ))}
             </div>

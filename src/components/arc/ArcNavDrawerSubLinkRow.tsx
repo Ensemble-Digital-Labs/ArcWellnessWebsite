@@ -46,7 +46,8 @@ const thumbByHrefExtra: Record<string, string> = {
 const thumbByLabelAlias: Record<string, string> = {
   infusions: thumbByLabel["infusion therapy"],
   peptides: thumbByLabel["peptide therapy"],
-  fillers: thumbByLabel["rha fillers"],
+  fillers: thumbByLabel["dermal fillers"],
+  "rha fillers": thumbByLabel["dermal fillers"],
   "book a consultation": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "membership options": NAV_PREVIEW.membershipCohort,
   "pricing & financing": CLINIC_INTERIOR_IMAGES.consultationLounge,

@@ -105,7 +105,7 @@ export const ARC_TREATMENT_NAV_LINKS = [
     thumbSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
   },
   {
-    label: "RHA Fillers",
+    label: "Dermal Fillers",
     href: "/treatments/rha",
     thumbSrc: NAV_PREVIEW.facialAesthetic,
   },

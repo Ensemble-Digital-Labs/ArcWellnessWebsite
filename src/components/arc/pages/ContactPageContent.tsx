@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
-import { ArcFaqSection } from "@/components/arc/ArcFaqSection";
-import { ArcTibbixelCopyFrame } from "@/components/arc/ArcTibbixelCopyFrame";
+import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
 import {
   ARC_ABOUT_COMPACT_BODY_CLASS,
   TitleEmphasis,
@@ -12,15 +11,19 @@ import {
 import { ContactForm } from "@/components/pages/ContactForm";
 import {
   ServiceCreamPlate,
+  ServiceDarkPlate,
   ServiceWave,
   ServiceWaveInset,
+  SERVICE_WAVE_H_CLASS,
   SERVICE_WAVE_H_VAR_CLASS,
   SERVICE_WAVE_MT_CLASS,
   serviceAboveCrestBottomMaskStyle,
 } from "@/components/arc/servicePlate";
 import { contactPage } from "@/content/pages/contact";
-import { liveSiteFaqs } from "@/content/pages/shared";
-import { serviceSharedCreamPlate } from "@/content/pages/serviceTemplate";
+import {
+  serviceSharedCreamPlate,
+  serviceSharedDarkPlate,
+} from "@/content/pages/serviceTemplate";
 import { images } from "@/content/site";
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_GALLERY_CLEAR_BELOW_LOGO, ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
@@ -139,65 +142,118 @@ export function ContactPageContent() {
                   </p>
                 </blockquote>
               </ArcTextReveal>
-              <ul className="mx-auto mt-10 flex w-full max-w-sm flex-col items-center space-y-8 text-center lg:max-w-none">
-                <li className="flex w-full flex-col items-center gap-2">
-                  <div className="flex items-center justify-center gap-3">
-                    <Phone className="size-6 shrink-0 text-arc-teal-ink sm:size-7" aria-hidden />
-                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-teal-ink sm:text-sm">
-                      Phone
-                    </p>
-                  </div>
-                  <ArcTextReveal variant="line" delayIndex={3} className="min-w-0">
-                    <a
-                      href={`tel:${siteMeta.phoneTel}`}
-                      className="font-serif text-2xl font-semibold tracking-tight text-arc-charcoal transition-colors hover:text-arc-teal-ink sm:text-3xl md:text-[2rem]"
-                    >
-                      {siteMeta.phone}
-                    </a>
-                  </ArcTextReveal>
-                </li>
-                <li className="flex w-full flex-col items-center gap-2">
-                  <div className="flex items-center justify-center gap-3">
-                    <Mail className="size-6 shrink-0 text-arc-teal-ink sm:size-7" aria-hidden />
-                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-teal-ink sm:text-sm">
-                      Email
-                    </p>
-                  </div>
-                  <ArcTextReveal variant="line" delayIndex={4} className="min-w-0">
-                    <a
-                      href={`mailto:${siteMeta.email}`}
-                      className="break-all font-serif text-xl font-semibold tracking-tight text-arc-charcoal transition-colors hover:text-arc-teal-ink sm:text-2xl md:text-[1.75rem]"
-                    >
-                      {siteMeta.email}
-                    </a>
-                  </ArcTextReveal>
-                </li>
-                <li className="flex w-full flex-col items-center gap-2">
-                  <div className="flex items-center justify-center gap-3">
-                    <MapPin className="size-6 shrink-0 text-arc-teal-ink sm:size-7" aria-hidden />
-                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-teal-ink sm:text-sm">
-                      Address
-                    </p>
-                  </div>
-                  <ArcTextReveal variant="line" delayIndex={5} className="min-w-0">
-                    <p className="max-w-xs font-serif text-lg font-semibold leading-snug tracking-tight text-arc-charcoal sm:max-w-sm sm:text-xl md:text-[1.35rem]">
-                      {siteMeta.address.line1}
-                      <br />
-                      {siteMeta.address.line2}
-                    </p>
-                  </ArcTextReveal>
-                </li>
-              </ul>
+
+              <ArcTextReveal variant="body" delayIndex={3}>
+                <ArcWindowFrame
+                  bordered
+                  archFacing="right"
+                  archDepth={36}
+                  baseRadius={16}
+                  className={cn(
+                    "mx-auto mt-10 w-full max-w-md bg-white lg:mx-0 lg:max-w-lg",
+                    "shadow-[0_20px_56px_rgba(44,44,44,0.10)] ring-1 ring-arc-teal/15",
+                  )}
+                >
+                  <ul className="relative z-10 divide-y divide-arc-charcoal/10 py-2 pl-1 pr-[clamp(2.5rem,14%,3.75rem)] sm:py-3">
+                    <li>
+                      <a
+                        href={`tel:${siteMeta.phoneTel}`}
+                        className={cn(
+                          "group flex items-start gap-4 px-4 py-4 transition-colors sm:gap-5 sm:px-5 sm:py-5",
+                          "hover:bg-arc-teal/10 focus-visible:bg-arc-teal/10 focus-visible:outline-none",
+                        )}
+                      >
+                        <span
+                          className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-arc-teal/15 text-arc-teal-ink ring-1 ring-arc-teal/25 sm:size-11"
+                          aria-hidden
+                        >
+                          <Phone className="size-4 sm:size-[1.125rem]" strokeWidth={1.75} />
+                        </span>
+                        <span className="min-w-0 flex-1 text-left">
+                          <span className="block font-sans text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-arc-charcoal/45">
+                            Phone
+                          </span>
+                          <span className="mt-1 block font-sans text-base font-medium tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-teal-ink sm:text-lg">
+                            {siteMeta.phone}
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href={`mailto:${siteMeta.email}`}
+                        className={cn(
+                          "group flex items-start gap-4 px-4 py-4 transition-colors sm:gap-5 sm:px-5 sm:py-5",
+                          "hover:bg-arc-teal/10 focus-visible:bg-arc-teal/10 focus-visible:outline-none",
+                        )}
+                      >
+                        <span
+                          className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-arc-teal/15 text-arc-teal-ink ring-1 ring-arc-teal/25 sm:size-11"
+                          aria-hidden
+                        >
+                          <Mail className="size-4 sm:size-[1.125rem]" strokeWidth={1.75} />
+                        </span>
+                        <span className="min-w-0 flex-1 text-left">
+                          <span className="block font-sans text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-arc-charcoal/45">
+                            Email
+                          </span>
+                          <span className="mt-1 block break-all font-sans text-base font-medium tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-teal-ink sm:text-lg">
+                            {siteMeta.email}
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href={siteMeta.mapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(
+                          "group flex items-start gap-4 px-4 py-4 transition-colors sm:gap-5 sm:px-5 sm:py-5",
+                          "hover:bg-arc-teal/10 focus-visible:bg-arc-teal/10 focus-visible:outline-none",
+                        )}
+                      >
+                        <span
+                          className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-arc-teal/15 text-arc-teal-ink ring-1 ring-arc-teal/25 sm:size-11"
+                          aria-hidden
+                        >
+                          <MapPin className="size-4 sm:size-[1.125rem]" strokeWidth={1.75} />
+                        </span>
+                        <span className="min-w-0 flex-1 text-left">
+                          <span className="block font-sans text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-arc-charcoal/45">
+                            Address
+                          </span>
+                          <span className="mt-1 block font-sans text-base font-medium leading-snug tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-teal-ink sm:text-lg">
+                            {siteMeta.address.line1}
+                            <br />
+                            {siteMeta.address.line2}
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </ArcWindowFrame>
+              </ArcTextReveal>
             </div>
 
-            <div
+            <ArcWindowFrame
+              bordered
+              archDepth={14}
+              baseRadius={16}
               className={cn(
-                "overflow-hidden rounded-2xl border border-arc-charcoal/10 bg-white sm:rounded-3xl",
+                "w-full bg-white",
                 "shadow-[0_24px_64px_rgba(44,44,44,0.12),0_10px_32px_rgba(131,208,187,0.14)]",
                 "ring-1 ring-arc-teal/20",
               )}
             >
-              <ArcTibbixelCopyFrame>
+              <div
+                className={cn(
+                  "relative z-10 flex flex-col items-center px-[clamp(1.65rem,6.5vw,3.5rem)] text-center",
+                  "pb-[clamp(2rem,7.5vw,4.5rem)] pt-[clamp(3.25rem,9%,5rem)]",
+                  "sm:px-[clamp(1.85rem,6vw,3.25rem)] sm:pb-[clamp(2.25rem,7vw,4.25rem)]",
+                  "md:px-[clamp(2rem,5.5vw,3.75rem)] md:pb-[clamp(2.5rem,6.5vw,4.75rem)]",
+                )}
+              >
                 <ArcTextReveal variant="heading">
                   <h3 className="leading-[0.92] tracking-tight">
                     <TitleEmphasis
@@ -219,15 +275,15 @@ export function ContactPageContent() {
                 <div className="mt-6 w-full text-left">
                   <ContactForm />
                 </div>
-              </ArcTibbixelCopyFrame>
-            </div>
+              </div>
+            </ArcWindowFrame>
           </div>
         </section>
 
         <ServiceWave tone="pearl" />
       </div>
 
-      {/* FAQ — tiled cream plate (same soft-blend repeats as Every pathway) */}
+      {/* Visit us — dark plate + Google Map; click opens Maps at the clinic. */}
       <div
         className={cn(
           "relative z-[9] overflow-x-clip",
@@ -235,17 +291,67 @@ export function ContactPageContent() {
           SERVICE_WAVE_H_VAR_CLASS,
         )}
       >
-        <ServiceCreamPlate src={creamPlateSrc} maskBottom={false} tileMedia />
-        <ServiceWaveInset />
+        <ServiceDarkPlate src={serviceSharedDarkPlate.src} maskBottom={false} />
+        <div className={cn("relative z-10", SERVICE_WAVE_H_CLASS)} aria-hidden />
 
-        <div className="relative z-10">
-          <ArcFaqSection
-            id="faq"
-            className="border-t-0 bg-transparent"
-            categories={{ general: "Getting started" }}
-            faqByCategory={{ general: liveSiteFaqs }}
-          />
-        </div>
+        <section
+          id="visit"
+          className="relative z-10 scroll-mt-32 px-6 pb-16 pt-8 sm:scroll-mt-40 sm:px-10 sm:pb-20 sm:pt-10 md:scroll-mt-44 md:px-12 md:pb-24 lg:scroll-mt-52"
+        >
+          <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-start lg:flex-row lg:items-start lg:gap-14">
+            <header className="mb-10 shrink-0 text-center lg:sticky lg:top-48 lg:mb-0 lg:w-[38%] lg:max-w-sm lg:pt-4 lg:text-left xl:top-52">
+              <ArcTextReveal variant="heading">
+                <h2 className="leading-[0.92] tracking-tight">
+                  <span
+                    className={cn(
+                      "font-title-emphasis inline-block tracking-tight text-[#d9b878]",
+                      "[-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)]",
+                      "[text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
+                    )}
+                    style={{
+                      fontSize: "clamp(4.5rem, 14vw, 7.5rem)",
+                      fontSizeAdjust: "none",
+                    }}
+                  >
+                    Visit us
+                  </span>
+                </h2>
+              </ArcTextReveal>
+            </header>
+
+            <div className="relative mx-auto min-w-0 w-full flex-1 lg:mx-0 lg:pt-2">
+              <a
+                href={siteMeta.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "group relative block overflow-hidden rounded-2xl border border-white/10 bg-black/20 sm:rounded-3xl",
+                  "shadow-[0_24px_64px_rgba(0,0,0,0.35)]",
+                  "ring-1 ring-[#d9b878]/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d9b878]",
+                )}
+                aria-label={`Open Google Maps for ${siteMeta.address.line1}, ${siteMeta.address.line2}`}
+              >
+                <div className="relative aspect-[4/3] w-full sm:aspect-[16/10] lg:aspect-[5/3]">
+                  <iframe
+                    title="Arc Wellness clinic location"
+                    src={siteMeta.mapsEmbedUrl}
+                    className="pointer-events-none absolute inset-0 h-full w-full border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                  <span
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    aria-hidden
+                  />
+                  <span className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-arc-charcoal shadow-md opacity-90 transition-opacity group-hover:opacity-100 sm:text-sm">
+                    Open in Maps
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );

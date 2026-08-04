@@ -399,35 +399,72 @@ export const allTreatments: readonly TreatmentPage[] = [
   {
     slug: "emface",
     title: "EmFace",
-    tagline: "The Needle-Free Revolution in Facial Rejuvenation",
+    tagline: "Lift. Tone. Restore.",
     category: "aesthetics",
     categoryLabel: "Facial device",
     imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
     imageAlt: "EmFace facial treatment with BTL console at ARC Wellness",
     intro:
-      "EMFACE is the first and only non-invasive procedure that simultaneously treats facial skin and muscles to lift, tone, and reduce wrinkles, all without needles or downtime.",
+      "EMFACE is the first non-invasive facial treatment that simultaneously strengthens the muscles that support your face while stimulating collagen and elastin deep within the skin—creating subtle lifting, improved definition, smoother skin, and healthier aging without needles, surgery, or downtime.",
     sections: [
       {
         heading: "How It Works",
-        body: "EMFACE combines two powerful technologies in a single 20-minute session: Synchronized Radiofrequency (RF) gently heats the dermal layers to stimulate collagen and elastin; HIFES™ Technology delivers high-intensity electrical pulses to selectively contract and tone facial muscles for a natural lifting effect from within.",
+        body: "EMFACE combines synchronized radiofrequency (RF) and High-Intensity Facial Electrical Stimulation (HIFES™) in a single session: RF gently heats the dermal layers to stimulate collagen and elastin; HIFES™ contracts facial muscles thousands of times for a natural lifting effect from within.",
       },
       {
         heading: "Key Benefits",
         bullets: [
-          "Natural Lift: Average of 23% more lift in targeted areas",
-          "Wrinkle Reduction: Up to 37% reduction in fine lines and wrinkles",
-          "Improved Muscle Tone: Approximately 30% increase in resting muscle tone",
-          "No Needles & No Pain: Often compared to a warm facial massage",
-          "Zero Downtime: Return to daily activities immediately after your lunchtime lift",
+          "Lift: Strengthens facial elevator muscles for cheeks and brows",
+          "Tighten: Stimulates collagen and elastin for firmer skin",
+          "Smooth: Softens fine lines by improving skin quality—not freezing expression",
+          "Restore: Enhances natural contours while preserving expression",
+          "No needles, no surgery, no downtime—about 20 minutes per session",
         ],
       },
       {
-        heading: "Treatment Areas",
-        body: "Forehead (lifts brows, smooths lines), cheeks (volume and definition), jawline and jowls, and submentum (under chin) with dedicated applicators.",
+        heading: "What Can EMFACE Treat?",
+        bullets: [
+          "Forehead lines, frown lines, and crow's feet",
+          "Drooping brows and flattening cheeks",
+          "Mild jowling and loss of facial definition",
+          "Skin laxity and early signs of aging",
+        ],
       },
       {
         heading: "Is EMFACE Right for You?",
-        body: "EMFACE is suitable for almost anyone seeking a non-surgical alternative to a facelift or a preventative anti-aging strategy, especially those who want to avoid needles, seek natural-looking results, and cannot afford recovery time.",
+        body: "EMFACE is suited for adults seeking a natural, non-invasive solution for facial aging, loss of definition, mild skin laxity, or early wrinkles—especially those who want to avoid needles and cannot afford recovery time.",
+      },
+    ],
+    faqs: [
+      {
+        id: "replace-botox",
+        question: "Does EMFACE replace Botox?",
+        answer:
+          "Not always. Many patients choose EMFACE alone for a natural approach, while others combine treatments for comprehensive facial rejuvenation.",
+      },
+      {
+        id: "pain",
+        question: "Does it hurt?",
+        answer:
+          "Most patients describe a warming sensation with rhythmic muscle contractions. There is no recovery period afterward.",
+      },
+      {
+        id: "how-many",
+        question: "How many treatments will I need?",
+        answer:
+          "A typical treatment plan consists of four sessions performed once weekly. Maintenance treatments help preserve long-term results.",
+      },
+      {
+        id: "results",
+        question: "When will I see results?",
+        answer:
+          "Many patients notice subtle improvements after the first few weeks, with continued lifting and skin improvement over the next 2–3 months as collagen remodeling continues.",
+      },
+      {
+        id: "candidate",
+        question: "Who is a good candidate?",
+        answer:
+          "Adults looking for a natural, non-invasive solution for facial aging, loss of definition, mild skin laxity, or early wrinkles.",
       },
     ],
   },
@@ -531,39 +568,67 @@ export const allTreatments: readonly TreatmentPage[] = [
   },
   {
     slug: "rha",
-    title: "RHA®",
-    tagline: "Experience the next generation of dermal fillers",
+    title: "Dermal Fillers",
+    tagline: "Restore. Support. Enhance.",
     category: "aesthetics",
     categoryLabel: "Fillers",
     imageSrc: images.services[0],
-    imageAlt: "RHA filler treatment at ARC Wellness",
+    imageAlt: "Dermal filler treatment consultation at ARC Wellness",
     intro:
-      "The RHA® (Resilient Hyaluronic Acid) Collection is the first and only FDA-approved line of fillers specifically designed to treat dynamic wrinkles and folds.",
+      "Natural-looking volume restoration designed to complement your features—not change them. Dermal fillers replace lost structural support from bone, fat, collagen, and hydration changes—restoring balance, contour, and youthful proportions while preserving what makes you uniquely you.",
     sections: [
       {
-        heading: "Why Choose RHA®?",
+        heading: "Aging Happens in Layers",
+        body: "Wrinkles are only part of the story. Facial bones lose support, fat pads shrink and shift, collagen thins, and hyaluronic acid declines. When these layers change together, the face can appear tired, hollow, or less defined. Dermal fillers restore support where it has been lost.",
+      },
+      {
+        heading: "What Fillers Can Improve",
         bullets: [
-          "Designed for Movement: Adapts to your facial expressions for a natural look at rest or in motion",
-          "Cleaner Formula: Preserves the natural structure of hyaluronic acid, similar to the HA in your skin",
-          "Impressive Longevity: Clinically proven results that last up to 15 months",
+          "Cheek volume, jawline definition, and chin projection",
+          "Smile lines, marionette lines, and under-eye hollowness",
+          "Lip hydration, definition, and subtle fullness",
+          "Temples, pre-jowl sulcus, and overall facial symmetry",
         ],
       },
       {
-        heading: "Meet the Collection",
-        bullets: [
-          "RHA Redensity: Delicate areas and fine smoker's lines around the mouth",
-          "RHA 2: Moderate dynamic wrinkles around lips and forehead",
-          "RHA 3: Moderate-to-severe folds including nasolabial and marionette lines",
-          "RHA 4: Deep support and volume for cheeks, jawline, and severe folds",
-        ],
+        heading: "Not Every Face Needs Filler",
+        body: "Volume loss is only one piece of facial aging. Sometimes RF Microneedling, EMFACE, EXION, or lifestyle and longevity factors are the better first step. Our role is to recommend the treatment—or combination—that best supports long-term facial health, not simply add more product.",
       },
       {
-        heading: "What to Expect",
-        body: "A quick in-office treatment typically lasting 30–45 minutes. Each formulation contains lidocaine for comfort. Most patients return to daily activities immediately; mild swelling or bruising may occur and usually subsides within a few days.",
+        heading: "Our Approach",
+        body: "We don't believe more filler creates better results. Every plan begins with a comprehensive facial assessment of proportions, bone structure, volume loss, skin quality, muscle activity, and long-term aging patterns—so you look refreshed, not different.",
+      },
+    ],
+    faqs: [
+      {
+        id: "overfilled",
+        question: "Will I look overfilled?",
+        answer:
+          "Not at Arc Wellness. Our philosophy emphasizes facial balance, subtle restoration, and respecting your natural anatomy.",
       },
       {
-        heading: "Are You a Candidate?",
-        body: "RHA® is ideal for anyone seeking subtle, refreshed results without sacrificing natural expressions. It is safe for all skin types and adults over 21.",
+        id: "noticeable",
+        question: "Will people know I've had filler?",
+        answer:
+          "Most people simply notice that you look more rested and refreshed without identifying exactly why.",
+      },
+      {
+        id: "pain",
+        question: "Does treatment hurt?",
+        answer:
+          "Most fillers contain lidocaine, and we also use topical numbing when appropriate to maximize comfort.",
+      },
+      {
+        id: "duration",
+        question: "How long do fillers last?",
+        answer:
+          "Depending on the product and treatment area, results generally last between 6 and 18 months.",
+      },
+      {
+        id: "reverse",
+        question: "Can fillers be reversed?",
+        answer:
+          "Yes. Most hyaluronic acid fillers can be safely dissolved using an enzyme called hyaluronidase if needed.",
       },
     ],
   },

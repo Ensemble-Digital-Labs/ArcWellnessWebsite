@@ -47,7 +47,7 @@ export const metabolicHealthContent: ServicePageContent = {
       body: "Crashes, cravings, and fatigue often signal a metabolism under strain.",
     },
     {
-      iconSrc: `${ICON}/magnet.svg`,
+      iconSrc: `${ICON}/bicep.svg`,
       title: "Muscle",
       body: "Lean muscle supports glucose regulation, strength, and healthy aging.",
     },
@@ -131,12 +131,12 @@ export const metabolicHealthContent: ServicePageContent = {
         body: "We don't begin with restriction. We begin with understanding.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/arc-wordmark.svg`,
         title: "Whole Picture",
         body: "Labs, hormones, muscle, sleep, and stress, seen together.",
       },
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/bicep.svg`,
         title: "Muscle Protected",
         body: "Preserve strength while improving metabolic health.",
       },
@@ -157,17 +157,17 @@ export const metabolicHealthContent: ServicePageContent = {
         body: "Share what you're experiencing, crashes, cravings, weight, labs.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/checklist.svg`,
         title: "Test",
         body: "Comprehensive evaluation to uncover the patterns underneath.",
       },
       {
-        iconSrc: `${ICON}/meditation.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Plan",
         body: "A physiology-first strategy, not a generic program.",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/bicep.svg`,
         title: "Strengthen",
         body: "Protect muscle while improving how your body uses energy.",
       },

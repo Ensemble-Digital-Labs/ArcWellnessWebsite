@@ -75,6 +75,8 @@ export function validateInsightEntry(
       imageSrc,
       imageAlt,
       body,
+      // Preserve typed article layout when admin edits metadata/body text.
+      ...(entry.article ? { article: entry.article } : {}),
     },
   };
 }

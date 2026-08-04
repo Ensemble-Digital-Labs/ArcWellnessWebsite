@@ -1,8 +1,6 @@
 /**
- * Hormone Health: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Hormone Health: EXION section stack; dedicated hero + temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +11,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const HORMONE_HEALTH_ASSET = "/assets/treatments/hormone-health";
 /** Bump when replacing Hormone Health rasters so next/image + browser drop stale caches. */
-const HORMONE_HEALTH_ASSETS_VERSION = "20260730-hero";
+const HORMONE_HEALTH_ASSETS_VERSION = "20260803-cards";
 
 function hormoneHealthAsset(file: string) {
   return `${HORMONE_HEALTH_ASSET}/${file}?v=${HORMONE_HEALTH_ASSETS_VERSION}`;
@@ -42,7 +40,7 @@ export const hormoneHealthContent: ServicePageContent = {
       body: "When hormones shift, fatigue and afternoon crashes often follow.",
     },
     {
-      iconSrc: `${ICON}/lotus.svg`,
+      iconSrc: `${ICON}/sleep.svg?v=zoom`,
       title: "Sleep",
       body: "Restorative sleep is one of the first places imbalance shows up.",
     },
@@ -52,7 +50,7 @@ export const hormoneHealthContent: ServicePageContent = {
       body: "Cognition, motivation, and emotional steadiness are tightly linked to hormones.",
     },
     {
-      iconSrc: `${ICON}/cell.svg`,
+      iconSrc: `${ICON}/bicep.svg`,
       title: "Strength",
       body: "Muscle, bone, metabolism, and desire all respond when hormones change.",
     },
@@ -67,8 +65,11 @@ export const hormoneHealthContent: ServicePageContent = {
       "Thyroid, metabolic health, nutrients, inflammation, and cardiovascular markers when relevant",
       "A plan designed to restore balance, function, and quality of life",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "ARC Wellness hallway seating: thoughtful, unhurried care",
+    imageSrc: hormoneHealthAsset("hormone-health-mechanism.webp"),
+    imageAlt:
+      "Calm ARC Wellness suite with warm arched lighting, bed, and seating",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-[48%_45%] scale-[1.08]",
   },
   treatments: {
     title: "Care shaped",
@@ -86,8 +87,8 @@ export const hormoneHealthContent: ServicePageContent = {
           "Bioidentical HRT when medically appropriate",
           "Menopause is a transition, not your identity",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm waiting room at ARC Wellness",
+        imageSrc: hormoneHealthAsset("hormone-health-card-women.webp"),
+        imageAlt: "Woman in a calm consultation at ARC Wellness",
       },
       {
         eyebrow: "For men",
@@ -100,8 +101,8 @@ export const hormoneHealthContent: ServicePageContent = {
           "Careful monitoring over time",
           "Move forward stronger, not turn back the clock",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness lobby and care environment",
+        imageSrc: hormoneHealthAsset("hormone-health-card-men.webp"),
+        imageAlt: "Man in a calm consultation at ARC Wellness",
       },
       {
         eyebrow: "Whole-body lens",
@@ -114,8 +115,8 @@ export const hormoneHealthContent: ServicePageContent = {
           "Cardiovascular and related markers",
           "One symptom can have many causes",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: hormoneHealthAsset("hormone-health-card-beyond.webp"),
+        imageAlt: "Physician reviewing hormone and metabolic markers with a patient",
       },
     ],
   },
@@ -128,7 +129,7 @@ export const hormoneHealthContent: ServicePageContent = {
     backgroundAlt: "",
     cards: [
       {
-        iconSrc: `${ICON}/lotus.svg`,
+        iconSrc: `${ICON}/sleep.svg?v=zoom`,
         title: "Restorative Sleep",
         body: "More restorative sleep that helps you wake ready for the day.",
       },
@@ -169,7 +170,7 @@ export const hormoneHealthContent: ServicePageContent = {
         body: "You simply need to know that something feels different. We start there.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Evaluate",
         body: "Story, labs, and physician-guided evaluation uncover what your body needs.",
       },
@@ -179,12 +180,12 @@ export const hormoneHealthContent: ServicePageContent = {
         body: "A plan built around balance, function, and quality of life, not a single number.",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/calendar-check.svg`,
         title: "Monitor",
         body: "Care continues with thoughtful follow-up as your body responds.",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/lotus.svg`,
         title: "Feel Better",
         body: "Understanding changes everything, and feeling better can follow.",
       },

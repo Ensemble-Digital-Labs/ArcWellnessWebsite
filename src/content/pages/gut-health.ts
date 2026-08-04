@@ -41,12 +41,12 @@ export const gutHealthContent: ServicePageContent = {
   },
   pillars: [
     {
-      iconSrc: `${ICON}/cell.svg`,
+      iconSrc: `${ICON}/capsule-leaf.svg`,
       title: "Digestion",
       body: "How you break down and absorb nutrients shapes how you feel every day.",
     },
     {
-      iconSrc: `${ICON}/lotus.svg`,
+      iconSrc: `${ICON}/shield-check.svg`,
       title: "Immunity",
       body: "Your gut supports immune function far beyond the digestive tract.",
     },
@@ -56,7 +56,7 @@ export const gutHealthContent: ServicePageContent = {
       body: "The gut communicates with the brain: mood, focus, and comfort included.",
     },
     {
-      iconSrc: `${ICON}/sun.svg`,
+      iconSrc: `${ICON}/person-sparkle.svg`,
       title: "Whole Body",
       body: "Metabolism, hormones, and inflammation all interact with gut health.",
     },

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import {
@@ -246,6 +246,9 @@ export function ArcDesktopNav() {
   const [revealed, setRevealed] = useState(true);
   const reducedMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+  const triggerRefs = useRef<Record<string, HTMLLIElement | null>>({});
+  const [tabPanelLeft, setTabPanelLeft] = useState<number | null>(null);
   const lastScrollYRef = useRef(0);
   /** Distance travelled in the current direction; resets when direction flips. */
   const dirAccumRef = useRef(0);
@@ -310,6 +313,32 @@ export function ArcDesktopNav() {
   const navVisible = reducedMotion ? true : revealed;
   const menuOpen = Boolean(openItem?.columns);
   const panelItem = openItem ?? displayItem;
+  const alignPanelToTab = panelItem?.panelAlign === "tab";
+  const panelLeftPx = alignPanelToTab ? tabPanelLeft : null;
+
+  // Narrow menus (Start Here) anchor under their tab; wide menus stay centered on the pill.
+  useLayoutEffect(() => {
+    if (!alignPanelToTab || !panelItem) {
+      setTabPanelLeft(null);
+      return;
+    }
+
+    const measure = () => {
+      const pill = pillRef.current;
+      const trigger = triggerRefs.current[panelItem.id];
+      if (!pill || !trigger) {
+        setTabPanelLeft(null);
+        return;
+      }
+      const pillRect = pill.getBoundingClientRect();
+      const triggerRect = trigger.getBoundingClientRect();
+      setTabPanelLeft(triggerRect.left + triggerRect.width / 2 - pillRect.left);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [alignPanelToTab, panelItem, menuOpen]);
 
   return (
     <div
@@ -330,6 +359,7 @@ export function ArcDesktopNav() {
             onMouseLeave lives here (pointer-events-auto) so leaving the pill+card closes the
             dropdown — the outer container is pointer-events-none and never fires leave events. */}
         <div
+          ref={pillRef}
           className={cn(
             "pointer-events-auto relative justify-self-center",
             "transition-opacity ease-[cubic-bezier(0.4,0,0.2,1)] duration-[600ms] will-change-[opacity]",
@@ -352,6 +382,9 @@ export function ArcDesktopNav() {
               {DESKTOP_NAV_ITEMS.map((item) => (
                 <li
                   key={item.id}
+                  ref={(el) => {
+                    triggerRefs.current[item.id] = el;
+                  }}
                   onMouseEnter={() =>
                     navItemHasPanel(item) ? setOpenId(item.id) : setOpenId(null)
                   }
@@ -370,20 +403,29 @@ export function ArcDesktopNav() {
             </ul>
           </nav>
 
-          {/* Mega-menu — floating rounded card centered under the pill (pt-3 bridges the gap).
-              Persistent container: fades / lifts in on open, fades out on close (keeps last
-              content mounted during the close), and gently crossfades content when switching
-              tabs — so moving between menus glides instead of popping. */}
+          {/* Mega-menu — floating rounded card (pt-3 bridges the gap).
+              Default: centered under the pill. Start Here (`panelAlign: "tab"`): under that tab. */}
           {panelItem?.columns ? (
             <div
               className={cn(
-                "absolute left-1/2 top-full z-20 -translate-x-1/2 pt-3",
+                "absolute top-full z-20 pt-3",
+                panelLeftPx == null && "left-1/2 -translate-x-1/2",
                 "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]",
                 menuOpen
                   ? "pointer-events-auto translate-y-0 opacity-100"
                   : "pointer-events-none -translate-y-1.5 opacity-0",
                 reducedMotion && "motion-reduce:transition-none",
               )}
+              style={
+                panelLeftPx != null
+                  ? {
+                      left: panelLeftPx,
+                      transform: menuOpen
+                        ? "translate(-50%, 0)"
+                        : "translate(-50%, -0.375rem)",
+                    }
+                  : undefined
+              }
               aria-hidden={!menuOpen}
             >
               <div className="max-h-[70vh] w-max max-w-[min(66rem,calc(100vw-24rem))] overflow-y-auto rounded-2xl border border-black/30 bg-arc-cream p-6 shadow-[0_24px_48px_rgba(44,44,44,0.14)]">

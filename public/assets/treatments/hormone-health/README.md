@@ -4,6 +4,11 @@
 |------|---------|
 | `hormone-health-hero.png` | 4K master (editing only) |
 | `hormone-health-hero.webp` | hero background — `hormoneHealthContent.hero.imageSrc` |
+| `hormone-health-mechanism.png` | master for mechanism section |
+| `hormone-health-mechanism.webp` | “Hormones influence more than you think” — `mechanism.imageSrc` |
+| `hormone-health-card-women.webp` | Perimenopause & Menopause card |
+| `hormone-health-card-men.webp` | Men's Hormone Health card |
+| `hormone-health-card-beyond.webp` | Beyond the Basics card |
 
 Bump `HORMONE_HEALTH_ASSETS_VERSION` in `src/content/pages/hormone-health.ts` when
 replacing a raster under the same filename, or caches will serve the old image.

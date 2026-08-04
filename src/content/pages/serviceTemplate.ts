@@ -51,6 +51,10 @@ export type ServiceMechanism = {
   evaluationBullets?: readonly string[];
   imageSrc?: string;
   imageAlt?: string;
+  /** Optional object-fit/position for the mechanism photo. */
+  imageObjectClass?: string;
+  /** Optional aspect-ratio utilities for the mechanism photo frame. */
+  imageAspectClass?: string;
   videoEmbedSrc?: string;
   videoTitle?: string;
 };

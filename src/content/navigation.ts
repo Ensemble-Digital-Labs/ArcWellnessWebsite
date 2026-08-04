@@ -1,6 +1,7 @@
 /**
  * Site navigation IA — single source of truth for header mega-menus.
- * Top bar: About · Services · Conditions · Start Here · Arc Library · Financing · Shop · Contact
+ * Top bar: About · Services · Conditions · Start Here · Case Study · Contact
+ * (Financing + Shop tabs exist in source but are `hidden` until ready — see notes on those items.)
  *
  * Linking convention:
  * - `href` set           → live route
@@ -8,6 +9,11 @@
  * - `comingSoon: true`   → disabled + "Coming soon"
  * - `future: true`       → disabled + "Future"
  * - `hidden: true`       → omitted from desktop bar + mobile drawer (IA kept)
+ *
+ * Arc Library mega-menu: temporarily replaced by a simple **Case Study** link
+ * (`/case-studies`). Full column IA remains in `arcLibraryMenu` — restore by
+ * swapping the top item back to `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
+ * (and removing `href` if you only want the panel, or keep both if the label should also navigate).
  */
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
@@ -41,6 +47,12 @@ export type NavTopItem = {
    * on their own content width, which gives ragged rows on long lists.
    */
   panelColumnsPerRow?: number;
+  /**
+   * Desktop mega-panel horizontal alignment under the floating pill.
+   * - `center` (default): centered under the whole pill (wide Services / Conditions).
+   * - `tab`: centered under this tab’s trigger (narrow Start Here).
+   */
+  panelAlign?: "center" | "tab";
   /**
    * When true, the tab is filtered out of `ARC_NAV_TOP_ITEMS` (desktop + mobile).
    * Keep the entry + its `*Menu` IA here so it can be restored without rewriting.
@@ -116,7 +128,7 @@ const servicesMenu: readonly NavColumn[] = [
         heading: "Aesthetics",
         items: [
           leaf("Neuromodulators", "/treatments/neuromodulators"),
-          leaf("Fillers", treatmentHrefByLabel["RHA Fillers"]),
+          leaf("Dermal Fillers", treatmentHrefByLabel["Dermal Fillers"]),
           leaf("Exion", treatmentHrefByLabel["Exion"]),
           leaf("EmFace", treatmentHrefByLabel["EmFace"]),
           leaf("RF Microneedling", "/treatments/rf-microneedling"),
@@ -279,40 +291,46 @@ const conditionsMenu: readonly NavColumn[] = [
   },
 ];
 
-/** START HERE — new vs existing patients. */
+/** START HERE — first-visit paths. */
 const startHereMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        heading: "Your First Visit",
         items: [
           leaf("Book a consultation", siteMeta.bookingUrl),
           leaf("Membership Options", "/programs"),
           leaf("Pricing & Financing", "/financing"),
-          soon("Insurance & Payment"),
-          soon("Frequently Asked Questions"),
+          // NOTE: Insurance & Payment / FAQ removed from Start Here until live.
+          // Restore: soon("Insurance & Payment"), soon("Frequently Asked Questions"),
         ],
       },
     ],
   },
-  {
-    groups: [
-      {
-        heading: "Existing Patients",
-        items: [
-          soon("Patient Portal"),
-          soon("Forms"),
-          soon("Prescription Refills"),
-          // NOTE: "Contact Your Care Team" removed — Contact is a top-bar tab.
-          // Restore: leaf("Contact Your Care Team", "/contact"),
-        ],
-      },
-    ],
-  },
+  // NOTE (Aug 2026): "Existing Patients" column removed (Patient Portal / Forms /
+  // Prescription Refills were all Soon). Restore when portal/forms go live:
+  // {
+  //   groups: [{
+  //     heading: "Existing Patients",
+  //     items: [
+  //       soon("Patient Portal"),
+  //       soon("Forms"),
+  //       soon("Prescription Refills"),
+  //     ],
+  //   }],
+  // },
 ];
 
-/** ARC LIBRARY — content hub (interim: case-studies). */
-const arcLibraryMenu: readonly NavColumn[] = [
+/**
+ * ARC LIBRARY — content hub mega-menu (preserved for restore).
+ *
+ * NOTE (Aug 2026): Top bar currently shows a simple **Case Study** link to
+ * `/case-studies` with no dropdown. When more library pages exist, restore the
+ * mega-menu by setting the top item to:
+ *   `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
+ * Columns / SOON badges below are the last shipped design.
+ * See `documents/2026-08-03/arc-library-mega-menu-restore.md`.
+ */
+export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
   {
     groups: [
       {
@@ -488,9 +506,26 @@ const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   { id: "about", label: "About", href: "/about" },
   { id: "services", label: "Services", href: "/treatments", columns: servicesMenu },
   { id: "conditions", label: "Conditions", columns: conditionsMenu, panelColumnsPerRow: 4 },
-  { id: "start-here", label: "Start Here", columns: startHereMenu },
-  { id: "arc-library", label: "Arc Library", columns: arcLibraryMenu },
-  { id: "financing", label: "Financing", href: "/financing", columns: financingMenu },
+  { id: "start-here", label: "Start Here", columns: startHereMenu, panelAlign: "tab" },
+  {
+    id: "arc-library",
+    label: "Case Study",
+    href: "/case-studies",
+    // NOTE (Aug 2026): Mega-menu hidden until more Arc Library pages ship.
+    // Previous: `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
+    // Full column IA is kept in `ARC_LIBRARY_MENU_PRESERVED` above — do not delete.
+  },
+  {
+    id: "financing",
+    label: "Financing",
+    href: "/financing",
+    columns: financingMenu,
+    // NOTE (Aug 2026): Financing top-bar tab hidden for now.
+    // Mega-menu IA stays in `financingMenu` above — do not delete.
+    // To show again: set `hidden: false` (or remove this flag).
+    // Start Here still links "Pricing & Financing" → `/financing` until that changes.
+    hidden: true,
+  },
   {
     id: "shop",
     label: "Shop",

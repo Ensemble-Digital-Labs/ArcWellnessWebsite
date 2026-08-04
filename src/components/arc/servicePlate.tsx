@@ -282,11 +282,17 @@ export function ServiceGoldRule({ className }: { className?: string }) {
 export function ServiceEmblemIcon({
   src,
   className,
+  iconClassName,
+  plate = false,
 }: {
   src: string;
   className?: string;
+  /** Applied to the SVG only (e.g. scale) — does not resize a cream plate. */
+  iconClassName?: string;
+  /** Cream-section white disk + gold rim. Omit on dark plates. */
+  plate?: boolean;
 }) {
-  return (
+  const image = (
     <Image
       src={src}
       alt=""
@@ -294,7 +300,28 @@ export function ServiceEmblemIcon({
       width={128}
       height={128}
       unoptimized
-      className={cn("select-none object-contain", className)}
+      className={cn(
+        "select-none object-contain",
+        plate ? "relative h-full w-full" : className,
+        iconClassName,
+      )}
     />
+  );
+
+  if (!plate) return image;
+
+  return (
+    <span
+      className={cn(
+        "relative inline-flex shrink-0 items-center justify-center overflow-visible",
+        className,
+      )}
+    >
+      <span
+        aria-hidden
+        className="absolute inset-[6%] rounded-full bg-[#FCFBFB] shadow-[0_0_0_1.5px_#C9A05A]"
+      />
+      {image}
+    </span>
   );
 }

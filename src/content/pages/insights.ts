@@ -1,5 +1,69 @@
 export type InsightKind = "blog" | "case-study";
 
+/** Checklist of short lines (foundation habits, red flags, etc.). */
+export type InsightBulletList = {
+  style: "bullets";
+  items: readonly string[];
+};
+
+/** Labeled cards — symptom groups, lab meanings, pillars. */
+export type InsightCardList = {
+  style: "cards";
+  items: readonly {
+    label: string;
+    body: string;
+  }[];
+};
+
+/** Two-column compare (e.g. acute vs chronic inflammation). */
+export type InsightCompareList = {
+  style: "compare";
+  leftTitle: string;
+  rightTitle: string;
+  rows: readonly {
+    label: string;
+    left: string;
+    right: string;
+  }[];
+};
+
+export type InsightSectionList =
+  | InsightBulletList
+  | InsightCardList
+  | InsightCompareList;
+
+/**
+ * One cream-plate teaching act on a typed blog.
+ * Prefer 2–4 sections per post — not one plate per Word heading.
+ */
+export type InsightArticleSection = {
+  title: string;
+  body: readonly string[];
+  /** Optional pull-quote / emphasis under the gold rule. */
+  callout?: string;
+  list?: InsightSectionList;
+  /** Prose after a list (wrap-up for that act). */
+  closing?: readonly string[];
+};
+
+/**
+ * Authored blog structure (condition-page discipline).
+ * When present, the detail page uses this instead of guessing from `body`.
+ */
+export type InsightArticle = {
+  /** Lead paragraphs after the hero (no extra H2, or titled “Overview”). */
+  overview: readonly string[];
+  /** Optional gold-pill line in the hero (conditions-style). */
+  closingLine?: string;
+  /** Optional emphasis line under overview prose. */
+  overviewCallout?: string;
+  sections: readonly InsightArticleSection[];
+  perspective: {
+    title: string;
+    body: readonly string[];
+  };
+};
+
 export type InsightEntry = {
   id: string;
   kind: InsightKind;
@@ -10,9 +74,40 @@ export type InsightEntry = {
   publishedAt: string;
   imageSrc: string;
   imageAlt: string;
-  /** Detail page body paragraphs */
+  /**
+   * Flat paragraphs — required for admin CMS + legacy posts.
+   * Keep in sync with `article` when both exist (flatten for search/admin).
+   */
   body: readonly string[];
+  /** Typed detail layout; omit on legacy Word-import posts. */
+  article?: InsightArticle;
 };
+
+/** Flatten a typed article back to paragraphs (admin / legacy tools). */
+export function flattenInsightArticle(article: InsightArticle): string[] {
+  const out: string[] = [...article.overview];
+  if (article.overviewCallout) out.push(article.overviewCallout);
+  for (const section of article.sections) {
+    out.push(section.title);
+    out.push(...section.body);
+    if (section.callout) out.push(section.callout);
+    if (section.list?.style === "bullets") {
+      out.push(...section.list.items);
+    } else if (section.list?.style === "cards") {
+      for (const item of section.list.items) {
+        out.push(`${item.label}: ${item.body}`);
+      }
+    } else if (section.list?.style === "compare") {
+      out.push(section.list.leftTitle, section.list.rightTitle);
+      for (const row of section.list.rows) {
+        out.push(row.label, row.left, row.right);
+      }
+    }
+    if (section.closing?.length) out.push(...section.closing);
+  }
+  out.push(article.perspective.title, ...article.perspective.body);
+  return out;
+}
 
 export const insightsPage = {
   seo: {

@@ -19,7 +19,7 @@ export const aestheticsPage = {
   linkedTreatments: [
     { slug: "neuromodulators", label: "Neuromodulators" },
     { slug: "daxxify", label: "Daxxify" },
-    { slug: "rha", label: "RHA Fillers" },
+    { slug: "rha", label: "Dermal Fillers" },
     { slug: "emface", label: "EmFace" },
     { slug: "exion", label: "Exion" },
     { slug: "rf-microneedling", label: "RF Microneedling" },

@@ -233,7 +233,7 @@ export function Arc360PageContent() {
           />
           <div
             className={cn(
-              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16",
+              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12 lg:grid-cols-[0.85fr_1.25fr] lg:gap-12",
               ARC_PAGE_RAIL_MAX,
             )}
           >
@@ -276,16 +276,16 @@ export function Arc360PageContent() {
             <ArcTextReveal
               variant="body"
               delayIndex={2}
-              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
+              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-[calc(100%+1.5rem)] lg:justify-self-end"
             >
-              <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                <div className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] lg:aspect-video">
+              <div className="rounded-none bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:p-2 md:p-2.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                <div className="relative aspect-[4/3] w-full min-h-[18rem] overflow-hidden rounded-none ring-1 ring-arc-champagne/30 sm:aspect-[5/4] sm:min-h-[22rem] sm:rounded-[18px] lg:aspect-[4/3] lg:min-h-[26rem]">
                   <Image
                     src={connected.imageSrc}
                     alt={connected.imageAlt}
                     fill
-                    sizes="(min-width: 1024px) 40vw, 100vw"
-                    className="object-cover object-center"
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="scale-[1.01] object-cover object-center"
                   />
                 </div>
               </div>
@@ -314,7 +314,8 @@ export function Arc360PageContent() {
                 <div className="flex h-full flex-col items-center text-center">
                   <ServiceEmblemIcon
                     src={pillar.iconSrc}
-                    className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28"
+                    plate
+                    className="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32"
                   />
                   <h3 className="mt-2 sm:mt-3">
                     <TitleEmphasis className="block text-[clamp(1.45rem,3.6vw,2rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
@@ -549,10 +550,17 @@ export function Arc360PageContent() {
                     )}
                   >
                     <div className="flex flex-col items-center text-center">
-                      <ServiceEmblemIcon
-                        src={item.iconSrc}
-                        className="h-24 w-24 sm:h-28 sm:w-28"
-                      />
+                      <div className="flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
+                        <ServiceEmblemIcon
+                          src={item.iconSrc}
+                          className={cn(
+                            "h-full w-full origin-center",
+                            item.title === "Strength" && "scale-[1.9]",
+                            item.title === "Brain Health" && "scale-[1.25]",
+                            item.title === "Independence" && "scale-[1.25]",
+                          )}
+                        />
+                      </div>
                       <h3 className="mt-4 max-w-[12rem]">
                         <TitleEmphasis className="block text-[clamp(1.6rem,4vw,2.15rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">
                           {item.title}
@@ -620,9 +628,10 @@ export function Arc360PageContent() {
                     <div className="flex h-full flex-col items-center text-center">
                       <ServiceEmblemIcon
                         src={item.iconSrc}
-                        className="h-20 w-20 sm:h-24 sm:w-24"
+                        plate
+                        className="h-28 w-28 sm:h-[7.5rem] sm:w-[7.5rem]"
                       />
-                      <h3 className="mt-3">
+                      <h3 className="mt-5 sm:mt-6">
                         <TitleEmphasis className="block text-[clamp(1.5rem,3.6vw,2rem)] leading-[0.92] tracking-tight text-arc-teal-ink [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_1px_2px_rgba(255,255,255,0.45)]">
                           {item.title}
                         </TitleEmphasis>
