@@ -139,20 +139,11 @@ export const homeFaqByCategory: Record<HomeFaqCategory, readonly HomeFaqItem[]> 
 };
 
 /**
- * Portrait pool for the 3D sphere, swap for approved photography.
+ * Portrait pool for review cards — mint wall hero until real patient photos exist.
  * NOTE: never include the founder portrait here — it would render Dr. Jabbar
  * as if he were a patient in the Google-review cards.
  */
-const testimonialPortraitPool = [
-  images.services[0],
-  images.services[1],
-  images.services[2],
-  images.services[3],
-  images.services[4],
-  images.whoWeAre,
-  images.heroMedia,
-  images.investBanner,
-] as const;
+const testimonialPortraitPool = [images.heroMedia] as const;
 
 /** Dummy copy, replace with real patient stories when available. */
 const testimonialCopyRows = [
