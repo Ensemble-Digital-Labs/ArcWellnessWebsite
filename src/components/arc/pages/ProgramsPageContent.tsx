@@ -137,7 +137,7 @@ export function ProgramsPageContent() {
         </div>
 
         <section
-          id="programs-hero"
+        id="programs-hero"
           className={cn(
             "relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-12 md:py-14",
             ARC_GALLERY_CLEAR_BELOW_LOGO,

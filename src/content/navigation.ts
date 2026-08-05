@@ -1,6 +1,6 @@
 /**
  * Site navigation IA — single source of truth for header mega-menus.
- * Top bar: About · Services · Conditions · Start Here · Case Study · Contact
+ * Top bar: About · Services · Conditions · Start Here · Arc Library · Contact
  * (Financing + Shop tabs exist in source but are `hidden` until ready — see notes on those items.)
  *
  * Linking convention:
@@ -10,10 +10,8 @@
  * - `future: true`       → disabled + "Future"
  * - `hidden: true`       → omitted from desktop bar + mobile drawer (IA kept)
  *
- * Arc Library mega-menu: temporarily replaced by a simple **Case Study** link
- * (`/case-studies`). Full column IA remains in `arcLibraryMenu` — restore by
- * swapping the top item back to `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
- * (and removing `href` if you only want the panel, or keep both if the label should also navigate).
+ * Arc Library uses a slim Start Here–style panel (`arcLibraryMenu`). Full multi-column
+ * IA remains in `ARC_LIBRARY_MENU_PRESERVED` for when more library pages ship.
  */
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
@@ -321,14 +319,8 @@ const startHereMenu: readonly NavColumn[] = [
 ];
 
 /**
- * ARC LIBRARY — content hub mega-menu (preserved for restore).
- *
- * NOTE (Aug 2026): Top bar currently shows a simple **Case Study** link to
- * `/case-studies` with no dropdown. When more library pages exist, restore the
- * mega-menu by setting the top item to:
- *   `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
- * Columns / SOON badges below are the last shipped design.
- * See `documents/2026-08-03/arc-library-mega-menu-restore.md`.
+ * Full ARC LIBRARY mega-menu IA (multi-column). Kept for restore when more
+ * library pages ship — top bar currently uses the slim `arcLibraryMenu` below.
  */
 export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
   {
@@ -387,6 +379,17 @@ export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
           soon("Frequently Asked Questions"),
           soon("Videos & Webinars"),
         ],
+      },
+    ],
+  },
+];
+
+/** ARC LIBRARY — Start Here–style slim panel (live links only). */
+const arcLibraryMenu: readonly NavColumn[] = [
+  {
+    groups: [
+      {
+        items: [leaf("Latest Insights", "/case-studies")],
       },
     ],
   },
@@ -509,11 +512,10 @@ const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   { id: "start-here", label: "Start Here", columns: startHereMenu, panelAlign: "tab" },
   {
     id: "arc-library",
-    label: "Case Study",
+    label: "Arc Library",
     href: "/case-studies",
-    // NOTE (Aug 2026): Mega-menu hidden until more Arc Library pages ship.
-    // Previous: `{ id: "arc-library", label: "Arc Library", columns: ARC_LIBRARY_MENU_PRESERVED }`
-    // Full column IA is kept in `ARC_LIBRARY_MENU_PRESERVED` above — do not delete.
+    columns: arcLibraryMenu,
+    panelAlign: "tab",
   },
   {
     id: "financing",

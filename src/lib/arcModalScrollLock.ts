@@ -24,14 +24,18 @@ type LocomotiveWindow = Window & {
 let holdScrollRaf = 0;
 let lockedScrollY = 0;
 
-function isInsideGalleryScroller(target: EventTarget | null): boolean {
+function isInsideModalScroller(target: EventTarget | null): boolean {
   if (!(target instanceof Element)) return false;
-  return Boolean(target.closest("[data-arc-clinic-gallery-scroll]"));
+  return Boolean(
+    target.closest(
+      "[data-arc-clinic-gallery-scroll], [data-arc-modal-scroll]",
+    ),
+  );
 }
 
 function blockPageScrollGesture(event: Event) {
   if (!isArcModalScrollLockActive()) return;
-  if (isInsideGalleryScroller(event.target)) return;
+  if (isInsideModalScroller(event.target)) return;
   event.preventDefault();
   event.stopPropagation();
 }

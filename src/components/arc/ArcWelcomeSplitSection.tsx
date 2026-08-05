@@ -35,7 +35,7 @@ const COPY_FADE_IN_END = 0.58;
 
 const WELCOME_COPY_HEADLINE_SERIF_CLASS = "text-arc-charcoal";
 const WELCOME_COPY_HEADLINE_EMPHASIS_CLASS =
-  "text-[1.52em] leading-[1.04] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
+  "whitespace-nowrap text-[1.82em] leading-[1.02] text-arc-teal-ink sm:text-[1.6em] md:text-[1.72em] lg:text-[1.82em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 const WELCOME_COPY_BODY_CLASS =
   "space-y-3 font-sans text-[13px] leading-relaxed text-arc-charcoal/88 sm:text-[0.92rem] md:text-[0.95rem] md:leading-relaxed lg:max-w-[54rem] lg:text-base";
 
@@ -148,25 +148,32 @@ function WelcomeTitleOnBackdrop({
   const { hasEmphasis, before, after } = split;
 
   return (
-    <p className="max-w-[min(92vw,20rem)] text-balance text-center font-serif text-3xl font-bold leading-[1.08] tracking-tight drop-shadow-[0_2px_24px_rgba(0,0,0,0.7)] sm:max-w-[24rem] sm:text-4xl md:max-w-[28rem] md:text-5xl md:leading-[1.06] lg:max-w-[32rem] lg:text-[3.25rem] xl:text-[3.5rem]">
+    <p className="max-w-[min(96vw,24rem)] text-center font-serif text-3xl font-bold leading-[1.08] tracking-tight drop-shadow-[0_2px_24px_rgba(0,0,0,0.7)] sm:max-w-[24rem] sm:text-4xl md:max-w-[28rem] md:text-5xl md:leading-[1.06] lg:max-w-[32rem] lg:text-[3.25rem] xl:text-[3.5rem]">
       {hasEmphasis ? (
         <>
           <span className="text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
             {before}
           </span>
-          {before ? " " : null}
-          <TitleEmphasis className="text-[1.2em] leading-[1.04] text-white sm:text-[1.24em] md:text-[1.28em] lg:text-[1.32em] [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
-            {headlineEmphasisWord}
-          </TitleEmphasis>
-          {after ? (
-            <span className="font-serif text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
-              {after.startsWith(".") ? after : ` ${after}`}
-            </span>
-          ) : (
-            <span className="font-serif text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
-              .
-            </span>
-          )}
+          {before ? (
+            <>
+              <br className="sm:hidden" />
+              <span className="hidden sm:inline"> </span>
+            </>
+          ) : null}
+          <span className="whitespace-nowrap">
+            <TitleEmphasis className="text-[1.82em] leading-[1.02] text-white sm:text-[1.48em] md:text-[1.52em] lg:text-[1.56em] [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
+              {headlineEmphasisWord}
+            </TitleEmphasis>
+            {after ? (
+              <span className="font-serif text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
+                {after.startsWith(".") ? after : ` ${after}`}
+              </span>
+            ) : (
+              <span className="font-serif text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.72),0_0_28px_rgba(0,0,0,0.4)]">
+                .
+              </span>
+            )}
+          </span>
         </>
       ) : (
         <span className="text-white">{headline}</span>
@@ -200,19 +207,26 @@ function WelcomeCopyBlock({
       {hasEmphasis ? (
         <>
           <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{before}</span>
-          {before ? " " : null}
-          <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
-            {headlineEmphasisWord}
-          </TitleEmphasis>
-          {after ? (
-            after.trim() === "." ? (
-              <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
+          {before ? (
+            <>
+              <br className="sm:hidden" />
+              <span className="hidden sm:inline"> </span>
+            </>
+          ) : null}
+          <span className="whitespace-nowrap">
+            <TitleEmphasis className={WELCOME_COPY_HEADLINE_EMPHASIS_CLASS}>
+              {headlineEmphasisWord}
+            </TitleEmphasis>
+            {after ? (
+              after.trim() === "." ? (
+                <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
+              ) : (
+                <> {after}</>
+              )
             ) : (
-              <> {after}</>
-            )
-          ) : (
-            <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
-          )}
+              <span className={cn("font-serif", WELCOME_COPY_HEADLINE_SERIF_CLASS)}>.</span>
+            )}
+          </span>
         </>
       ) : (
         <span className={WELCOME_COPY_HEADLINE_SERIF_CLASS}>{headline}</span>
