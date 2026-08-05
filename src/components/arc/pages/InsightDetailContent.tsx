@@ -51,8 +51,25 @@ function kindLabel(kind: InsightKind): string {
   return kind === "blog" ? "Blogs" : "Case study";
 }
 
+function BackLink({ kind }: { kind: InsightKind }) {
+  return (
+    <div className="flex justify-center">
+      <Link
+        href={backHref(kind)}
+        className="inline-flex items-center gap-2.5 font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-charcoal/70 transition-colors hover:text-arc-teal-ink sm:text-base sm:tracking-[0.18em]"
+      >
+        <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
+        {backLabel(kind)}
+      </Link>
+    </div>
+  );
+}
+
 const PROSE =
   "font-sans text-[0.9375rem] leading-[1.75] text-arc-charcoal/85 sm:text-base sm:leading-[1.8]";
+
+const SECTION_HEADING =
+  "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-balance";
 
 function ProseBlock({ paragraphs }: { paragraphs: readonly string[] }) {
   if (!paragraphs.length) return null;
@@ -307,9 +324,7 @@ function ArticleSection({ section }: { section: InsightArticleSection }) {
           ))}
         </ul>
       ) : null}
-      <h2 className="font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
-        {section.title}
-      </h2>
+      <h2 className={SECTION_HEADING}>{section.title}</h2>
       <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={section.body} />
       {section.callout ? <Callout>{section.callout}</Callout> : null}
@@ -341,14 +356,14 @@ function PerspectiveBlock({
       <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.22em] text-arc-teal-ink">
         From the Arc Desk
       </p>
-      <h2 className="mt-3 font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
+      <h2 className={cn("mt-3", SECTION_HEADING)}>
         {article.perspective.title}
       </h2>
       <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={article.perspective.body} />
       {cta ? (
         <div className="mt-8 border-t border-arc-charcoal/15 pt-7 text-center">
-          <p className="font-serif text-xl leading-snug text-arc-charcoal sm:text-2xl">
+          <p className="font-title-emphasis font-normal not-italic text-[clamp(2rem,5.5vw,2.85rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-balance">
             {cta.lead}
           </p>
           {cta.body ? (
@@ -372,19 +387,20 @@ function PerspectiveBlock({
 
 function ContinuePath({ nextSteps }: { nextSteps: readonly NextStep[] }) {
   return (
-    <nav className="mt-14 border-t border-arc-charcoal/20 pt-10 sm:mt-16" aria-label="Continue">
-      <h2 className="font-serif text-[clamp(1.4rem,4vw,1.85rem)] font-semibold tracking-tight text-arc-charcoal">
-        Continue your path
-      </h2>
-      <p className={cn(PROSE, "mt-3 max-w-xl")}>
+    <nav
+      className="mt-14 border-t border-arc-charcoal/20 pt-10 text-center sm:mt-16"
+      aria-label="Continue"
+    >
+      <h2 className={SECTION_HEADING}>Continue your path</h2>
+      <p className={cn(PROSE, "mx-auto mt-3 max-w-xl")}>
         Ready for personalized care, or want to keep reading?
       </p>
-      <ul className="mt-6 divide-y divide-arc-charcoal/15 border-y border-arc-charcoal/15">
+      <ul className="mx-auto mt-6 max-w-xl divide-y divide-arc-charcoal/15 border-y border-arc-charcoal/15">
         {nextSteps.map((step) => (
           <li key={step.label}>
             <Link
               href={step.href}
-              className="group flex min-h-[3.25rem] items-center justify-between gap-3 py-3.5 transition-colors"
+              className="group flex min-h-[3.25rem] items-center justify-center gap-3 py-3.5 transition-colors"
             >
               <span className="font-serif text-lg tracking-tight text-arc-charcoal group-hover:text-arc-teal-ink sm:text-xl">
                 {step.label}
@@ -422,13 +438,7 @@ function TypedEditorial({
         )}
       >
         <div className="mx-auto max-w-3xl">
-          <Link
-            href={backHref(entry.kind)}
-            className="inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-charcoal/60 transition-colors hover:text-arc-teal-ink"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
-            {backLabel(entry.kind)}
-          </Link>
+          <BackLink kind={entry.kind} />
 
           <header className="mt-8 text-center sm:mt-10">
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -439,7 +449,7 @@ function TypedEditorial({
             </div>
 
             <ArcTextReveal variant="heading" trigger="mount">
-              <h1 className="mt-6 font-serif text-[clamp(2.15rem,7.5vw,3.65rem)] font-semibold leading-[1.08] tracking-tight text-arc-charcoal">
+              <h1 className="mt-6 font-title-emphasis font-normal not-italic text-[clamp(2.75rem,10vw,5rem)] leading-[0.95] tracking-tight text-arc-teal-ink">
                 {entry.titleLines?.length
                   ? entry.titleLines.map((line) => (
                       <span key={line} className="block text-balance">
@@ -485,9 +495,7 @@ function TypedEditorial({
 
           {article.faq ? (
             <section className="mt-14 sm:mt-16">
-              <h2 className="font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
-                {article.faq.title}
-              </h2>
+              <h2 className={SECTION_HEADING}>{article.faq.title}</h2>
               <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
               <div className="space-y-3">
                 {article.faq.items.map((item) => (
@@ -628,13 +636,7 @@ function LegacyEditorial({
         )}
       >
         <div className="mx-auto max-w-3xl">
-          <Link
-            href={backHref(entry.kind)}
-            className="inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-charcoal/60 transition-colors hover:text-arc-teal-ink"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
-            {backLabel(entry.kind)}
-          </Link>
+          <BackLink kind={entry.kind} />
 
           <header className="mt-8 text-center sm:mt-10">
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -643,7 +645,7 @@ function LegacyEditorial({
                 <MetaPill>{entry.publishedAt}</MetaPill>
               ) : null}
             </div>
-            <h1 className="mt-6 font-serif text-[clamp(2.15rem,7.5vw,3.65rem)] font-semibold leading-[1.08] tracking-tight text-arc-charcoal text-balance">
+            <h1 className="mt-6 font-title-emphasis font-normal not-italic text-[clamp(2.75rem,10vw,5rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-balance">
               {entry.title}
             </h1>
             <p className="mx-auto mt-5 max-w-2xl font-sans text-base font-medium leading-relaxed text-arc-charcoal/75 sm:text-lg">
@@ -662,16 +664,14 @@ function LegacyEditorial({
             >
               {section.title ? (
                 <>
-                  <h2 className="font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
-                    {section.title}
-                  </h2>
+                  <h2 className={SECTION_HEADING}>{section.title}</h2>
                   <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
                 </>
               ) : null}
               <ProseBlock paragraphs={section.paragraphs} />
               {section.blocks?.map((block) => (
                 <div key={block.title} className="mt-8">
-                  <h3 className="font-serif text-xl font-semibold tracking-tight text-arc-teal-ink">
+                  <h3 className="font-title-emphasis font-normal not-italic text-[clamp(1.75rem,4vw,2.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink">
                     {block.title}
                   </h3>
                   <div className="mt-3">
@@ -684,7 +684,7 @@ function LegacyEditorial({
 
           {perspective ? (
             <section className="mt-14 border border-arc-charcoal/20 bg-[#f7f1e6]/80 px-5 py-8 sm:mt-16 sm:px-8 sm:py-10">
-              <h2 className="font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
+              <h2 className={SECTION_HEADING}>
                 {perspective.title ?? "This Is Where the Arc Begins"}
               </h2>
               <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
@@ -699,9 +699,7 @@ function LegacyEditorial({
             >
               {section.title ? (
                 <>
-                  <h2 className="font-serif text-[clamp(1.55rem,4.5vw,2.15rem)] font-semibold leading-[1.15] tracking-tight text-arc-charcoal">
-                    {section.title}
-                  </h2>
+                  <h2 className={SECTION_HEADING}>{section.title}</h2>
                   <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
                 </>
               ) : null}
