@@ -120,7 +120,7 @@ function SocialRow({ className }: { className?: string }) {
 
 function StarRatingBlock() {
   return (
-    <div className="flex flex-col items-start gap-1 text-left">
+    <div className="flex flex-col items-center gap-1 text-center md:items-start md:text-left">
       <p className="sr-only">Rated 5.0 out of 5 based on patient feedback.</p>
       <span className={footerEyebrowClass}>Patient experience</span>
       <div className="flex items-baseline gap-2" aria-hidden>
@@ -177,8 +177,20 @@ export function ArcFooter() {
             <div className="order-2 flex flex-col gap-1.5 text-center md:order-1 md:text-left">
               <span className={footerEyebrowClass}>Visit</span>
               <address className="not-italic">
-                <p className={footerBodyClass}>{FOOTER_ADDRESS.line1}</p>
-                <p className={footerBodyClass}>{FOOTER_ADDRESS.line2}</p>
+                <a
+                  href={siteMeta.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    footerBodyClass,
+                    "inline-block transition-colors duration-200 hover:text-arc-teal-ink",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/55 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream/80",
+                  )}
+                  aria-label={`Open ${FOOTER_ADDRESS.line1}, ${FOOTER_ADDRESS.line2} in Google Maps`}
+                >
+                  <span className="block">{FOOTER_ADDRESS.line1}</span>
+                  <span className="block">{FOOTER_ADDRESS.line2}</span>
+                </a>
               </address>
             </div>
 
@@ -242,7 +254,7 @@ export function ArcFooter() {
         {/* Tier 2, full-width rail: rating flush left, social/legal centered, CTA flush right */}
         <div className="relative z-[1] w-full px-5 pb-14 pt-2 sm:px-8 md:px-12 md:pb-16 lg:px-16 xl:px-20">
           <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center md:gap-6 lg:gap-10">
-            <div className="flex justify-start">
+            <div className="flex justify-center md:justify-start">
               <StarRatingBlock />
             </div>
 

@@ -123,7 +123,8 @@ export const arc360Content: Arc360Content = {
     imageAlt:
       "Soft cream and gold marbled artwork with teal veining, framing an open centre",
     // Abstract plate, not a photo: keep it centred so the open middle stays behind the copy.
-    imageObjectClass: "object-cover object-center",
+    imageObjectClass:
+      "object-cover object-[88%_40%] sm:object-[78%_40%] md:object-[65%_42%] lg:object-[55%_center]",
   },
   connected: {
     titleLines: ["Your health", "is connected."],

@@ -5,7 +5,7 @@ import {
   INSIGHTS_FEED_AMBIENT_SRC,
   PATH_SECTION_INTRO_BACKGROUND_SRC,
 } from "@/content/backgroundDecoration";
-import { SERVICE_PAGE_LCP_HERO_SRCS } from "@/content/servicePageLcpHeroes";
+import { SERVICE_PAGE_LCP_HERO_SRCS, SHARED_SITE_BACKGROUND_SRCS } from "@/content/servicePageLcpHeroes";
 import { images } from "@/content/site";
 
 /**
@@ -32,8 +32,9 @@ const PRELOAD_SRCS: readonly string[] = [
  * marketing page hero (Contact, Programs, Financing, Aesthetics, Treatments,
  * treatment detail) shares the same marble plate, so warming these one time
  * makes those heroes paint instantly on the first navigation. Also warms the
- * About page silk-floral hero plate (`ScrollChapterIntroSection`), plus curated
- * **service + shared condition LCP** heroes (see `servicePageLcpHeroes.ts`).
+ * About page silk-floral hero plate (`ScrollChapterIntroSection`), shared
+ * silk / cream-gold / dark-teal section plates, plus curated **service +
+ * shared condition LCP** heroes (see `servicePageLcpHeroes.ts`).
  *
  * These are warmed via the exact `/_next/image` variant (not the raw file) so the
  * cached URL matches what the destination pages actually request.
@@ -42,6 +43,7 @@ const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
   images.aboutHeroMedia,
   INSIGHTS_FEED_AMBIENT_SRC,
   images.heroMedia,
+  ...SHARED_SITE_BACKGROUND_SRCS,
   ...SERVICE_PAGE_LCP_HERO_SRCS,
 ];
 

@@ -33,7 +33,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const HERO_OBJECT =
-  "object-cover object-[72%_38%] sm:object-[68%_40%] md:object-[62%_42%] lg:object-[55%_center]";
+  "object-cover object-[88%_40%] sm:object-[78%_40%] md:object-[65%_42%] lg:object-[55%_center]";
 
 /**
  * Tighter than `ARC_GALLERY_CLEAR_BELOW_LOGO`: that clearance assumes copy in the

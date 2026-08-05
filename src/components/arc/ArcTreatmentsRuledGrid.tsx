@@ -21,6 +21,7 @@ import type { TreatmentPage } from "@/content/pages/treatments";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
 import { cn } from "@/lib/utils";
 
 type ArcTreatmentsRuledGridProps = {
@@ -35,6 +36,32 @@ type ArcTreatmentsRuledGridProps = {
   bottomSeam?: boolean;
   className?: string;
 };
+
+/** Same circle thumbs as the mobile Services menu (service hero, right-side crop). */
+const previewBySlug = Object.fromEntries(
+  ARC_TREATMENT_NAV_LINKS.map((t) => [
+    t.href.replace(/^\/treatments\//, ""),
+    {
+      src: t.thumbSrc,
+      objectClass:
+        "thumbObjectClass" in t && t.thumbObjectClass
+          ? t.thumbObjectClass
+          : "object-cover",
+    },
+  ]),
+) as Record<string, { src: string; objectClass: string }>;
+
+function treatmentPreview(treatment: TreatmentPage): {
+  src: string;
+  objectClass: string;
+} {
+  return (
+    previewBySlug[treatment.slug] ?? {
+      src: treatment.imageSrc,
+      objectClass: "object-cover",
+    }
+  );
+}
 
 const ROMAN_UNITS = [
   [1000, "M"],
@@ -158,6 +185,8 @@ function TreatmentInteractiveRow({
     setHovered(false);
   };
 
+  const preview = treatmentPreview(treatment);
+
   return (
     <ArcTextReveal
       as="li"
@@ -202,11 +231,11 @@ function TreatmentInteractiveRow({
           >
             <div className="relative h-full w-full overflow-hidden rounded-full border border-white/40 bg-arc-cream-deep shadow-[0_18px_44px_rgba(44,44,44,0.2)] ring-2 ring-white/50">
               <Image
-                src={treatment.imageSrc}
+                src={preview.src}
                 alt=""
                 fill
                 sizes="(max-width: 768px) 120px, 168px"
-                className="object-cover"
+                className={cn(preview.objectClass)}
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-t from-arc-charcoal/25 via-transparent to-transparent" />
             </div>

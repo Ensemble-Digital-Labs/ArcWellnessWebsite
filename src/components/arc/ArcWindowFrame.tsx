@@ -30,6 +30,8 @@ export type ArcWindowFrameProps = {
   /** `next/image` responsive sizes hint. */
   sizes?: string;
   priority?: boolean;
+  /** Hint for the browser — use `high` with `priority` for above-the-fold cards. */
+  fetchPriority?: "high" | "low" | "auto";
   /**
    * Depth of the domed head as a % of the facing axis.
    * - `archFacing="top"` (default): % of height — higher = taller arch. ~42 classic; ~28 short/wide.
@@ -83,6 +85,7 @@ export function ArcWindowFrame({
   imageClassName,
   sizes = "(max-width: 768px) 90vw, 33vw",
   priority = false,
+  fetchPriority,
   archDepth = 42,
   archFacing = "top",
   baseRadius = 14,
@@ -121,6 +124,7 @@ export function ArcWindowFrame({
           fill
           sizes={sizes}
           priority={priority}
+          fetchPriority={fetchPriority ?? (priority ? "high" : undefined)}
           className={cn(
             "object-cover object-center",
             interactive &&
