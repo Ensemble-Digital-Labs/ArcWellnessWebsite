@@ -476,7 +476,11 @@ function DrawerNavItem({
             closeMenu={closeMenu}
             reducedMotion={reducedMotion}
             canHover={canHover}
-            showThumb={item.id !== "conditions" && item.id !== "start-here"}
+            showThumb={
+              item.id !== "conditions" &&
+              item.id !== "start-here" &&
+              item.id !== "arc-library"
+            }
           />
         </DrawerExpandable>
       ) : null}
