@@ -19,12 +19,88 @@ import { getAllTreatmentSlugs, getTreatmentBySlug } from "@/content/pages/treatm
 
 type Props = { params: Promise<{ slug: string }> };
 
+const TREATMENT_META_BY_SLUG: Record<
+  string,
+  { title: string; description: string }
+> = {
+  overview: {
+    title: "Treatment Overview | ExoMind, EmSculpt Neo, Peptides & More",
+    description:
+      "See every treatment path at Arc Wellness, neuromodulation, pelvic health, body contouring, IV nutrients, peptides, and physician-selected supplements.",
+  },
+  exomind: {
+    title: "ExoMind TMS Neuromodulation | Arc Wellness, St. Louis",
+    description:
+      "ExoMind uses precise Transcranial Magnetic Stimulation to recalibrate brain communication and support healthier function. Available at Arc Wellness, St. Louis.",
+  },
+  emsella: {
+    title: "EmSella Pelvic Floor Therapy | Arc Wellness, St. Louis",
+    description:
+      "EmSella is a non-invasive HIFEM treatment that strengthens pelvic floor muscles while you stay fully clothed. Book a session at Arc Wellness, St. Louis.",
+  },
+  "emsculpt-neo": {
+    title: "EmSculpt Neo Body Contouring | Arc Wellness, St. Louis",
+    description:
+      "EmSculpt Neo combines two technologies to reduce fat and build muscle at once, no surgery, no downtime. Available at Arc Wellness in St. Louis, MO.",
+  },
+  emface: {
+    title: "EmFace Non-Invasive Facial Toning | Arc Wellness, St. Louis",
+    description:
+      "EmFace lifts, tones, and reduces wrinkles by treating facial skin and muscle at once, no needles, no downtime. Book at Arc Wellness in St. Louis.",
+  },
+  exion: {
+    title: "Exion Skin Rejuvenation (RF + Ultrasound) | Arc Wellness",
+    description:
+      "Exion combines radiofrequency and ultrasound to boost collagen, elastin, and hyaluronic acid for firmer, healthier-looking skin. Available in St. Louis.",
+  },
+  daxxify: {
+    title: "DAXXIFY Long-Lasting Wrinkle Injections | Arc Wellness",
+    description:
+      "DAXXIFY is an FDA-approved neuromodulator that smooths moderate to severe frown lines with longer-lasting results. Book at Arc Wellness in St. Louis, MO.",
+  },
+  neuromodulators: {
+    title: "Neuromodulators | Arc Wellness, St. Louis",
+    description:
+      "Physician-guided neuromodulators to soften lines while keeping you looking like yourself. Available at Arc Wellness in St. Louis, MO.",
+  },
+  "dermal-fillers": {
+    title: "RHA Dermal Fillers for Dynamic Wrinkles | Arc Wellness",
+    description:
+      "The RHA Collection is the first FDA-approved filler line built specifically for dynamic wrinkles and folds. Available at Arc Wellness in St. Louis, MO.",
+  },
+  knesko: {
+    title: "Knesko Collagen Masks & Gemstone Facials | Arc Wellness",
+    description:
+      "Knesko Skin blends clinical science with gemstone-infused collagen masks for a luxury facial that treats skin, mind, and spirit. Book at Arc Wellness.",
+  },
+  "infusion-therapy": {
+    title: "Infusion & Nutrient Therapy | Arc Wellness, St. Louis",
+    description:
+      "Physician-guided infusion and nutrient therapy for hydration, recovery, and busy seasons—without a hospital visit. Available at Arc Wellness in St. Louis.",
+  },
+  "peptide-therapy": {
+    title: "Peptide Therapy for Recovery & Longevity | Arc Wellness",
+    description:
+      "Peptide therapy works with your body's natural repair and regulation systems to support healing, recovery, and regeneration. Available in St. Louis, MO.",
+  },
+  supplements: {
+    title: "Physician-Guided Supplements | Arc Wellness, St. Louis",
+    description:
+      "Supplements at Arc Wellness are chosen carefully, dosed correctly, and paired with a physician-guided plan, never generic retail products.",
+  },
+};
+
 export async function generateStaticParams() {
   return getAllTreatmentSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const matchedMeta = TREATMENT_META_BY_SLUG[slug];
+  if (matchedMeta) {
+    return matchedMeta;
+  }
+
   const treatment = getTreatmentBySlug(slug);
   if (!treatment) return { title: "Treatment | Arc Wellness" };
   return {

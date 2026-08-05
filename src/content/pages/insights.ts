@@ -174,9 +174,9 @@ export function flattenInsightArticle(article: InsightArticle): string[] {
 
 export const insightsPage = {
   seo: {
-    title: "From the Arc Desk | Arc Wellness",
+    title: "From the Arc Desk | Arc Wellness, St. Louis",
     description:
-      "Patient stories, clinical insights, and wellness education from the ARC Wellness team in St. Louis.",
+      "Real patient stories, clinical insights, and wellness education from Arc Wellness in St. Louis—covering metabolic health, hormones, recovery, and more.",
   },
   hero: {
     eyebrow: "From the Arc Desk",

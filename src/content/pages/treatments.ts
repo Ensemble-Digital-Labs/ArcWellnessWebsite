@@ -53,9 +53,9 @@ const img = images;
 /** Live `/new-page-2` (Our Services) + `/wellness-therapies` hub copy */
 export const treatmentsHub = {
   seo: {
-    title: "Overview | Arc Wellness",
+    title: "Wellness & Aesthetic Treatments in St. Louis | Arc Wellness",
     description:
-      "Discover science-backed treatments designed to elevate your health, enhance your body, and restore your mind, all under one roof.",
+      "Browse every Arc Wellness treatment in one place, from EmSculpt Neo and EmFace to peptide therapy and infusions. Physician-guided care for every goal.",
   },
   hero: {
     eyebrow: "Restoration Begins Here",

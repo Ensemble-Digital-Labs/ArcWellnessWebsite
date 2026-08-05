@@ -5,6 +5,8 @@ import { siteMeta } from "@/content/siteMeta";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Arc Wellness",
+  description:
+    "Read the Arc Wellness privacy policy, covering how we collect, use, and protect your personal and health information as a St. Louis wellness clinic.",
   robots: { index: false },
 };
 

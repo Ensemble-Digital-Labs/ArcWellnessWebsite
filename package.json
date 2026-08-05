@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "logo:transparent": "node scripts/make-logo-transparent.cjs",
+    "favicons": "node scripts/generate-favicons.mjs",
     "assets:webp:convert": "node scripts/convert-assets-to-webp.mjs",
     "assets:webp:sync": "node scripts/sync-asset-paths-webp.mjs",
     "assets:webp": "node scripts/convert-assets-to-webp.mjs && node scripts/sync-asset-paths-webp.mjs",

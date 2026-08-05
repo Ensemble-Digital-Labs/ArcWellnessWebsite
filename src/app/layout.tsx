@@ -43,9 +43,21 @@ const radley = Radley({
 });
 
 export const metadata: Metadata = {
-  title: "ARC Wellness | Aesthetics, Wellness & Longevity",
+  metadataBase: new URL("https://arcwellness.net"),
+  title: "Arc Wellness | Enhance Your Wellness Today",
   description:
-    "Where aesthetics, wellness, and longevity converge. Elevated care for intentional results.",
+    "Discover cutting-edge, personalized wellness treatments including body sculpting, cognitive renewal, and vitamin therapy at Arc Wellness in St. Louis.",
+  applicationName: "Arc Wellness",
+  // File-convention icons in `src/app/` (favicon.ico, icon.svg/png, apple-icon.png)
+  // apply site-wide; themeColor helps browser chrome / installed shortcuts.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F0E3D7" },
+    { media: "(prefers-color-scheme: dark)", color: "#83D0BB" },
+  ],
+  appleWebApp: {
+    title: "Arc Wellness",
+    statusBarStyle: "default",
+  },
 };
 
 /**

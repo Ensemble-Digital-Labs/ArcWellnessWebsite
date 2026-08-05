@@ -1,8 +1,8 @@
 export const aestheticsPage = {
   seo: {
-    title: "Arc Aesthetics | Arc Wellness",
+    title: "Arc Aesthetics | Injectables, Facials & Body Contouring | St. Louis",
     description:
-      "Subtle enhancements and noticeable confidence, innovative solutions that enhance your features without compromising what makes you unique.",
+      "Subtle enhancements, noticeable confidence. Explore Arc Wellness aesthetic treatments in St. Louis, from fillers and EmFace to Exion skin renewal.",
   },
   hero: {
     eyebrow: "Arc Aesthetics",
