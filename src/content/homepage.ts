@@ -81,7 +81,7 @@ export const homeInvestCtaLabel = "Reserve your Consultation";
 
 export const homeInvestSignoff = {
   preamble: "We look forward to meeting you",
-  name: "Dr. Jabbar",
+  name: "— Dr. Jabbar",
 } as const;
 
 /** FAQ category labels for `#faq` tabs, keys must match `homeFaqByCategory`. */
