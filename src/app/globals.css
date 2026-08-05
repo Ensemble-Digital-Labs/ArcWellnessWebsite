@@ -255,6 +255,32 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   }
 }
 
+/* Service template mobile hero: photo first, then cream copy card (~1.2s). */
+@keyframes arc-service-hero-copy-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 767.98px) {
+  @media (prefers-reduced-motion: no-preference) {
+    .arc-service-hero-copy {
+      animation: arc-service-hero-copy-in 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+        1.2s both;
+    }
+
+    .arc-service-hero-pill {
+      animation: arc-service-hero-copy-in 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+        1.32s both;
+    }
+  }
+}
+
 .animate-arc-marquee {
   display: flex;
   width: max-content;

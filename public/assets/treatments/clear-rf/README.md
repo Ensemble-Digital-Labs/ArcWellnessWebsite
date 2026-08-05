@@ -2,16 +2,13 @@
 
 | File | Used by |
 |------|---------|
-| `clear-rf-hero.png` | 4K master (editing only) |
-| `clear-rf-hero.webp` | hero background — `clearRfContent.hero.imageSrc` |
+| `clear-rf-hero.png` / `.webp` | hero |
+| `clear-rf-card-the-details.png` / `.webp` | treatments card 1 |
+| `clear-rf-card-intentional-care.png` / `.webp` | treatments card 2 |
+| `clear-rf-card-let-skin-show.png` / `.webp` | treatments card 3 |
 
-Bump `CLEAR_RF_ASSETS_VERSION` in `src/content/pages/clear-rf.ts` when replacing a
-raster under the same filename, or caches will serve the old image.
+Mechanism uses Bunny Stream video (not a local raster).
+Cream/dark plates still reuse shared EXION plates.
 
-Card photography and cream/dark plates still reuse clinic interiors + EXION plates.
-
-When more dedicated art is ready:
-1. Place masters here
-2. Run `npm run assets:webp`
-3. Point `src/content/pages/clear-rf.ts` at the `.webp` paths
-4. Bump the assets version query string
+Bump `CLEAR_RF_ASSETS_VERSION` in `src/content/pages/clear-rf.ts` when
+replacing a raster under the same filename, or caches will serve the old image.

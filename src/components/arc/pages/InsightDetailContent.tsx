@@ -31,6 +31,11 @@ import {
   serviceSharedCreamPlate,
   serviceSharedDarkPlate,
 } from "@/content/pages/serviceTemplate";
+import {
+  CONDITION_HERO_IMAGE_ALT,
+  CONDITION_HERO_IMAGE_SRC,
+  CONDITION_HERO_OBJECT_CLASS,
+} from "@/content/pages/conditions/assets";
 import { images } from "@/content/site";
 import { siteMeta } from "@/content/siteMeta";
 import {
@@ -44,10 +49,8 @@ import { cn } from "@/lib/utils";
 /**
  * Blog / case-study detail — condition plate/wave stack.
  * Prefer typed `entry.article`; fall back to Word-import heuristics on `body`.
+ * Hero backdrop matches condition landings (shared sage/gold plate).
  */
-
-const DEFAULT_HERO_OBJECT =
-  "object-cover object-[72%_center] sm:object-[65%_center] lg:object-center";
 
 const CREAM_HEADLINE = cn(
   "font-title-emphasis block font-normal not-italic tracking-tight text-arc-teal-ink",
@@ -389,13 +392,13 @@ function InsightHero({
         aria-hidden
       >
         <Image
-          src={entry.imageSrc}
+          src={CONDITION_HERO_IMAGE_SRC}
           alt=""
           fill
           priority
           fetchPriority="high"
           sizes="100vw"
-          className={DEFAULT_HERO_OBJECT}
+          className={CONDITION_HERO_OBJECT_CLASS}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/35 via-arc-cream/15 to-arc-cream/30" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-arc-cream/40 to-transparent sm:h-32" />
@@ -448,7 +451,7 @@ function InsightHero({
         </div>
       </section>
 
-      <span className="sr-only">{entry.imageAlt}</span>
+      <span className="sr-only">{CONDITION_HERO_IMAGE_ALT}</span>
       <ServiceWave tone="pearl" />
     </div>
   );

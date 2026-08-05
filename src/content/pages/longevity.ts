@@ -1,7 +1,7 @@
 /**
- * Longevity: EXION section stack; temporary EXION plates/icons + clinic heroes.
+ * Longevity: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -12,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const LONGEVITY_ASSET = "/assets/treatments/longevity";
 /** Bump when replacing Longevity rasters so next/image + browser drop stale caches. */
-const LONGEVITY_ASSETS_VERSION = "20260730-hero";
+const LONGEVITY_ASSETS_VERSION = "20260804-cards";
 
 function longevityAsset(file: string) {
   return `${LONGEVITY_ASSET}/${file}?v=${LONGEVITY_ASSETS_VERSION}`;
@@ -36,7 +36,7 @@ export const longevityContent: ServicePageContent = {
   },
   pillars: [
     {
-      iconSrc: `${ICON}/magnet.svg`,
+      iconSrc: `${ICON}/bicep.svg`,
       title: "Strength",
       body: "Muscle to keep you strong, mobile, and independent.",
     },
@@ -66,8 +66,11 @@ export const longevityContent: ServicePageContent = {
       "Nutrition, sleep, movement, and genetics",
       "Risk recognition earlier, before function is limited",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-    imageAlt: "Consultation lounge at ARC Wellness",
+    imageSrc: longevityAsset("longevity-mechanism.webp"),
+    imageAlt:
+      "Physician and patient reviewing longevity markers together on a tablet in consultation",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-center scale-[1.01]",
   },
   treatments: {
     title: "Protect what keeps",
@@ -84,8 +87,10 @@ export const longevityContent: ServicePageContent = {
           "Influence what can be influenced",
           "Strategy for the years ahead",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-        imageAlt: "ARC Wellness hallway seating",
+        imageSrc: longevityAsset("longevity-card-built-today.webp"),
+        imageAlt:
+          "Longevity planning still life with nutrition, strength tools, supplements, and a personal strategy notebook",
+        imageObjectClass: "object-[center_68%]",
       },
       {
         title: "Beyond Disease",
@@ -97,8 +102,10 @@ export const longevityContent: ServicePageContent = {
           "Earlier recognition of change",
           "Informed decisions before limits set in",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: longevityAsset("longevity-card-beyond-disease.webp"),
+        imageAlt:
+          "Physician reviewing functional health markers with a patient on a tablet",
+        imageObjectClass: "object-[center_72%]",
       },
       {
         title: "Whole-Person Care",
@@ -110,8 +117,10 @@ export const longevityContent: ServicePageContent = {
           "Supplementation and prevention",
           "Advanced therapies when appropriate",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: longevityAsset("longevity-card-whole-person-care.webp"),
+        imageAlt:
+          "Whole-person longevity care—nutrition, movement, supplementation, and advanced therapies",
+        imageObjectClass: "object-[center_70%]",
       },
     ],
   },
@@ -124,24 +133,28 @@ export const longevityContent: ServicePageContent = {
     backgroundAlt: "",
     cards: [
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/bicep.svg`,
         title: "Stay Strong",
         body: "Muscle and mobility that keep daily life yours.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/brain.svg`,
         title: "Stay Clear",
         body: "Clarity and connection with the people you love.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Stay Independent",
         body: "Driving, cooking, traveling, playing on your terms.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/sun.svg`,
         title: "Stay Present",
         body: "Making plans because you still expect to be part of them.",
+        iconClassName: "origin-center scale-[1.45]",
       },
     ],
   },
@@ -155,7 +168,7 @@ export const longevityContent: ServicePageContent = {
         body: "Share the life you want to keep living, and what concerns you.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Evaluate",
         body: "Physician-guided testing beyond \"normal\" alone.",
       },
@@ -170,9 +183,10 @@ export const longevityContent: ServicePageContent = {
         body: "Nutrition, movement, hormones, metabolism, and more.",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/shield-check.svg`,
         title: "Protect",
         body: "Ongoing care so you keep living the life you've built.",
+        iconClassName: "origin-center scale-[1.7]",
       },
     ],
   },

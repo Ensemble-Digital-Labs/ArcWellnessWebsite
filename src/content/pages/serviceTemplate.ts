@@ -7,6 +7,8 @@ export type ServiceIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  /** Optional scale/position tweak for the SVG only (EmblemIcon). */
+  iconClassName?: string;
 };
 
 export type ServiceStat = {
@@ -24,12 +26,17 @@ export type ServiceTreatmentCard = {
   bullets: readonly string[];
   imageSrc: string;
   imageAlt: string;
+  /** Optional object-fit/position for the card photo crop. */
+  imageObjectClass?: string;
 };
 
 export type ServiceHero = {
   title: string;
   titleEmphasis: string;
-  titleEmphasisLines: readonly [string] | readonly [string, string];
+  titleEmphasisLines:
+    | readonly [string]
+    | readonly [string, string]
+    | readonly [string, string, string];
   subhead: string;
   intro: string;
   closingLine: string;
@@ -40,6 +47,27 @@ export type ServiceHero = {
   imageAlt: string;
   /** Optional object-position override for the hero photo. */
   imageObjectClass?: string;
+  /**
+   * Optional desktop max-width for hero subhead + intro.
+   * Default in the template is `md:max-w-md`. Wider values tighten tall copy columns.
+   */
+  copyMaxClass?: string;
+  /** Optional spacing classes for the gold closing pill (e.g. extra top margin). */
+  closingPillClass?: string;
+  /**
+   * Optional shell height classes for the hero outer frame.
+   * Default is `min-h-[100dvh]`. Shorter values tighten tall heroes.
+   */
+  shellClass?: string;
+  /**
+   * Optional top margin for hero subhead + intro (replaces default `mt-5` / `mt-5 sm:mt-6`).
+   */
+  copyGapClass?: string;
+  /**
+   * Compact hero: skip full-viewport centering and hug the copy stack
+   * (useful for long intros that still need a shorter first screen).
+   */
+  compact?: boolean;
 };
 
 export type ServiceMechanism = {

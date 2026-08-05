@@ -396,11 +396,11 @@ export function ArcInsightsFeedSection({
                   {feed.masthead}
                 </h1>
               </ArcTextReveal>
-              <ArcTextReveal variant="body" delayIndex={1} trigger="mount" when>
-                <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base md:mt-6">
-                  {feed.subtitle}
-                </p>
-              </ArcTextReveal>
+              {/* Spacer keeps former subtitle gap under the masthead. */}
+              <div
+                className="mx-auto mt-5 h-[2.75rem] max-w-2xl sm:h-[3.25rem] md:mt-6"
+                aria-hidden
+              />
             </header>
           </div>
         </div>

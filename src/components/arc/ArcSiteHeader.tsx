@@ -268,7 +268,11 @@ function ArcNavTreatmentLinkRow({
               src={item.thumbSrc}
               alt=""
               fill
-              className="object-cover"
+              className={
+                "thumbObjectClass" in item && item.thumbObjectClass
+                  ? item.thumbObjectClass
+                  : "object-cover"
+              }
               sizes="(max-width: 640px) 168px, 192px"
               unoptimized
             />
@@ -283,7 +287,11 @@ function ArcNavTreatmentLinkRow({
             alt=""
             fill
             sizes="64px"
-            className="object-cover"
+            className={
+              "thumbObjectClass" in item && item.thumbObjectClass
+                ? item.thumbObjectClass
+                : "object-cover"
+            }
             unoptimized
           />
         </span>

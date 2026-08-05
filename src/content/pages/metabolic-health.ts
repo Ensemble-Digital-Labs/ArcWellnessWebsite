@@ -1,8 +1,7 @@
 /**
- * Metabolic Health: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Metabolic Health: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const METABOLIC_HEALTH_ASSET = "/assets/treatments/metabolic-health";
 /** Bump when replacing Metabolic Health rasters so next/image + browser drop stale caches. */
-const METABOLIC_HEALTH_ASSETS_VERSION = "20260730-hero";
+const METABOLIC_HEALTH_ASSETS_VERSION = "20260804-cards";
 
 function metabolicHealthAsset(file: string) {
   return `${METABOLIC_HEALTH_ASSET}/${file}?v=${METABOLIC_HEALTH_ASSETS_VERSION}`;
@@ -68,8 +67,11 @@ export const metabolicHealthContent: ServicePageContent = {
       "Nutrient status and body composition",
       "Nutrition, sleep, stress, and movement",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
-    imageAlt: "Supportive care environment at ARC Wellness",
+    imageSrc: metabolicHealthAsset("metabolic-health-mechanism.webp"),
+    imageAlt:
+      "Metabolic wellness still life with berries, greens, hydration, vials, a scale, measuring tape, and strength tools in warm golden light",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-center scale-[1.01]",
   },
   treatments: {
     title: "A plan around",
@@ -86,8 +88,9 @@ export const metabolicHealthContent: ServicePageContent = {
           "Body composition, not scale alone",
           "A plan built for your physiology",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-        imageAlt: "Thoughtful clinical environment at ARC Wellness",
+        imageSrc: metabolicHealthAsset("metabolic-health-card-look-deeper.webp"),
+        imageAlt:
+          "Physician reviewing a metabolic assessment chart with a patient in consultation",
       },
       {
         title: "Strength Matters",
@@ -99,8 +102,11 @@ export const metabolicHealthContent: ServicePageContent = {
           "GLP-1 therapy when medically appropriate",
           "Medication is one tool, not the whole plan",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: metabolicHealthAsset(
+          "metabolic-health-card-strength-matters.webp",
+        ),
+        imageAlt:
+          "Woman training with resistance bands in a calm Arc Wellness space",
       },
       {
         title: "Change the Trajectory",
@@ -112,8 +118,11 @@ export const metabolicHealthContent: ServicePageContent = {
           "Goal: live stronger, not only weigh less",
           "Healthier function for the years ahead",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: metabolicHealthAsset(
+          "metabolic-health-card-change-trajectory.webp",
+        ),
+        imageAlt:
+          "Personalized health plan on a desk as a patient walks toward bright daylight ahead",
       },
     ],
   },

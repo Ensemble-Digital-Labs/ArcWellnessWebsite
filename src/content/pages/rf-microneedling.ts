@@ -1,8 +1,7 @@
 /**
- * RF Microneedling: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * RF Microneedling: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const RF_MICRONEEDLING_ASSET = "/assets/treatments/rf-microneedling";
 /** Bump when replacing RF Microneedling rasters so next/image + browser drop stale caches. */
-const RF_MICRONEEDLING_ASSETS_VERSION = "20260730-hero";
+const RF_MICRONEEDLING_ASSETS_VERSION = "20260804-cards";
 
 function rfMicroneedlingAsset(file: string) {
   return `${RF_MICRONEEDLING_ASSET}/${file}?v=${RF_MICRONEEDLING_ASSETS_VERSION}`;
@@ -29,7 +28,7 @@ export const rfMicroneedlingContent: ServicePageContent = {
       "Skin changes slowly. Collagen declines. Texture becomes less smooth. Fine lines settle in. Skin begins to feel a little less firm, and scars or imperfections may become more noticeable. RF Microneedling works beneath the surface to encourage something your skin already knows how to do: renew itself.",
     closingLine: "Your skin. Just stronger.",
     poweredByEyebrow: "Physician-guided care",
-    poweredByIconSrc: `${ICON}/atom.svg`,
+    poweredByIconSrc: `${ICON}/consult-desk.svg`,
     synergyLine: "Stimulate. Remodel. Rebuild.",
     imageSrc: rfMicroneedlingAsset("rf-microneedling-hero.webp"),
     imageAlt:
@@ -40,11 +39,13 @@ export const rfMicroneedlingContent: ServicePageContent = {
       iconSrc: `${ICON}/cell.svg`,
       title: "Collagen",
       body: "Controlled stimulation that encourages new collagen and elastin from within.",
+      iconClassName: "origin-center scale-[0.92]",
     },
     {
-      iconSrc: `${ICON}/magnet.svg`,
+      iconSrc: `${ICON}/target-rings.svg`,
       title: "Precision",
       body: "Microneedling paired with radiofrequency energy in targeted skin layers.",
+      iconClassName: "origin-center scale-[1.15]",
     },
     {
       iconSrc: `${ICON}/lotus.svg`,
@@ -55,6 +56,7 @@ export const rfMicroneedlingContent: ServicePageContent = {
       iconSrc: `${ICON}/sun.svg`,
       title: "Strength",
       body: "Skin that gradually looks smoother, firmer, healthier, and refreshed.",
+      iconClassName: "origin-center scale-[1.35]",
     },
   ],
   creamPlate: serviceSharedCreamPlate,
@@ -67,8 +69,11 @@ export const rfMicroneedlingContent: ServicePageContent = {
       "Uneven texture and enlarged pores",
       "Acne scars and overall skin quality",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "Thoughtful clinical environment at ARC Wellness",
+    imageSrc: rfMicroneedlingAsset("rf-microneedling-mechanism.webp"),
+    imageAlt:
+      "RF microneedling handpiece delivering energy into the cheek to stimulate collagen from within",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-[center_38%] scale-[1.01]",
   },
   treatments: {
     title: "One treatment.",
@@ -85,8 +90,12 @@ export const rfMicroneedlingContent: ServicePageContent = {
           "Texture, pores, and scars",
           "Overall skin quality",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-        imageAlt: "Consultation lounge at ARC Wellness",
+        imageSrc: rfMicroneedlingAsset(
+          "rf-microneedling-card-custom-concerns.webp",
+        ),
+        imageAlt:
+          "Provider customizing RF microneedling treatment to the patient's skin concerns",
+        imageObjectClass: "object-[center_40%]",
       },
       {
         title: "Face and Body",
@@ -98,8 +107,12 @@ export const rfMicroneedlingContent: ServicePageContent = {
           "Texture renewal beyond the face",
           "Plan matched to your concerns",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: rfMicroneedlingAsset(
+          "rf-microneedling-card-face-and-body.webp",
+        ),
+        imageAlt:
+          "RF microneedling mapped across face, neck, and shoulder—beyond the jawline",
+        imageObjectClass: "object-[center_42%]",
       },
       {
         title: "Results That Evolve",
@@ -111,8 +124,12 @@ export const rfMicroneedlingContent: ServicePageContent = {
           "Smoother, firmer, healthier look",
           "Your features stay yours",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: rfMicroneedlingAsset(
+          "rf-microneedling-card-results-evolve.webp",
+        ),
+        imageAlt:
+          "Collagen remodeling continues after RF microneedling for smoother, firmer skin over time",
+        imageObjectClass: "object-[center_32%]",
       },
     ],
   },
@@ -128,31 +145,37 @@ export const rfMicroneedlingContent: ServicePageContent = {
         iconSrc: `${ICON}/cell.svg`,
         title: "Rebuild",
         body: "Support collagen and elastin instead of only covering the surface.",
+        iconClassName: "origin-center scale-[1.1]",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Healthy",
         body: "Skin that looks healthy and feels strong.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/sun.svg`,
         title: "Light",
         body: "Texture that reflects light more beautifully.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Confidence",
         body: "Wear less. Cover less. Enjoy your skin more.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/atom.svg`,
         title: "From Within",
         body: "Change that starts beneath the surface.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/clock.svg`,
         title: "Over Time",
         body: "Results that continue to evolve after your visit.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },
@@ -164,26 +187,31 @@ export const rfMicroneedlingContent: ServicePageContent = {
         iconSrc: `${ICON}/chat.svg`,
         title: "Consult",
         body: "Share texture, firmness, scars, and the skin you want to rebuild.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/target-rings.svg`,
         title: "Map",
         body: "Customize depth and energy to your concerns and areas.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
         iconSrc: `${ICON}/face-device.svg`,
         title: "Treat",
         body: "Precision microneedling with radiofrequency in targeted layers.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
         iconSrc: `${ICON}/cell.svg`,
         title: "Remodel",
         body: "Collagen and elastin continue building in the weeks after.",
+        iconClassName: "origin-center scale-[1.1]",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Strengthen",
         body: "Skin that looks smoother, firmer, and more like itself.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },

@@ -1,8 +1,7 @@
 /**
- * Gut Health: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Gut Health: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const GUT_HEALTH_ASSET = "/assets/treatments/gut-health";
 /** Bump when replacing Gut Health rasters so next/image + browser drop stale caches. */
-const GUT_HEALTH_ASSETS_VERSION = "20260730-hero";
+const GUT_HEALTH_ASSETS_VERSION = "20260804-cards";
 
 function gutHealthAsset(file: string) {
   return `${GUT_HEALTH_ASSET}/${file}?v=${GUT_HEALTH_ASSETS_VERSION}`;
@@ -72,8 +71,11 @@ export const gutHealthContent: ServicePageContent = {
       "Inflammation and intestinal function",
       "Gut-brain connections",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "Calm clinic hallway at ARC Wellness",
+    imageSrc: gutHealthAsset("gut-health-mechanism.webp"),
+    imageAlt:
+      "Gut-brain axis still life with berries, greens, ginger, supplements, and a glowing digestive-system model",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-center scale-[1.01]",
   },
   treatments: {
     title: "Restore the",
@@ -90,8 +92,9 @@ export const gutHealthContent: ServicePageContent = {
           "Gut-brain communication",
           "Links to metabolism and hormones",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: gutHealthAsset("gut-health-card-more-than-digestion.webp"),
+        imageAlt:
+          "Nourishing meal with supplements and glowing icons for brain, immunity, and metabolism",
       },
       {
         title: "Look Beneath",
@@ -103,8 +106,9 @@ export const gutHealthContent: ServicePageContent = {
           "Inflammation and function",
           "A plan around your findings",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: gutHealthAsset("gut-health-card-look-beneath.webp"),
+        imageAlt:
+          "Lab vials, capsules, and a clipboard ready for physician-guided gut evaluation",
       },
       {
         title: "Start From Within",
@@ -116,8 +120,9 @@ export const gutHealthContent: ServicePageContent = {
           "Medical treatment when appropriate",
           "Less guessing. More understanding.",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: gutHealthAsset("gut-health-card-start-from-within.webp"),
+        imageAlt:
+          "Fresh salad, green tea, nuts, and targeted supplements on a calm Arc Wellness table",
       },
     ],
   },
@@ -130,8 +135,8 @@ export const gutHealthContent: ServicePageContent = {
     backgroundAlt: "",
     cards: [
       {
-        iconSrc: `${ICON}/mind.svg`,
-        title: "Beyond Symptoms",
+        iconSrc: `${ICON}/atom.svg`,
+        title: "Look Deeper",
         body: "We look past the obvious to what your gut may be signaling.",
       },
       {
@@ -145,9 +150,10 @@ export const gutHealthContent: ServicePageContent = {
         body: "Create an internal environment that digests and absorbs well.",
       },
       {
-        iconSrc: `${ICON}/sun.svg`,
-        title: "Whole-Body Links",
-        body: "Gut health connected to energy, skin, mood, and more.",
+        iconSrc: `${ICON}/sprout.svg`,
+        title: "Connected Systems",
+        body: "Gut health linked to energy, skin, mood, and more.",
+        iconClassName: "origin-center scale-[2.05]",
       },
     ],
   },
@@ -161,7 +167,7 @@ export const gutHealthContent: ServicePageContent = {
         body: "Tell us what you're feeling, obvious or unexpected.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Evaluate",
         body: "Physician-guided testing to look beneath the surface.",
       },
@@ -176,9 +182,10 @@ export const gutHealthContent: ServicePageContent = {
         body: "Nutrition, support, and treatment when appropriate.",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/molecule.svg`,
         title: "Rebuild",
         body: "Rebuilding from the foundation so you feel better from within.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },

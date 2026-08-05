@@ -1,8 +1,8 @@
 /**
  * Dermal Fillers: EXION / ServiceTemplate section stack; client brief copy.
- * Lives at `/treatments/rha` (existing slug) until a dedicated fillers asset kit ships.
+ * Route: `/treatments/dermal-fillers` (legacy `/treatments/rha` redirects here).
+ * Hero, mechanism, and card art under public/assets/treatments/dermal-fillers.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -11,12 +11,12 @@ import {
 } from "@/content/pages/serviceTemplate";
 
 const ICON = SERVICE_EXION_ICON;
-const NEUROMODULATORS_ASSET = "/assets/treatments/neuromodulators";
+const DERMAL_FILLERS_ASSET = "/assets/treatments/dermal-fillers";
 /** Bump when replacing dermal filler rasters so next/image + browser drop stale caches. */
-const DERMAL_FILLERS_ASSETS_VERSION = "20260804-launch";
+const DERMAL_FILLERS_ASSETS_VERSION = "20260804-hero";
 
-function fillerAsset(file: string) {
-  return `${NEUROMODULATORS_ASSET}/${file}?v=${DERMAL_FILLERS_ASSETS_VERSION}`;
+function dermalFillersAsset(file: string) {
+  return `${DERMAL_FILLERS_ASSET}/${file}?v=${DERMAL_FILLERS_ASSETS_VERSION}`;
 }
 
 export const dermalFillersContent: ServicePageContent = {
@@ -32,22 +32,26 @@ export const dermalFillersContent: ServicePageContent = {
     poweredByEyebrow: "Physician-guided care",
     poweredByIconSrc: `${ICON}/atom.svg`,
     synergyLine: "Thoughtful restoration—not transformation.",
-    imageSrc: fillerAsset("neuromodulators-hero.webp"),
+    imageSrc: dermalFillersAsset("dermal-fillers-hero.webp"),
     imageAlt:
-      "Physician-guided facial aesthetic consultation and treatment at ARC Wellness",
+      "Physician-guided dermal filler treatment restoring natural facial support at ARC Wellness",
     imageObjectClass:
       "object-cover object-[72%_35%] sm:object-[65%_40%] lg:object-center",
+    copyMaxClass: "md:max-w-2xl",
   },
   pillars: [
     {
-      iconSrc: `${ICON}/shield-check.svg`,
+      iconSrc: `${ICON}/dumbbell.svg`,
       title: "Bone",
       body: "Facial bones naturally lose volume and support over time.",
+      iconClassName: "origin-center scale-[2.45] object-center translate-y-[8%]",
     },
     {
-      iconSrc: `${ICON}/droplet.svg`,
+      iconSrc: `${ICON}/waist-contour.svg`,
       title: "Fat",
       body: "Protective fat pads shrink and shift downward.",
+      iconClassName:
+        "origin-center scale-[2.35] object-center translate-x-[2%] translate-y-[8%]",
     },
     {
       iconSrc: `${ICON}/cell.svg`,
@@ -55,9 +59,10 @@ export const dermalFillersContent: ServicePageContent = {
       body: "The skin becomes thinner and less resilient.",
     },
     {
-      iconSrc: `${ICON}/lotus.svg`,
+      iconSrc: `${ICON}/droplet.svg`,
       title: "Hydration",
       body: "Hyaluronic acid decreases, leading to drier, less supple skin.",
+      iconClassName: "origin-center scale-[1.55]",
     },
   ],
   creamPlate: serviceSharedCreamPlate,
@@ -71,8 +76,11 @@ export const dermalFillersContent: ServicePageContent = {
       "Hyaluronic acid declines; skin feels less supple",
       "Dermal fillers restore support where it has been lost",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-    imageAlt: "Thoughtful consultation environment at ARC Wellness",
+    imageSrc: dermalFillersAsset("dermal-fillers-mechanism.webp"),
+    imageAlt:
+      "Provider assessing facial support layers—bone, fat, collagen, and hydration—before dermal filler placement",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-[center_32%] scale-[1.01]",
   },
   treatments: {
     title: "What fillers can",
@@ -90,8 +98,12 @@ export const dermalFillersContent: ServicePageContent = {
           "Smile lines and marionette lines",
           "Pre-jowl sulcus and facial balance",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: dermalFillersAsset(
+          "dermal-fillers-card-treatment-areas.webp",
+        ),
+        imageAlt:
+          "Facial map highlighting common filler areas—cheeks, under-eyes, lips, chin, and jawline",
+        imageObjectClass: "object-[center_32%]",
       },
       {
         title: "Why Patients Choose Fillers",
@@ -103,8 +115,12 @@ export const dermalFillersContent: ServicePageContent = {
           "Minimal downtime for most patients",
           "Results often last 6–18 months depending on product and area",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: dermalFillersAsset(
+          "dermal-fillers-card-why-patients-choose.webp",
+        ),
+        imageAlt:
+          "Naturally refreshed appearance after thoughtful dermal filler treatment",
+        imageObjectClass: "object-[center_28%]",
       },
       {
         title: "Not Every Face Needs Filler",
@@ -116,8 +132,12 @@ export const dermalFillersContent: ServicePageContent = {
           "EXION for collagen stimulation",
           "Lifestyle and longevity factors when they matter most",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-        imageAlt: "Clinical pathway environment at ARC Wellness",
+        imageSrc: dermalFillersAsset(
+          "dermal-fillers-card-not-every-face.webp",
+        ),
+        imageAlt:
+          "Provider reviewing a facial plan with a patient—choosing the right approach, not more product",
+        imageObjectClass: "object-[center_40%]",
       },
     ],
   },
@@ -133,31 +153,37 @@ export const dermalFillersContent: ServicePageContent = {
         iconSrc: `${ICON}/target-rings.svg`,
         title: "Facial Balance",
         body: "We evaluate how every feature works together—not isolated wrinkles alone.",
+        iconClassName: "origin-center scale-[1.4]",
+      },
+      {
+        iconSrc: `${ICON}/consult-desk.svg`,
+        title: "Full Assessment",
+        body: "Proportions, bone structure, volume loss, skin quality, muscle activity, and long-term aging patterns.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
         iconSrc: `${ICON}/checklist.svg`,
-        title: "Full Assessment",
-        body: "Proportions, bone structure, volume loss, skin quality, muscle activity, and long-term aging patterns.",
-      },
-      {
-        iconSrc: `${ICON}/book.svg`,
         title: "Right Tool First",
         body: "Sometimes filler is best. Sometimes RF, EMFACE, or EXION is the better first step.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/cycle-sparkle.svg`,
         title: "Strategic Combinations",
         body: "The most natural results often come from combining treatments—not relying on filler alone.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
         iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Still You",
         body: "Restore what time has changed. Not create someone new.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
-        iconSrc: `${ICON}/shield-plus.svg`,
+        iconSrc: `${ICON}/molecule.svg`,
         title: "Fillers vs Biostimulators",
         body: "HA fillers replace volume now; biostimulators build collagen gradually for longer remodeling.",
+        iconClassName: "origin-center scale-[1.45]",
       },
     ],
   },
@@ -169,26 +195,31 @@ export const dermalFillersContent: ServicePageContent = {
         iconSrc: `${ICON}/chat.svg`,
         title: "Consultation",
         body: "We discuss your goals and perform a comprehensive facial assessment.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/checklist.svg`,
         title: "Personalized Plan",
         body: "Every injection plan is customized based on your anatomy—not trends.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/face-device.svg`,
+        iconSrc: `${ICON}/target-rings.svg`,
         title: "Precision Placement",
         body: "Advanced injection techniques help maximize safety while creating natural, balanced results.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/calendar-check.svg`,
         title: "Follow-Up",
         body: "We reassess your results and make small refinements when appropriate.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/cycle-sparkle.svg`,
         title: "Maintenance",
         body: "Because aging is ongoing, periodic touch-ups help maintain a refreshed appearance over time.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },

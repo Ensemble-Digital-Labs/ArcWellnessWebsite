@@ -542,6 +542,9 @@ export const allTreatments: readonly TreatmentPage[] = [
     imageAlt: "Daxxify consultation at ARC Wellness",
     intro:
       "DAXXIFY® (daxibotulinumtoxinA-lanm) is a premium, long-lasting injectable treatment designed to temporarily smooth moderate to severe frown lines. It's an FDA-approved neuromodulator formulated with a proprietary peptide.",
+    // DAXXIFY lives on the Neuromodulators service page (`/treatments/neuromodulators`).
+    // Keep entry hidden; `/treatments/daxxify` redirects there (see next.config).
+    hidden: true,
     sections: [
       {
         heading: "Key Benefits",
@@ -567,7 +570,7 @@ export const allTreatments: readonly TreatmentPage[] = [
     ],
   },
   {
-    slug: "rha",
+    slug: "dermal-fillers",
     title: "Dermal Fillers",
     tagline: "Restore. Support. Enhance.",
     category: "aesthetics",
@@ -736,113 +739,111 @@ export const allTreatments: readonly TreatmentPage[] = [
   {
     slug: "peptide-therapy",
     title: "Peptide Therapy",
-    tagline: "Thoughtful Support for Targeted Wellness",
+    tagline: "Precision Medicine.",
     category: "wellness",
     categoryLabel: "Peptides",
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    imageSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
+    imageAlt: "ARC Wellness injection bar and peptide therapy menu display",
     intro:
-      "Peptide Therapy is a science-based approach that works with your body's natural repair, regulation, and communication systems. By guiding processes related to healing, recovery, and regeneration, these therapies offer targeted support where your body needs it most.",
+      "Peptide therapy helps support your body's natural communication systems—encouraging healthier function rather than simply masking symptoms. At Arc Wellness, care is always personalized, physician-guided, and designed for your long-term health goals.",
     highlights: [
-      "Prescribed after medical consultation",
-      "Subcutaneous delivery",
-      "GLOW and Wolverine protocols available",
+      "Physician-guided, personalized plans",
+      "Targeted cellular signaling support",
+      "Part of a broader wellness Blueprint",
     ],
     sections: [
       {
-        heading: "Our Peptide Offerings",
-        body: "All peptides are prescribed following medical consultation to ensure appropriate use, accurate dosing, and alignment with your health profile.",
+        heading: "What Are Peptides?",
+        body: "Peptides are short chains of amino acids—biological messengers that help cells communicate. Rather than replacing what your body does naturally, they encourage processes already built into your physiology.",
       },
       {
-        heading: "GLOW",
-        body: "For collagen stimulation, cellular renewal, and overall skin and hair vitality. Delivered through a subcutaneous injection, $195.",
-      },
-      {
-        heading: "Wolverine",
-        body: "For faster healing, reduced inflammation, and optimal recovery. Delivered through a subcutaneous injection, $175.",
-      },
-      {
-        heading: "Who Thrives with Peptides?",
-        bullets: [
-          "Improve skin health, collagen production, and overall glow",
-          "Support faster healing, tissue repair, and recovery",
-          "Reduce inflammation and physical strain from workouts or overuse",
-          "Enhance mobility, performance, and overall vitality",
-        ],
+        heading: "Why Physician Guidance Matters",
+        body: "Not every peptide is appropriate for every patient. Recommendations consider medical history, medications, laboratory testing, hormone balance, lifestyle, and personal goals.",
       },
     ],
     faqs: [
       {
-        id: "safe",
-        question: "Is peptide therapy safe?",
+        id: "hormones",
+        question: "Are peptides hormones?",
         answer:
-          "Yes. At Arc Wellness, all peptides are recommended and guided by licensed medical providers. Each plan is tailored to your health, goals, and medical history, so you can feel confident knowing your care is personalized and closely monitored.",
+          "No. Peptides are signaling molecules that help cells communicate. Some influence hormone pathways, but peptides themselves are not hormones.",
       },
       {
-        id: "duration",
-        question: "How long will I need to use peptides?",
+        id: "safe",
+        question: "Are peptides safe?",
         answer:
-          "The duration varies depending on your individual goals and how your body responds. Some peptides are used for a few weeks, while others may become part of a longer-term wellness plan. Your provider will work with you to create a schedule that feels right for you.",
+          "When prescribed appropriately and obtained from regulated compounding pharmacies, many peptide therapies have established safety profiles. Treatment should always be guided by an experienced medical provider.",
+      },
+      {
+        id: "delivery",
+        question: "How are peptides given?",
+        answer:
+          "Depending on the peptide, treatment may involve small self-administered injections, oral capsules, nasal sprays, or topical formulations. Your provider will recommend the option best suited for your plan.",
       },
       {
         id: "results",
-        question: "Will I feel results immediately?",
+        question: "How quickly will I notice results?",
         answer:
-          "Some people experience subtle shifts in energy, focus, or recovery within the first few weeks. Other benefits, such as skin improvement or metabolic balance, often develop gradually with consistent use.",
+          "Some patients notice changes within weeks, while others experience gradual improvements over several months. Results depend on the peptide selected, your goals, and your overall health.",
+      },
+      {
+        id: "habits",
+        question: "Will peptides replace healthy habits?",
+        answer:
+          "No. Peptides work best alongside proper nutrition, exercise, sleep, and other healthy lifestyle choices.",
       },
     ],
   },
   {
     slug: "supplements",
     title: "Supplements",
-    tagline: "Your Daily Reset for Everyday Vitality",
+    tagline: "Personalized Nutrition for Lifelong Health",
     category: "wellness",
     categoryLabel: "Nutrition",
     imageSrc: RETAIL_IMAGES.arcSupplementShelvingUnits,
     imageAlt: "ARC Wellness supplement shelving",
     intro:
-      "Supplements can be powerful, but only when they're chosen carefully, dosed correctly, and aligned with the body's real needs. At Arc Wellness, supplements are supportive tools within a broader, physician-guided wellness plan, not generic retail products.",
+      "The right supplement isn't the most popular one—it's the one your body actually needs. At Arc Wellness, we build personalized plans from your biology, labs, and goals—not one-size-fits-all bottles.",
     sections: [
       {
-        heading: "Who Benefits Most from Supplement Support?",
-        bullets: [
-          "High-cognitive work, study, or emotional challenges",
-          "Low energy, poor sleep, or chronic stress",
-          "Recovery from illness, burnout, or hormonal imbalance",
-          "Regular training or physically demanding routines",
-          "Healthy aging, focus, and metabolic balance",
-          "Extending benefits between IV, peptide, or body-based treatments",
-        ],
+        heading: "One Body. One Blueprint.",
+        body: "No two patients have the same biology. We consider laboratory testing, medical history, lifestyle, nutrition, medications, hormone balance, digestive health, inflammation, genetics when appropriate, and your personal health goals before making recommendations.",
       },
       {
-        heading: "Core Supplement Offerings",
-        body: "Clinically backed, pharmaceutical-grade formulations available exclusively through licensed medical providers, including Foundation, Gut Reset, Women's Longevity, and Brain Health protocols.",
+        heading: "Quality & Precision",
+        body: "We carefully select professional-grade supplements from trusted manufacturers. Recommendations are based on your health and laboratory findings—not what's trending online.",
       },
     ],
     faqs: [
       {
-        id: "one",
-        question: "Do I need to take all five supplements, or can I start with just one?",
+        id: "same-multi",
+        question: "Should everyone take the same multivitamin?",
         answer:
-          "Your supplement plan is fully personalized. Some individuals may start with just one or two formulas based on their goals. Your provider will help determine what combination is most supportive for you.",
+          "Not necessarily. Nutritional needs vary significantly based on age, diet, health conditions, medications, and laboratory findings.",
       },
       {
-        id: "timing",
-        question: "How long does it take to notice benefits from supplements?",
+        id: "healthy-diet",
+        question: "Do I need supplements if I eat a healthy diet?",
         answer:
-          "Many people notice subtle changes in energy, focus, or sleep within a few weeks. Some benefits build gradually over time as part of a consistent, personalized wellness plan.",
+          "A nutrient-rich diet is always the foundation of good health. However, factors such as absorption, medications, digestive health, stress, and aging may create additional nutritional needs.",
       },
       {
-        id: "standalone",
-        question: "Can I use these supplements if I'm not receiving IV therapy or peptide treatments?",
+        id: "which-ones",
+        question: "How do you know which supplements I need?",
         answer:
-          "Absolutely. Our supplements are designed to support overall wellness and can be taken independently. They also complement IV therapy or peptides for those who are using them.",
+          "Our recommendations are based on a combination of your medical history, symptoms, lifestyle, laboratory testing, and health goals.",
       },
       {
-        id: "which",
-        question: "How do I know which supplements are right for me?",
+        id: "forever",
+        question: "Will I need supplements forever?",
         answer:
-          "During your free consultation, your provider will review your health history, lifestyle, and wellness goals. Together, you'll select supplements that are safe, effective, and tailored to you.",
+          "Not always. Some supplements address temporary needs, while others may provide ongoing support. As your health evolves, so does your personalized plan.",
+      },
+      {
+        id: "replace-meds",
+        question: "Can supplements replace medications?",
+        answer:
+          "No. Supplements are designed to support health, not replace prescribed medical treatment unless recommended by your healthcare provider.",
       },
     ],
   },

@@ -13,7 +13,10 @@ import {
   ARC_WAVE_TOP_FILL_D,
 } from "@/components/arc/ArcWaveSeparator";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { CreamPlateTiledMedia } from "@/components/arc/servicePlate";
+import {
+  CreamPlateTiledMedia,
+  ServiceEmblemIcon as EmblemIcon,
+} from "@/components/arc/servicePlate";
 import {
   TitleEmphasis,
   arcHeadlineEmphasisClass,
@@ -157,20 +160,6 @@ function GoldRule({ className }: { className?: string }) {
   );
 }
 
-function EmblemIcon({ src, className }: { src: string; className?: string }) {
-  return (
-    <Image
-      src={src}
-      alt=""
-      aria-hidden
-      width={128}
-      height={128}
-      unoptimized
-      className={cn("select-none object-contain", className)}
-    />
-  );
-}
-
 /** Infusion Therapy — EXION design template (content/assets swap). */
 export function InfusionTreatmentContent({
   treatment,
@@ -214,7 +203,7 @@ export function InfusionTreatmentContent({
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:text-left">
+            <div className="arc-service-hero-copy relative mx-auto w-fit max-w-md text-center md:mx-0 md:text-left">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-5 -inset-y-4 z-0 rounded-[2rem] bg-arc-cream/70 blur-md md:hidden"
@@ -258,22 +247,26 @@ export function InfusionTreatmentContent({
             </div>
           </div>
 
-          <ArcTextReveal
-            variant="body"
-            trigger="mount"
-            delayIndex={3}
+          <div
             className={cn(
-              "relative z-30 mx-auto mb-3 flex justify-center px-6 sm:mb-4 sm:px-10 md:px-12",
+              "arc-service-hero-pill relative z-30 mx-auto mb-3 flex justify-center px-6 sm:mb-4 sm:px-10 md:px-12",
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full border border-[#d9b878]/70 bg-[color-mix(in_srgb,#c19a5b_48%,#2c2c2c)] px-6 py-3.5 text-center shadow-[0_16px_48px_rgba(44,44,44,0.22),0_0_0_1px_rgba(255,248,231,0.35)_inset] ring-1 ring-[#c19a5b]/40 backdrop-blur-xl supports-[backdrop-filter]:bg-[color-mix(in_srgb,#c19a5b_42%,rgba(44,44,44,0.35))] sm:w-auto sm:max-w-none sm:px-8">
-              <Sparkles className="h-4 w-4 shrink-0 text-white" aria-hidden />
-              <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-white">
-                {infusionHero.closingLine}
-              </span>
-            </div>
-          </ArcTextReveal>
+            <ArcTextReveal
+              variant="body"
+              trigger="mount"
+              delayIndex={3}
+              className="flex w-full justify-center"
+            >
+              <div className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full border border-[#d9b878]/70 bg-[color-mix(in_srgb,#c19a5b_48%,#2c2c2c)] px-6 py-3.5 text-center shadow-[0_16px_48px_rgba(44,44,44,0.22),0_0_0_1px_rgba(255,248,231,0.35)_inset] ring-1 ring-[#c19a5b]/40 backdrop-blur-xl supports-[backdrop-filter]:bg-[color-mix(in_srgb,#c19a5b_42%,rgba(44,44,44,0.35))] sm:w-auto sm:max-w-none sm:px-8">
+                <Sparkles className="h-4 w-4 shrink-0 text-white" aria-hidden />
+                <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-white">
+                  {infusionHero.closingLine}
+                </span>
+              </div>
+            </ArcTextReveal>
+          </div>
         </section>
 
         <div className={cn("relative z-30 mt-auto", WAVE_H_CLASS)}>
@@ -311,6 +304,7 @@ export function InfusionTreatmentContent({
                 <div className="flex h-full flex-col items-center text-center">
                   <EmblemIcon
                     src={pillar.iconSrc}
+                    plate
                     className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
                   />
                   <h3 className="mt-2 sm:mt-3">
@@ -333,6 +327,7 @@ export function InfusionTreatmentContent({
               <div className="flex h-full flex-col items-center text-center">
                 <EmblemIcon
                   src={infusionHero.poweredByIconSrc}
+                  plate
                   className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
                 />
                 <h3 className="mt-2 max-w-[13rem] sm:mt-3">
@@ -701,6 +696,7 @@ export function InfusionTreatmentContent({
                     <EmblemIcon
                       src={step.iconSrc}
                       className="h-24 w-24 sm:h-28 sm:w-28"
+                      iconClassName={step.iconClassName}
                     />
                     <h3 className="mt-4 max-w-[12rem]">
                       <TitleEmphasis className="block text-[clamp(1.85rem,4.6vw,2.45rem)] leading-[0.92] tracking-tight text-[#d9b878] [-webkit-text-stroke:0.055em_color-mix(in_srgb,currentColor_55%,transparent)] [text-shadow:0_2px_14px_rgba(0,0,0,0.35),0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_35%,transparent)]">

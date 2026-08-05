@@ -1,8 +1,7 @@
 /**
- * Medical Weight Loss: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Medical Weight Loss: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const MEDICAL_WEIGHT_LOSS_ASSET = "/assets/treatments/medical-weight-loss";
 /** Bump when replacing Medical Weight Loss rasters so next/image + browser drop stale caches. */
-const MEDICAL_WEIGHT_LOSS_ASSETS_VERSION = "20260730-hero";
+const MEDICAL_WEIGHT_LOSS_ASSETS_VERSION = "20260804-cards";
 
 function medicalWeightLossAsset(file: string) {
   return `${MEDICAL_WEIGHT_LOSS_ASSET}/${file}?v=${MEDICAL_WEIGHT_LOSS_ASSETS_VERSION}`;
@@ -42,12 +41,12 @@ export const medicalWeightLossContent: ServicePageContent = {
       body: "Hormones, insulin, muscle, sleep, and stress shape how weight responds.",
     },
     {
-      iconSrc: `${ICON}/cell.svg`,
+      iconSrc: `${ICON}/target-rings.svg`,
       title: "Intention",
       body: "GLP-1 and other tools used with purpose, inside a fuller plan.",
     },
     {
-      iconSrc: `${ICON}/magnet.svg`,
+      iconSrc: `${ICON}/bicep.svg`,
       title: "Muscle",
       body: "Protect lean mass so you get stronger, not only smaller.",
     },
@@ -67,8 +66,11 @@ export const medicalWeightLossContent: ServicePageContent = {
       "Sleep, stress, inflammation, and medications",
       "A plan around your body, health, and goals",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "Thoughtful clinical environment at ARC Wellness",
+    imageSrc: medicalWeightLossAsset("medical-weight-loss-mechanism.webp"),
+    imageAlt:
+      "Physician reviewing metabolic and body-composition markers with a patient on a tablet",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-center scale-[1.01]",
   },
   treatments: {
     title: "Medication with",
@@ -85,8 +87,12 @@ export const medicalWeightLossContent: ServicePageContent = {
           "Sleep, stress, and inflammation in view",
           "A plan matched to your physiology",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: medicalWeightLossAsset(
+          "medical-weight-loss-card-understand-why.webp",
+        ),
+        imageAlt:
+          "Physician reviewing metabolic factors with a patient on a tablet",
+        imageObjectClass: "object-[center_55%]",
       },
       {
         title: "GLP-1 & Beyond",
@@ -98,8 +104,12 @@ export const medicalWeightLossContent: ServicePageContent = {
           "Body composition monitoring",
           "Medication is one tool within the plan",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: medicalWeightLossAsset(
+          "medical-weight-loss-card-glp1-beyond.webp",
+        ),
+        imageAlt:
+          "GLP-1 pen with nutrition, hydration, supplements, and a personalized plan",
+        imageObjectClass: "object-[center_72%]",
       },
       {
         title: "Protect the Muscle",
@@ -111,8 +121,12 @@ export const medicalWeightLossContent: ServicePageContent = {
           "Healthier composition, not only size",
           "Health you keep after the weight comes off",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
-        imageAlt: "Quiet detail in the ARC Wellness clinic",
+        imageSrc: medicalWeightLossAsset(
+          "medical-weight-loss-card-protect-muscle.webp",
+        ),
+        imageAlt:
+          "Woman training with resistance bands to protect lean muscle during weight loss",
+        imageObjectClass: "object-[center_42%]",
       },
     ],
   },
@@ -135,9 +149,10 @@ export const medicalWeightLossContent: ServicePageContent = {
         body: "Feeling at home in a stronger, healthier composition.",
       },
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/bicep.svg`,
         title: "Better Movement",
         body: "Strength and mobility that support independence.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
         iconSrc: `${ICON}/cell.svg`,
@@ -166,7 +181,7 @@ export const medicalWeightLossContent: ServicePageContent = {
         body: "Share what's worked, what hasn't, and how your body feels now.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Evaluate",
         body: "Labs and physician insight into the \"why\" underneath.",
       },
@@ -176,9 +191,10 @@ export const medicalWeightLossContent: ServicePageContent = {
         body: "Medication with intention, inside a fuller program.",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/shield-check.svg`,
         title: "Protect",
         body: "Preserve lean muscle while composition improves.",
+        iconClassName: "origin-center scale-[1.7]",
       },
       {
         iconSrc: `${ICON}/calendar-check.svg`,

@@ -27,6 +27,14 @@ import {
   rfMicroneedlingContent,
   rfMicroneedlingHero,
 } from "@/content/pages/rf-microneedling";
+import {
+  supplementsContent,
+  supplementsHero,
+} from "@/content/pages/supplements";
+import {
+  peptideTherapyContent,
+  peptideTherapyHero,
+} from "@/content/pages/peptide-therapy";
 import type { ServiceHero, ServicePageContent } from "@/content/pages/serviceTemplate";
 
 const SERVICE_TEMPLATE_BY_SLUG: Record<
@@ -55,7 +63,12 @@ const SERVICE_TEMPLATE_BY_SLUG: Record<
   },
   "clear-rf": { content: clearRfContent, hero: clearRfHero },
   emface: { content: emfaceContent, hero: emfaceHero },
-  rha: { content: dermalFillersContent, hero: dermalFillersHero },
+  "dermal-fillers": { content: dermalFillersContent, hero: dermalFillersHero },
+  supplements: { content: supplementsContent, hero: supplementsHero },
+  "peptide-therapy": {
+    content: peptideTherapyContent,
+    hero: peptideTherapyHero,
+  },
 };
 
 export function getServiceTemplateBySlug(slug: string) {

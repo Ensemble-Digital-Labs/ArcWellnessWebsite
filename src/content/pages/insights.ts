@@ -123,8 +123,6 @@ export const insightsPage = {
   },
   feed: {
     masthead: "Insights",
-    subtitle:
-      "Tracking the ideas that support whole-body wellness, across patient stories, clinical perspective, and everyday care.",
   },
 } as const;
 

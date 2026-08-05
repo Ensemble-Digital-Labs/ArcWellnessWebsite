@@ -73,11 +73,13 @@ export function ServiceTemplateContent({
   const cardCount = treatments.cards.length;
 
   return (
+    <div className="relative w-full max-w-[100%] overflow-x-clip">
     <>
       {/* ---------- Hero ---------- */}
       <div
         className={cn(
-          "relative z-20 flex min-h-[100dvh] flex-col",
+          "relative z-20 flex flex-col",
+          hero.shellClass ?? (hero.compact ? "min-h-0" : "min-h-[100dvh]"),
           WAVE_H_VAR_CLASS,
         )}
       >
@@ -101,17 +103,20 @@ export function ServiceTemplateContent({
 
         <section
           className={cn(
-            "relative z-10 flex flex-1 flex-col",
+            "relative z-10 flex flex-col",
+            !hero.compact && "flex-1",
             ARC_GALLERY_CLEAR_BELOW_LOGO,
           )}
         >
+          {/* Text + pill stay one unit so tall phones don’t orphan the pill at the wave. */}
           <div
             className={cn(
-              "mx-auto flex w-full flex-1 flex-col justify-center px-6 sm:px-10 md:px-12",
+              "mx-auto flex w-full flex-col px-6 sm:px-10 md:px-12",
+              hero.compact ? "justify-start" : "flex-1 justify-center",
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="relative mx-auto w-fit max-w-md text-center md:mx-0 md:max-w-none md:text-left">
+            <div className="arc-service-hero-copy relative mx-auto w-full max-w-md text-center md:mx-0 md:w-fit md:max-w-none md:text-left">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-5 -inset-y-4 z-0 rounded-[2rem] bg-arc-cream/70 blur-md md:hidden"
@@ -122,22 +127,22 @@ export function ServiceTemplateContent({
               />
               <div className="relative z-10">
                 <ArcTextReveal variant="heading" trigger="mount">
-                  <h1 className="font-serif text-[clamp(2.25rem,6.5vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
+                  <h1 className="font-serif text-[clamp(2rem,7.2vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:text-[clamp(2.25rem,6.5vw,4rem)] md:[text-shadow:none]">
                     <span className="block font-semibold leading-none md:whitespace-nowrap">
                       {hero.title}
                     </span>
                     <TitleEmphasis
                       className={cn(
                         arcHeadlineEmphasisClass("teal"),
-                        "mt-0.5 inline-block leading-[0.82]",
+                        "mt-0.5 inline-block max-w-full leading-[0.82]",
                       )}
                     >
                       {hero.titleEmphasisLines.map((line, i) => (
                         <span
-                          key={line}
+                          key={`${i}-${line}`}
                           className={cn(
                             "block whitespace-nowrap leading-[0.82]",
-                            i > 0 && "-mt-[0.18em] text-center",
+                            i > 0 && "-mt-[0.18em] text-center md:text-left",
                           )}
                         >
                           {line}
@@ -147,35 +152,54 @@ export function ServiceTemplateContent({
                   </h1>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-                  <p className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.22em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-sm md:max-w-md md:[text-shadow:none]">
+                  <p
+                    className={cn(
+                      "text-balance font-sans text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-arc-charcoal [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-xs sm:tracking-[0.2em] md:text-sm md:tracking-[0.22em] md:[text-shadow:none]",
+                      hero.copyGapClass ?? "mt-5",
+                      hero.copyMaxClass ?? "md:max-w-md",
+                    )}
+                  >
                     {hero.subhead}
                   </p>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
-                  <p className="mt-5 font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:mt-6 sm:text-base md:max-w-md md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]">
+                  <p
+                    className={cn(
+                      "font-sans text-sm font-medium leading-relaxed text-arc-charcoal/92 [text-shadow:0_1px_10px_rgba(245,240,232,0.75)] sm:text-base md:font-normal md:text-arc-charcoal/78 md:[text-shadow:none]",
+                      hero.copyGapClass ?? "mt-5 sm:mt-6",
+                      hero.copyMaxClass ?? "md:max-w-md",
+                    )}
+                  >
                     {hero.intro}
                   </p>
                 </ArcTextReveal>
               </div>
             </div>
-          </div>
 
-          <ArcTextReveal
-            variant="body"
-            trigger="mount"
-            delayIndex={3}
-            className={cn(
-              "relative z-30 mx-auto mb-3 flex justify-center px-6 sm:mb-4 sm:px-10 md:px-12",
-              ARC_PAGE_RAIL_MAX,
-            )}
-          >
-            <div className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full border border-[#d9b878]/70 bg-[color-mix(in_srgb,#c19a5b_48%,#2c2c2c)] px-6 py-3.5 text-center shadow-[0_16px_48px_rgba(44,44,44,0.22),0_0_0_1px_rgba(255,248,231,0.35)_inset] ring-1 ring-[#c19a5b]/40 backdrop-blur-xl supports-[backdrop-filter]:bg-[color-mix(in_srgb,#c19a5b_42%,rgba(44,44,44,0.35))] sm:w-auto sm:max-w-none sm:px-8">
-              <Sparkles className="h-4 w-4 shrink-0 text-white" aria-hidden />
-              <span className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-white">
-                {hero.closingLine}
-              </span>
+            <div
+              className={cn(
+                "arc-service-hero-pill relative z-30 mx-auto mt-6 flex w-full justify-center sm:mt-7 md:mt-8",
+                hero.closingPillClass,
+              )}
+            >
+              <ArcTextReveal
+                variant="body"
+                trigger="mount"
+                delayIndex={3}
+                className="flex w-full justify-center"
+              >
+                <div className="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full border border-[#d9b878]/70 bg-[color-mix(in_srgb,#c19a5b_48%,#2c2c2c)] px-4 py-3 text-center shadow-[0_16px_48px_rgba(44,44,44,0.22),0_0_0_1px_rgba(255,248,231,0.35)_inset] ring-1 ring-[#c19a5b]/40 backdrop-blur-xl supports-[backdrop-filter]:bg-[color-mix(in_srgb,#c19a5b_42%,rgba(44,44,44,0.35))] sm:w-auto sm:max-w-none sm:gap-2.5 sm:px-8 sm:py-3.5">
+                  <Sparkles
+                    className="h-3.5 w-3.5 shrink-0 text-white sm:h-4 sm:w-4"
+                    aria-hidden
+                  />
+                  <span className="min-w-0 text-balance font-sans text-[0.625rem] font-semibold uppercase leading-snug tracking-[0.12em] text-white sm:text-[0.6875rem] sm:tracking-[0.18em]">
+                    {hero.closingLine}
+                  </span>
+                </div>
+              </ArcTextReveal>
             </div>
-          </ArcTextReveal>
+          </div>
         </section>
 
         <ServiceWave tone="pearl" className="mt-auto" />
@@ -209,14 +233,16 @@ export function ServiceTemplateContent({
                     plate
                     className="h-24 w-24 sm:h-28 sm:w-28 md:h-[7.25rem] md:w-[7.25rem]"
                     iconClassName={
-                      pillar.title === "Digestion" ||
+                      pillar.iconClassName ??
+                      (pillar.title === "Digestion" ||
                       pillar.title === "Immunity"
                         ? "origin-center scale-[1.45]"
-                        : pillar.title === "Sleep"
+                        : pillar.title === "Sleep" ||
+                            pillar.title === "Stress & Sleep"
                           ? "origin-center scale-[1.28]"
                           : pillar.title === "Muscle"
                             ? "origin-center scale-[1.35]"
-                            : undefined
+                            : undefined)
                     }
                   />
                   <h3 className="mt-2 sm:mt-3">
@@ -269,10 +295,10 @@ export function ServiceTemplateContent({
         <CreamPlate src={creamPlate.src} />
         <div className={cn("relative z-10", WAVE_H_CLASS)} aria-hidden />
 
-        <section className="relative z-10 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
+        <section className="relative z-10 overflow-x-clip px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-10 top-0 z-0 h-72 w-72 rounded-full opacity-40 md:blur-2xl"
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-72 w-72 rounded-full opacity-40 md:block md:blur-2xl"
             style={{
               background:
                 "radial-gradient(circle at center, rgba(193,154,91,0.35) 0%, transparent 70%)",
@@ -280,30 +306,30 @@ export function ServiceTemplateContent({
           />
           <div
             className={cn(
-              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12",
+              "relative z-10 mx-auto grid min-w-0 items-center gap-8 sm:gap-12",
               hasMechanismMedia && "lg:grid-cols-2 lg:gap-16",
               ARC_PAGE_RAIL_MAX,
             )}
           >
             <div
               className={cn(
-                "mx-auto max-w-lg text-center lg:max-w-none",
+                "mx-auto w-full min-w-0 max-w-lg text-center lg:max-w-none",
                 hasMechanismMedia ? "lg:mx-0 lg:text-left" : "lg:mx-auto",
               )}
             >
-              <div>
+              <div className="min-w-0 overflow-x-clip">
                 <ArcTextReveal variant="heading">
-                  <h2 className="text-balance leading-[0.88] text-arc-teal-ink">
+                  <h2 className="mx-auto max-w-[18.5rem] text-balance leading-[0.9] text-arc-teal-ink sm:max-w-none">
                     {mechanism.titleLines.map((line, i) => (
                       <span
                         key={line}
                         className={cn(
-                          "font-title-emphasis block tracking-tight text-arc-teal-ink",
+                          "font-title-emphasis block max-w-full tracking-tight text-arc-teal-ink",
                           "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
                           i > 0 && "-mt-[0.12em]",
                         )}
                         style={{
-                          fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
+                          fontSize: "clamp(1.95rem, 7.2vw, 4.35rem)",
                           fontSizeAdjust: "none",
                         }}
                       >
@@ -327,7 +353,7 @@ export function ServiceTemplateContent({
               </div>
 
               {hasStats ? (
-                <div className="mt-10 grid grid-cols-2 gap-8 justify-items-center sm:grid-cols-4 lg:justify-items-start lg:gap-5">
+                <div className="mt-10 grid w-full min-w-0 grid-cols-2 gap-x-3 gap-y-8 justify-items-stretch sm:grid-cols-4 sm:gap-8 sm:justify-items-center lg:justify-items-start lg:gap-5">
                   {mechanism.stats!.map((stat, i) => (
                     <ArcCountUpStat
                       key={stat.label}
@@ -336,11 +362,11 @@ export function ServiceTemplateContent({
                       suffix={stat.suffix}
                       label={stat.label}
                       align="center"
-                      className="lg:items-start lg:text-left"
+                      className="min-w-0 w-full max-w-full px-0.5 lg:items-start lg:text-left"
                       durationMs={1800}
                       startDelayMs={200 + i * 60}
-                      numberClassName="text-[2.75rem] font-normal leading-none text-arc-teal-ink sm:text-5xl"
-                      labelClassName="mt-2 max-w-none text-sm leading-snug text-arc-charcoal/70 sm:text-[0.9375rem]"
+                      numberClassName="text-[2.1rem] font-normal leading-none text-arc-teal-ink sm:text-[2.75rem] md:text-5xl"
+                      labelClassName="mt-2 w-full max-w-full text-pretty text-[0.8125rem] leading-snug text-arc-charcoal/70 sm:text-[0.9375rem]"
                     />
                   ))}
                 </div>
@@ -373,44 +399,47 @@ export function ServiceTemplateContent({
             </div>
 
             {hasMechanismMedia ? (
-              <ArcTextReveal
-                variant="body"
-                delayIndex={2}
-                className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
-              >
-                <div className="rounded-none bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                  <div
-                    className={cn(
-                      "relative w-full min-h-[14.5rem] overflow-hidden rounded-none ring-1 ring-arc-champagne/30 sm:min-h-0 sm:rounded-[18px]",
-                      mechanism.videoEmbedSrc
-                        ? "aspect-video"
-                        : (mechanism.imageAspectClass ?? "aspect-[3/2]"),
-                    )}
-                  >
-                    {mechanism.videoEmbedSrc ? (
-                      <iframe
-                        src={mechanism.videoEmbedSrc}
-                        title={mechanism.videoTitle ?? `${treatment.title} video`}
-                        className="absolute inset-0 h-full w-full border-0"
-                        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                        allowFullScreen
-                        loading="lazy"
-                      />
-                    ) : mechanism.imageSrc ? (
-                      <Image
-                        src={mechanism.imageSrc}
-                        alt={mechanism.imageAlt ?? ""}
-                        fill
-                        sizes="(min-width: 1024px) 40vw, 100vw"
-                        className={
-                          mechanism.imageObjectClass ??
-                          "object-cover object-center scale-[1.01]"
-                        }
-                      />
-                    ) : null}
+              <div className="relative min-w-0 w-full">
+                <ArcTextReveal variant="body" delayIndex={2} className="block">
+                  {/* Full-bleed like EXION — bleed lives on the media shell only, not the text column. */}
+                  <div className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full">
+                    <div className="overflow-hidden rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                      <div
+                        className={cn(
+                          "relative w-full min-h-[14.5rem] overflow-hidden rounded-none sm:min-h-0 sm:rounded-[18px]",
+                          mechanism.videoEmbedSrc
+                            ? "aspect-video"
+                            : (mechanism.imageAspectClass ?? "aspect-[3/2]"),
+                        )}
+                      >
+                        {mechanism.videoEmbedSrc ? (
+                          <iframe
+                            src={mechanism.videoEmbedSrc}
+                            title={
+                              mechanism.videoTitle ?? `${treatment.title} video`
+                            }
+                            className="absolute inset-0 h-full w-full border-0"
+                            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                            allowFullScreen
+                            loading="lazy"
+                          />
+                        ) : mechanism.imageSrc ? (
+                          <Image
+                            src={mechanism.imageSrc}
+                            alt={mechanism.imageAlt ?? ""}
+                            fill
+                            sizes="(min-width: 1024px) 40vw, 100vw"
+                            className={
+                              mechanism.imageObjectClass ??
+                              "object-cover object-center scale-[1.01]"
+                            }
+                          />
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </ArcTextReveal>
+                </ArcTextReveal>
+              </div>
             ) : null}
           </div>
         </section>
@@ -478,7 +507,10 @@ export function ServiceTemplateContent({
                         alt={card.imageAlt}
                         fill
                         sizes="(min-width: 1024px) 30vw, 100vw"
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                        className={cn(
+                          "object-cover transition-transform duration-700 ease-out group-hover:scale-105",
+                          card.imageObjectClass ?? "object-center",
+                        )}
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-4 p-7">
@@ -532,7 +564,7 @@ export function ServiceTemplateContent({
       <div className="relative z-[1] isolate">
         <div
           className={cn(
-            "relative z-[1] overflow-hidden",
+            "relative z-[1] overflow-x-clip",
             WAVE_MT_CLASS,
             WAVE_H_VAR_CLASS,
           )}
@@ -543,11 +575,16 @@ export function ServiceTemplateContent({
           <section className="relative z-10 px-6 py-16 sm:px-10 sm:py-20 md:px-12 md:py-24">
             <div
               className={cn(
-                "relative mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.6fr] lg:items-center lg:gap-16",
+                "relative mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.6fr] lg:items-start lg:gap-16",
                 ARC_PAGE_RAIL_MAX,
               )}
             >
-              <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <div
+                className={cn(
+                  "mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left",
+                  "lg:sticky lg:top-44 lg:self-start xl:top-52",
+                )}
+              >
                 <ArcTextReveal variant="heading">
                   <h2 className="text-balance leading-[0.92]">
                     <span
@@ -578,7 +615,11 @@ export function ServiceTemplateContent({
               <div
                 className={cn(
                   "grid gap-x-8 gap-y-12 sm:grid-cols-2",
-                  different.cards.length >= 5 && "lg:grid-cols-3",
+                  // 10 cards → two even rows of five (avoids a 3×3 + orphan).
+                  different.cards.length === 10 && "lg:grid-cols-5 lg:gap-x-5 lg:gap-y-10",
+                  different.cards.length >= 5 &&
+                    different.cards.length !== 10 &&
+                    "lg:grid-cols-3",
                   different.cards.length === 4 && "lg:grid-cols-2",
                   different.cards.length <= 3 && "lg:grid-cols-3",
                 )}
@@ -594,12 +635,13 @@ export function ServiceTemplateContent({
                         src={card.iconSrc}
                         className="h-28 w-28"
                         iconClassName={
-                          card.title === "Whole Picture"
+                          card.iconClassName ??
+                          (card.title === "Whole Picture"
                             ? "origin-center scale-[1.65]"
                             : card.title === "Restorative Sleep" ||
                                 card.title === "Muscle Protected"
                               ? "origin-center scale-[1.35]"
-                              : undefined
+                              : undefined)
                         }
                       />
                       <h3 className="max-w-[16rem]">
@@ -658,7 +700,16 @@ export function ServiceTemplateContent({
                 </ArcTextReveal>
               </div>
 
-              <ol className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+              <ol
+                className={cn(
+                  "mt-14 grid grid-cols-2 items-start gap-x-6 gap-y-12 sm:grid-cols-3 lg:gap-6",
+                  experience.steps.length === 4 && "lg:grid-cols-4",
+                  experience.steps.length === 5 && "lg:grid-cols-5",
+                  experience.steps.length !== 4 &&
+                    experience.steps.length !== 5 &&
+                    "lg:grid-cols-3",
+                )}
+              >
                 {experience.steps.map((step, i) => (
                   <ArcTextReveal
                     as="li"
@@ -666,19 +717,22 @@ export function ServiceTemplateContent({
                     variant="body"
                     delayIndex={i + 1}
                     className={cn(
-                      "flex flex-col items-center text-center",
+                      "flex flex-col items-center justify-start text-center",
+                      // Solo last cell on 2-col only — keep 5-up desktop row even.
                       i === experience.steps.length - 1 &&
+                        experience.steps.length % 2 === 1 &&
                         "col-span-2 justify-self-center sm:col-span-1",
                     )}
                   >
-                    <div className="flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
+                    <div className="flex h-24 w-24 shrink-0 items-center justify-center sm:h-28 sm:w-28">
                       <EmblemIcon
                         src={step.iconSrc}
                         className="h-full w-full origin-center"
                         iconClassName={
-                          step.title === "Strengthen"
+                          step.iconClassName ??
+                          (step.title === "Strengthen"
                             ? "origin-center scale-[1.55]"
-                            : undefined
+                            : undefined)
                         }
                       />
                     </div>
@@ -773,5 +827,6 @@ export function ServiceTemplateContent({
         topSeamClassName={ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS}
       />
     </>
+    </div>
   );
 }

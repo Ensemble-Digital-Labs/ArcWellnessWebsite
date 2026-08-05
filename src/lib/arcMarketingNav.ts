@@ -1,12 +1,33 @@
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
-import { RETAIL_IMAGES } from "@/content/retailImages";
+import { brainHealthContent } from "@/content/pages/brain-health";
+import { clearRfHero } from "@/content/pages/clear-rf";
+import { dermalFillersHero } from "@/content/pages/dermal-fillers";
+import { emfaceHero } from "@/content/pages/emface";
+import { emsculptNeoHero } from "@/content/pages/emsculpt-neo";
+import { emsellaHero } from "@/content/pages/emsella";
+import { exionHero } from "@/content/pages/exion";
+import { exomindHero } from "@/content/pages/exomind";
+import { gutHealthContent } from "@/content/pages/gut-health";
+import { hormoneHealthContent } from "@/content/pages/hormone-health";
+import { infusionHero } from "@/content/pages/infusion";
+import { longevityContent } from "@/content/pages/longevity";
+import { medicalWeightLossContent } from "@/content/pages/medical-weight-loss";
+import { metabolicHealthContent } from "@/content/pages/metabolic-health";
+import { neuromodulatorsHero } from "@/content/pages/neuromodulators";
+import { peptideTherapyHero } from "@/content/pages/peptide-therapy";
+import { rfMicroneedlingHero } from "@/content/pages/rf-microneedling";
+import { supplementsHero } from "@/content/pages/supplements";
 
 /** Nav preview thumbs — string paths only (avoids circular import with `@/content/site`). */
 const NAV_PREVIEW = {
   facialAesthetic: "/assets/sections/whole-body/facial-aesthetic-treatment.webp",
   membershipCohort: "/assets/sections/who-we-are/biometric-consultation-room.webp",
 } as const;
+
+/** Individual service circle previews = right side of each service hero. */
+const SERVICE_HERO_OBJECT =
+  "object-cover object-[88%_42%] sm:object-[82%_45%]" as const;
 
 /** Primary site navigation — @deprecated Use `@/content/navigation` + `ArcNavDrawerMenu`. Kept for treatment thumb previews. */
 export const ARC_PRIMARY_NAV_LINKS = [
@@ -62,98 +83,112 @@ export const ARC_TREATMENT_NAV_LINKS = [
   {
     label: "ExoMind",
     href: "/treatments/exomind",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.exomindBtlConsoleTreatmentBed,
+    thumbSrc: exomindHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "EmSella",
     href: "/treatments/emsella",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
+    thumbSrc: emsellaHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "EmSculpt Neo",
     href: "/treatments/emsculpt-neo",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
+    thumbSrc: emsculptNeoHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "EmFace",
     href: "/treatments/emface",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
+    thumbSrc: emfaceHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Exion",
     href: "/treatments/exion",
-    thumbSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceCheekApplicatorTreatment,
+    thumbSrc: exionHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
-  {
-    label: "Daxxify",
-    href: "/treatments/daxxify",
-    thumbSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
-  },
+  // NOTE: Separate Daxxify nav leaf removed — DAXXIFY® lives on Neuromodulators.
   {
     label: "Neuromodulators",
     href: "/treatments/neuromodulators",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
+    thumbSrc: neuromodulatorsHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "RF Microneedling",
     href: "/treatments/rf-microneedling",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
+    thumbSrc: rfMicroneedlingHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Clear RF",
     href: "/treatments/clear-rf",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+    thumbSrc: clearRfHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Dermal Fillers",
-    href: "/treatments/rha",
-    thumbSrc: NAV_PREVIEW.facialAesthetic,
+    href: "/treatments/dermal-fillers",
+    thumbSrc: dermalFillersHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   // NOTE: Knesko nav leaf removed — offering not active. Restore with:
-  // { label: "Knesko", href: "/treatments/knesko", thumbSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay },
+  // { label: "Knesko", href: "/treatments/knesko", thumbSrc: …, thumbObjectClass: SERVICE_HERO_OBJECT },
   {
     label: "Infusion Therapy",
     href: "/treatments/infusion-therapy",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
+    thumbSrc: infusionHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Peptide Therapy",
     href: "/treatments/peptide-therapy",
-    thumbSrc: NAV_PREVIEW.membershipCohort,
+    thumbSrc: peptideTherapyHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Supplements",
     href: "/treatments/supplements",
-    thumbSrc: RETAIL_IMAGES.arcSupplementShelvingUnits,
+    thumbSrc: supplementsHero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Hormone Health",
     href: "/treatments/hormone-health",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    thumbSrc: hormoneHealthContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Metabolic Health",
     href: "/treatments/metabolic-health",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    thumbSrc: metabolicHealthContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Gut Health",
     href: "/treatments/gut-health",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    thumbSrc: gutHealthContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Brain Health",
     href: "/treatments/brain-health",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    thumbSrc: brainHealthContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Longevity",
     href: "/treatments/longevity",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.heroLobbyLounge,
+    thumbSrc: longevityContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
   {
     label: "Medical Weight Loss",
     href: "/treatments/medical-weight-loss",
-    thumbSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    thumbSrc: medicalWeightLossContent.hero.imageSrc,
+    thumbObjectClass: SERVICE_HERO_OBJECT,
   },
 ] as const;

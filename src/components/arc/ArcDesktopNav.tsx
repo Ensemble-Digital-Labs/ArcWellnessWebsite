@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -17,6 +18,7 @@ import {
   type NavLeaf,
   type NavTopItem,
 } from "@/content/navigation";
+import { resolveNavLeafThumb } from "@/components/arc/ArcNavDrawerSubLinkRow";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { getStableNativeScroll } from "@/lib/arcScrollMode";
@@ -24,6 +26,8 @@ import { cn } from "@/lib/utils";
 import type Lenis from "lenis";
 
 const DESKTOP_NAV_ITEMS: readonly NavTopItem[] = [ARC_NAV_HOME_ITEM, ...ARC_NAV_TOP_ITEMS];
+const FEATURED_HUB_FALLBACK_THUMB =
+  "/assets/treatments/arc-360/arc-360-nav-preview.webp";
 
 /** Always show the nav while scroll is within this distance from the top. */
 const NAV_TOP_PIN_Y = 48;
@@ -116,17 +120,63 @@ function DesktopMegaPanel({
   return (
     <div className="space-y-8">
       {rows.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex flex-wrap justify-center gap-x-4 gap-y-8">
+        <div key={rowIndex} className="flex flex-wrap items-stretch justify-center gap-x-4 gap-y-8">
           {row.map(({ group, key }) => {
             const hubOnly = group.items.length === 0;
             const headingActive = Boolean(
               group.headingHref && isNavHrefExact(group.headingHref, pathname),
             );
+
+            if (hubOnly && group.heading && group.headingHref) {
+              const thumbSrc =
+                resolveNavLeafThumb({
+                  label: group.heading,
+                  href: group.headingHref,
+                }) ?? FEATURED_HUB_FALLBACK_THUMB;
+
+              return (
+                <div
+                  key={key}
+                  className="flex min-w-[12.5rem] items-center justify-center self-stretch"
+                >
+                  <Link
+                    href={group.headingHref}
+                    onClick={onNavigate}
+                    aria-current={headingActive ? "page" : undefined}
+                    className={cn(
+                      "group flex w-full max-w-[15rem] flex-col items-center gap-3 px-2 py-2 text-center",
+                      "transition-transform duration-300 hover:-translate-y-0.5",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
+                    )}
+                  >
+                    <span className="relative size-[4.5rem] overflow-hidden rounded-full bg-arc-cream-deep shadow-[0_8px_22px_rgba(44,44,44,0.18)] ring-2 ring-white/85">
+                      <Image
+                        src={thumbSrc}
+                        alt=""
+                        fill
+                        sizes="72px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized
+                      />
+                    </span>
+                    <span className="font-serif text-[1.55rem] font-semibold leading-none tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-teal">
+                      {group.heading}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal transition-colors group-hover:text-arc-teal">
+                      Explore
+                      <ArrowRight
+                        className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </span>
+                  </Link>
+                </div>
+              );
+            }
+
             return (
-              <div
-                key={key}
-                className={cn("min-w-[11rem] space-y-2", hubOnly && "text-center")}
-              >
+              <div key={key} className="min-w-[11rem] space-y-2">
                 {group.heading ? (
                   group.headingHref ? (
                     <Link
@@ -134,36 +184,28 @@ function DesktopMegaPanel({
                       onClick={onNavigate}
                       aria-current={headingActive ? "page" : undefined}
                       className={cn(
-                        "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
-                        hubOnly ? "inline-block" : "block",
+                        "block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
                         headingActive ? "text-arc-teal" : "text-arc-charcoal",
                       )}
                     >
                       {group.heading}
                     </Link>
                   ) : (
-                    <p
-                      className={cn(
-                        "border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal",
-                        hubOnly ? "inline-block" : "block",
-                      )}
-                    >
+                    <p className="block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal">
                       {group.heading}
                     </p>
                   )
                 ) : null}
-                {!hubOnly ? (
-                  <ul className="space-y-0.5">
-                    {group.items.map((leaf) => (
-                      <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
-                        <DesktopLeaf
-                          leaf={leaf}
-                          active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                <ul className="space-y-0.5">
+                  {group.items.map((leaf) => (
+                    <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
+                      <DesktopLeaf
+                        leaf={leaf}
+                        active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
+                      />
+                    </li>
+                  ))}
+                </ul>
               </div>
             );
           })}

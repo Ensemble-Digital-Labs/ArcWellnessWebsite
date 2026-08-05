@@ -1,8 +1,7 @@
 /**
- * Brain Health: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Brain Health: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons. ExoMind card reuses ExoMind targeted-stimulation art.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const BRAIN_HEALTH_ASSET = "/assets/treatments/brain-health";
 /** Bump when replacing Brain Health rasters so next/image + browser drop stale caches. */
-const BRAIN_HEALTH_ASSETS_VERSION = "20260730-hero";
+const BRAIN_HEALTH_ASSETS_VERSION = "20260804-cards";
 
 function brainHealthAsset(file: string) {
   return `${BRAIN_HEALTH_ASSET}/${file}?v=${BRAIN_HEALTH_ASSETS_VERSION}`;
@@ -71,8 +70,11 @@ export const brainHealthContent: ServicePageContent = {
       "Nutrient status and gut health",
       "Sleep, stress, lifestyle, and family history",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "Calm ARC Wellness interior for thoughtful care",
+    imageSrc: brainHealthAsset("brain-health-mechanism.webp"),
+    imageAlt:
+      "Glowing brain connected to sleep, gut, nutrition, vascular health, and calm—systems that shape how the mind feels",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-center scale-[1.01]",
   },
   treatments: {
     title: "Support the brain.",
@@ -89,8 +91,9 @@ export const brainHealthContent: ServicePageContent = {
           "Gut, nutrients, sleep, and stress",
           "A plan for today and tomorrow",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: brainHealthAsset("brain-health-card-connected-systems.webp"),
+        imageAlt:
+          "Brain at the center of connected systems—hormones, vascular health, gut, nutrients, sleep, and stress",
       },
       {
         title: "Personalized Support",
@@ -102,8 +105,11 @@ export const brainHealthContent: ServicePageContent = {
           "Lifestyle strategies that stick",
           "Advanced therapies when indicated",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: brainHealthAsset(
+          "brain-health-card-personalized-support.webp",
+        ),
+        imageAlt:
+          "Brain-supportive nutrition, supplements, hydration, and a personal plan notebook",
       },
       {
         title: "ExoMind™",
@@ -115,8 +121,9 @@ export const brainHealthContent: ServicePageContent = {
           "Used when clinically appropriate",
           "Brain health is more than memory",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.ivTherapyReclinerRoom,
-        imageAlt: "Supportive therapy environment at ARC Wellness",
+        imageSrc:
+          "/assets/treatments/exomind/exomind-card-targeted-stimulation.webp?v=20260730-target-card",
+        imageAlt: "ExoMind Targeted Stimulation — TMS delivery",
       },
     ],
   },
@@ -160,7 +167,7 @@ export const brainHealthContent: ServicePageContent = {
         body: "Share the fog, the forgotten words, the fading mental energy.",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Evaluate",
         body: "Testing and consultation to find patterns influencing cognition.",
       },
@@ -175,9 +182,10 @@ export const brainHealthContent: ServicePageContent = {
         body: "Nutrition, lifestyle, optimization, and therapies when appropriate.",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/shield-check.svg`,
         title: "Protect",
         body: "Ongoing care to stay engaged, capable, and present.",
+        iconClassName: "origin-center scale-[1.7]",
       },
     ],
   },

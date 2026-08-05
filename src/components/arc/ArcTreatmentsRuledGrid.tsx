@@ -216,14 +216,14 @@ function TreatmentInteractiveRow({
         <p
           className={cn(
             // em-based rail keeps titles aligned as numerals widen (I → XVIII).
-            "relative z-10 shrink-0 font-serif text-[clamp(2.75rem,7vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:min-w-[2.6em] sm:pt-0.5",
+            "relative z-10 shrink-0 font-serif text-[clamp(2rem,6.5vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:min-w-[2.6em] sm:pt-0.5 sm:text-[clamp(2.75rem,7vw,4.5rem)]",
             showInteractivePreview && hovered
               ? cn(
                   accentBright,
                   "[text-shadow:0_1px_12px_rgba(0,0,0,0.4)]",
                 )
               : cn(
-                  "text-arc-charcoal/22",
+                  "text-arc-teal-ink/70 md:text-arc-charcoal/22",
                   "group-hover:text-arc-teal-ink/40",
                 ),
           )}
@@ -242,26 +242,33 @@ function TreatmentInteractiveRow({
             <div className="min-w-0 flex-1 pr-2 sm:pr-4">
               <motion.h3
                 className={cn(
-                  "flex flex-wrap font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
+                  "flex flex-wrap gap-x-[0.28em] font-serif text-[clamp(1.125rem,4.6vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
                   hovered
                     ? "text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.45)]"
                     : "text-arc-charcoal",
                 )}
                 variants={titleStaggerVariants}
               >
-                {treatment.title.split("").map((char, ci) => (
-                  <motion.span
-                    key={`${treatment.slug}-char-${ci}`}
-                    variants={titleLetterVariants}
-                    className="inline-block"
+                {treatment.title.split(" ").map((word, wi) => (
+                  <span
+                    key={`${treatment.slug}-word-${wi}`}
+                    className="inline-flex whitespace-nowrap"
                   >
-                    {char === " " ? "\u00A0" : char}
-                  </motion.span>
+                    {word.split("").map((char, ci) => (
+                      <motion.span
+                        key={`${treatment.slug}-char-${wi}-${ci}`}
+                        variants={titleLetterVariants}
+                        className="inline-block"
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </span>
                 ))}
               </motion.h3>
               <p
                 className={cn(
-                  "mt-2.5 break-words transition-colors duration-300 md:mt-3",
+                  "mt-2.5 transition-colors duration-300 md:mt-3",
                   "font-serif text-[clamp(1rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight",
                   hovered
                     ? "text-white/92 [text-shadow:0_1px_12px_rgba(0,0,0,0.4)]"
@@ -289,7 +296,7 @@ function TreatmentInteractiveRow({
             <div className="relative z-10 min-w-0 flex-1">
               <h3
                 className={cn(
-                  "break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
+                  "font-serif text-[clamp(1.125rem,4.6vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors [overflow-wrap:normal] [word-break:normal]",
                   "group-hover:text-arc-teal-ink",
                 )}
               >
@@ -297,8 +304,8 @@ function TreatmentInteractiveRow({
               </h3>
               <p
                 className={cn(
-                  "mt-2.5 break-words md:mt-3",
-                  "font-serif text-[clamp(1rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal/88",
+                  "mt-2.5 md:mt-3",
+                  "font-serif text-[clamp(0.9375rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal/88",
                 )}
               >
                 {treatment.tagline}
@@ -307,13 +314,13 @@ function TreatmentInteractiveRow({
 
             <span
               className={cn(
-                "relative z-10 inline-flex shrink-0 items-center gap-2 self-start font-sans text-[11px] font-semibold uppercase tracking-[0.18em] sm:self-center",
+                "relative z-10 inline-flex shrink-0 items-center gap-1.5 self-start font-sans text-[10px] font-semibold uppercase tracking-[0.16em] sm:gap-2 sm:self-center sm:text-[11px] sm:tracking-[0.18em]",
                 accentInk,
               )}
             >
               View
               <ArrowRight
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none sm:size-4"
                 aria-hidden
               />
             </span>

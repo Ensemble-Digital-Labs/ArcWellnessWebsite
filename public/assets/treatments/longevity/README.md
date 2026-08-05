@@ -2,16 +2,13 @@
 
 | File | Used by |
 |------|---------|
-| `longevity-hero.png` | 4K master (editing only) |
-| `longevity-hero.webp` | hero background — `longevityContent.hero.imageSrc` |
+| `longevity-hero.png` / `.webp` | hero |
+| `longevity-mechanism.png` / `.webp` | mechanism |
+| `longevity-card-built-today.png` / `.webp` | treatments card 1 |
+| `longevity-card-beyond-disease.png` / `.webp` | treatments card 2 |
+| `longevity-card-whole-person-care.png` / `.webp` | treatments card 3 |
 
-Card photography and cream/dark plates still reuse clinic interiors + EXION plates.
+Cream/dark plates still reuse shared EXION plates.
 
-Bump `LONGEVITY_ASSETS_VERSION` in `src/content/pages/longevity.ts` when replacing a
-raster under the same filename, or caches will serve the old image.
-
-When more dedicated art is ready:
-1. Place masters here
-2. Run `npm run assets:webp`
-3. Point `src/content/pages/longevity.ts` at the `.webp` paths
-4. Bump the assets version query string
+Bump `LONGEVITY_ASSETS_VERSION` in `src/content/pages/longevity.ts` when
+replacing a raster under the same filename, or caches will serve the old image.

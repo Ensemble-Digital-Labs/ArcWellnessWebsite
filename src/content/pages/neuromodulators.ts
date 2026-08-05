@@ -1,8 +1,7 @@
 /**
- * Neuromodulators: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Neuromodulators: EXION section stack; dedicated hero, mechanism, and card art;
+ * temporary EXION plates/icons.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,7 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const NEUROMODULATORS_ASSET = "/assets/treatments/neuromodulators";
 /** Bump when replacing Neuromodulators rasters so next/image + browser drop stale caches. */
-const NEUROMODULATORS_ASSETS_VERSION = "20260730-hero";
+const NEUROMODULATORS_ASSETS_VERSION = "20260804-cards";
 
 function neuromodulatorsAsset(file: string) {
   return `${NEUROMODULATORS_ASSET}/${file}?v=${NEUROMODULATORS_ASSETS_VERSION}`;
@@ -22,8 +21,8 @@ function neuromodulatorsAsset(file: string) {
 export const neuromodulatorsContent: ServicePageContent = {
   hero: {
     title: "Neuromodulators",
-    titleEmphasis: "Still you. Just a little more refreshed.",
-    titleEmphasisLines: ["Still you.", "Just a little more refreshed."],
+    titleEmphasis: "Still you. Just refreshed.",
+    titleEmphasisLines: ["Still you.", "Just refreshed."],
     subhead: "Soften. Preserve. Stay you.",
     intro:
       "Your face tells your story. Every smile, laugh, squint, and expression becomes part of it. Over time, those repeated movements can leave lines that remain even after the expression has passed. Neuromodulators, including DAXXIFY®, soften the appearance of dynamic lines while preserving what matters most: you still look like you.",
@@ -47,12 +46,12 @@ export const neuromodulatorsContent: ServicePageContent = {
       body: "The goal is never a frozen forehead. It is a smoother look that still moves with you.",
     },
     {
-      iconSrc: `${ICON}/meditation.svg`,
+      iconSrc: `${ICON}/target-rings.svg`,
       title: "Placement",
       body: "Thoughtful placement and intentional dosing shaped around your facial movement and goals.",
     },
     {
-      iconSrc: `${ICON}/sun.svg`,
+      iconSrc: `${ICON}/person-sparkle.svg`,
       title: "Still You",
       body: "People may notice you look rested. They should not immediately know why.",
     },
@@ -67,8 +66,11 @@ export const neuromodulatorsContent: ServicePageContent = {
       "Crow's feet",
       "Other areas of facial tension and movement",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-    imageAlt: "Calm seating at ARC Wellness for aesthetics consultations",
+    imageSrc: neuromodulatorsAsset("neuromodulators-mechanism.webp"),
+    imageAlt:
+      "Practitioner assessing brow and expression lines before neuromodulator treatment",
+    imageAspectClass: "aspect-[3/2]",
+    imageObjectClass: "object-cover object-[center_28%] scale-[1.01]",
   },
   treatments: {
     title: "A more thoughtful",
@@ -85,8 +87,12 @@ export const neuromodulatorsContent: ServicePageContent = {
           "Smoother, rested appearance",
           "Natural movement preserved",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-        imageAlt: "Consultation lounge at ARC Wellness",
+        imageSrc: neuromodulatorsAsset(
+          "neuromodulators-card-keep-expression.webp",
+        ),
+        imageAlt:
+          "Naturally refreshed expression that still moves with you",
+        imageObjectClass: "object-[center_28%]",
       },
       {
         title: "Thoughtful Injectables",
@@ -98,8 +104,12 @@ export const neuromodulatorsContent: ServicePageContent = {
           "Combine only when it serves you",
           "Knowing when to stop",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: neuromodulatorsAsset(
+          "neuromodulators-card-thoughtful-injectables.webp",
+        ),
+        imageAlt:
+          "Provider reviewing facial structure and goals with a patient before injectables",
+        imageObjectClass: "object-[center_40%]",
       },
       {
         title: "Why DAXXIFY®",
@@ -111,8 +121,12 @@ export const neuromodulatorsContent: ServicePageContent = {
           "Customized to your facial movement",
           "Matched to your desired result",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
-        imageAlt: "DAXXIFY® presence in the ARC Wellness clinic",
+        imageSrc: neuromodulatorsAsset(
+          "neuromodulators-card-why-daxxify.webp",
+        ),
+        imageAlt:
+          "Precise neuromodulator treatment softens expression lines with intentional placement",
+        imageObjectClass: "object-[center_45%]",
       },
     ],
   },
@@ -125,34 +139,40 @@ export const neuromodulatorsContent: ServicePageContent = {
     backgroundAlt: "",
     cards: [
       {
-        iconSrc: `${ICON}/lotus.svg`,
+        iconSrc: `${ICON}/sleep.svg?v=zoom`,
         title: "Rested",
         body: "A softer look that reads as well-rested, not overdone.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/sun.svg`,
         title: "Refreshed",
         body: "Maybe a little brighter, without changing who you are.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/lotus.svg`,
         title: "Subtle",
         body: "The best work shouldn't announce itself.",
+        iconClassName: "origin-center scale-[1.3]",
       },
       {
-        iconSrc: `${ICON}/chat.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Recognizable",
         body: "Confidence comes from still recognizing yourself.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
-        iconSrc: `${ICON}/meditation.svg`,
+        iconSrc: `${ICON}/target-rings.svg`,
         title: "Intentional",
         body: "Placement and dosing shaped around your goals.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
-        iconSrc: `${ICON}/atom.svg`,
+        iconSrc: `${ICON}/molecule.svg`,
         title: "DAXXIFY® Option",
         body: "Longer intervals between treatments for some patients.",
+        iconClassName: "origin-center scale-[1.45]",
       },
     ],
   },
@@ -164,26 +184,31 @@ export const neuromodulatorsContent: ServicePageContent = {
         iconSrc: `${ICON}/chat.svg`,
         title: "Listen",
         body: "Share what you see, what bothers you, and what you want to keep.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/consult-desk.svg`,
         title: "Assess",
         body: "Facial structure, movement, symmetry, and goals guide the plan.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
-        iconSrc: `${ICON}/meditation.svg`,
+        iconSrc: `${ICON}/target-rings.svg`,
         title: "Place",
         body: "Thoughtful placement with intentional dosing.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Soften",
         body: "Dynamic lines ease while expression stays yours.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
         iconSrc: `${ICON}/calendar-check.svg`,
         title: "Return",
         body: "A maintenance rhythm matched to how your face responds.",
+        iconClassName: "origin-center scale-[1.45]",
       },
     ],
   },

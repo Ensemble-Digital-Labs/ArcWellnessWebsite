@@ -81,6 +81,16 @@ const nextConfig: NextConfig = {
         destination: "/treatments/infusion-therapy",
         permanent: true,
       },
+      {
+        source: "/treatments/daxxify",
+        destination: "/treatments/neuromodulators",
+        permanent: true,
+      },
+      {
+        source: "/treatments/rha",
+        destination: "/treatments/dermal-fillers",
+        permanent: true,
+      },
     ];
   },
 };

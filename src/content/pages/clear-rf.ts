@@ -1,8 +1,7 @@
 /**
- * Clear RF: EXION section stack; dedicated hero + temporary EXION plates/icons
- * and clinic-interior card photography.
+ * Clear RF: EXION section stack; dedicated hero + card art;
+ * temporary EXION plates/icons. Mechanism uses Bunny video.
  */
-import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import {
   SERVICE_EXION_ICON,
   serviceSharedCreamPlate,
@@ -13,7 +12,12 @@ import {
 const ICON = SERVICE_EXION_ICON;
 const CLEAR_RF_ASSET = "/assets/treatments/clear-rf";
 /** Bump when replacing Clear RF rasters so next/image + browser drop stale caches. */
-const CLEAR_RF_ASSETS_VERSION = "20260730-hero";
+const CLEAR_RF_ASSETS_VERSION = "20260804-cards";
+
+/** Bunny Stream library + video (unlisted embed; restrict domains in Bunny Security). */
+const CLEAR_RF_BUNNY_LIBRARY_ID = "710568";
+const CLEAR_RF_BUNNY_VIDEO_ID = "b466b324-1b66-497a-80d9-5e21b7c5736f";
+const CLEAR_RF_BUNNY_EMBED_BASE = `https://player.mediadelivery.net/embed/${CLEAR_RF_BUNNY_LIBRARY_ID}/${CLEAR_RF_BUNNY_VIDEO_ID}`;
 
 function clearRfAsset(file: string) {
   return `${CLEAR_RF_ASSET}/${file}?v=${CLEAR_RF_ASSETS_VERSION}`;
@@ -29,7 +33,7 @@ export const clearRfContent: ServicePageContent = {
       "Sometimes it isn't one thing. It's the uneven tone. The visible pores. The redness. The texture that catches the light differently than it used to. The lingering marks that makeup never quite seems to hide. You may not want to change your face at all. You simply want better skin.",
     closingLine: "Beautifully healthy.",
     poweredByEyebrow: "Physician-guided care",
-    poweredByIconSrc: `${ICON}/atom.svg`,
+    poweredByIconSrc: `${ICON}/consult-desk.svg`,
     synergyLine: "Refine the surface. Renew beneath it.",
     imageSrc: clearRfAsset("clear-rf-hero.webp"),
     imageAlt:
@@ -40,21 +44,25 @@ export const clearRfContent: ServicePageContent = {
       iconSrc: `${ICON}/sun.svg`,
       title: "Tone",
       body: "More even tone and less of the unevenness makeup tries to hide.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
       iconSrc: `${ICON}/lotus.svg`,
       title: "Texture",
       body: "Smoother surface quality that catches the light more kindly.",
+      iconClassName: "origin-center scale-[1.1]",
     },
     {
-      iconSrc: `${ICON}/cell.svg`,
+      iconSrc: `${ICON}/droplet.svg`,
       title: "Clarity",
       body: "Refined pores, less redness, and a clearer, fresher appearance.",
+      iconClassName: "origin-center scale-[1.35]",
     },
     {
-      iconSrc: `${ICON}/mind.svg`,
+      iconSrc: `${ICON}/meditation.svg`,
       title: "Ease",
       body: "Skin that looks beautiful before the makeup ever goes on.",
+      iconClassName: "origin-center scale-[0.85]",
     },
   ],
   creamPlate: serviceSharedCreamPlate,
@@ -67,8 +75,12 @@ export const clearRfContent: ServicePageContent = {
       "Acne and acne-related concerns",
       "Fine lines, pigmentation, and overall quality",
     ],
-    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
-    imageAlt: "Thoughtful clinical environment at ARC Wellness",
+    /**
+     * Bunny Stream embed for the mechanism column (muted loop).
+     * Domain allowlist is managed in Bunny Security.
+     */
+    videoEmbedSrc: `${CLEAR_RF_BUNNY_EMBED_BASE}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`,
+    videoTitle: "Clear RF treatment at ARC Wellness",
   },
   treatments: {
     title: "Skin that looks better",
@@ -85,8 +97,10 @@ export const clearRfContent: ServicePageContent = {
           "Refined pores",
           "Clearer, fresher appearance",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-        imageAlt: "Consultation lounge at ARC Wellness",
+        imageSrc: clearRfAsset("clear-rf-card-the-details.webp"),
+        imageAlt:
+          "Clear, refined skin showing smoother texture, even tone, and fresh clarity",
+        imageObjectClass: "object-[center_28%]",
       },
       {
         title: "Intentional Care",
@@ -98,8 +112,10 @@ export const clearRfContent: ServicePageContent = {
           "Stand alone or layered with other tech",
           "The right things, not everything",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
-        imageAlt: "Calm seating at ARC Wellness",
+        imageSrc: clearRfAsset("clear-rf-card-intentional-care.webp"),
+        imageAlt:
+          "Provider and patient reviewing skin goals intentionally before Clear RF",
+        imageObjectClass: "object-[center_40%]",
       },
       {
         title: "Let Your Skin Show",
@@ -111,8 +127,10 @@ export const clearRfContent: ServicePageContent = {
           "Healthy over flawless",
           "Skin that shows before makeup",
         ],
-        imageSrc: CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-        imageAlt: "ARC Wellness care environment",
+        imageSrc: clearRfAsset("clear-rf-card-let-skin-show.webp"),
+        imageAlt:
+          "Confident, healthy-looking skin that shows before makeup",
+        imageObjectClass: "object-[center_30%]",
       },
     ],
   },
@@ -128,31 +146,37 @@ export const clearRfContent: ServicePageContent = {
         iconSrc: `${ICON}/sun.svg`,
         title: "Even Tone",
         body: "Address uneven tone without chasing perfection.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Smoother Feel",
         body: "Texture that feels kinder to the touch and the light.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/cell.svg`,
+        iconSrc: `${ICON}/target-rings.svg`,
         title: "Refined Pores",
         body: "Visible pores that look more refined over time.",
+        iconClassName: "origin-center scale-[1.15]",
       },
       {
-        iconSrc: `${ICON}/magnet.svg`,
+        iconSrc: `${ICON}/cycle-sparkle.svg`,
         title: "Less Redness",
         body: "Support for redness and acne-related concerns.",
+        iconClassName: "origin-center scale-[1.35]",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/checklist.svg`,
         title: "Layered Plans",
         body: "Alone or alongside other rejuvenation technologies.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/mind.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Healthy Look",
         body: "Treated to look healthy, not to look treated.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },
@@ -164,26 +188,31 @@ export const clearRfContent: ServicePageContent = {
         iconSrc: `${ICON}/chat.svg`,
         title: "Listen",
         body: "Share tone, pores, redness, marks, and what makeup can't hide.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/book.svg`,
+        iconSrc: `${ICON}/checklist.svg`,
         title: "Choose",
         body: "Decide whether Clear RF stands alone or layers into a broader plan.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
         iconSrc: `${ICON}/face-device.svg`,
         title: "Treat",
         body: "Controlled radiofrequency tailored to your skin concerns.",
+        iconClassName: "origin-center scale-[1.4]",
       },
       {
         iconSrc: `${ICON}/lotus.svg`,
         title: "Refine",
         body: "Tone, texture, and clarity continue to improve with care.",
+        iconClassName: "origin-center scale-[1.45]",
       },
       {
-        iconSrc: `${ICON}/calendar-check.svg`,
+        iconSrc: `${ICON}/person-sparkle.svg`,
         title: "Show",
         body: "Skin you're happier to show, with less covering and correcting.",
+        iconClassName: "origin-center scale-[1.4]",
       },
     ],
   },
