@@ -17,15 +17,12 @@ import { images } from "@/content/site";
  * `layout.tsx`, which sets `html[data-arc-intro="active"]` before first paint.
  * This component only animates/removes that attribute; it never decides to show
  * the overlay on its own (so a refresh with the flag already set stays clean).
+ *
+ * PageSpeed / Slow 4G: splash only waits on the logo + the exact `/_next/image`
+ * mint-hero variant (not the raw ~1.3MB WebP). Inner-page hero warming still
+ * runs, but only after the splash finishes (or after LCP settles on revisits)
+ * so it does not compete with homepage LCP.
  */
-
-/** Above-the-fold art warmed while the splash holds, so the hero paints instantly on reveal. */
-const PRELOAD_SRCS: readonly string[] = [
-  images.logo,
-  images.heroMedia,
-  PATH_SECTION_INTRO_BACKGROUND_SRC,
-  images.founderPortrait,
-];
 
 /**
  * Full-bleed hero plates served through next/image on inner pages. Nearly every
@@ -47,6 +44,12 @@ const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
   ...SERVICE_PAGE_LCP_HERO_SRCS,
 ];
 
+/** Below-fold homepage art — warm after splash starts exiting (does not gate hold). */
+const POST_SPLASH_HOMEPAGE_SRCS: readonly string[] = [
+  PATH_SECTION_INTRO_BACKGROUND_SRC,
+  images.founderPortrait,
+];
+
 /** Next.js default `deviceSizes` — used to pick the same width next/image would for `sizes="100vw"`. */
 const NEXT_DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840] as const;
 
@@ -56,6 +59,13 @@ const MIN_HOLD_MS = 1400;
 const MAX_WAIT_MS = 3500;
 /** Must match the `data-arc-intro="exiting"` fade duration in `globals.css`. */
 const FADE_MS = 900;
+/**
+ * After splash is fully gone, wait briefly then idle-warm other page heroes.
+ * Keeps Slow 4G bandwidth on homepage LCP first; navigation warm-up still happens.
+ */
+const INNER_WARM_AFTER_SPLASH_MS = 500;
+/** Return / refresh visits (no splash): let homepage LCP settle before warming others. */
+const INNER_WARM_NO_SPLASH_MS = 2800;
 
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
@@ -75,6 +85,14 @@ function nextImageVariantUrl(src: string, quality = 75): string {
   return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
 }
 
+function warmSrcList(srcs: readonly string[]) {
+  for (const src of srcs) {
+    const img = new window.Image();
+    img.decoding = "async";
+    img.src = src.startsWith("/_next/image") ? src : nextImageVariantUrl(src);
+  }
+}
+
 /**
  * Warm shared inner-page + service LCP hero plates in the background (idle,
  * non-blocking) so navigation from the homepage lands on an already-cached
@@ -86,21 +104,19 @@ function warmInnerPageHeroAssets() {
   ).connection;
   if (connection?.saveData) return;
 
-  const warm = () => {
-    for (const src of WARM_OPTIMIZED_HERO_SRCS) {
-      const img = new window.Image();
-      img.decoding = "async";
-      img.src = nextImageVariantUrl(src);
-    }
-  };
+  const warm = () => warmSrcList(WARM_OPTIMIZED_HERO_SRCS);
 
   const idle = (
     window as Window & {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
     }
   ).requestIdleCallback;
-  if (idle) idle(warm, { timeout: 2500 });
-  else window.setTimeout(warm, 600);
+  if (idle) idle(warm, { timeout: 3500 });
+  else window.setTimeout(warm, 800);
+}
+
+function scheduleInnerPageWarm(delayMs: number): number {
+  return window.setTimeout(() => warmInnerPageHeroAssets(), delayMs);
 }
 
 export function ArcSitePreloader() {
@@ -112,21 +128,25 @@ export function ArcSitePreloader() {
     const html = document.documentElement;
     const splashActive = html.getAttribute("data-arc-intro") === "active";
 
-    // Idle-warm inner + service LCP heroes on every homepage mount (splash or
-    // not). Splash itself stays gated to first visit; this never blocks it.
-    warmInnerPageHeroAssets();
-
     if (!splashActive) {
       setRendered(false);
-      return;
+      const warmTimer = scheduleInnerPageWarm(INNER_WARM_NO_SPLASH_MS);
+      return () => window.clearTimeout(warmTimer);
     }
 
     let cancelled = false;
     let exitTimer: ReturnType<typeof setTimeout> | undefined;
     let removeTimer: ReturnType<typeof setTimeout> | undefined;
+    let innerWarmTimer: number | undefined;
     const startedAt = performance.now();
 
-    const assetsReady = Promise.all(PRELOAD_SRCS.map(preloadImage));
+    // Critical path only: splash logo (raw) + mint hero as next/image serves it.
+    // Avoid fetching the raw ~1.3MB WebP during the hold — that starves Slow 4G LCP.
+    const lcpHeroUrl = nextImageVariantUrl(images.heroMedia);
+    const assetsReady = Promise.all([
+      preloadImage(images.logo),
+      preloadImage(lcpHeroUrl),
+    ]);
     const maxWait = new Promise<void>((resolve) => setTimeout(resolve, MAX_WAIT_MS));
 
     void Promise.race([assetsReady, maxWait]).then(() => {
@@ -135,10 +155,13 @@ export function ArcSitePreloader() {
       exitTimer = setTimeout(() => {
         if (cancelled) return;
         html.setAttribute("data-arc-intro", "exiting");
+        // Soft-warm below-fold homepage art while the splash fades (same UX, no gate).
+        warmSrcList(POST_SPLASH_HOMEPAGE_SRCS.map((src) => nextImageVariantUrl(src)));
         removeTimer = setTimeout(() => {
           if (cancelled) return;
           html.removeAttribute("data-arc-intro");
           setRendered(false);
+          innerWarmTimer = scheduleInnerPageWarm(INNER_WARM_AFTER_SPLASH_MS);
         }, FADE_MS);
       }, remaining);
     });
@@ -147,6 +170,7 @@ export function ArcSitePreloader() {
       cancelled = true;
       if (exitTimer) clearTimeout(exitTimer);
       if (removeTimer) clearTimeout(removeTimer);
+      if (innerWarmTimer) window.clearTimeout(innerWarmTimer);
     };
   }, []);
 

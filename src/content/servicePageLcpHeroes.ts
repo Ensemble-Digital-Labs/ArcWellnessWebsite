@@ -1,5 +1,6 @@
 /**
- * Service + condition LCP heroes warmed during homepage idle (see `ArcSitePreloader`).
+ * Service + condition LCP heroes warmed after homepage splash / LCP settle
+ * (see `ArcSitePreloader` — delayed so Slow 4G bandwidth isn’t stolen from mint LCP).
  *
  * Curated: **one** first-viewport plate per service — not every section plate.
  * Conditions share a single hero plate (`CONDITION_HERO_IMAGE_SRC`), so one entry
