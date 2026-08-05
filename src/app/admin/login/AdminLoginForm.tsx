@@ -96,7 +96,7 @@ export function AdminLoginForm({ configured }: { configured: boolean }) {
       )}
 
       <Link
-        href="/case-studies"
+        href="/blogs"
         className="mt-10 text-center text-sm font-medium text-arc-charcoal/55 underline-offset-2 hover:text-arc-teal hover:underline"
       >
         ← Back to Insights

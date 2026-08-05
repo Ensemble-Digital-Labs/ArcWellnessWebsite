@@ -11,8 +11,14 @@ export type InsightCardList = {
   style: "cards";
   items: readonly {
     label: string;
-    body: string;
+    /** Prose, or bullet lines under the label. */
+    body: string | readonly string[];
   }[];
+};
+
+export type InsightFaqItem = {
+  question: string;
+  answer: string;
 };
 
 /** Two-column compare (e.g. acute vs chronic inflammation). */
@@ -36,12 +42,21 @@ export type InsightSectionList =
  * One cream-plate teaching act on a typed blog.
  * Prefer 2–4 sections per post — not one plate per Word heading.
  */
+export type InsightSectionImage = {
+  src: string;
+  alt: string;
+};
+
 export type InsightArticleSection = {
   title: string;
   body: readonly string[];
   /** Optional pull-quote / emphasis under the gold rule. */
   callout?: string;
   list?: InsightSectionList;
+  /** Optional figure after body / before list. */
+  image?: InsightSectionImage;
+  /** Optional multi-image gallery (e.g. habit photos). */
+  images?: readonly InsightSectionImage[];
   /** Prose after a list (wrap-up for that act). */
   closing?: readonly string[];
 };
@@ -53,6 +68,8 @@ export type InsightArticleSection = {
 export type InsightArticle = {
   /** Lead paragraphs after the hero (no extra H2, or titled “Overview”). */
   overview: readonly string[];
+  /** Optional figure at the top of the overview plate (directly under the hero). */
+  overviewImage?: InsightSectionImage;
   /** Optional gold-pill line in the hero (conditions-style). */
   closingLine?: string;
   /** Optional emphasis line under overview prose. */
@@ -61,7 +78,23 @@ export type InsightArticle = {
   perspective: {
     title: string;
     body: readonly string[];
+    /** Closing invitation under perspective prose (dark plate). */
+    cta?: {
+      lead: string;
+      body?: string;
+      /** Button label; falls back to article.primaryCtaLabel / “Book a consultation”. */
+      label?: string;
+    };
   };
+  /** Optional accordion FAQ before continue-path. */
+  faq?: {
+    title: string;
+    items: readonly InsightFaqItem[];
+  };
+  /** Educational disclaimer under FAQ / before continue-path. */
+  disclaimer?: string;
+  /** Overrides the first continue-path CTA label. */
+  primaryCtaLabel?: string;
 };
 
 export type InsightEntry = {
@@ -69,6 +102,11 @@ export type InsightEntry = {
   kind: InsightKind;
   slug: string;
   title: string;
+  /**
+   * Optional hero line breaks (display only). Falls back to `title` as one block.
+   * Example: ["Could It Be Insulin Resistance?", "Early Signs and Symptoms to Watch For"]
+   */
+  titleLines?: readonly string[];
   excerpt: string;
   /** Display date e.g. "19 May 2026" */
   publishedAt: string;
@@ -81,6 +119,16 @@ export type InsightEntry = {
   body: readonly string[];
   /** Typed detail layout; omit on legacy Word-import posts. */
   article?: InsightArticle;
+  /**
+   * CMS SEO metadata (not shown in the published body).
+   * Falls back to `title` / `excerpt` when omitted.
+   */
+  seo?: {
+    title?: string;
+    description?: string;
+    focusKeyword?: string;
+    secondaryKeywords?: readonly string[];
+  };
 };
 
 /** Flatten a typed article back to paragraphs (admin / legacy tools). */
@@ -95,7 +143,10 @@ export function flattenInsightArticle(article: InsightArticle): string[] {
       out.push(...section.list.items);
     } else if (section.list?.style === "cards") {
       for (const item of section.list.items) {
-        out.push(`${item.label}: ${item.body}`);
+        const body = Array.isArray(item.body)
+          ? item.body.join("; ")
+          : item.body;
+        out.push(body ? `${item.label}: ${body}` : item.label);
       }
     } else if (section.list?.style === "compare") {
       out.push(section.list.leftTitle, section.list.rightTitle);
@@ -106,6 +157,18 @@ export function flattenInsightArticle(article: InsightArticle): string[] {
     if (section.closing?.length) out.push(...section.closing);
   }
   out.push(article.perspective.title, ...article.perspective.body);
+  if (article.perspective.cta) {
+    out.push(article.perspective.cta.lead);
+    if (article.perspective.cta.body) out.push(article.perspective.cta.body);
+    if (article.perspective.cta.label) out.push(article.perspective.cta.label);
+  }
+  if (article.faq) {
+    out.push(article.faq.title);
+    for (const item of article.faq.items) {
+      out.push(item.question, item.answer);
+    }
+  }
+  if (article.disclaimer) out.push(article.disclaimer);
   return out;
 }
 
@@ -127,7 +190,7 @@ export const insightsPage = {
 } as const;
 
 export function insightHref(entry: Pick<InsightEntry, "kind" | "slug">): string {
-  return entry.kind === "blog" ? `/blog/${entry.slug}` : `/case-studies/${entry.slug}`;
+  return `/blogs/${entry.slug}`;
 }
 
 /** @deprecated Use insightsPage, kept for existing imports */

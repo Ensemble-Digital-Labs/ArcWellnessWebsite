@@ -36,10 +36,13 @@ type InsightFilter = "all" | InsightKind;
 
 /**
  * Temporarily omit blog cards from the Insights grid while the client redesigns
- * blog layout for conversion. Tabs (All / Blogs / Case studies) stay visible.
+ * blog layout for conversion. Tabs (All / Blogs) stay visible; Case studies tab hidden.
  * Flip to `false` when the new blog card design ships.
  */
 const INSIGHTS_HIDE_BLOG_CARDS = true;
+
+/** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
+const INSIGHTS_VISIBLE_TABS: InsightFilter[] = ["all", "blog"];
 
 const TAB_LABELS: Record<InsightFilter, string> = {
   all: "All posts",
@@ -390,7 +393,8 @@ export function ArcInsightsFeedSection({
   const readFilterFromUrl = (): InsightFilter => {
     if (typeof window === "undefined") return "all";
     const q = new URLSearchParams(window.location.search).get("filter");
-    if (q === "blog" || q === "case-study") return q;
+    if (q === "blog") return q;
+    // Case-study tab is hidden; ignore stale ?filter=case-study links.
     return "all";
   };
 
@@ -461,7 +465,7 @@ export function ArcInsightsFeedSection({
     if (reduceMotion) scheduleScrollLayoutRefresh();
   };
 
-  const tabs: InsightFilter[] = ["all", "blog", "case-study"];
+  const tabs: InsightFilter[] = INSIGHTS_VISIBLE_TABS;
 
   return (
     <section

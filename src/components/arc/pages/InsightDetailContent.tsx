@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { ArrowRight, Plus } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
@@ -24,7 +25,9 @@ import {
   type InsightArticle,
   type InsightArticleSection,
   type InsightEntry,
+  type InsightFaqItem,
   type InsightKind,
+  type InsightSectionImage,
   type InsightSectionList,
 } from "@/content/pages/insights";
 import {
@@ -62,6 +65,8 @@ const DARK_GOLD_HEADLINE =
   "font-title-emphasis block tracking-tight text-[#d9b878] [-webkit-text-stroke:0.04em_color-mix(in_srgb,currentColor_45%,transparent)] [text-shadow:0_2px_18px_rgba(0,0,0,0.4),0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.02em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
 
 const SECTION_Z = [
+  "z-[12]",
+  "z-[11]",
   "z-[10]",
   "z-[9]",
   "z-[8]",
@@ -70,6 +75,7 @@ const SECTION_Z = [
   "z-[5]",
   "z-[4]",
   "z-[3]",
+  "z-[2]",
 ] as const;
 
 type InsightDetailContentProps = {
@@ -79,17 +85,15 @@ type InsightDetailContentProps = {
 type NextStep = { label: string; href: string };
 
 function backHref(kind: InsightKind): string {
-  return kind === "blog"
-    ? "/case-studies?filter=blog"
-    : "/case-studies?filter=case-study";
+  return kind === "blog" ? "/blogs?filter=blog" : "/blogs";
 }
 
 function backLabel(kind: InsightKind): string {
-  return kind === "blog" ? "All blogs" : "All case studies";
+  return kind === "blog" ? "All blogs" : "From the Arc Desk";
 }
 
 function kindLabel(kind: InsightKind): string {
-  return kind === "blog" ? "Blog" : "Case study";
+  return kind === "blog" ? "Blogs" : "Case study";
 }
 
 function NextStepRow({ step, index }: { step: NextStep; index: number }) {
@@ -156,8 +160,8 @@ function SectionList({ list }: { list: InsightSectionList }) {
         {list.items.map((item, i) => (
           <ArcTextReveal key={item} variant="body" delayIndex={i}>
             <li className="flex gap-3">
-              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-              <span className="font-serif text-base leading-snug tracking-tight text-arc-teal-ink sm:text-lg">
+              <span className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-arc-charcoal/70" />
+              <span className="font-serif text-base leading-snug tracking-tight text-arc-charcoal sm:text-lg">
                 {item}
               </span>
             </li>
@@ -168,8 +172,8 @@ function SectionList({ list }: { list: InsightSectionList }) {
       <ul className="mx-auto mt-8 max-w-4xl space-y-3 text-left">
         {list.items.map((item, i) => (
           <ArcTextReveal key={item} variant="body" delayIndex={i}>
-            <li className="flex gap-2.5 font-sans text-sm text-arc-charcoal/80 sm:text-[0.9375rem]">
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
+            <li className="flex gap-2.5 font-sans text-sm text-arc-charcoal sm:text-[0.9375rem]">
+              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-arc-charcoal/70" />
               <span>{item}</span>
             </li>
           </ArcTextReveal>
@@ -181,18 +185,49 @@ function SectionList({ list }: { list: InsightSectionList }) {
   if (list.style === "cards") {
     return (
       <ul className="mx-auto mt-10 grid max-w-4xl gap-4 text-left sm:grid-cols-2 sm:gap-5">
-        {list.items.map((item, i) => (
-          <ArcTextReveal key={item.label} variant="body" delayIndex={i}>
-            <li className="h-full rounded-2xl border border-arc-charcoal/10 bg-arc-cream/55 px-5 py-5 sm:px-6 sm:py-6">
-              <p className="font-serif text-lg tracking-tight text-arc-teal-ink sm:text-xl">
-                {item.label}
-              </p>
-              <p className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/75 sm:text-[0.9375rem]">
-                {item.body}
-              </p>
-            </li>
-          </ArcTextReveal>
-        ))}
+        {list.items.map((item, i) => {
+          const lines = Array.isArray(item.body) ? item.body : null;
+          const titleOnly = Array.isArray(item.body) && item.body.length === 0;
+          return (
+            <ArcTextReveal key={item.label} variant="body" delayIndex={i}>
+              <li className="h-full rounded-2xl border border-arc-charcoal/10 bg-arc-cream/55 px-5 py-5 sm:px-6 sm:py-6">
+                {titleOnly ? (
+                  <div className="flex gap-3">
+                    <span className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-arc-teal-ink" />
+                    <p className="font-serif text-lg leading-snug tracking-tight text-arc-teal-ink sm:text-xl">
+                      {item.label}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="font-serif text-lg tracking-tight text-arc-teal-ink sm:text-xl">
+                      {item.label}
+                    </p>
+                    {lines ? (
+                      lines.length > 0 ? (
+                        <ul className="mt-3 space-y-2">
+                          {lines.map((line) => (
+                            <li
+                              key={line}
+                              className="flex gap-2.5 font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]"
+                            >
+                              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-arc-teal-ink" />
+                              <span>{line}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null
+                    ) : (
+                      <p className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]">
+                        {item.body}
+                      </p>
+                    )}
+                  </>
+                )}
+              </li>
+            </ArcTextReveal>
+          );
+        })}
       </ul>
     );
   }
@@ -255,6 +290,24 @@ function CreamPlateShell({
   );
 }
 
+function CreamCallout({
+  children,
+  delayIndex = 1,
+}: {
+  children: string;
+  delayIndex?: number;
+}) {
+  return (
+    <ArcTextReveal variant="body" delayIndex={delayIndex}>
+      <div className="mx-auto mt-8 w-full max-w-2xl rounded-2xl border-2 border-arc-champagne bg-arc-cream/90 px-5 py-4 text-left shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)] sm:rounded-3xl sm:px-7 sm:py-5 sm:text-center">
+        <p className="font-sans text-sm font-bold leading-snug text-black sm:text-[0.9375rem]">
+          {children}
+        </p>
+      </div>
+    </ArcTextReveal>
+  );
+}
+
 function CreamTitle({ children }: { children: string }) {
   return (
     <ArcTextReveal variant="heading">
@@ -273,6 +326,74 @@ function CreamTitle({ children }: { children: string }) {
   );
 }
 
+function SectionMedia({
+  image,
+  images,
+  flushTop = false,
+}: {
+  image?: InsightSectionImage;
+  images?: readonly InsightSectionImage[];
+  /** Tighter top spacing when the figure leads a plate (e.g. under hero). */
+  flushTop?: boolean;
+}) {
+  const gallery = images?.length
+    ? images
+    : image
+      ? [image]
+      : [];
+  if (!gallery.length) return null;
+
+  if (gallery.length === 1) {
+    const fig = gallery[0]!;
+    return (
+      <ArcTextReveal variant="body" delayIndex={flushTop ? 0 : 2}>
+        <figure
+          className={cn(
+            "mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-arc-charcoal/10 bg-arc-cream/40 shadow-[0_18px_40px_-28px_rgba(44,44,44,0.35)]",
+            flushTop ? "mt-6 mb-8" : "mt-10",
+          )}
+        >
+          <div className="relative aspect-[16/10] w-full">
+            <Image
+              src={fig.src}
+              alt={fig.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 48rem"
+              className="object-cover"
+              priority={flushTop}
+            />
+          </div>
+        </figure>
+      </ArcTextReveal>
+    );
+  }
+
+  return (
+    <ul
+      className={cn(
+        "mx-auto grid w-full max-w-4xl gap-4 sm:grid-cols-3 sm:gap-5",
+        flushTop ? "mt-6" : "mt-10",
+      )}
+    >
+      {gallery.map((fig, i) => (
+        <ArcTextReveal key={fig.src} variant="body" delayIndex={i}>
+          <li className="overflow-hidden rounded-2xl border border-arc-charcoal/10 bg-arc-cream/40 shadow-[0_18px_40px_-28px_rgba(44,44,44,0.35)]">
+            <div className="relative aspect-[4/5] w-full sm:aspect-[3/4]">
+              <Image
+                src={fig.src}
+                alt={fig.alt}
+                fill
+                sizes="(max-width: 640px) 100vw, 33vw"
+                className="object-cover"
+              />
+            </div>
+          </li>
+        </ArcTextReveal>
+      ))}
+    </ul>
+  );
+}
+
 function TypedSection({
   section,
   plateSrc,
@@ -284,18 +405,11 @@ function TypedSection({
 }) {
   return (
     <CreamPlateShell zClass={zClass} plateSrc={plateSrc}>
+      <SectionMedia image={section.image} images={section.images} flushTop />
       <CreamTitle>{section.title}</CreamTitle>
       <ServiceGoldRule className="mx-auto mt-6" />
-      {section.callout ? (
-        <ArcTextReveal variant="body" delayIndex={1}>
-          <div className="mx-auto mt-8 inline-flex max-w-2xl rounded-full border-2 border-arc-champagne bg-arc-cream/90 px-6 py-3 shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)]">
-            <p className="font-sans text-sm font-bold leading-snug text-black sm:text-[0.9375rem]">
-              {section.callout}
-            </p>
-          </div>
-        </ArcTextReveal>
-      ) : null}
       <ProseBlock paragraphs={section.body} />
+      {section.callout ? <CreamCallout>{section.callout}</CreamCallout> : null}
       {section.list ? <SectionList list={section.list} /> : null}
       {section.closing?.length ? (
         <ProseBlock paragraphs={section.closing} />
@@ -327,15 +441,10 @@ function TypedArticle({
 
       <CreamPlateShell zClass={nextZ()} plateSrc={creamPlateSrc}>
         <ServiceGoldRule className="mx-auto" />
+        <SectionMedia image={article.overviewImage} flushTop />
         <ProseBlock paragraphs={article.overview} />
         {article.overviewCallout ? (
-          <ArcTextReveal variant="body" delayIndex={2}>
-            <div className="mx-auto mt-8 inline-flex max-w-2xl rounded-full border-2 border-arc-champagne bg-arc-cream/90 px-6 py-3 shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)]">
-              <p className="font-sans text-sm font-bold leading-snug text-black sm:text-[0.9375rem]">
-                {article.overviewCallout}
-              </p>
-            </div>
-          </ArcTextReveal>
+          <CreamCallout delayIndex={2}>{article.overviewCallout}</CreamCallout>
         ) : null}
       </CreamPlateShell>
 
@@ -353,7 +462,41 @@ function TypedArticle({
         darkPlateSrc={darkPlateSrc}
         title={article.perspective.title}
         paragraphs={article.perspective.body}
+        cta={
+          article.perspective.cta
+            ? {
+                lead: article.perspective.cta.lead,
+                body: article.perspective.cta.body,
+                label:
+                  article.perspective.cta.label?.trim() ||
+                  article.primaryCtaLabel?.trim() ||
+                  "Book a consultation",
+                href: siteMeta.bookingUrl,
+              }
+            : undefined
+        }
       />
+
+      {article.faq ? (
+        <InsightFaqPlate
+          zClass={nextZ()}
+          plateSrc={creamPlateSrc}
+          title={article.faq.title}
+          items={article.faq.items}
+          disclaimer={article.disclaimer}
+        />
+      ) : article.disclaimer ? (
+        <CreamPlateShell zClass={nextZ()} plateSrc={creamPlateSrc}>
+          <p
+            className={cn(
+              ARC_ABOUT_COMPACT_BODY_CLASS,
+              "mx-auto mt-2 max-w-3xl text-arc-charcoal/65",
+            )}
+          >
+            {article.disclaimer}
+          </p>
+        </CreamPlateShell>
+      ) : null}
 
       <ContinuePathPlate
         zClass={nextZ()}
@@ -369,6 +512,118 @@ function TypedArticle({
         topSeamClassName={ARC_HOME_INVEST_TOP_SEAM_SOFT_CLASS}
       />
     </>
+  );
+}
+
+function InsightFaqRow({
+  item,
+  reduceMotion,
+}: {
+  item: InsightFaqItem;
+  reduceMotion: boolean | null;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="rounded-xl border border-arc-teal/12 bg-arc-cream/40 text-left transition-colors">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left sm:px-5"
+      >
+        <span
+          className={cn(
+            "min-w-0 text-balance font-sans text-sm font-semibold sm:text-[0.9375rem]",
+            open ? "text-arc-charcoal" : "text-arc-charcoal/85",
+          )}
+        >
+          {item.question}
+        </span>
+        <motion.span
+          animate={open ? "open" : "closed"}
+          variants={{ open: { rotate: 45 }, closed: { rotate: 0 } }}
+          transition={{ duration: reduceMotion ? 0 : 0.22, ease: "easeOut" }}
+          className="inline-flex shrink-0"
+        >
+          <Plus
+            className={cn(
+              "size-5",
+              open ? "text-arc-charcoal" : "text-arc-charcoal/45",
+            )}
+            strokeWidth={2}
+            aria-hidden
+          />
+        </motion.span>
+      </button>
+      {reduceMotion ? (
+        open ? (
+          <div className="border-t border-arc-teal/10 px-4 pb-4 pt-0 sm:px-5">
+            <p className="font-sans text-sm leading-relaxed text-arc-charcoal/75 sm:text-[0.9375rem]">
+              {item.answer}
+            </p>
+          </div>
+        ) : null
+      ) : (
+        <motion.div
+          initial={false}
+          animate={{
+            height: open ? "auto" : 0,
+            opacity: open ? 1 : 0,
+          }}
+          transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+          className="overflow-hidden"
+        >
+          <div className="border-t border-arc-teal/10 px-4 pb-4 pt-3 sm:px-5">
+            <p className="font-sans text-sm leading-relaxed text-arc-charcoal/75 sm:text-[0.9375rem]">
+              {item.answer}
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+function InsightFaqPlate({
+  zClass,
+  plateSrc,
+  title,
+  items,
+  disclaimer,
+}: {
+  zClass: string;
+  plateSrc: string;
+  title: string;
+  items: readonly InsightFaqItem[];
+  disclaimer?: string;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <CreamPlateShell zClass={zClass} plateSrc={plateSrc}>
+      <CreamTitle>{title}</CreamTitle>
+      <ServiceGoldRule className="mx-auto mt-6" />
+      <div className="mx-auto mt-10 max-w-3xl space-y-3">
+        {items.map((item) => (
+          <InsightFaqRow
+            key={item.question}
+            item={item}
+            reduceMotion={reduceMotion}
+          />
+        ))}
+      </div>
+      {disclaimer ? (
+        <p
+          className={cn(
+            ARC_ABOUT_COMPACT_BODY_CLASS,
+            "mx-auto mt-10 max-w-3xl text-arc-charcoal/65",
+          )}
+        >
+          {disclaimer}
+        </p>
+      ) : null}
+    </CreamPlateShell>
   );
 }
 
@@ -417,19 +672,46 @@ function InsightHero({
             ARC_PAGE_RAIL_MAX,
           )}
         >
-          <div className="relative mx-auto w-full max-w-xl text-center md:max-w-3xl lg:max-w-4xl">
+          <div className="relative mx-auto w-full max-w-xl text-center md:max-w-[min(100%,68rem)] lg:max-w-[min(100%,76rem)]">
             <div className="relative z-10">
               <div className="-translate-y-3 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
                 <ArcTextReveal variant="heading" trigger="mount">
-                  <h1 className="font-serif text-[clamp(2.75rem,7.5vw,4.75rem)] font-bold leading-none tracking-tight text-black [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
-                    {entry.title}
+                  <h1
+                    className={cn(
+                      "font-title-emphasis font-normal not-italic leading-[0.9] tracking-tight text-black",
+                      "text-[clamp(2.75rem,10vw,5.5rem)] md:text-[clamp(3.25rem,6vw,5.75rem)]",
+                      "[text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]",
+                    )}
+                  >
+                    {entry.titleLines?.length ? (
+                      entry.titleLines.map((line, i) => (
+                        <span key={line} className="block text-balance">
+                          {line}
+                          {i < entry.titleLines!.length - 1 ? (
+                            <span className="sr-only"> </span>
+                          ) : null}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-balance">{entry.title}</span>
+                    )}
                   </h1>
                 </ArcTextReveal>
                 <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-                  <p className="mx-auto mt-5 max-w-2xl font-sans text-sm font-bold uppercase tracking-[0.22em] text-black [text-shadow:0_1px_10px_rgba(245,240,232,0.8)] sm:text-base md:text-lg md:[text-shadow:none]">
-                    {kindLabel(entry.kind)}
-                    {entry.publishedAt ? ` · ${entry.publishedAt}` : ""}
-                  </p>
+                  <div className="mx-auto mt-5 flex max-w-full flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+                    <span className="inline-flex rounded-full border-2 border-arc-champagne bg-arc-cream/90 px-4 py-1.5 shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)] backdrop-blur-[3px] sm:px-5 sm:py-2 md:bg-arc-cream/85">
+                      <span className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-black sm:text-sm">
+                        {kindLabel(entry.kind)}
+                      </span>
+                    </span>
+                    {entry.publishedAt ? (
+                      <span className="inline-flex rounded-full border-2 border-arc-champagne bg-arc-cream/90 px-4 py-1.5 shadow-[0_10px_28px_-12px_rgba(120,90,40,0.45)] backdrop-blur-[3px] sm:px-5 sm:py-2 md:bg-arc-cream/85">
+                        <span className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-black sm:text-sm">
+                          {entry.publishedAt}
+                        </span>
+                      </span>
+                    ) : null}
+                  </div>
                 </ArcTextReveal>
               </div>
               <ArcTextReveal variant="body" trigger="mount" delayIndex={2}>
@@ -462,11 +744,18 @@ function DarkPerspective({
   darkPlateSrc,
   title,
   paragraphs,
+  cta,
 }: {
   zClass: string;
   darkPlateSrc: string;
   title: string;
   paragraphs: readonly string[];
+  cta?: {
+    lead: string;
+    body?: string;
+    label: string;
+    href: string;
+  };
 }) {
   return (
     <div
@@ -497,11 +786,51 @@ function DarkPerspective({
             </ArcTextReveal>
             <ServiceGoldRule className="mx-auto mt-6" />
             <ProseBlock paragraphs={paragraphs} tone="dark" />
+            {cta ? <DarkPerspectiveCta cta={cta} /> : null}
           </div>
         </div>
       </section>
       <ServiceWave />
     </div>
+  );
+}
+
+function DarkPerspectiveCta({
+  cta,
+}: {
+  cta: {
+    lead: string;
+    body?: string;
+    label: string;
+    href: string;
+  };
+}) {
+  return (
+    <ArcTextReveal variant="body" delayIndex={3}>
+      <div className="mx-auto mt-10 max-w-2xl border-y border-[#d9b878]/30 px-4 py-8 sm:mt-12 sm:px-8 sm:py-10">
+        <p className="font-serif text-xl leading-snug tracking-tight text-[#d9b878] sm:text-2xl md:text-[1.65rem]">
+          {cta.lead}
+        </p>
+        {cta.body ? (
+          <p
+            className="mx-auto mt-3 max-w-xl font-sans text-sm leading-relaxed sm:text-[0.9375rem]"
+            style={{ color: "rgba(217,184,120,0.72)" }}
+          >
+            {cta.body}
+          </p>
+        ) : null}
+        <Link
+          href={cta.href}
+          className="group mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#d9b878]/55 bg-[#d9b878]/10 px-6 py-2.5 font-sans text-sm font-semibold tracking-wide text-[#d9b878] transition-colors hover:border-[#d9b878] hover:bg-[#d9b878]/18 hover:text-arc-champagne focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d9b878]"
+        >
+          {cta.label}
+          <ArrowRight
+            aria-hidden
+            className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+          />
+        </Link>
+      </div>
+    </ArcTextReveal>
   );
 }
 
@@ -857,7 +1186,11 @@ export function InsightDetailContent({ entry }: InsightDetailContentProps) {
   const creamPlateSrc = serviceSharedCreamPlate.src;
   const darkPlateSrc = serviceSharedDarkPlate.src;
   const nextSteps: readonly NextStep[] = [
-    { label: "Book a consultation", href: siteMeta.bookingUrl },
+    {
+      label:
+        entry.article?.primaryCtaLabel?.trim() || "Book a consultation",
+      href: siteMeta.bookingUrl,
+    },
     { label: backLabel(entry.kind), href: backHref(entry.kind) },
     { label: "Explore treatments", href: "/treatments" },
   ];

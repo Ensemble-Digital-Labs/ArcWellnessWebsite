@@ -1,132 +1,292 @@
 [
   {
-    "id": "blog-could-it-be-insulin-resistance",
+    "id": "blog-insulin-resistance-signs-symptoms",
     "kind": "blog",
-    "slug": "could-it-be-insulin-resistance",
-    "title": "Could It Be Insulin Resistance?",
+    "slug": "insulin-resistance-signs-symptoms",
+    "title": "Could It Be Insulin Resistance? Early Signs and Symptoms to Watch For",
+    "titleLines": [
+      "Could It Be Insulin Resistance?",
+      "Early Signs and Symptoms to Watch For"
+    ],
     "excerpt": "Understanding the early signs your metabolism may be asking for help.",
     "publishedAt": "03 Aug 2026",
     "imageSrc": "/assets/insights/could-it-be-insulin-resistance-preview.webp",
     "imageAlt": "Woman reviewing health notes at a kitchen table with breakfast and a glucose monitor",
-    "body": [
-      "You've probably heard the term insulin resistance before. Maybe your healthcare provider mentioned it. Maybe you've seen it on social media. Maybe you've heard that it's why people struggle with weight gain or why diabetes develops.",
-      "But what exactly is insulin resistance? More importantly... how would you know if you have it?",
-      "The truth is, insulin resistance doesn't usually appear overnight. It develops gradually, often over many years, and many people experience symptoms long before they're diagnosed with prediabetes or Type 2 diabetes. Recognizing those early signs gives you the opportunity to make changes before more serious health problems develop.",
-      "What Insulin Does—and What Resistance Looks Like",
-      "Every time you eat, your digestive system breaks food down into nutrients your body can use for energy. Carbohydrates are broken down into glucose (blood sugar), which becomes one of your body's primary fuel sources.",
-      "But glucose can't enter your cells by itself. That's where insulin comes in. Insulin is a hormone made by your pancreas—think of it as a key that unlocks your cells, allowing glucose to move from your bloodstream into your muscles, organs, and other tissues.",
-      "Over time, your cells can become less responsive to insulin. Imagine that key trying to unlock a door that has become sticky. The key still fits. It just doesn't work as well. Your pancreas produces more insulin to keep blood sugar under control—and for a while, it succeeds. That's why many people with insulin resistance still have normal blood sugar levels.",
-      "Eventually, if insulin resistance continues to worsen, the pancreas may no longer be able to keep up. Blood sugar begins to rise, increasing the risk of prediabetes and, eventually, Type 2 diabetes.",
-      "Many people with insulin resistance have completely normal fasting glucose levels. Looking at your health as a whole can provide a more complete picture.",
-      "What Does Insulin Resistance Feel Like?",
-      "One of the challenges is that insulin resistance doesn't cause one specific symptom. Instead, people often notice a collection of changes that seem unrelated.",
-      "Weight & hunger: Difficulty losing weight despite eating well, weight gain around the abdomen, craving sweets or carbohydrates, and feeling hungry again shortly after eating.",
-      "Energy levels: Afternoon energy crashes, feeling sleepy after meals, fatigue despite adequate sleep, and brain fog or difficulty concentrating.",
-      "Clinical markers: Increased waist circumference, elevated blood pressure, high triglycerides, low HDL cholesterol, and elevated fasting insulin levels.",
-      "Physical & medical signs: Skin tags, dark velvety skin around the neck or underarms (acanthosis nigricans), PMOS, fatty liver disease, and a family history of Type 2 diabetes.",
-      "Having one or two of these doesn't necessarily mean you have insulin resistance. But if several of them sound familiar, it's worth having a conversation with your healthcare provider.",
-      "Why It Matters—and How It Can Improve",
-      "Many people associate insulin resistance only with diabetes. In reality, healthy insulin function influences how your body stores energy, builds muscle, burns fat, and regulates inflammation.",
-      "It may also contribute to low energy, difficulty losing weight, and changes in overall metabolic health. The good news is that insulin resistance often develops gradually—which means there is often time to intervene.",
-      "In many cases, yes—the body is remarkably adaptable. Improving insulin sensitivity is the result of consistent habits that support your metabolism over time.",
-      "Nutrition: Prioritizing protein and fiber at meals, and reducing highly processed foods and added sugars.",
-      "Movement: Building and maintaining muscle through strength training, and walking regularly—especially after meals.",
-      "Lifestyle: Improving sleep quality and managing chronic stress.",
-      "Balance: Achieving and maintaining a healthy weight when appropriate—and medications when they belong in a comprehensive plan.",
-      "Insulin resistance has also been associated with increased risk of prediabetes and Type 2 diabetes, heart disease and high blood pressure, fatty liver disease and metabolic syndrome, PMOS, and elevated cholesterol and triglycerides.",
-      "This Is Where the Arc Begins",
-      "At Arc Wellness, we believe metabolic health is about far more than preventing diabetes. It's about understanding how your body creates and uses energy. It's about recognizing changes before they become disease. It's about protecting your muscles, your heart, your brain, and your future.",
-      "Whether you're trying to lose weight, improve your energy, lower your risk of chronic disease, or simply understand your health better, insulin resistance is one of the most important conversations we can have. Because small changes made today can have a profound impact on the decades ahead."
-    ],
+    "seo": {
+      "title": "Could It Be Insulin Resistance? Signs & Symptoms | Arc Wellness",
+      "description": "Insulin resistance often develops years before diabetes. Learn the early signs, symptoms, and how to improve insulin sensitivity — from Arc Wellness.",
+      "focusKeyword": "insulin resistance",
+      "secondaryKeywords": [
+        "signs of insulin resistance",
+        "insulin resistance symptoms",
+        "insulin resistance and weight gain",
+        "how to improve insulin sensitivity",
+        "prediabetes",
+        "metabolic health",
+        "PMOS",
+        "PCOS"
+      ]
+    },
     "article": {
-      "closingLine": "Recognizing early signs gives you room to change.",
+      "overviewImage": {
+        "src": "/assets/insights/insulin-resistance-signs-symptoms/balanced-meal-bowl.webp",
+        "alt": "Balanced bowl with grilled chicken, quinoa, and roasted vegetables"
+      },
       "overview": [
-        "You've probably heard the term insulin resistance before. Maybe your healthcare provider mentioned it. Maybe you've seen it on social media. Maybe you've heard that it's why people struggle with weight gain or why diabetes develops.",
-        "But what exactly is insulin resistance? More importantly... how would you know if you have it?",
+        "You've probably heard the term insulin resistance before. Maybe your healthcare provider mentioned it. Maybe you've seen it on social media. Maybe you've heard that it's why people struggle with weight gain or why Type 2 diabetes develops.",
+        "But what exactly is insulin resistance? And more importantly, how would you know if you have it?",
         "The truth is, insulin resistance doesn't usually appear overnight. It develops gradually, often over many years, and many people experience symptoms long before they're diagnosed with prediabetes or Type 2 diabetes. Recognizing those early signs gives you the opportunity to make changes before more serious health problems develop."
       ],
       "sections": [
         {
-          "title": "What Insulin Does—and What Resistance Looks Like",
+          "title": "What Is Insulin?",
           "body": [
             "Every time you eat, your digestive system breaks food down into nutrients your body can use for energy. Carbohydrates are broken down into glucose (blood sugar), which becomes one of your body's primary fuel sources.",
-            "But glucose can't enter your cells by itself. That's where insulin comes in. Insulin is a hormone made by your pancreas—think of it as a key that unlocks your cells, allowing glucose to move from your bloodstream into your muscles, organs, and other tissues.",
-            "Over time, your cells can become less responsive to insulin. Imagine that key trying to unlock a door that has become sticky. The key still fits. It just doesn't work as well. Your pancreas produces more insulin to keep blood sugar under control—and for a while, it succeeds. That's why many people with insulin resistance still have normal blood sugar levels.",
-            "Eventually, if insulin resistance continues to worsen, the pancreas may no longer be able to keep up. Blood sugar begins to rise, increasing the risk of prediabetes and, eventually, Type 2 diabetes."
+            "But glucose can't enter your cells by itself. That's where insulin comes in.",
+            "Insulin is a hormone made by your pancreas. Think of it as a key that unlocks your cells, allowing glucose to move from your bloodstream into your muscles, organs, and other tissues where it can be used for energy. When everything is working well, this process happens efficiently and your blood sugar stays within a healthy range."
           ],
-          "callout": "Many people with insulin resistance have completely normal fasting glucose levels. Looking at your health as a whole can provide a more complete picture."
+          "image": {
+            "src": "/assets/insights/insulin-resistance-signs-symptoms/insulin-key-glucose-cell.webp",
+            "alt": "Illustration of insulin as a golden key unlocking a cell so glucose can enter"
+          }
         },
         {
-          "title": "What Does Insulin Resistance Feel Like?",
+          "title": "What Is Insulin Resistance?",
           "body": [
-            "One of the challenges is that insulin resistance doesn't cause one specific symptom. Instead, people often notice a collection of changes that seem unrelated."
+            "Over time, your cells can become less responsive to insulin. Imagine that key trying to unlock a door that has become sticky. The key still fits — it just doesn't work as well.",
+            "To overcome this, your pancreas produces more insulin to keep your blood sugar under control. For a while, it succeeds. That's why many people with insulin resistance still have normal blood sugar levels: their body is simply working much harder than it should.",
+            "Eventually, if insulin resistance continues to worsen, the pancreas may no longer be able to keep up. Blood sugar begins to rise, increasing the risk of prediabetes and, eventually, Type 2 diabetes. Insulin resistance is one of the earliest stages in that process."
           ],
+          "callout": "Did you know? Many people with insulin resistance have completely normal fasting glucose levels. That's because the pancreas often produces extra insulin for years before blood sugar begins to rise. Looking at your health as a whole — including your history, body composition, lifestyle, and, when appropriate, additional laboratory markers — can provide a more complete picture of your metabolic health."
+        },
+        {
+          "title": "What Are the Signs and Symptoms of Insulin Resistance?",
+          "body": [
+            "One of the challenges is that insulin resistance doesn't cause one specific symptom. Instead, people often notice a collection of changes that seem unrelated. Some of the most common signs of insulin resistance include:"
+          ],
+          "image": {
+            "src": "/assets/insights/insulin-resistance-signs-symptoms/walking-neighborhood.webp",
+            "alt": "Woman walking outdoors on a tree-lined neighborhood sidewalk"
+          },
           "list": {
             "style": "cards",
             "items": [
               {
                 "label": "Weight & hunger",
-                "body": "Difficulty losing weight despite eating well, weight gain around the abdomen, craving sweets or carbohydrates, and feeling hungry again shortly after eating."
+                "body": [
+                  "Difficulty losing weight despite eating well",
+                  "Weight gain around the abdomen or waistline",
+                  "Craving sweets or carbohydrates",
+                  "Feeling hungry again shortly after eating"
+                ]
               },
               {
                 "label": "Energy levels",
-                "body": "Afternoon energy crashes, feeling sleepy after meals, fatigue despite adequate sleep, and brain fog or difficulty concentrating."
+                "body": [
+                  "Afternoon energy crashes",
+                  "Feeling sleepy after meals",
+                  "Fatigue despite getting adequate sleep",
+                  "Brain fog or difficulty concentrating"
+                ]
               },
               {
                 "label": "Clinical markers",
-                "body": "Increased waist circumference, elevated blood pressure, high triglycerides, low HDL cholesterol, and elevated fasting insulin levels."
+                "body": [
+                  "Increased waist circumference",
+                  "Elevated blood pressure",
+                  "High triglycerides",
+                  "Low HDL (\"good\") cholesterol",
+                  "Elevated fasting insulin levels"
+                ]
               },
               {
                 "label": "Physical & medical signs",
-                "body": "Skin tags, dark velvety skin around the neck or underarms (acanthosis nigricans), PMOS, fatty liver disease, and a family history of Type 2 diabetes."
+                "body": [
+                  "Skin tags, especially around the neck or underarms",
+                  "Dark, velvety skin around the neck, armpits, or groin (called acanthosis nigricans)",
+                  "Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly PCOS",
+                  "Fatty liver disease",
+                  "A family history of Type 2 diabetes"
+                ]
               }
             ]
           },
           "closing": [
-            "Having one or two of these doesn't necessarily mean you have insulin resistance. But if several of them sound familiar, it's worth having a conversation with your healthcare provider."
+            "Having one or two of these doesn't necessarily mean you have insulin resistance — many of these symptoms can have other causes. But if several of them sound familiar, it's worth having a conversation with your healthcare provider."
           ]
         },
         {
-          "title": "Why It Matters—and How It Can Improve",
+          "title": "Why Does Insulin Resistance Matter?",
           "body": [
-            "Many people associate insulin resistance only with diabetes. In reality, healthy insulin function influences how your body stores energy, builds muscle, burns fat, and regulates inflammation.",
-            "It may also contribute to low energy, difficulty losing weight, and changes in overall metabolic health. The good news is that insulin resistance often develops gradually—which means there is often time to intervene.",
-            "In many cases, yes—the body is remarkably adaptable. Improving insulin sensitivity is the result of consistent habits that support your metabolism over time."
+            "Many people associate insulin resistance only with diabetes. In reality, it affects much more than blood sugar. Healthy insulin function influences how your body stores energy, builds muscle, burns fat, and regulates inflammation.",
+            "Insulin resistance has been associated with an increased risk of:"
           ],
           "list": {
             "style": "cards",
             "items": [
               {
-                "label": "Nutrition",
-                "body": "Prioritizing protein and fiber at meals, and reducing highly processed foods and added sugars."
+                "label": "Prediabetes and Type 2 diabetes",
+                "body": []
               },
               {
-                "label": "Movement",
-                "body": "Building and maintaining muscle through strength training, and walking regularly—especially after meals."
+                "label": "Heart disease and high blood pressure",
+                "body": []
               },
               {
-                "label": "Lifestyle",
-                "body": "Improving sleep quality and managing chronic stress."
+                "label": "Fatty liver disease and metabolic syndrome",
+                "body": []
               },
               {
-                "label": "Balance",
-                "body": "Achieving and maintaining a healthy weight when appropriate—and medications when they belong in a comprehensive plan."
+                "label": "Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly PCOS",
+                "body": []
+              },
+              {
+                "label": "Elevated cholesterol and triglycerides",
+                "body": []
               }
             ]
           },
           "closing": [
-            "Insulin resistance has also been associated with increased risk of prediabetes and Type 2 diabetes, heart disease and high blood pressure, fatty liver disease and metabolic syndrome, PMOS, and elevated cholesterol and triglycerides."
+            "It may also contribute to low energy, difficulty losing weight, and changes in overall metabolic health. The good news is that insulin resistance often develops gradually — which means there is often time to intervene."
+          ]
+        },
+        {
+          "title": "Can Insulin Resistance Be Reversed?",
+          "body": [
+            "In many cases, yes. The body is remarkably adaptable.",
+            "Improving insulin sensitivity doesn't happen through one perfect meal or one intense workout. It's the result of consistent habits that support your metabolism over time. For many people, that includes:"
+          ],
+          "image": {
+            "src": "/assets/insights/insulin-resistance-signs-symptoms/strength-training-home.webp",
+            "alt": "Woman strength training at home with dumbbells"
+          },
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "Nutrition",
+                "body": [
+                  "Prioritizing protein and fiber at meals",
+                  "Reducing highly processed foods and added sugars"
+                ]
+              },
+              {
+                "label": "Movement",
+                "body": [
+                  "Building and maintaining muscle through strength training",
+                  "Walking regularly, especially after meals"
+                ]
+              },
+              {
+                "label": "Lifestyle",
+                "body": [
+                  "Improving sleep quality",
+                  "Managing chronic stress"
+                ]
+              },
+              {
+                "label": "Balance",
+                "body": [
+                  "Achieving and maintaining a healthy weight when appropriate"
+                ]
+              }
+            ]
+          },
+          "closing": [
+            "For some individuals, medications may also play an important role as part of a comprehensive treatment plan. The right approach depends on your individual health history, goals, and overall metabolic picture."
           ]
         }
       ],
       "perspective": {
-        "title": "This Is Where the Arc Begins",
+        "title": "The Arc Wellness Perspective",
         "body": [
           "At Arc Wellness, we believe metabolic health is about far more than preventing diabetes. It's about understanding how your body creates and uses energy. It's about recognizing changes before they become disease. It's about protecting your muscles, your heart, your brain, and your future.",
           "Whether you're trying to lose weight, improve your energy, lower your risk of chronic disease, or simply understand your health better, insulin resistance is one of the most important conversations we can have. Because small changes made today can have a profound impact on the decades ahead."
+        ],
+        "cta": {
+          "lead": "Ready to understand your metabolic health?",
+          "body": "Book a consultation with Arc Wellness to review your history, body composition, and the right next steps for you.",
+          "label": "Book a metabolic health consultation"
+        }
+      },
+      "primaryCtaLabel": "Book a metabolic health consultation",
+      "faq": {
+        "title": "Frequently Asked Questions About Insulin Resistance",
+        "items": [
+          {
+            "question": "What are the first signs of insulin resistance?",
+            "answer": "Early signs often include stubborn weight gain around the midsection, frequent sugar or carb cravings, feeling tired or foggy after meals, and afternoon energy crashes. Because these symptoms are easy to dismiss, insulin resistance can go unnoticed for years."
+          },
+          {
+            "question": "Can you have insulin resistance with normal blood sugar?",
+            "answer": "Yes. For years, the pancreas can produce extra insulin to keep blood sugar in a normal range, so a standard fasting glucose test may look completely normal even while insulin resistance is developing."
+          },
+          {
+            "question": "How is insulin resistance diagnosed?",
+            "answer": "There is no single test. A provider typically looks at your health history, waist circumference, blood pressure, cholesterol and triglycerides, and — when appropriate — fasting insulin and glucose together, to build a complete picture of your metabolic health."
+          },
+          {
+            "question": "Can insulin resistance be reversed naturally?",
+            "answer": "In many cases it can be improved through consistent habits: prioritizing protein and fiber, reducing processed foods and added sugars, strength training, walking after meals, better sleep, and stress management. Some people also benefit from medication as part of a broader plan."
+          }
         ]
-      }
-    }
+      },
+      "disclaimer": "This article is for general educational purposes and is not a substitute for individualized medical advice. Please consult a qualified healthcare provider about your own health."
+    },
+    "body": [
+      "You've probably heard the term insulin resistance before. Maybe your healthcare provider mentioned it. Maybe you've seen it on social media. Maybe you've heard that it's why people struggle with weight gain or why Type 2 diabetes develops.",
+      "But what exactly is insulin resistance? And more importantly, how would you know if you have it?",
+      "The truth is, insulin resistance doesn't usually appear overnight. It develops gradually, often over many years, and many people experience symptoms long before they're diagnosed with prediabetes or Type 2 diabetes. Recognizing those early signs gives you the opportunity to make changes before more serious health problems develop.",
+      "What Is Insulin?",
+      "Every time you eat, your digestive system breaks food down into nutrients your body can use for energy. Carbohydrates are broken down into glucose (blood sugar), which becomes one of your body's primary fuel sources.",
+      "But glucose can't enter your cells by itself. That's where insulin comes in.",
+      "Insulin is a hormone made by your pancreas. Think of it as a key that unlocks your cells, allowing glucose to move from your bloodstream into your muscles, organs, and other tissues where it can be used for energy. When everything is working well, this process happens efficiently and your blood sugar stays within a healthy range.",
+      "What Is Insulin Resistance?",
+      "Over time, your cells can become less responsive to insulin. Imagine that key trying to unlock a door that has become sticky. The key still fits — it just doesn't work as well.",
+      "To overcome this, your pancreas produces more insulin to keep your blood sugar under control. For a while, it succeeds. That's why many people with insulin resistance still have normal blood sugar levels: their body is simply working much harder than it should.",
+      "Eventually, if insulin resistance continues to worsen, the pancreas may no longer be able to keep up. Blood sugar begins to rise, increasing the risk of prediabetes and, eventually, Type 2 diabetes. Insulin resistance is one of the earliest stages in that process.",
+      "Did you know? Many people with insulin resistance have completely normal fasting glucose levels. That's because the pancreas often produces extra insulin for years before blood sugar begins to rise. Looking at your health as a whole — including your history, body composition, lifestyle, and, when appropriate, additional laboratory markers — can provide a more complete picture of your metabolic health.",
+      "What Are the Signs and Symptoms of Insulin Resistance?",
+      "One of the challenges is that insulin resistance doesn't cause one specific symptom. Instead, people often notice a collection of changes that seem unrelated. Some of the most common signs of insulin resistance include:",
+      "Weight & hunger: Difficulty losing weight despite eating well; Weight gain around the abdomen or waistline; Craving sweets or carbohydrates; Feeling hungry again shortly after eating",
+      "Energy levels: Afternoon energy crashes; Feeling sleepy after meals; Fatigue despite getting adequate sleep; Brain fog or difficulty concentrating",
+      "Clinical markers: Increased waist circumference; Elevated blood pressure; High triglycerides; Low HDL (\"good\") cholesterol; Elevated fasting insulin levels",
+      "Physical & medical signs: Skin tags, especially around the neck or underarms; Dark, velvety skin around the neck, armpits, or groin (called acanthosis nigricans); Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly PCOS; Fatty liver disease; A family history of Type 2 diabetes",
+      "Having one or two of these doesn't necessarily mean you have insulin resistance — many of these symptoms can have other causes. But if several of them sound familiar, it's worth having a conversation with your healthcare provider.",
+      "Why Does Insulin Resistance Matter?",
+      "Many people associate insulin resistance only with diabetes. In reality, it affects much more than blood sugar. Healthy insulin function influences how your body stores energy, builds muscle, burns fat, and regulates inflammation.",
+      "Insulin resistance has been associated with an increased risk of:",
+      "Prediabetes and Type 2 diabetes",
+      "Heart disease and high blood pressure",
+      "Fatty liver disease and metabolic syndrome",
+      "Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly PCOS",
+      "Elevated cholesterol and triglycerides",
+      "It may also contribute to low energy, difficulty losing weight, and changes in overall metabolic health. The good news is that insulin resistance often develops gradually — which means there is often time to intervene.",
+      "Can Insulin Resistance Be Reversed?",
+      "In many cases, yes. The body is remarkably adaptable.",
+      "Improving insulin sensitivity doesn't happen through one perfect meal or one intense workout. It's the result of consistent habits that support your metabolism over time. For many people, that includes:",
+      "Nutrition: Prioritizing protein and fiber at meals; Reducing highly processed foods and added sugars",
+      "Movement: Building and maintaining muscle through strength training; Walking regularly, especially after meals",
+      "Lifestyle: Improving sleep quality; Managing chronic stress",
+      "Balance: Achieving and maintaining a healthy weight when appropriate",
+      "For some individuals, medications may also play an important role as part of a comprehensive treatment plan. The right approach depends on your individual health history, goals, and overall metabolic picture.",
+      "The Arc Wellness Perspective",
+      "At Arc Wellness, we believe metabolic health is about far more than preventing diabetes. It's about understanding how your body creates and uses energy. It's about recognizing changes before they become disease. It's about protecting your muscles, your heart, your brain, and your future.",
+      "Whether you're trying to lose weight, improve your energy, lower your risk of chronic disease, or simply understand your health better, insulin resistance is one of the most important conversations we can have. Because small changes made today can have a profound impact on the decades ahead.",
+      "Ready to understand your metabolic health?",
+      "Book a consultation with Arc Wellness to review your history, body composition, and the right next steps for you.",
+      "Book a metabolic health consultation",
+      "Frequently Asked Questions About Insulin Resistance",
+      "What are the first signs of insulin resistance?",
+      "Early signs often include stubborn weight gain around the midsection, frequent sugar or carb cravings, feeling tired or foggy after meals, and afternoon energy crashes. Because these symptoms are easy to dismiss, insulin resistance can go unnoticed for years.",
+      "Can you have insulin resistance with normal blood sugar?",
+      "Yes. For years, the pancreas can produce extra insulin to keep blood sugar in a normal range, so a standard fasting glucose test may look completely normal even while insulin resistance is developing.",
+      "How is insulin resistance diagnosed?",
+      "There is no single test. A provider typically looks at your health history, waist circumference, blood pressure, cholesterol and triglycerides, and — when appropriate — fasting insulin and glucose together, to build a complete picture of your metabolic health.",
+      "Can insulin resistance be reversed naturally?",
+      "In many cases it can be improved through consistent habits: prioritizing protein and fiber, reducing processed foods and added sugars, strength training, walking after meals, better sleep, and stress management. Some people also benefit from medication as part of a broader plan.",
+      "This article is for general educational purposes and is not a substitute for individualized medical advice. Please consult a qualified healthcare provider about your own health."
+    ]
   },
   {
     "id": "blog-hormones-through-the-decades",

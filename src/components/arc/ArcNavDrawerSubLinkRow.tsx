@@ -57,7 +57,7 @@ const thumbByHrefExtra: Record<string, string> = {
   "/programs": NAV_PREVIEW.membershipCohort,
   "/financing": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "/contact": CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-  "/case-studies": CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
+  "/blogs": CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
   "/about": CLINIC_INTERIOR_IMAGES.receptionBacklitLogoWall,
 };
 

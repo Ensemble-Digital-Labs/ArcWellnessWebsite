@@ -354,7 +354,7 @@ export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
       {
         heading: "Healthy Living",
         items: [
-          leaf("From the Arc Desk", "/case-studies"),
+          leaf("From the Arc Desk", "/blogs"),
           soon("Healthy Recipes"),
           soon("Nutrition & Lifestyle"),
         ],
@@ -389,7 +389,7 @@ const arcLibraryMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        items: [leaf("From the Arc Desk", "/case-studies")],
+        items: [leaf("From the Arc Desk", "/blogs")],
       },
     ],
   },
@@ -513,7 +513,7 @@ const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   {
     id: "arc-library",
     label: "Arc Library",
-    href: "/case-studies",
+    href: "/blogs",
     columns: arcLibraryMenu,
     panelAlign: "tab",
   },

@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   description: insightsPage.seo.description,
 };
 
-export default function CaseStudiesPage() {
+/** From the Arc Desk hub — blogs + desk posts (`/blogs`). */
+export default function BlogsHubPage() {
   const entries = getInsightEntries();
 
   preload(INSIGHTS_FEED_AMBIENT_SRC, { as: "image", fetchPriority: "high" });
