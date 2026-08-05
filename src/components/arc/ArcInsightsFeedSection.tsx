@@ -34,6 +34,13 @@ const INSIGHTS_MASTHEAD_CLASS = cn(
 
 type InsightFilter = "all" | InsightKind;
 
+/**
+ * Temporarily omit blog cards from the Insights grid while the client redesigns
+ * blog layout for conversion. Tabs (All / Blogs / Case studies) stay visible.
+ * Flip to `false` when the new blog card design ships.
+ */
+const INSIGHTS_HIDE_BLOG_CARDS = true;
+
 const TAB_LABELS: Record<InsightFilter, string> = {
   all: "All posts",
   blog: "Blogs",
@@ -293,6 +300,8 @@ function InsightsFilterPanel({
   const runEntrance = animateEntrance && !reduceMotion;
 
   if (items.length === 0) {
+    const blogsHeldBack =
+      INSIGHTS_HIDE_BLOG_CARDS && (filter === "blog" || filter === "all");
     return (
       <motion.p
         initial={runEntrance ? { opacity: 0, y: 14 } : false}
@@ -311,14 +320,30 @@ function InsightsFilterPanel({
         }}
         className="mt-14 text-center font-sans text-base text-arc-charcoal/70 sm:mt-16"
       >
-        No posts in this category yet. Explore our{" "}
-        <Link
-          href="/treatments"
-          className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
-        >
-          treatments
-        </Link>
-        .
+        {blogsHeldBack ? (
+          <>
+            Blog posts are temporarily hidden while we refresh the format.
+            Explore our{" "}
+            <Link
+              href="/treatments"
+              className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
+            >
+              treatments
+            </Link>
+            .
+          </>
+        ) : (
+          <>
+            No posts in this category yet. Explore our{" "}
+            <Link
+              href="/treatments"
+              className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
+            >
+              treatments
+            </Link>
+            .
+          </>
+        )}
       </motion.p>
     );
   }
@@ -403,8 +428,10 @@ export function ArcInsightsFeedSection({
   }, []);
 
   const filtered = useMemo(() => {
-    if (filter === "all") return [...entries];
-    return entries.filter((e) => e.kind === filter);
+    const byTab =
+      filter === "all" ? [...entries] : entries.filter((e) => e.kind === filter);
+    if (!INSIGHTS_HIDE_BLOG_CARDS) return byTab;
+    return byTab.filter((e) => e.kind !== "blog");
   }, [entries, filter]);
 
   const scheduleScrollLayoutRefresh = () => {
