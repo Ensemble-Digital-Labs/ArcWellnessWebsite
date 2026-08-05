@@ -4,7 +4,7 @@ General-purpose **non–St. Louis** art: abstract textures, ambient mood, or lay
 
 | File | Notes |
 |------|--------|
-| `ambient-01-light.png` … `ambient-04-light.png` | **Default** light-tone plates for slots 01–04 (`BACKGROUND_DECORATION_IMAGES[0]`…`[3]`). |
+| `ambient-03-light.webp` | Homepage / clinic marble plate. **2026-08-04:** runtime WebP resized to 1920×1080 (~99 KB). HD master kept as `ambient-03-light--hd-master.webp`. |
 | `ambient-01.png` … `ambient-04.png` | Original darker plates — rollback only (`BACKGROUND_DECORATION_DARK_IMAGES`). |
 | `welcome-copy-stage-cream.png` | Welcome / about **copy-phase** full-bleed — cream / fabric / portrait mood (see `ArcWelcomeSplitSection.tsx` → `WELCOME_COPY_STAGE_BG`). |
 | `about-copy-stage--previous.png` | Prior copy-stage art (kept for rollback). |

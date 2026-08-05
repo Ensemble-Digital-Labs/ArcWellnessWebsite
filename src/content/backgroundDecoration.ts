@@ -13,8 +13,8 @@ export const BACKGROUND_DECORATION_IMAGES = [
   "/assets/decoration/background/ambient-08.webp",
 ] as const;
 
-/** Cache-bust when decoration masters are re-exported (e.g. HD marble upscale). */
-const DECORATION_HD_VERSION = "20260710-hd";
+/** Cache-bust when decoration masters are re-exported / recompressed. */
+const DECORATION_HD_VERSION = "20260804-opt";
 
 /** Original darker-tone plates for slots 01–04 (kept for rollback). */
 export const BACKGROUND_DECORATION_DARK_IMAGES = [
@@ -33,7 +33,7 @@ export const BACKGROUND_DECORATION_LIGHT_IMAGES = [
 ] as const;
 
 /** Hero underlay, persistent plate behind scroll-expand photography. */
-export const HERO_AMBIENT_BG = BACKGROUND_DECORATION_IMAGES[2]!;
+export const HERO_AMBIENT_BG = `${BACKGROUND_DECORATION_IMAGES[2]}?v=${DECORATION_HD_VERSION}`;
 
 /** Footer + services band ambient plate. */
 export const FOOTER_AMBIENT_BG = BACKGROUND_DECORATION_IMAGES[3]!;

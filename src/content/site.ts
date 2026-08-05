@@ -37,8 +37,8 @@ export const videos = {
 } as const;
 
 export const images = {
-  /** Header wordmark: HD transparent gold RGBA PNG (`public/assets/branding/`). */
-  logo: "/assets/branding/arc-wellness-logo-transparent-gold.webp",
+  /** Header wordmark: transparent gold WebP (`public/assets/branding/`). ~720px master for retina header. */
+  logo: "/assets/branding/arc-wellness-logo-transparent-gold.webp?v=20260804-opt",
   /** Full-bleed hero background, scroll-zoom in `ScrollExpandHero` (mint wall, 4K WebP). */
   heroMedia: "/assets/hero/arc_wellness_mint_wall_hero_HD_4K_web.webp",
   /** About page `ScrollChapterIntroSection` plate — cream + gold silk drape with light streaks. */
