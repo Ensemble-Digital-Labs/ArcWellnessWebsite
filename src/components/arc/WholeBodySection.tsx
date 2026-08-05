@@ -20,7 +20,7 @@ export function WholeBodySection({ topSeam = false, bottomSeam: _bottomSeam = fa
   return (
     <section
       id="services"
-      className="relative w-full overflow-x-clip bg-arc-cream"
+      className="relative w-full overflow-x-clip bg-arc-cream max-md:pb-px"
     >
       <div className="relative w-full">
         {topSeam ? (

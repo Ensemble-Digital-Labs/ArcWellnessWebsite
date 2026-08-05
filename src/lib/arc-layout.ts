@@ -191,7 +191,14 @@ export const ARC_IMAGE_TOP_BORDER_FEATHER_LIP_CLASS =
 
 /** Cream feather above services showcase nav — softens the photo into the overlaid tab bar. */
 export const ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS =
-  `pointer-events-none absolute inset-x-0 bottom-full z-[1] h-[min(7vh,3.75rem)] ${ARC_CREAM_BLUR_GRADIENT_BOTTOM} backdrop-blur-[2px] supports-[backdrop-filter]:backdrop-blur-sm ${ARC_CREAM_BLUR_MASK_BOTTOM}`;
+  `pointer-events-none absolute inset-x-0 bottom-full z-[1] h-[min(7vh,3.75rem)] max-md:h-[min(10vh,5rem)] ${ARC_CREAM_BLUR_GRADIENT_BOTTOM} max-md:from-arc-cream max-md:from-[28%] backdrop-blur-[2px] max-md:backdrop-blur-none supports-[backdrop-filter]:backdrop-blur-sm max-md:supports-[backdrop-filter]:backdrop-blur-none ${ARC_CREAM_BLUR_MASK_BOTTOM} max-md:[-webkit-mask-image:linear-gradient(to_top,black_0%,black_58%,transparent_100%)] max-md:mask-image-[linear-gradient(to_top,black_0%,black_58%,transparent_100%)]`;
+
+/**
+ * Opaque cream seal under the showcase feather on mobile (tab bar is `hidden` below md).
+ * Stops the iOS Safari hairline that appears at the bottom of backdrop-blur / mask feathers while scrolling.
+ */
+export const ARC_SERVICES_SHOWCASE_MOBILE_BOTTOM_LIP_CLASS =
+  "pointer-events-none absolute inset-x-0 bottom-0 z-[22] h-[3px] bg-arc-cream md:hidden";
 
 /** Reusable left-edge feather for full-bleed photography — arc-cream vertical split. */
 export const ARC_IMAGE_LEFT_BORDER_FEATHER_CLASS =

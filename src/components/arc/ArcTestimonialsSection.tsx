@@ -451,6 +451,9 @@ export function ArcTestimonialsSection({
   const mobileCardSwipeRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const interactionResumeTimeoutRef = useRef<number | null>(null);
+  const sphereMountRef = useRef<HTMLDivElement>(null);
+  const [sphereNear, setSphereNear] = useState(false);
+  const [sphereDesktop, setSphereDesktop] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(
     () => items[0]?.id ?? null,
   );
@@ -572,6 +575,29 @@ export function ArcTestimonialsSection({
     };
   }, []);
 
+  useEffect(() => {
+    const el = sphereMountRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        setSphereNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "360px 0px", threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setSphereDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   return (
     <PinnedSection
       id={id}
@@ -607,7 +633,10 @@ export function ArcTestimonialsSection({
         />
       ) : null}
 
-      <div className="flex min-h-0 flex-col max-md:overflow-hidden md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch">
+      <div
+        ref={sphereMountRef}
+        className="flex min-h-0 flex-col max-md:overflow-hidden md:h-[100dvh] md:max-h-[100dvh] md:overflow-hidden lg:flex-row lg:items-stretch"
+      >
         <div
           {...(pinEnabled ? { "data-scroll-section": true } : {})}
           className="relative z-[1] hidden min-h-0 flex-1 items-center justify-center px-2 pb-10 pt-4 sm:pt-6 lg:flex lg:h-full lg:min-h-[52vh] lg:w-1/2 lg:justify-end lg:py-6 lg:pl-8 lg:pr-3 [@media(max-height:820px)]:lg:py-4 xl:pl-12 xl:pr-5"
@@ -627,27 +656,34 @@ export function ArcTestimonialsSection({
               className="w-full touch-pan-y [@media(max-height:820px)]:scale-[0.92] [@media(max-height:820px)]:origin-center"
               style={sphereMotion}
             >
-              <SphereImageGrid
-                images={sphereImages}
-                className="w-full"
-                containerSize={600}
-                sphereRadius={285}
-                dragSensitivity={0.8}
-                momentumDecay={0.96}
-                maxRotationSpeed={6}
-                baseImageScale={0.182}
-                hoverScale={1.35}
-                perspective={1580}
-                autoRotate
-                autoRotateSpeed={0.08}
-                theme="light"
-                fitContainer
-                selectedId={selectedId}
-                showModal={false}
-                onImageSelect={(img) => {
-                  if (img.testimonialId) selectTestimonial(img.testimonialId);
-                }}
-              />
+              {sphereNear && sphereDesktop ? (
+                <SphereImageGrid
+                  images={sphereImages}
+                  className="w-full"
+                  containerSize={600}
+                  sphereRadius={285}
+                  dragSensitivity={0.8}
+                  momentumDecay={0.96}
+                  maxRotationSpeed={6}
+                  baseImageScale={0.182}
+                  hoverScale={1.35}
+                  perspective={1580}
+                  autoRotate
+                  autoRotateSpeed={0.08}
+                  theme="light"
+                  fitContainer
+                  selectedId={selectedId}
+                  showModal={false}
+                  onImageSelect={(img) => {
+                    if (img.testimonialId) selectTestimonial(img.testimonialId);
+                  }}
+                />
+              ) : (
+                <div
+                  className="mx-auto aspect-square w-full max-w-[600px]"
+                  aria-hidden
+                />
+              )}
             </div>
             <p
               id={sphereHintId}

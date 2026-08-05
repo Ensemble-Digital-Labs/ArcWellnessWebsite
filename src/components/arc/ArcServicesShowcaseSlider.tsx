@@ -9,7 +9,7 @@ import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
 import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
-import { ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS } from "@/lib/arc-layout";
+import { ARC_SERVICES_SHOWCASE_MOBILE_BOTTOM_LIP_CLASS, ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS } from "@/lib/arc-layout";
 import {
   servicesShowcaseFragmentShader,
   servicesShowcaseVertexShader,
@@ -117,7 +117,7 @@ const SHOWCASE_CTRL_NEXT_WRAP_CLASS =
  * Cream category tabs hidden below `md`; shown from `md` up.
  */
 const SHOWCASE_NAV_SHELL_CLASS =
-  "pointer-events-none absolute inset-x-0 bottom-0 z-20 w-full";
+  "pointer-events-none absolute inset-x-0 bottom-0 z-20 w-full max-md:min-h-px max-md:bg-arc-cream";
 const SHOWCASE_NAV_CLASS =
   "arc-slide-nav arc-slide-nav--light slides-navigation pointer-events-auto relative hidden w-full flex-nowrap items-stretch justify-between gap-0 overflow-x-auto overflow-y-visible overscroll-x-contain bg-arc-cream px-2 py-3.5 shadow-[0_-10px_36px_rgba(131,208,187,0.14),0_-2px_12px_rgba(44,44,44,0.06)] [-ms-overflow-style:none] [scrollbar-width:none] md:flex md:px-6 md:py-5 lg:px-8 lg:py-5 [&::-webkit-scrollbar]:hidden";
 /** Slide overlay inside the media stage only. */
@@ -167,6 +167,8 @@ function ServicesShowcaseNav({
     <div className={SHOWCASE_NAV_SHELL_CLASS}>
       {/* Soft cream feather — kept on mobile to blend into the next section */}
       <div aria-hidden className={ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS} />
+      {/* Solid cream lip — seals iOS hairline when the md+ tab bar is hidden */}
+      <div aria-hidden className={ARC_SERVICES_SHOWCASE_MOBILE_BOTTOM_LIP_CLASS} />
       <nav
         ref={localNavRef}
         id="slidesNav"
@@ -230,14 +232,31 @@ type ShowcaseProps = {
 /** Static crossfade + typography when user prefers reduced motion. */
 function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
   const [index, setIndex] = useState(0);
+  const [mediaNear, setMediaNear] = useState(false);
+  const shellRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
+    const el = shellRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        setMediaNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "320px 0px", threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!mediaNear || slides.length <= 1) return;
     const t = window.setInterval(() => {
       setIndex((i) => (i + 1) % slides.length);
     }, SLIDER_CONFIG.settings.autoSlideSpeed);
     return () => window.clearInterval(t);
-  }, [slides.length]);
+  }, [mediaNear, slides.length]);
 
   useEffect(() => {
     const active = document.querySelector<HTMLElement>(
@@ -251,34 +270,46 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
 
   return (
     <section
+      ref={shellRef}
       className={cn(SHOWCASE_SHELL_CLASS, className)}
       aria-roledescription="carousel"
       aria-label="Whole-body care highlights"
     >
       <div className={SHOWCASE_MEDIA_STAGE_CLASS}>
         <div className="absolute inset-0">
-          {slides.map((s, i) => (
-            <div
-              key={s.imageSrc}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-700 ease-out",
-                i === index ? "opacity-100" : "pointer-events-none opacity-0",
-              )}
-              aria-hidden={i !== index}
-            >
-              <Image
-                src={s.imageSrc}
-                alt=""
-                fill
-                className={SHOWCASE_PHOTO_OBJECT_CLASS}
-                style={{
-                  objectPosition: showcasePhotoObjectPosition(s, false),
-                }}
-                sizes="100vw"
-                priority={i === 0}
-              />
-            </div>
-          ))}
+          {mediaNear
+            ? slides.map((s, i) => {
+                const nearby =
+                  i === index ||
+                  i === (index + 1) % slides.length ||
+                  i === (index - 1 + slides.length) % slides.length;
+                if (!nearby) return null;
+                return (
+                  <div
+                    key={s.imageSrc}
+                    className={cn(
+                      "absolute inset-0 transition-opacity duration-700 ease-out",
+                      i === index
+                        ? "opacity-100"
+                        : "pointer-events-none opacity-0",
+                    )}
+                    aria-hidden={i !== index}
+                  >
+                    <Image
+                      src={s.imageSrc}
+                      alt=""
+                      fill
+                      className={SHOWCASE_PHOTO_OBJECT_CLASS}
+                      style={{
+                        objectPosition: showcasePhotoObjectPosition(s, false),
+                      }}
+                      sizes="100vw"
+                      loading={i === index ? "eager" : "lazy"}
+                    />
+                  </div>
+                );
+              })
+            : null}
         </div>
         <div className={SHOWCASE_SLIDE_CONTENT_CLASS}>
           <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
@@ -382,7 +413,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     /** Browser timer id, avoid `NodeJS.Timeout` union from Node typings */
     let autoSlideTimer: number | null = null;
     let rafId = 0;
-    let isInView = true;
+    // Start false so we do not fetch slide textures until near the viewport.
+    let isInView = false;
+    let nearLoadObserver: IntersectionObserver | null = null;
 
     const gsapCtx = gsap.context(() => {}, root);
 
@@ -868,6 +901,26 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
     coverMq?.addEventListener("change", onCoverMqChange);
 
     (async () => {
+      // Do not create WebGL or fetch slide WebPs on first paint — wait until near view.
+      await new Promise<void>((resolve) => {
+        if (disposed) {
+          resolve();
+          return;
+        }
+        nearLoadObserver = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((e) => e.isIntersecting)) return;
+            nearLoadObserver?.disconnect();
+            nearLoadObserver = null;
+            resolve();
+          },
+          { rootMargin: "320px 0px", threshold: 0.01 },
+        );
+        nearLoadObserver.observe(root);
+      });
+
+      if (disposed) return;
+
       scene = new THREE.Scene();
       camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
       renderer = new THREE.WebGLRenderer({
@@ -947,9 +1000,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
       );
       scene.add(mesh);
 
-      for (const s of slideList) {
+      for (let i = 0; i < Math.min(2, slideList.length); i++) {
         try {
-          slideTextures.push(await loadImageTexture(s.imageSrc));
+          slideTextures.push(await loadImageTexture(slideList[i]!.imageSrc));
         } catch {
           // skip failed loads
         }
@@ -967,9 +1020,9 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         shaderMaterial.uniforms.uTexture1.value = slideTextures[0];
         shaderMaterial.uniforms.uTexture2.value = slideTextures[1];
         shaderMaterial.uniforms.uTexture1Size.value =
-          slideTextures[0].userData.size as THREE.Vector2;
+          slideTextures[0]!.userData.size as THREE.Vector2;
         shaderMaterial.uniforms.uTexture2Size.value =
-          slideTextures[1].userData.size as THREE.Vector2;
+          slideTextures[1]!.userData.size as THREE.Vector2;
         if (disposed) return;
 
         applyCoverAnchors(0, 0);
@@ -979,7 +1032,17 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
         root.classList.add("arc-showcase-loaded");
         setWebglReady(true);
         safeStartTimer(500);
-        rafId = requestAnimationFrame(renderLoop);
+        if (isInView && !rafId) rafId = requestAnimationFrame(renderLoop);
+      }
+
+      // Remaining slides in the background after the first pair is ready.
+      for (let i = 2; i < slideList.length; i++) {
+        if (disposed) return;
+        try {
+          slideTextures.push(await loadImageTexture(slideList[i]!.imageSrc));
+        } catch {
+          // skip failed loads
+        }
       }
     })().catch(() => {
       /* textures may fail; section still shows copy */
@@ -1021,6 +1084,8 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
     return () => {
       disposed = true;
+      nearLoadObserver?.disconnect();
+      nearLoadObserver = null;
       viewportObserver.disconnect();
       prevEl?.removeEventListener("click", onPrev);
       nextEl?.removeEventListener("click", onNext);
@@ -1064,7 +1129,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
                 objectPosition: showcasePhotoObjectPosition(slides[0], false),
               }}
               sizes="100vw"
-              priority
+              loading="lazy"
             />
           </div>
         ) : null}

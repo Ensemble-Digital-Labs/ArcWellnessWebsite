@@ -139,7 +139,11 @@ function YourPathIntroSection({
       pinDistanceMultiplier={0.35}
       onProgress={setPinProgress}
       disabled
-      className="relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted"
+      className={cn(
+        "relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted",
+        /* Overlap showcase cream lip — kills mobile Safari scroll hairline at the feather. */
+        topSeam && "max-md:-mt-[3px] max-md:pt-[3px]",
+      )}
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <Image

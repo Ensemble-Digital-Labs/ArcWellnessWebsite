@@ -1186,11 +1186,10 @@ export function ArcSiteHeader({
               <Image
                 src={logoSrc}
                 alt={logoAlt}
-                width={720}
-                height={240}
+                width={360}
+                height={148}
                 priority
-                placeholder="empty"
-                unoptimized
+                sizes="(max-width: 768px) 180px, (max-width: 1280px) 260px, 320px"
                 className={ARC_HEADER_LOGO_IMG_CLASS}
               />
             </motion.div>
