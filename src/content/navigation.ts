@@ -354,7 +354,7 @@ export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
       {
         heading: "Healthy Living",
         items: [
-          leaf("Latest Insights", "/case-studies"),
+          leaf("From the Arc Desk", "/case-studies"),
           soon("Healthy Recipes"),
           soon("Nutrition & Lifestyle"),
         ],
@@ -389,7 +389,7 @@ const arcLibraryMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        items: [leaf("Latest Insights", "/case-studies")],
+        items: [leaf("From the Arc Desk", "/case-studies")],
       },
     ],
   },

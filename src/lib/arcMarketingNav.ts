@@ -62,7 +62,7 @@ export const ARC_PRIMARY_NAV_LINKS = [
     previewSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
   },
   {
-    label: "Insights",
+    label: "From the Arc Desk",
     href: "/case-studies",
     shape: "6",
     previewSrc: CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,

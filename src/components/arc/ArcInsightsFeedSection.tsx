@@ -500,7 +500,8 @@ export function ArcInsightsFeedSection({
                   className="leading-[0.9] tracking-tight"
                 >
                   <TitleEmphasis className={INSIGHTS_MASTHEAD_CLASS}>
-                    {feed.masthead}
+                    From the{" "}
+                    <span className="whitespace-nowrap">Arc Desk</span>
                   </TitleEmphasis>
                 </h1>
               </ArcTextReveal>
