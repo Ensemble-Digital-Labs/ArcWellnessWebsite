@@ -91,19 +91,13 @@ const PATH_STEPS: PathStep[] = [
   },
 ];
 
+/** Blank cream plate while step photography is held back — no placeholder copy. */
 function PathStepPhotoPlaceholder({ className }: { className?: string }) {
   return (
     <div
-      className={cn(
-        "absolute inset-0 flex items-center justify-center bg-arc-cream",
-        className,
-      )}
+      className={cn("absolute inset-0 bg-arc-cream", className)}
       aria-hidden
-    >
-      <p className="px-6 text-center font-sans text-xs font-semibold uppercase tracking-[0.18em] text-arc-charcoal/40 sm:text-sm">
-        Photo coming soon
-      </p>
-    </div>
+    />
   );
 }
 
