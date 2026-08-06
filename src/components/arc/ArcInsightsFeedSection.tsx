@@ -35,11 +35,12 @@ const INSIGHTS_MASTHEAD_CLASS = cn(
 type InsightFilter = "all" | InsightKind;
 
 /**
- * Temporarily omit blog cards from the Insights grid while the client redesigns
- * blog layout for conversion. Tabs (All / Blogs) stay visible; Case studies tab hidden.
- * Flip to `false` when the new blog card design ships.
+ * Blog slugs ready to show on the Arc Desk feed. Others stay hidden until
+ * their editorial layout / copy is finished. `null` = show every blog.
  */
-const INSIGHTS_HIDE_BLOG_CARDS = true;
+const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
+  "insulin-resistance-signs-symptoms",
+]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
 const INSIGHTS_VISIBLE_TABS: InsightFilter[] = ["all", "blog"];
@@ -102,11 +103,18 @@ function distributeToColumns(items: readonly InsightEntry[], columnCount: number
   return columns;
 }
 
+function isFeedVisibleEntry(entry: InsightEntry): boolean {
+  if (entry.kind !== "blog") return true;
+  if (INSIGHTS_READY_BLOG_SLUGS === null) return true;
+  return INSIGHTS_READY_BLOG_SLUGS.has(entry.slug);
+}
+
 function getCounts(entries: readonly InsightEntry[]) {
+  const visible = entries.filter(isFeedVisibleEntry);
   return {
-    all: entries.length,
-    blog: entries.filter((e) => e.kind === "blog").length,
-    caseStudy: entries.filter((e) => e.kind === "case-study").length,
+    all: visible.length,
+    blog: visible.filter((e) => e.kind === "blog").length,
+    caseStudy: visible.filter((e) => e.kind === "case-study").length,
   };
 }
 
@@ -244,14 +252,8 @@ function InsightsCanvasGrid({
     [items],
   );
 
-  const populatedColumns = useMemo(
-    () =>
-      columns
-        .map((columnItems, columnIndex) => ({ columnItems, columnIndex }))
-        .filter(({ columnItems }) => columnItems.length > 0),
-    [columns],
-  );
-
+  // Keep empty columns mounted on tablet/laptop so a short list still sits in a
+  // 2/3-col track (cards don't stretch full-bleed when there is only one post).
   return (
     <div
       className={cn(
@@ -261,7 +263,7 @@ function InsightsCanvasGrid({
           : "flex items-start gap-x-8 sm:gap-x-10 lg:gap-x-12 xl:gap-x-16",
       )}
     >
-      {populatedColumns.map(({ columnItems, columnIndex }) => (
+      {columns.map((columnItems, columnIndex) => (
         <div
           key={`col-${columnIndex}`}
           className={cn(
@@ -303,8 +305,6 @@ function InsightsFilterPanel({
   const runEntrance = animateEntrance && !reduceMotion;
 
   if (items.length === 0) {
-    const blogsHeldBack =
-      INSIGHTS_HIDE_BLOG_CARDS && (filter === "blog" || filter === "all");
     return (
       <motion.p
         initial={runEntrance ? { opacity: 0, y: 14 } : false}
@@ -323,30 +323,14 @@ function InsightsFilterPanel({
         }}
         className="mt-14 text-center font-sans text-base text-arc-charcoal/70 sm:mt-16"
       >
-        {blogsHeldBack ? (
-          <>
-            Blog posts are temporarily hidden while we refresh the format.
-            Explore our{" "}
-            <Link
-              href="/treatments"
-              className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
-            >
-              treatments
-            </Link>
-            .
-          </>
-        ) : (
-          <>
-            No posts in this category yet. Explore our{" "}
-            <Link
-              href="/treatments"
-              className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
-            >
-              treatments
-            </Link>
-            .
-          </>
-        )}
+        No posts in this category yet. Explore our{" "}
+        <Link
+          href="/treatments"
+          className="font-semibold text-arc-charcoal underline-offset-2 hover:text-arc-teal hover:underline"
+        >
+          treatments
+        </Link>
+        .
       </motion.p>
     );
   }
@@ -434,8 +418,7 @@ export function ArcInsightsFeedSection({
   const filtered = useMemo(() => {
     const byTab =
       filter === "all" ? [...entries] : entries.filter((e) => e.kind === filter);
-    if (!INSIGHTS_HIDE_BLOG_CARDS) return byTab;
-    return byTab.filter((e) => e.kind !== "blog");
+    return byTab.filter(isFeedVisibleEntry);
   }, [entries, filter]);
 
   const scheduleScrollLayoutRefresh = () => {
@@ -519,7 +502,7 @@ export function ArcInsightsFeedSection({
         </div>
       </div>
 
-      <div className="relative z-10 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
+      <div className="relative z-20 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
         <div className="mx-auto w-full max-w-[min(100%,1440px)]">
           <div
             id="insights-filter-bar"
@@ -579,7 +562,6 @@ export function ArcInsightsFeedSection({
           tone="cream"
           variant="soft"
           scope="background"
-          className="z-20"
         />
       ) : null}
     </section>

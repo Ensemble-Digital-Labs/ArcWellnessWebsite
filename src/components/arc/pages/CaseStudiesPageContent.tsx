@@ -39,6 +39,7 @@ export function CaseStudiesPageContent({ entries }: { entries: readonly InsightE
         imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
         topSeam
+        topSeamOverlap={false}
       />
     </>
   );
