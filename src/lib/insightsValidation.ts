@@ -75,6 +75,12 @@ export function validateInsightEntry(
       imageSrc,
       imageAlt,
       body,
+      // Preserve typed article layout when admin edits metadata/body text.
+      ...(entry.article ? { article: entry.article } : {}),
+      ...(entry.seo ? { seo: entry.seo } : {}),
+      ...(entry.titleLines?.length
+        ? { titleLines: entry.titleLines.map((l) => String(l).trim()).filter(Boolean) }
+        : {}),
     },
   };
 }

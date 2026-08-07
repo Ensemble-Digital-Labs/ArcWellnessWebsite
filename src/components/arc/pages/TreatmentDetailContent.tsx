@@ -129,7 +129,7 @@ export function TreatmentDetailContent({ treatment }: TreatmentDetailContentProp
         <div className={cn("relative z-10 mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
           <ArcTextReveal variant="line">
             <Link
-              href="/treatments"
+              href="/treatments#treatments-index"
               className="inline-flex min-h-[44px] items-center font-sans text-sm font-semibold uppercase tracking-[0.18em] text-arc-teal-ink transition-colors hover:text-arc-teal-ink-hover"
             >
               ← All treatments

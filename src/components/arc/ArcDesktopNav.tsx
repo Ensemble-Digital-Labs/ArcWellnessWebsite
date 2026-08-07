@@ -1,19 +1,24 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import {
   ARC_NAV_HOME_ITEM,
   ARC_NAV_TOP_ITEMS,
   ARC_NAV_BOOK_CTA,
+  isNavHrefExact,
+  isNavItemActive,
   navItemHasPanel,
   type NavColumn,
+  type NavGroup,
   type NavLeaf,
   type NavTopItem,
 } from "@/content/navigation";
+import { resolveNavLeafThumb } from "@/components/arc/ArcNavDrawerSubLinkRow";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
 import { getStableNativeScroll } from "@/lib/arcScrollMode";
@@ -21,6 +26,8 @@ import { cn } from "@/lib/utils";
 import type Lenis from "lenis";
 
 const DESKTOP_NAV_ITEMS: readonly NavTopItem[] = [ARC_NAV_HOME_ITEM, ...ARC_NAV_TOP_ITEMS];
+const FEATURED_HUB_FALLBACK_THUMB =
+  "/assets/treatments/arc-360/arc-360-nav-preview.webp";
 
 /** Always show the nav while scroll is within this distance from the top. */
 const NAV_TOP_PIN_Y = 48;
@@ -43,13 +50,19 @@ function readScrollY(): number {
   return window.scrollY || document.documentElement.scrollTop || 0;
 }
 
-function DesktopLeaf({ leaf }: { leaf: NavLeaf }) {
+function DesktopLeaf({ leaf, active }: { leaf: NavLeaf; active: boolean }) {
   if (leaf.href) {
     return (
       <Link
         href={leaf.href}
         {...bookingLinkExternalProps(leaf.href)}
-        className="block rounded-md py-1 font-sans text-[0.9375rem] leading-snug text-arc-charcoal/72 transition-colors duration-200 hover:text-arc-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40"
+        aria-current={active ? "page" : undefined}
+        className={cn(
+          "block rounded-md py-1 font-sans text-[0.9375rem] leading-snug transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40",
+          active
+            ? "font-semibold text-arc-teal"
+            : "text-arc-charcoal/72 hover:text-arc-teal",
+        )}
       >
         {leaf.label}
       </Link>
@@ -69,43 +82,135 @@ function DesktopLeaf({ leaf }: { leaf: NavLeaf }) {
   );
 }
 
+type PanelCell = { group: NavGroup; key: string };
+
+/** Flatten columns → groups, then optionally slice into fixed-length rows. */
+function panelRows(
+  columns: readonly NavColumn[],
+  columnsPerRow: number | undefined,
+): PanelCell[][] {
+  const cells: PanelCell[] = [];
+  columns.forEach((column, colIndex) => {
+    column.groups.forEach((group, groupIndex) => {
+      cells.push({ group, key: `${colIndex}-${groupIndex}` });
+    });
+  });
+  if (!columnsPerRow) return [cells];
+
+  const rows: PanelCell[][] = [];
+  for (let i = 0; i < cells.length; i += columnsPerRow) {
+    rows.push(cells.slice(i, i + columnsPerRow));
+  }
+  return rows;
+}
+
 function DesktopMegaPanel({
   columns,
+  columnsPerRow,
+  pathname,
   onNavigate,
 }: {
   columns: readonly NavColumn[];
+  columnsPerRow?: number;
+  pathname: string | null;
   onNavigate: () => void;
 }) {
+  const rows = panelRows(columns, columnsPerRow);
+
   return (
-    <div className="flex flex-wrap justify-center gap-x-4 gap-y-8">
-      {columns.map((column, colIndex) =>
-        column.groups.map((group, groupIndex) => (
-          <div key={`${colIndex}-${groupIndex}`} className="min-w-[11rem] space-y-2">
-            {group.heading ? (
-              group.headingHref ? (
-                <Link
-                  href={group.headingHref}
-                  onClick={onNavigate}
-                  className="block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal transition-colors duration-200 hover:text-arc-teal"
+    <div className="space-y-8">
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex flex-wrap items-stretch justify-center gap-x-4 gap-y-8">
+          {row.map(({ group, key }) => {
+            const hubOnly = group.items.length === 0;
+            const headingActive = Boolean(
+              group.headingHref && isNavHrefExact(group.headingHref, pathname),
+            );
+
+            if (hubOnly && group.heading && group.headingHref) {
+              const thumbSrc =
+                resolveNavLeafThumb({
+                  label: group.heading,
+                  href: group.headingHref,
+                }) ?? FEATURED_HUB_FALLBACK_THUMB;
+
+              return (
+                <div
+                  key={key}
+                  className="flex min-w-[12.5rem] items-center justify-center self-stretch"
                 >
-                  {group.heading}
-                </Link>
-              ) : (
-                <p className="border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal">
-                  {group.heading}
-                </p>
-              )
-            ) : null}
-            <ul className="space-y-0.5">
-              {group.items.map((leaf) => (
-                <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
-                  <DesktopLeaf leaf={leaf} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )),
-      )}
+                  <Link
+                    href={group.headingHref}
+                    onClick={onNavigate}
+                    aria-current={headingActive ? "page" : undefined}
+                    className={cn(
+                      "group flex w-full max-w-[15rem] flex-col items-center gap-3 px-2 py-2 text-center",
+                      "transition-transform duration-300 hover:-translate-y-0.5",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
+                    )}
+                  >
+                    <span className="relative size-[4.5rem] overflow-hidden rounded-full bg-arc-cream-deep shadow-[0_8px_22px_rgba(44,44,44,0.18)] ring-2 ring-white/85">
+                      <Image
+                        src={thumbSrc}
+                        alt=""
+                        fill
+                        sizes="72px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized
+                      />
+                    </span>
+                    <span className="font-serif text-[1.55rem] font-semibold leading-none tracking-tight text-arc-charcoal transition-colors group-hover:text-arc-teal">
+                      {group.heading}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-arc-charcoal transition-colors group-hover:text-arc-teal">
+                      Explore
+                      <ArrowRight
+                        className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </span>
+                  </Link>
+                </div>
+              );
+            }
+
+            return (
+              <div key={key} className="min-w-[11rem] space-y-2">
+                {group.heading ? (
+                  group.headingHref ? (
+                    <Link
+                      href={group.headingHref}
+                      onClick={onNavigate}
+                      aria-current={headingActive ? "page" : undefined}
+                      className={cn(
+                        "block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight transition-colors duration-200 hover:text-arc-teal",
+                        headingActive ? "text-arc-teal" : "text-arc-charcoal",
+                      )}
+                    >
+                      {group.heading}
+                    </Link>
+                  ) : (
+                    <p className="block border-b border-arc-charcoal/12 pb-2 font-serif text-lg font-semibold tracking-tight text-arc-charcoal">
+                      {group.heading}
+                    </p>
+                  )
+                ) : null}
+                <ul className="space-y-0.5">
+                  {group.items.map((leaf) => (
+                    <li key={leaf.label} onClick={leaf.href ? onNavigate : undefined}>
+                      <DesktopLeaf
+                        leaf={leaf}
+                        active={Boolean(leaf.href && isNavHrefExact(leaf.href, pathname))}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 }
@@ -127,11 +232,13 @@ function DesktopNavTrigger({
   const triggerClass = cn(
     "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-2 font-sans text-[0.875rem] font-medium tracking-tight transition-colors duration-200",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent",
-    open
-      ? "bg-white/70 text-arc-teal"
-      : active
-        ? "bg-arc-teal font-semibold text-white shadow-[0_4px_12px_rgba(131,208,187,0.4)]"
-        : "text-arc-charcoal hover:bg-white/50 hover:text-arc-teal",
+    open && active
+      ? "bg-arc-teal/20 font-semibold text-arc-teal ring-1 ring-arc-teal/35"
+      : open
+        ? "bg-white/70 text-arc-teal"
+        : active
+          ? "bg-arc-teal font-semibold text-white shadow-[0_4px_12px_rgba(131,208,187,0.4)]"
+          : "text-arc-charcoal hover:bg-white/50 hover:text-arc-teal",
   );
 
   const chevron = hasPanel ? (
@@ -173,13 +280,6 @@ function DesktopNavTrigger({
  * logo is rendered separately by `ArcSiteHeader`. Hides on scroll down, fades in on scroll up
  * (always visible near page top). Mobile keeps the existing logo + drawer.
  */
-/** True when the current route matches this nav item (exact for "/", prefix otherwise). */
-function isNavItemActive(item: NavTopItem, pathname: string | null): boolean {
-  if (!pathname || !item.href) return false;
-  if (item.href === "/") return pathname === "/";
-  return pathname === item.href || pathname.startsWith(`${item.href}/`);
-}
-
 export function ArcDesktopNav() {
   const pathname = usePathname();
   const [openId, setOpenId] = useState<string | null>(null);
@@ -188,6 +288,9 @@ export function ArcDesktopNav() {
   const [revealed, setRevealed] = useState(true);
   const reducedMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+  const triggerRefs = useRef<Record<string, HTMLLIElement | null>>({});
+  const [tabPanelLeft, setTabPanelLeft] = useState<number | null>(null);
   const lastScrollYRef = useRef(0);
   /** Distance travelled in the current direction; resets when direction flips. */
   const dirAccumRef = useRef(0);
@@ -252,6 +355,32 @@ export function ArcDesktopNav() {
   const navVisible = reducedMotion ? true : revealed;
   const menuOpen = Boolean(openItem?.columns);
   const panelItem = openItem ?? displayItem;
+  const alignPanelToTab = panelItem?.panelAlign === "tab";
+  const panelLeftPx = alignPanelToTab ? tabPanelLeft : null;
+
+  // Narrow menus (Start Here) anchor under their tab; wide menus stay centered on the pill.
+  useLayoutEffect(() => {
+    if (!alignPanelToTab || !panelItem) {
+      setTabPanelLeft(null);
+      return;
+    }
+
+    const measure = () => {
+      const pill = pillRef.current;
+      const trigger = triggerRefs.current[panelItem.id];
+      if (!pill || !trigger) {
+        setTabPanelLeft(null);
+        return;
+      }
+      const pillRect = pill.getBoundingClientRect();
+      const triggerRect = trigger.getBoundingClientRect();
+      setTabPanelLeft(triggerRect.left + triggerRect.width / 2 - pillRect.left);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [alignPanelToTab, panelItem, menuOpen]);
 
   return (
     <div
@@ -272,6 +401,7 @@ export function ArcDesktopNav() {
             onMouseLeave lives here (pointer-events-auto) so leaving the pill+card closes the
             dropdown — the outer container is pointer-events-none and never fires leave events. */}
         <div
+          ref={pillRef}
           className={cn(
             "pointer-events-auto relative justify-self-center",
             "transition-opacity ease-[cubic-bezier(0.4,0,0.2,1)] duration-[600ms] will-change-[opacity]",
@@ -294,6 +424,9 @@ export function ArcDesktopNav() {
               {DESKTOP_NAV_ITEMS.map((item) => (
                 <li
                   key={item.id}
+                  ref={(el) => {
+                    triggerRefs.current[item.id] = el;
+                  }}
                   onMouseEnter={() =>
                     navItemHasPanel(item) ? setOpenId(item.id) : setOpenId(null)
                   }
@@ -312,20 +445,29 @@ export function ArcDesktopNav() {
             </ul>
           </nav>
 
-          {/* Mega-menu — floating rounded card centered under the pill (pt-3 bridges the gap).
-              Persistent container: fades / lifts in on open, fades out on close (keeps last
-              content mounted during the close), and gently crossfades content when switching
-              tabs — so moving between menus glides instead of popping. */}
+          {/* Mega-menu — floating rounded card (pt-3 bridges the gap).
+              Default: centered under the pill. Start Here (`panelAlign: "tab"`): under that tab. */}
           {panelItem?.columns ? (
             <div
               className={cn(
-                "absolute left-1/2 top-full z-20 -translate-x-1/2 pt-3",
+                "absolute top-full z-20 pt-3",
+                panelLeftPx == null && "left-1/2 -translate-x-1/2",
                 "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]",
                 menuOpen
                   ? "pointer-events-auto translate-y-0 opacity-100"
                   : "pointer-events-none -translate-y-1.5 opacity-0",
                 reducedMotion && "motion-reduce:transition-none",
               )}
+              style={
+                panelLeftPx != null
+                  ? {
+                      left: panelLeftPx,
+                      transform: menuOpen
+                        ? "translate(-50%, 0)"
+                        : "translate(-50%, -0.375rem)",
+                    }
+                  : undefined
+              }
               aria-hidden={!menuOpen}
             >
               <div className="max-h-[70vh] w-max max-w-[min(66rem,calc(100vw-24rem))] overflow-y-auto rounded-2xl border border-black/30 bg-arc-cream p-6 shadow-[0_24px_48px_rgba(44,44,44,0.14)]">
@@ -333,7 +475,12 @@ export function ArcDesktopNav() {
                   key={panelItem.id}
                   className={cn(reducedMotion ? "" : "animate-[arc-nav-fade_160ms_ease-out]")}
                 >
-                  <DesktopMegaPanel columns={panelItem.columns} onNavigate={closeMenu} />
+                  <DesktopMegaPanel
+                    columns={panelItem.columns}
+                    columnsPerRow={panelItem.panelColumnsPerRow}
+                    pathname={pathname}
+                    onNavigate={closeMenu}
+                  />
                 </div>
               </div>
             </div>

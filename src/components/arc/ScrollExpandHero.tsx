@@ -749,6 +749,7 @@ export function ScrollExpandHero({
                 sizes="100vw"
                 className="object-cover object-center"
                 priority
+                fetchPriority="high"
                 onLoadingComplete={handleHeroImageReady}
               />
             </div>

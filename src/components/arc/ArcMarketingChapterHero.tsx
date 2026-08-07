@@ -9,12 +9,13 @@ type ArcMarketingChapterHeroProps = {
   id: string;
   headline: string;
   headlineEmphasis: string;
-  heroCanvasTiles: readonly ArcChapterHeroCanvasTile[];
+  /** Optional floating window tiles. Omit for a plate-only chapter hero (e.g. Contact). */
+  heroCanvasTiles?: readonly ArcChapterHeroCanvasTile[];
   /** Soft cream feather into the next section (background layer). */
   bottomSeam?: boolean;
 };
 
-/** Ambient full-bleed chapter hero — headline + canvas only (one viewport, like About / Treatments). */
+/** Ambient full-bleed chapter hero — headline + optional canvas (one viewport, like About / Treatments). */
 export function ArcMarketingChapterHero({
   id,
   headline,
@@ -33,7 +34,11 @@ export function ArcMarketingChapterHero({
       body=""
       introMode="visible-on-load"
       copyColumnAmbients={ABOUT_HERO_COPY_AMBIENT_IMAGES}
-      heroCanvasTiles={splitCenterHeroTiles(heroCanvasTiles)}
+      heroCanvasTiles={
+        heroCanvasTiles?.length
+          ? splitCenterHeroTiles(heroCanvasTiles)
+          : undefined
+      }
       bottomSeam={bottomSeam}
       priorityBackground
     />

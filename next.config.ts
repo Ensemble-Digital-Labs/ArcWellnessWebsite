@@ -81,6 +81,41 @@ const nextConfig: NextConfig = {
         destination: "/treatments/infusion-therapy",
         permanent: true,
       },
+      {
+        source: "/treatments/daxxify",
+        destination: "/treatments/neuromodulators",
+        permanent: true,
+      },
+      {
+        source: "/treatments/rha",
+        destination: "/treatments/dermal-fillers",
+        permanent: true,
+      },
+      {
+        source: "/case-studies",
+        destination: "/blogs",
+        permanent: true,
+      },
+      {
+        source: "/case-studies/:slug",
+        destination: "/blogs/:slug",
+        permanent: true,
+      },
+      {
+        source: "/blog/insulin-resistance-signs-symptoms",
+        destination: "/blogs/insulin-resistance-signs-symptoms",
+        permanent: true,
+      },
+      {
+        source: "/blogs/could-it-be-insulin-resistance",
+        destination: "/blogs/insulin-resistance-signs-symptoms",
+        permanent: true,
+      },
+      {
+        source: "/case-studies/could-it-be-insulin-resistance",
+        destination: "/blogs/insulin-resistance-signs-symptoms",
+        permanent: true,
+      },
     ];
   },
 };

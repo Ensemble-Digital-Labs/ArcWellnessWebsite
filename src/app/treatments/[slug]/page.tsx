@@ -7,17 +7,22 @@ import { EmsellaTreatmentContent } from "@/components/arc/pages/EmsellaTreatment
 import { ExionTreatmentContent } from "@/components/arc/pages/ExionTreatmentContent";
 import { ExoMindTreatmentContent } from "@/components/arc/pages/ExoMindTreatmentContent";
 import { InfusionTreatmentContent } from "@/components/arc/pages/InfusionTreatmentContent";
+import { ServiceTemplateContent } from "@/components/arc/pages/ServiceTemplateContent";
 import { TreatmentDetailContent } from "@/components/arc/pages/TreatmentDetailContent";
 import { emsculptNeoHero } from "@/content/pages/emsculpt-neo";
 import { emsellaHero } from "@/content/pages/emsella";
 import { exionHero } from "@/content/pages/exion";
 import { exomindHero } from "@/content/pages/exomind";
 import { infusionHero } from "@/content/pages/infusion";
+import { getServiceTemplateBySlug } from "@/content/pages/serviceTemplateRegistry";
 import { getAllTreatmentSlugs, getTreatmentBySlug } from "@/content/pages/treatments";
 
 type Props = { params: Promise<{ slug: string }> };
 
-const TREATMENT_META_BY_SLUG: Record<string, { title: string; description: string }> = {
+const TREATMENT_META_BY_SLUG: Record<
+  string,
+  { title: string; description: string }
+> = {
   overview: {
     title: "Treatment Overview | ExoMind, EmSculpt Neo, Peptides & More",
     description:
@@ -53,7 +58,12 @@ const TREATMENT_META_BY_SLUG: Record<string, { title: string; description: strin
     description:
       "DAXXIFY is an FDA-approved neuromodulator that smooths moderate to severe frown lines with longer-lasting results. Book at Arc Wellness in St. Louis, MO.",
   },
-  rha: {
+  neuromodulators: {
+    title: "Neuromodulators | Arc Wellness, St. Louis",
+    description:
+      "Physician-guided neuromodulators to soften lines while keeping you looking like yourself. Available at Arc Wellness in St. Louis, MO.",
+  },
+  "dermal-fillers": {
     title: "RHA Dermal Fillers for Dynamic Wrinkles | Arc Wellness",
     description:
       "The RHA Collection is the first FDA-approved filler line built specifically for dynamic wrinkles and folds. Available at Arc Wellness in St. Louis, MO.",
@@ -62,6 +72,11 @@ const TREATMENT_META_BY_SLUG: Record<string, { title: string; description: strin
     title: "Knesko Collagen Masks & Gemstone Facials | Arc Wellness",
     description:
       "Knesko Skin blends clinical science with gemstone-infused collagen masks for a luxury facial that treats skin, mind, and spirit. Book at Arc Wellness.",
+  },
+  "infusion-therapy": {
+    title: "Infusion & Nutrient Therapy | Arc Wellness, St. Louis",
+    description:
+      "Physician-guided infusion and nutrient therapy for hydration, recovery, and busy seasons—without a hospital visit. Available at Arc Wellness in St. Louis.",
   },
   "peptide-therapy": {
     title: "Peptide Therapy for Recovery & Longevity | Arc Wellness",
@@ -99,6 +114,8 @@ export default async function TreatmentDetailPage({ params }: Props) {
   const treatment = getTreatmentBySlug(slug);
   if (!treatment) notFound();
 
+  const serviceTemplate = getServiceTemplateBySlug(treatment.slug);
+
   // Kick LCP heroes early on cold / direct loads (raw WebP).
   // Homepage idle warm still uses the matching `/_next/image` variant for SPA nav.
   if (treatment.slug === "exion") {
@@ -111,6 +128,8 @@ export default async function TreatmentDetailPage({ params }: Props) {
     preload(emsculptNeoHero.imageSrc, { as: "image", fetchPriority: "high" });
   } else if (treatment.slug === "exomind") {
     preload(exomindHero.imageSrc, { as: "image", fetchPriority: "high" });
+  } else if (serviceTemplate) {
+    preload(serviceTemplate.hero.imageSrc, { as: "image", fetchPriority: "high" });
   }
 
   return (
@@ -125,6 +144,11 @@ export default async function TreatmentDetailPage({ params }: Props) {
         <EmsculptNeoTreatmentContent treatment={treatment} />
       ) : treatment.slug === "infusion-therapy" ? (
         <InfusionTreatmentContent treatment={treatment} />
+      ) : serviceTemplate ? (
+        <ServiceTemplateContent
+          treatment={treatment}
+          content={serviceTemplate.content}
+        />
       ) : (
         <TreatmentDetailContent treatment={treatment} />
       )}

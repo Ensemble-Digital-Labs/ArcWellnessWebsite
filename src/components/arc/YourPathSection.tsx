@@ -31,6 +31,9 @@ import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
 import { siteMeta } from "@/content/siteMeta";
 
+/** Hide AI / interim path-step photos until client photography is ready. */
+const PATH_STEP_PHOTOS_COMING_SOON = true;
+
 type PathStep = {
   title: string;
   stepMeta: string;
@@ -88,6 +91,16 @@ const PATH_STEPS: PathStep[] = [
   },
 ];
 
+/** Blank cream plate while step photography is held back — no placeholder copy. */
+function PathStepPhotoPlaceholder({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn("absolute inset-0 bg-arc-cream", className)}
+      aria-hidden
+    />
+  );
+}
+
 /** Script keywords on light path intro plate — bigger on mobile, slightly smaller on laptop+. */
 const PATH_INTRO_EMPHASIS_CLASS =
   "text-[2.15em] leading-[1.0] text-arc-teal-ink sm:text-[2.05em] md:text-[1.9em] lg:text-[1.82em] xl:text-[1.78em] [text-shadow:0_1px_2px_rgba(255,255,255,0.5),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]";
@@ -139,14 +152,18 @@ function YourPathIntroSection({
       pinDistanceMultiplier={0.35}
       onProgress={setPinProgress}
       disabled
-      className="relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted"
+      className={cn(
+        "relative z-30 min-h-[100dvh] overflow-clip bg-arc-teal-muted",
+        /* Overlap showcase cream lip — kills mobile Safari scroll hairline at the feather. */
+        topSeam && "max-md:-mt-[3px] max-md:pt-[3px]",
+      )}
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <Image
           src={PATH_SECTION_INTRO_BACKGROUND_SRC}
           alt=""
           fill
-          className="object-cover object-center"
+          className="object-cover object-[78%_center] md:object-center"
           sizes="100vw"
         />
       </div>
@@ -227,13 +244,17 @@ function YourPathStepPanel({
           ].join(" ")}
           style={imageStyle}
         >
-          <Image
-            src={step.imageSrc}
-            alt={step.imageAlt}
-            fill
-            className="object-cover object-center"
-            sizes="(min-width: 768px) 50vw, 100vw"
-          />
+          {PATH_STEP_PHOTOS_COMING_SOON ? (
+            <PathStepPhotoPlaceholder />
+          ) : (
+            <Image
+              src={step.imageSrc}
+              alt={step.imageAlt}
+              fill
+              className="object-cover object-center"
+              sizes="(min-width: 768px) 50vw, 100vw"
+            />
+          )}
         </div>
 
         <div
@@ -430,16 +451,20 @@ function YourPathStepsMobileExpanded() {
             </ArcTextReveal>
           </div>
 
-          <div className="relative aspect-[4/3] w-full bg-arc-charcoal/5 sm:aspect-[3/2]">
+          <div className="relative aspect-[4/3] w-full bg-arc-cream sm:aspect-[3/2]">
             <div aria-hidden className={ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_CLASS} />
-            <Image
-              src={step.imageSrc}
-              alt={step.imageAlt}
-              fill
-              className="object-cover object-center"
-              sizes="100vw"
-              priority={index === 0}
-            />
+            {PATH_STEP_PHOTOS_COMING_SOON ? (
+              <PathStepPhotoPlaceholder />
+            ) : (
+              <Image
+                src={step.imageSrc}
+                alt={step.imageAlt}
+                fill
+                className="object-cover object-center"
+                sizes="100vw"
+                priority={index === 0}
+              />
+            )}
           </div>
         </article>
       ))}
@@ -662,30 +687,34 @@ function YourPathStepsInteractiveSection({
             aria-hidden
             className={ARC_HOME_PATH_STEP_IMAGE_TOP_FEATHER_DESKTOP_CLASS}
           />
-          {PATH_STEPS.map((step, index) => (
-            <div
-              key={step.stepMeta}
-              className={cn(
-                "absolute inset-0",
-                reduceMotion
-                  ? index === activeIndex
-                    ? "opacity-100"
-                    : "opacity-0"
-                  : "transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                index === activeIndex ? "opacity-100" : "opacity-0",
-              )}
-              aria-hidden={index !== activeIndex}
-            >
-              <Image
-                src={step.imageSrc}
-                alt={step.imageAlt}
-                fill
-                className="object-cover object-center"
-                sizes="50vw"
-                priority={index === 0}
-              />
-            </div>
-          ))}
+          {PATH_STEP_PHOTOS_COMING_SOON ? (
+            <PathStepPhotoPlaceholder />
+          ) : (
+            PATH_STEPS.map((step, index) => (
+              <div
+                key={step.stepMeta}
+                className={cn(
+                  "absolute inset-0",
+                  reduceMotion
+                    ? index === activeIndex
+                      ? "opacity-100"
+                      : "opacity-0"
+                    : "transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  index === activeIndex ? "opacity-100" : "opacity-0",
+                )}
+                aria-hidden={index !== activeIndex}
+              >
+                <Image
+                  src={step.imageSrc}
+                  alt={step.imageAlt}
+                  fill
+                  className="object-cover object-center"
+                  sizes="50vw"
+                  priority={index === 0}
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
       ) : (

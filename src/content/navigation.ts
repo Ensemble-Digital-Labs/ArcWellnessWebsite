@@ -1,12 +1,17 @@
 /**
  * Site navigation IA — single source of truth for header mega-menus.
- * Top bar: About · Services · Conditions · Start Here · Arc Library · Financing · Shop · Contact
+ * Top bar: About · Services · Conditions · Start Here · Arc Library · Contact
+ * (Financing + Shop tabs exist in source but are `hidden` until ready — see notes on those items.)
  *
  * Linking convention:
  * - `href` set           → live route
  * - `href` omitted       → non-clickable label (page not built)
  * - `comingSoon: true`   → disabled + "Coming soon"
  * - `future: true`       → disabled + "Future"
+ * - `hidden: true`       → omitted from desktop bar + mobile drawer (IA kept)
+ *
+ * Arc Library uses a slim Start Here–style panel (`arcLibraryMenu`). Full multi-column
+ * IA remains in `ARC_LIBRARY_MENU_PRESERVED` for when more library pages ship.
  */
 import { siteMeta } from "@/content/siteMeta";
 import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
@@ -35,6 +40,22 @@ export type NavTopItem = {
   href?: string;
   /** Mega-menu columns (desktop) / accordion sections (mobile). */
   columns?: readonly NavColumn[];
+  /**
+   * Pin the desktop panel to this many columns per row. Without it, columns wrap
+   * on their own content width, which gives ragged rows on long lists.
+   */
+  panelColumnsPerRow?: number;
+  /**
+   * Desktop mega-panel horizontal alignment under the floating pill.
+   * - `center` (default): centered under the whole pill (wide Services / Conditions).
+   * - `tab`: centered under this tab’s trigger (narrow Start Here).
+   */
+  panelAlign?: "center" | "tab";
+  /**
+   * When true, the tab is filtered out of `ARC_NAV_TOP_ITEMS` (desktop + mobile).
+   * Keep the entry + its `*Menu` IA here so it can be restored without rewriting.
+   */
+  hidden?: boolean;
 };
 
 export const ARC_NAV_BOOK_CTA = {
@@ -61,12 +82,12 @@ function future(label: string): NavLeaf {
   return { label, future: true };
 }
 
-/** SERVICES — The Arc Method hub + four service groups (client IA). */
+/** SERVICES — Arc 360 hub + four service groups (client IA). */
 const servicesMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        heading: "The Arc Method",
+        heading: "Arc 360",
         headingHref: "/treatments",
         items: [],
       },
@@ -77,12 +98,12 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Restore & Optimize",
         items: [
-          soon("Hormone Health"),
-          soon("Metabolic Health"),
-          soon("Gut Health"),
-          soon("Brain Health"),
-          soon("Longevity"),
-          soon("Medical Weight Loss"),
+          leaf("Hormone Health", "/treatments/hormone-health"),
+          leaf("Metabolic Health", "/treatments/metabolic-health"),
+          leaf("Gut Health", "/treatments/gut-health"),
+          leaf("Brain Health", "/treatments/brain-health"),
+          leaf("Longevity", "/treatments/longevity"),
+          leaf("Medical Weight Loss", "/treatments/medical-weight-loss"),
         ],
       },
     ],
@@ -94,7 +115,6 @@ const servicesMenu: readonly NavColumn[] = [
         items: [
           leaf("Infusions", treatmentHrefByLabel["Infusion Therapy"]),
           leaf("Peptides", treatmentHrefByLabel["Peptide Therapy"]),
-          soon("Injections"),
           leaf("Supplements", treatmentHrefByLabel["Supplements"]),
         ],
       },
@@ -105,13 +125,12 @@ const servicesMenu: readonly NavColumn[] = [
       {
         heading: "Aesthetics",
         items: [
-          soon("Injectables"),
-          leaf("Fillers", treatmentHrefByLabel["RHA Fillers"]),
+          leaf("Neuromodulators", "/treatments/neuromodulators"),
+          leaf("Dermal Fillers", treatmentHrefByLabel["Dermal Fillers"]),
           leaf("Exion", treatmentHrefByLabel["Exion"]),
           leaf("EmFace", treatmentHrefByLabel["EmFace"]),
-          soon("RF Microneedling"),
-          soon("Clear RF"),
-          soon("Genesis Z"),
+          leaf("RF Microneedling", "/treatments/rf-microneedling"),
+          leaf("Clear RF", "/treatments/clear-rf"),
         ],
       },
     ],
@@ -136,10 +155,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Brain Fog"),
-          soon("Food Sensitivities"),
-          soon("Fine Lines & Wrinkles"),
-          soon("Low Testosterone"),
+          leaf("Brain Fog", "/conditions/brain-fog"),
+          leaf("Food Sensitivities", "/conditions/food-sensitivities"),
+          leaf("Fine Lines & Wrinkles", "/conditions/fine-lines-wrinkles"),
+          leaf("Male Hormonal Changes", "/conditions/male-hormonal-changes"),
         ],
       },
     ],
@@ -148,10 +167,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Chronic Fatigue"),
-          soon("Gut Health"),
-          soon("Hair Loss"),
-          soon("Menopause"),
+          leaf("Chronic Fatigue", "/conditions/chronic-fatigue"),
+          leaf("Gut Health", "/conditions/gut-health"),
+          leaf("Hair Loss", "/conditions/hair-loss"),
+          leaf("Women's Hormones", "/conditions/womens-hormones"),
         ],
       },
     ],
@@ -160,10 +179,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Poor Focus / ADHD"),
-          soon("Inflammation"),
-          soon("Hyperpigmentation"),
-          soon("Hormonal Imbalance"),
+          leaf("Poor Focus", "/conditions/poor-focus"),
+          leaf("ADHD", "/conditions/adhd"),
+          leaf("Inflammation", "/conditions/inflammation"),
+          leaf("Hyperpigmentation", "/conditions/hyperpigmentation"),
         ],
       },
     ],
@@ -172,10 +191,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Memory Concerns"),
-          soon("Insulin Resistance"),
-          soon("Loose Skin"),
-          soon("Low Libido"),
+          leaf("Memory Concerns", "/conditions/memory-concerns"),
+          leaf("Insulin Resistance", "/conditions/insulin-resistance"),
+          leaf("Loose Skin", "/conditions/loose-skin"),
+          leaf("Sleep Concerns", "/conditions/sleep-concerns"),
         ],
       },
     ],
@@ -184,10 +203,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Sleep Concerns"),
-          soon("Liver Health"),
-          soon("Acne"),
-          soon("Sexual Wellness"),
+          leaf("Acne", "/conditions/acne"),
+          leaf("Anxiety", "/conditions/anxiety"),
+          leaf("Oxidative Stress", "/conditions/oxidative-stress"),
+          leaf("Acne Scars", "/conditions/acne-scars"),
         ],
       },
     ],
@@ -196,10 +215,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Anxiety"),
-          soon("Oxidative Stress"),
-          soon("Acne Scars"),
-          soon("Weight Gain"),
+          leaf("Weight Gain", "/conditions/weight-gain"),
+          leaf("Depression", "/conditions/depression"),
+          leaf("Immune Health", "/conditions/immune-health"),
+          leaf("Rosacea", "/conditions/rosacea"),
         ],
       },
     ],
@@ -208,10 +227,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Depression"),
-          soon("Immune Health"),
-          soon("Rosacea"),
-          soon("Food Noise"),
+          leaf("Food Noise", "/conditions/food-noise"),
+          leaf("Stress & Burnout", "/conditions/stress-burnout"),
+          leaf("Longevity", "/conditions/longevity"),
+          leaf("Large Pores", "/conditions/large-pores"),
         ],
       },
     ],
@@ -220,10 +239,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Stress & Burnout"),
-          soon("Longevity"),
-          soon("Large Pores"),
-          soon("Medical Weight Loss"),
+          leaf("Cellular Health", "/conditions/cellular-health"),
+          leaf("Double Chin", "/conditions/double-chin"),
+          leaf("Muscle Loss", "/conditions/muscle-loss"),
+          leaf("Poor Recovery", "/conditions/poor-recovery"),
         ],
       },
     ],
@@ -232,10 +251,10 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Low Energy"),
-          soon("Cellular Health"),
-          soon("Double Chin"),
-          soon("Muscle Loss"),
+          leaf("Facial Volume Loss", "/conditions/facial-volume-loss"),
+          leaf("Physical Performance", "/conditions/physical-performance"),
+          leaf("Cognitive Health", "/conditions/cognitive-health"),
+          leaf("Parkinson's Support", "/conditions/parkinsons-support"),
         ],
       },
     ],
@@ -244,10 +263,9 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Poor Recovery"),
-          soon("Healthy Aging"),
-          soon("Facial Volume Loss"),
-          soon("Strength & Performance"),
+          leaf("Sun Damage", "/conditions/sun-damage"),
+          leaf("Pelvic Floor Weakness", "/conditions/pelvic-floor-weakness"),
+          leaf("Recurrent UTIs", "/conditions/recurrent-utis"),
         ],
       },
     ],
@@ -256,61 +274,55 @@ const conditionsMenu: readonly NavColumn[] = [
     groups: [
       {
         items: [
-          soon("Cognitive Health"),
-          soon("Parkinson's Support"),
-          soon("Thin Lips"),
-          soon("Pelvic Floor Weakness"),
-        ],
-      },
-    ],
-  },
-  {
-    groups: [
-      {
-        items: [
-          soon("Mental Clarity"),
-          soon("Chronic UTIs"),
-          soon("Sun Damage"),
-          soon("Urinary Incontinence"),
+          leaf("Urinary Incontinence", "/conditions/urinary-incontinence"),
+          leaf(
+            "Post Prostatectomy Incontinence",
+            "/conditions/post-prostatectomy-incontinence",
+          ),
+          leaf(
+            "Intimacy and Sexual Wellness",
+            "/conditions/intimacy-sexual-wellness",
+          ),
         ],
       },
     ],
   },
 ];
 
-/** START HERE — new vs existing patients. */
+/** START HERE — first-visit paths. */
 const startHereMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        heading: "Your First Visit",
         items: [
           leaf("Book a consultation", siteMeta.bookingUrl),
           leaf("Membership Options", "/programs"),
           leaf("Pricing & Financing", "/financing"),
-          soon("Insurance & Payment"),
-          soon("Frequently Asked Questions"),
+          // NOTE: Insurance & Payment / FAQ removed from Start Here until live.
+          // Restore: soon("Insurance & Payment"), soon("Frequently Asked Questions"),
         ],
       },
     ],
   },
-  {
-    groups: [
-      {
-        heading: "Existing Patients",
-        items: [
-          soon("Patient Portal"),
-          soon("Forms"),
-          soon("Prescription Refills"),
-          leaf("Contact Your Care Team", "/contact"),
-        ],
-      },
-    ],
-  },
+  // NOTE (Aug 2026): "Existing Patients" column removed (Patient Portal / Forms /
+  // Prescription Refills were all Soon). Restore when portal/forms go live:
+  // {
+  //   groups: [{
+  //     heading: "Existing Patients",
+  //     items: [
+  //       soon("Patient Portal"),
+  //       soon("Forms"),
+  //       soon("Prescription Refills"),
+  //     ],
+  //   }],
+  // },
 ];
 
-/** ARC LIBRARY — content hub (interim: case-studies). */
-const arcLibraryMenu: readonly NavColumn[] = [
+/**
+ * Full ARC LIBRARY mega-menu IA (multi-column). Kept for restore when more
+ * library pages ship — top bar currently uses the slim `arcLibraryMenu` below.
+ */
+export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
   {
     groups: [
       {
@@ -342,7 +354,7 @@ const arcLibraryMenu: readonly NavColumn[] = [
       {
         heading: "Healthy Living",
         items: [
-          leaf("Latest Insights", "/case-studies"),
+          leaf("From the Arc Desk", "/blogs"),
           soon("Healthy Recipes"),
           soon("Nutrition & Lifestyle"),
         ],
@@ -367,6 +379,17 @@ const arcLibraryMenu: readonly NavColumn[] = [
           soon("Frequently Asked Questions"),
           soon("Videos & Webinars"),
         ],
+      },
+    ],
+  },
+];
+
+/** ARC LIBRARY — Start Here–style slim panel (live links only). */
+const arcLibraryMenu: readonly NavColumn[] = [
+  {
+    groups: [
+      {
+        items: [leaf("From the Arc Desk", "/blogs")],
       },
     ],
   },
@@ -408,7 +431,8 @@ const financingMenu: readonly NavColumn[] = [
           leaf("How Financing Works", "/financing"),
           soon("Frequently Asked Questions"),
           future("Financing Calculator"),
-          leaf("Contact Our Team", "/contact"),
+          // NOTE: "Contact Our Team" removed — Contact is a top-bar tab.
+          // Restore: leaf("Contact Our Team", "/contact"),
         ],
       },
     ],
@@ -477,16 +501,48 @@ const shopMenu: readonly NavColumn[] = [
   },
 ];
 
-export const ARC_NAV_TOP_ITEMS: readonly NavTopItem[] = [
+/**
+ * Full top-bar IA (including temporarily hidden tabs).
+ * Public export `ARC_NAV_TOP_ITEMS` filters out `hidden` entries.
+ */
+const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   { id: "about", label: "About", href: "/about" },
   { id: "services", label: "Services", href: "/treatments", columns: servicesMenu },
-  { id: "conditions", label: "Conditions", columns: conditionsMenu },
-  { id: "start-here", label: "Start Here", columns: startHereMenu },
-  { id: "arc-library", label: "Arc Library", columns: arcLibraryMenu },
-  { id: "financing", label: "Financing", href: "/financing", columns: financingMenu },
-  { id: "shop", label: "Shop", columns: shopMenu },
+  { id: "conditions", label: "Conditions", columns: conditionsMenu, panelColumnsPerRow: 4 },
+  { id: "start-here", label: "Start Here", columns: startHereMenu, panelAlign: "tab" },
+  {
+    id: "arc-library",
+    label: "Arc Library",
+    href: "/blogs",
+    columns: arcLibraryMenu,
+    panelAlign: "tab",
+  },
+  {
+    id: "financing",
+    label: "Financing",
+    href: "/financing",
+    columns: financingMenu,
+    // NOTE (Aug 2026): Financing top-bar tab hidden for now.
+    // Mega-menu IA stays in `financingMenu` above — do not delete.
+    // To show again: set `hidden: false` (or remove this flag).
+    // Start Here still links "Pricing & Financing" → `/financing` until that changes.
+    hidden: true,
+  },
+  {
+    id: "shop",
+    label: "Shop",
+    columns: shopMenu,
+    // NOTE (Chinh): Shop tab hidden until shop pages / ecommerce are ready.
+    // To show again: set `hidden: false` (or remove this flag). Column IA stays in `shopMenu`.
+    hidden: true,
+  },
   { id: "contact", label: "Contact", href: "/contact" },
-] as const;
+];
+
+/** Top-bar items actually rendered in desktop nav + mobile drawer. */
+export const ARC_NAV_TOP_ITEMS: readonly NavTopItem[] = ARC_NAV_TOP_ITEMS_SOURCE.filter(
+  (item) => !item.hidden,
+);
 
 /** Flatten columns for simple horizontal submenus when mega grid is too wide. */
 export function flattenNavColumns(columns: readonly NavColumn[]): NavLeaf[] {
@@ -504,4 +560,35 @@ export function flattenNavColumns(columns: readonly NavColumn[]): NavLeaf[] {
 
 export function navItemHasPanel(item: NavTopItem): boolean {
   return Boolean(item.columns?.length);
+}
+
+/** Exact for `/`; otherwise exact or nested path under `href`. */
+export function isNavHrefActive(href: string, pathname: string | null): boolean {
+  if (!pathname) return false;
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Exact route match only (mega-menu leaves / hub headings). */
+export function isNavHrefExact(href: string, pathname: string | null): boolean {
+  if (!pathname) return false;
+  return pathname === href;
+}
+
+/** True when the current route matches this top item or any link in its mega-menu. */
+export function isNavItemActive(item: NavTopItem, pathname: string | null): boolean {
+  if (!pathname) return false;
+  if (item.href && isNavHrefActive(item.href, pathname)) return true;
+  if (!item.columns) return false;
+  for (const column of item.columns) {
+    for (const group of column.groups) {
+      if (group.headingHref && isNavHrefExact(group.headingHref, pathname)) {
+        return true;
+      }
+      for (const leaf of group.items) {
+        if (leaf.href && isNavHrefExact(leaf.href, pathname)) return true;
+      }
+    }
+  }
+  return false;
 }

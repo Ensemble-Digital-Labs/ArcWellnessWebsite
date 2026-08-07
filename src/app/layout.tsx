@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Birthstone, DM_Sans, Playfair_Display, Radley } from "next/font/google";
+import { GoogleTagManager } from "@/components/analytics/GoogleTagManager";
 import { ArcRouteTransition } from "@/components/arc/ArcRouteTransition";
 import "./globals.css";
 
@@ -43,9 +44,21 @@ const radley = Radley({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://arcwellness.net"),
   title: "Arc Wellness | Enhance Your Wellness Today",
   description:
     "Discover cutting-edge, personalized wellness treatments including body sculpting, cognitive renewal, and vitamin therapy at Arc Wellness in St. Louis.",
+  applicationName: "Arc Wellness",
+  // File-convention icons in `src/app/` (favicon.ico, icon.svg/png, apple-icon.png)
+  // apply site-wide; themeColor helps browser chrome / installed shortcuts.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F0E3D7" },
+    { media: "(prefers-color-scheme: dark)", color: "#83D0BB" },
+  ],
+  appleWebApp: {
+    title: "Arc Wellness",
+    statusBarStyle: "default",
+  },
 };
 
 /**
@@ -73,6 +86,7 @@ export default function RootLayout({
         className="min-h-full bg-arc-cream text-arc-charcoal"
         suppressHydrationWarning
       >
+        <GoogleTagManager />
         <script dangerouslySetInnerHTML={{ __html: ARC_INTRO_PREPAINT_SCRIPT }} />
         <ArcRouteTransition>{children}</ArcRouteTransition>
       </body>

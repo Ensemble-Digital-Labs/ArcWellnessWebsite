@@ -26,20 +26,32 @@ export const investSectionShellClass = cn(
   "2xl:min-h-[min(100dvh,76rem)]",
 );
 
-/** Readable panel on phone/tablet, cream type on mint wall needs a surface. */
-export const investMobilePanelClass = cn(
-  "w-full max-w-lg rounded-2xl",
+/**
+ * Mobile/tablet copy stack — no dark card.
+ * Legibility comes from `InvestCTABackdrop` veil + cream text shadows.
+ * Nudge below true center so the group clears the sticky logo/menu band.
+ */
+export const investMobileStackClass = cn(
+  "w-full max-w-lg",
   "md:max-w-xl lg:max-w-2xl",
-  "bg-arc-charcoal/78 px-6 py-7",
-  "sm:px-8 sm:py-9",
+  "mt-16 translate-y-12 px-1 py-2 sm:mt-20 sm:translate-y-14 sm:px-2",
 );
 
 export const investCopyBlockClass = "relative w-full max-w-full";
 
 /** Matches hero reference script lines (`Wellness,` / `Longevity &` / `Aesthetics`). */
+/** Large + tight stack on phone; `md+` restores the prior laptop/desktop scale. */
 const INVEST_CTA_KEYWORD_LINE_CLASS = cn(
-  "block font-title-emphasis text-[clamp(2.15rem,6.8vw,5.85rem)] font-normal not-italic leading-[1.02] tracking-tight text-arc-cream md:text-[clamp(2.5rem,7.2vw,6.35rem)]",
-  "[text-shadow:0_1px_8px_rgba(0,0,0,0.32)]",
+  "block font-title-emphasis font-normal not-italic tracking-tight text-arc-cream",
+  "text-[clamp(3.2rem,9.8vw,3.85rem)] leading-[0.82]",
+  "md:text-[clamp(2.5rem,7.2vw,6.35rem)] md:leading-[1.02]",
+  "[text-shadow:0_2px_22px_rgba(0,0,0,0.58),0_1px_6px_rgba(0,0,0,0.45)]",
+);
+
+/** Pull follow-on lines closer on mobile only. */
+const INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS = cn(
+  "mt-0 max-md:-mt-1.5",
+  "md:mt-0.5",
 );
 
 export function InvestCTAHeadline({
@@ -55,10 +67,14 @@ export function InvestCTAHeadline({
       style={headlineMotion}
     >
       <TitleEmphasis className={INVEST_CTA_KEYWORD_LINE_CLASS}>Invest in You.</TitleEmphasis>
-      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+      <TitleEmphasis
+        className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS)}
+      >
         Live Fully.
       </TitleEmphasis>
-      <TitleEmphasis className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, "mt-0.5")}>
+      <TitleEmphasis
+        className={cn(INVEST_CTA_KEYWORD_LINE_CLASS, INVEST_CTA_KEYWORD_LINE_FOLLOW_CLASS)}
+      >
         Age Intentionally.
       </TitleEmphasis>
     </h2>
@@ -100,30 +116,32 @@ export function InvestCTASignoffBlock({
   stacked?: boolean;
   centered?: boolean;
 }) {
+  const alignClass = stacked
+    ? centered
+      ? "text-center"
+      : "text-left"
+    : "text-right";
+
   return (
-    <div
-      className={cn(
-        stacked ? (centered ? "text-center" : "text-left") : "text-right",
-      )}
-      style={motionStyle}
-    >
+    <div className={alignClass} style={motionStyle}>
       <p
         className={cn(
-          "font-title-emphasis leading-[1.2] text-arc-cream",
-          "[text-shadow:0_2px_20px_rgba(0,0,0,0.4)]",
+          "font-title-emphasis text-arc-cream",
+          "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.25rem,4.8vw,1.55rem)]"
-            : "whitespace-nowrap text-[clamp(1.5rem,3.2vw,2.65rem)]",
+            ? "text-[clamp(1.55rem,5.8vw,1.95rem)] leading-[1.05]"
+            : "text-[clamp(1.65rem,3.2vw,2.65rem)] leading-[1.2]",
         )}
       >
         {signoff.preamble}
       </p>
       <p
         className={cn(
-          "mt-1 font-title-emphasis leading-none text-arc-cream",
+          "font-title-emphasis leading-none text-arc-cream",
+          "[text-shadow:0_2px_22px_rgba(0,0,0,0.55),0_1px_6px_rgba(0,0,0,0.4)]",
           stacked
-            ? "text-[clamp(1.4rem,5.2vw,1.7rem)]"
-            : "text-[clamp(1.7rem,3.5vw,2.85rem)]",
+            ? "-mt-0.5 text-[clamp(1.7rem,6.2vw,2.15rem)]"
+            : "mt-1 text-[clamp(1.85rem,3.5vw,2.85rem)]",
         )}
       >
         {signoff.name}
@@ -143,9 +161,14 @@ export function InvestCTABackdrop({ imageSrc }: { imageSrc: string }) {
         sizes="100vw"
         priority={false}
       />
+      {/* Mobile/tablet: soft full-bleed veil (no card) so cream type stays readable. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/28 via-black/10 to-black/35 xl:hidden"
+        className="absolute inset-0 bg-gradient-to-b from-black/48 via-black/32 to-black/55 xl:hidden"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42)_0%,transparent_72%)] xl:hidden"
       />
       <div
         aria-hidden

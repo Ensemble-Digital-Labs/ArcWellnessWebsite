@@ -17,6 +17,7 @@ export type EmsellaIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  iconClassName?: string;
 };
 
 export type EmsellaStat = {
@@ -46,6 +47,7 @@ export const emsellaHero = {
   closingLine: "28 minutes once a week. Stronger today. Stronger for tomorrow.",
   poweredByEyebrow: "Powered by HIFEM®",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
+  poweredByIconClassName: "origin-center scale-[0.92]",
   synergyLine: "Non-invasive. No downtime. Real strength from within.",
   imageSrc: emsellaAsset("emsella-hero.webp"),
   imageAlt: "EmSella treatment chair and console at ARC Wellness",
@@ -54,24 +56,29 @@ export const emsellaHero = {
 /** Temporary EXION icons — replace with EmSella SVGs later. */
 export const emsellaPillars: readonly EmsellaIconItem[] = [
   {
-    iconSrc: `${EXION_ICON}/magnet.svg`,
+    iconSrc: `${EXION_ICON}/bicep.svg`,
     title: "Core Support",
     body: "Strengthens the pelvic floor muscles that support your core from within.",
+    iconClassName: "origin-center scale-[1.4]",
   },
   {
-    iconSrc: `${EXION_ICON}/lotus.svg`,
+    iconSrc: `${EXION_ICON}/person-sparkle.svg`,
     title: "Intimacy & Confidence",
     body: "Supports intimacy, sensation, and confidence at every stage of life.",
+    iconClassName: "origin-center scale-[1.35]",
   },
   {
-    iconSrc: `${EXION_ICON}/mind.svg`,
+    iconSrc: `${EXION_ICON}/waist-contour.svg`,
     title: "Core & Posture",
     body: "Helps stabilize the core for better posture and everyday movement.",
+    iconClassName:
+      "origin-center scale-[2.35] object-center translate-x-[2%] translate-y-[8%]",
   },
   {
-    iconSrc: `${EXION_ICON}/battery-energy.svg`,
+    iconSrc: `${EXION_ICON}/dumbbell.svg`,
     title: "After Life’s Changes",
     body: "Restores strength after pregnancy, prostate care, or natural aging.",
+    iconClassName: "origin-center scale-[2.35] object-center translate-y-[8%]",
   },
 ];
 
@@ -174,36 +181,42 @@ export const emsellaTreatments = {
 
 export const emsellaDifferent = {
   title: "Who it’s",
-  titleEmphasis: "for",
+  titleEmphasis: "for?",
   intro:
     "EMSELLA is for anyone who wants to feel strong, confident, and in control of their body — at every stage. Strength from the inside out.",
   backgroundSrc: `${EXION_ASSET}/exion-different-background.webp`,
   backgroundAlt: "",
   cards: [
     {
-      iconSrc: `${EXION_ICON}/lotus.svg`,
+      iconSrc: `${EXION_ICON}/droplet.svg`,
       title: "Bladder Control",
       body: "For leaks, urgency, or frequency that interrupt daily life.",
+      iconClassName: "origin-center scale-[1.35]",
     },
     {
-      iconSrc: `${EXION_ICON}/sun.svg`,
+      iconSrc: `${EXION_ICON}/lotus.svg`,
       title: "Postpartum Support",
       body: "Restore pelvic strength after pregnancy and delivery.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/person-sparkle.svg`,
       title: "Intimacy & Wellness",
       body: "Support sexual wellness, sensation, and confidence.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
-      iconSrc: `${EXION_ICON}/magnet.svg`,
+      iconSrc: `${EXION_ICON}/waist-contour.svg`,
       title: "Core Stability",
       body: "Strengthen the foundation that supports posture and movement.",
+      iconClassName:
+        "origin-center scale-[2.35] object-center translate-x-[2%] translate-y-[8%]",
     },
     {
-      iconSrc: `${EXION_ICON}/battery-energy.svg`,
+      iconSrc: `${EXION_ICON}/bicep.svg`,
       title: "Life’s Changes",
       body: "Rebuild after aging, prostate care, or hormonal shifts.",
+      iconClassName: "origin-center scale-[1.45]",
     },
   ] as readonly EmsellaIconItem[],
 } as const;
@@ -216,26 +229,31 @@ export const emsellaExperience = {
       iconSrc: `${EXION_ICON}/chat.svg`,
       title: "Consultation",
       body: "We listen to your goals and review what support you need.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
-      iconSrc: `${EXION_ICON}/book.svg`,
+      iconSrc: `${EXION_ICON}/checklist.svg`,
       title: "Your Plan",
       body: "A personalized series tailored to your pelvic health goals.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
       iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Your Session",
       body: "Sit comfortably, fully clothed, for about 28 minutes.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/person-sparkle.svg`,
       title: "Feel the Difference",
       body: "Many notice steadier control and confidence as strength builds.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
       iconSrc: `${EXION_ICON}/calendar-check.svg`,
       title: "Maintain Strength",
       body: "Ongoing sessions help protect the results that matter most.",
+      iconClassName: "origin-center scale-[1.45]",
     },
   ] as readonly EmsellaIconItem[],
 } as const;

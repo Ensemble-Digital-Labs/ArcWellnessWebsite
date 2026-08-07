@@ -21,6 +21,7 @@ import type { TreatmentPage } from "@/content/pages/treatments";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { ARC_TREATMENT_NAV_LINKS } from "@/lib/arcMarketingNav";
 import { cn } from "@/lib/utils";
 
 type ArcTreatmentsRuledGridProps = {
@@ -36,23 +37,60 @@ type ArcTreatmentsRuledGridProps = {
   className?: string;
 };
 
-const ROMAN_NUMERALS = [
-  "I",
-  "II",
-  "III",
-  "IV",
-  "V",
-  "VI",
-  "VII",
-  "VIII",
-  "IX",
-  "X",
-  "XI",
-  "XII",
+/** Same circle thumbs as the mobile Services menu (service hero, right-side crop). */
+const previewBySlug = Object.fromEntries(
+  ARC_TREATMENT_NAV_LINKS.map((t) => [
+    t.href.replace(/^\/treatments\//, ""),
+    {
+      src: t.thumbSrc,
+      objectClass:
+        "thumbObjectClass" in t && t.thumbObjectClass
+          ? t.thumbObjectClass
+          : "object-cover",
+    },
+  ]),
+) as Record<string, { src: string; objectClass: string }>;
+
+function treatmentPreview(treatment: TreatmentPage): {
+  src: string;
+  objectClass: string;
+} {
+  return (
+    previewBySlug[treatment.slug] ?? {
+      src: treatment.imageSrc,
+      objectClass: "object-cover",
+    }
+  );
+}
+
+const ROMAN_UNITS = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
 ] as const;
 
 function treatmentRomanNumeral(index: number): string {
-  return ROMAN_NUMERALS[index] ?? String(index + 1);
+  let remaining = index + 1;
+  let numeral = "";
+
+  for (const [value, symbol] of ROMAN_UNITS) {
+    while (remaining >= value) {
+      numeral += symbol;
+      remaining -= value;
+    }
+  }
+
+  return numeral;
 }
 
 const rowRootVariants = {
@@ -147,6 +185,8 @@ function TreatmentInteractiveRow({
     setHovered(false);
   };
 
+  const preview = treatmentPreview(treatment);
+
   return (
     <ArcTextReveal
       as="li"
@@ -191,11 +231,11 @@ function TreatmentInteractiveRow({
           >
             <div className="relative h-full w-full overflow-hidden rounded-full border border-white/40 bg-arc-cream-deep shadow-[0_18px_44px_rgba(44,44,44,0.2)] ring-2 ring-white/50">
               <Image
-                src={treatment.imageSrc}
+                src={preview.src}
                 alt=""
                 fill
                 sizes="(max-width: 768px) 120px, 168px"
-                className="object-cover"
+                className={cn(preview.objectClass)}
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-t from-arc-charcoal/25 via-transparent to-transparent" />
             </div>
@@ -204,14 +244,15 @@ function TreatmentInteractiveRow({
 
         <p
           className={cn(
-            "relative z-10 shrink-0 font-serif text-[clamp(2.75rem,7vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:pt-0.5",
+            // em-based rail keeps titles aligned as numerals widen (I → XVIII).
+            "relative z-10 shrink-0 font-serif text-[clamp(2rem,6.5vw,4.5rem)] font-normal leading-[0.82] tracking-tight transition-colors duration-300 sm:min-w-[2.6em] sm:pt-0.5 sm:text-[clamp(2.75rem,7vw,4.5rem)]",
             showInteractivePreview && hovered
               ? cn(
                   accentBright,
                   "[text-shadow:0_1px_12px_rgba(0,0,0,0.4)]",
                 )
               : cn(
-                  "text-arc-charcoal/22",
+                  "text-arc-teal-ink/70 md:text-arc-charcoal/22",
                   "group-hover:text-arc-teal-ink/40",
                 ),
           )}
@@ -228,38 +269,35 @@ function TreatmentInteractiveRow({
             variants={rowRootVariants}
           >
             <div className="min-w-0 flex-1 pr-2 sm:pr-4">
-              <p
-                className={cn(
-                  "font-sans text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors duration-300",
-                  hovered
-                    ? cn(accentBright, "[text-shadow:0_1px_10px_rgba(0,0,0,0.35)]")
-                    : accentInk,
-                )}
-              >
-                {treatment.categoryLabel}
-              </p>
               <motion.h3
                 className={cn(
-                  "mt-1.5 flex flex-wrap font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
+                  "flex flex-wrap gap-x-[0.28em] font-serif text-[clamp(1.125rem,4.6vw,1.65rem)] font-semibold tracking-tight transition-colors duration-300",
                   hovered
                     ? "text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.45)]"
                     : "text-arc-charcoal",
                 )}
                 variants={titleStaggerVariants}
               >
-                {treatment.title.split("").map((char, ci) => (
-                  <motion.span
-                    key={`${treatment.slug}-char-${ci}`}
-                    variants={titleLetterVariants}
-                    className="inline-block"
+                {treatment.title.split(" ").map((word, wi) => (
+                  <span
+                    key={`${treatment.slug}-word-${wi}`}
+                    className="inline-flex whitespace-nowrap"
                   >
-                    {char === " " ? "\u00A0" : char}
-                  </motion.span>
+                    {word.split("").map((char, ci) => (
+                      <motion.span
+                        key={`${treatment.slug}-char-${wi}-${ci}`}
+                        variants={titleLetterVariants}
+                        className="inline-block"
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </span>
                 ))}
               </motion.h3>
               <p
                 className={cn(
-                  "mt-2.5 break-words transition-colors duration-300 md:mt-3",
+                  "mt-2.5 transition-colors duration-300 md:mt-3",
                   "font-serif text-[clamp(1rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight",
                   hovered
                     ? "text-white/92 [text-shadow:0_1px_12px_rgba(0,0,0,0.4)]"
@@ -285,12 +323,9 @@ function TreatmentInteractiveRow({
         ) : (
           <>
             <div className="relative z-10 min-w-0 flex-1">
-              <p className={cn("font-sans text-[10px] font-semibold uppercase tracking-[0.22em]", accentInk)}>
-                {treatment.categoryLabel}
-              </p>
               <h3
                 className={cn(
-                  "mt-1.5 break-words font-serif text-[clamp(1.25rem,2.4vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors",
+                  "font-serif text-[clamp(1.125rem,4.6vw,1.65rem)] font-semibold tracking-tight text-arc-charcoal transition-colors [overflow-wrap:normal] [word-break:normal]",
                   "group-hover:text-arc-teal-ink",
                 )}
               >
@@ -298,8 +333,8 @@ function TreatmentInteractiveRow({
               </h3>
               <p
                 className={cn(
-                  "mt-2.5 break-words md:mt-3",
-                  "font-serif text-[clamp(1rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal/88",
+                  "mt-2.5 md:mt-3",
+                  "font-serif text-[clamp(0.9375rem,2.1vw,1.25rem)] font-medium leading-[1.42] tracking-tight text-arc-charcoal/88",
                 )}
               >
                 {treatment.tagline}
@@ -308,13 +343,13 @@ function TreatmentInteractiveRow({
 
             <span
               className={cn(
-                "relative z-10 inline-flex shrink-0 items-center gap-2 self-start font-sans text-[11px] font-semibold uppercase tracking-[0.18em] sm:self-center",
+                "relative z-10 inline-flex shrink-0 items-center gap-1.5 self-start font-sans text-[10px] font-semibold uppercase tracking-[0.16em] sm:gap-2 sm:self-center sm:text-[11px] sm:tracking-[0.18em]",
                 accentInk,
               )}
             >
               View
               <ArrowRight
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none sm:size-4"
                 aria-hidden
               />
             </span>
@@ -339,7 +374,7 @@ export function ArcTreatmentsRuledGrid({
   bottomSeam = false,
   className,
 }: ArcTreatmentsRuledGridProps) {
-  const rows = treatments.filter((t) => t.slug !== "overview");
+  const rows = treatments.filter((t) => t.slug !== "overview" && !t.hidden);
   const emphasisClass = arcHeadlineEmphasisClass(accentTone);
 
   return (

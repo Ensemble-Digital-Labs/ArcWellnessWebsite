@@ -8,10 +8,14 @@ export function getInsightBySlug(
   return getInsightEntries().find((e) => e.kind === kind && e.slug === slug);
 }
 
-export function getAllInsightSlugs(kind: InsightKind): string[] {
-  return getInsightEntries()
-    .filter((e) => e.kind === kind)
-    .map((e) => e.slug);
+/** Any published insight by slug (blog or desk post) under `/blogs/[slug]`. */
+export function getInsightEntryBySlug(slug: string): InsightEntry | undefined {
+  return getInsightEntries().find((e) => e.slug === slug);
+}
+
+export function getAllInsightSlugs(kind?: InsightKind): string[] {
+  const entries = getInsightEntries();
+  return (kind ? entries.filter((e) => e.kind === kind) : entries).map((e) => e.slug);
 }
 
 export function getInsightCounts(entries: readonly InsightEntry[] = getInsightEntries()) {

@@ -18,6 +18,7 @@ export type InfusionIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  iconClassName?: string;
 };
 
 export type InfusionStat = {
@@ -245,9 +246,10 @@ export const infusionExperience = {
       body: "We listen to your goals and review what your body needs.",
     },
     {
-      iconSrc: `${EXION_ICON}/book.svg`,
+      iconSrc: `${EXION_ICON}/droplet.svg`,
       title: "Your Infusion",
       body: "A personalized blend prepared for your session.",
+      iconClassName: "origin-center scale-[1.7]",
     },
     {
       iconSrc: `${EXION_ICON}/meditation.svg`,

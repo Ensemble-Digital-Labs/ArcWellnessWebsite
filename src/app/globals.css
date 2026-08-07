@@ -255,6 +255,32 @@ html[data-emphasis-font="radley"] .font-title-emphasis {
   }
 }
 
+/* Service template mobile hero: photo first, then cream copy card (~1.2s). */
+@keyframes arc-service-hero-copy-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 767.98px) {
+  @media (prefers-reduced-motion: no-preference) {
+    .arc-service-hero-copy {
+      animation: arc-service-hero-copy-in 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+        1.2s both;
+    }
+
+    .arc-service-hero-pill {
+      animation: arc-service-hero-copy-in 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+        1.32s both;
+    }
+  }
+}
+
 .animate-arc-marquee {
   display: flex;
   width: max-content;
@@ -720,5 +746,22 @@ html[data-arc-intro="active"] .arc-preloader__logo {
 
   .exion-results-lift:hover {
     transform: none;
+  }
+}
+
+/**
+ * Blog article shell — soft newsprint paper (scoped; not global body).
+ * Grain opacity kept low so Arc typography and photography stay premium.
+ */
+.arc-blog-newsprint {
+  background-color: #f2ede1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+  background-repeat: repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-blog-newsprint {
+    background-image: none;
   }
 }

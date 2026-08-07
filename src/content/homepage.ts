@@ -2,6 +2,7 @@
  * Homepage narrative blocks, concentrated copy (see `documents/homepage-section-model-reference.md`).
  */
 
+import { googleReviewerPhotoByAttribution } from "@/content/googleReviewerPhotos";
 import { images } from "@/content/site";
 import { siteMeta } from "@/content/siteMeta";
 
@@ -80,7 +81,7 @@ export const homeInvestCtaLabel = "Reserve your Consultation";
 
 export const homeInvestSignoff = {
   preamble: "We look forward to meeting you",
-  name: "Dr. Jabbar",
+  name: "— Dr. Jabbar",
 } as const;
 
 /** FAQ category labels for `#faq` tabs, keys must match `homeFaqByCategory`. */
@@ -139,215 +140,67 @@ export const homeFaqByCategory: Record<HomeFaqCategory, readonly HomeFaqItem[]> 
 };
 
 /**
- * Portrait pool for the 3D sphere, swap for approved photography.
+ * Fallback portrait when a Google reviewer photo is not on disk yet.
  * NOTE: never include the founder portrait here — it would render Dr. Jabbar
  * as if he were a patient in the Google-review cards.
  */
-const testimonialPortraitPool = [
-  images.services[0],
-  images.services[1],
-  images.services[2],
-  images.services[3],
-  images.services[4],
-  images.whoWeAre,
-  images.heroMedia,
-  images.investBanner,
-] as const;
+const testimonialPortraitFallback = images.heroMedia;
 
-/** Dummy copy, replace with real patient stories when available. */
+/**
+ * Live Google reviews (5★) for Arc Wellness — St. Louis.
+ * Attribution uses first name + last initial; quotes kept as published.
+ * Profile photos: `npm run testimonials:google-photos` → googleReviewerPhotos.ts
+ */
 const testimonialCopyRows = [
   {
-    attribution: "Sarah M.",
-    context: "Aesthetic consultation",
+    attribution: "Imran S.",
+    context: "",
     quote:
-      "I wanted subtle refinement, not a different face. The plan was honest, unhurried, and the outcome still looks like me, just rested.",
+      "I just had my first Emface face lift treatment session at Arc Wellness and I already had such a great experience! The procedure was completely comfortable, relaxing, and much easier than I expected. The staff was professional, welcoming, and explained everything clearly before starting the treatment. Even after the first session, my skin felt tighter, fresher, and more lifted. I noticed a healthy glow and my face looked more refreshed and awake. I love that the treatment is non-invasive with no downtime at all. I’m really excited to continue the sessions and see the full results. Highly recommend Emface to anyone looking for a natural facial lift and rejuvenation!",
   },
   {
-    attribution: "James R.",
-    context: "Wellness & longevity",
+    attribution: "Sonya A.",
+    context: "",
     quote:
-      "Finally a place that treats how I feel and how I look as one conversation. Follow-up actually happens; I never feel rushed out the door.",
+      "Arc Wellness was recommended to me by a dear friend. After being introduced to the owners Jen and Danish I could tell it was going to be a beautiful experience. The Spa is beautiful and peaceful with an energy to match. Every interaction made me feel like I was their only client. I have been on a very difficult healing journey and because of Arc Wellness I have finally reached a place where I am ready to look forward. The way they tailor your wellness plan and the newest state of the art equipment and services they offer, have me exited for the next chapter in my healing journey. No matter your reason for visiting Arc Wellness, you are sure to be more than satisfied.",
   },
   {
-    attribution: "Elena K.",
-    context: "Ongoing care",
+    attribution: "Srinivasarao B.",
+    context: "",
     quote:
-      "The space is calm, the explanations are clear, and I always know why we’re doing what we’re doing. That trust matters.",
+      "My experience with ARC Wellness was truly beyond what I expected. From the moment I walked in, the staff made me feel comfortable and well-informed. Jennifer and Arina were especially outstanding—they took the time to explain every step in a way that was easy to understand and made sure I felt confident throughout the process. Jennifer and Arina’s professionalism, knowledge, and genuine care really set them apart. They made the entire experience feel personalized and supportive. I highly recommend ARC Wellness to anyone looking to improve both their physical and mental well-being.",
   },
   {
-    attribution: "Priya N.",
-    context: "Skin health",
+    attribution: "Khadijah Y.",
+    context: "",
     quote:
-      "They never oversell. If something isn’t right for my skin or my season of life, they say so, and the alternatives still feel elevated.",
+      "I’ve been going to microneedling and I love this place so much. So clean, serene, and the staff are kind. Irena was my technician and she is always fun to talk to.",
   },
   {
-    attribution: "Daniel T.",
-    context: "First visit",
+    attribution: "Dauna B.",
+    context: "",
     quote:
-      "I expected clinical coldness. Instead it felt quiet, respectful, and organized. I left with a plan I could actually follow.",
+      "My experience with ARC Wellness was so much more than I expected. Their staff is very knowledgeable and explained everything to my understanding. With use of the Emsculpt I noticed a big difference in the tone of my sides, back and stomach. The Exomind helped with clarity and my moods. I highly recommend Arc Wellness for all your wellness needs.",
   },
   {
-    attribution: "Olivia H.",
-    context: "Injectables",
+    attribution: "Sonya C.",
+    context: "",
     quote:
-      "Natural movement was non-negotiable for me. The approach was conservative in the best way:I look refreshed, not ‘done.’",
+      "I can not say enough about this team and program. I started with Arc about 3 months ago and i have lost almost 20 pounds and feel better then i have in years! I would give them 10 stars if I could!",
   },
   {
-    attribution: "Marcus W.",
-    context: "Vitality program",
+    attribution: "Justin C.",
+    context: "",
     quote:
-      "Labs and lifestyle finally sit in the same conversation. I’m not bouncing between disconnected appointments anymore.",
-  },
-  {
-    attribution: "Amira F.",
-    context: "Body contouring",
-    quote:
-      "Clear timelines, clear expectations. I always knew what recovery would feel like and what results were realistic.",
-  },
-  {
-    attribution: "Chris L.",
-    context: "Men’s aesthetics",
-    quote:
-      "No judgment, no hype, just straightforward guidance. The team treats this like healthcare with an eye for detail.",
-  },
-  {
-    attribution: "Nina P.",
-    context: "Long-term patient",
-    quote:
-      "Year two still feels like partnership. Adjustments are small, intentional, and never rushed.",
-  },
-  {
-    attribution: "Jordan K.",
-    context: "Preventive focus",
-    quote:
-      "I came in curious about longevity, not chasing trends. The roadmap felt evidence-informed and calm.",
-  },
-  {
-    attribution: "Taylor S.",
-    context: "Laser & texture",
-    quote:
-      "They paced treatments around my schedule and my skin’s tolerance. Nothing felt aggressive for the sake of drama.",
-  },
-  {
-    attribution: "Riley B.",
-    context: "Consultation only",
-    quote:
-      "Even when I wasn’t ready to book, the consult was worth it, clear options, no pressure, real education.",
-  },
-  {
-    attribution: "Casey D.",
-    context: "Recovery support",
-    quote:
-      "Check-ins were consistent. Questions got answered quickly. That mattered more than I expected.",
-  },
-  {
-    attribution: "Morgan A.",
-    context: "Combination plan",
-    quote:
-      "Skin, energy, and confidence were treated as one story, not three separate upsells.",
-  },
-  {
-    attribution: "Alexis V.",
-    context: "Evening appointments",
-    quote:
-      "As someone with a packed calendar, the flexibility and punctuality here is a relief.",
-  },
-  {
-    attribution: "Quinn E.",
-    context: "Sensitive skin",
-    quote:
-      "They listened to my history and built from there. No cookie-cutter protocol, just thoughtful steps.",
-  },
-  {
-    attribution: "Jamie C.",
-    context: "Referral",
-    quote:
-      "A friend sent me here after years of ‘maybe later.’ I wish I’d come sooner, the tone of care is different.",
-  },
-  {
-    attribution: "Reese T.",
-    context: "Microneedling",
-    quote:
-      "Healing was explained in plain language. I knew what to expect day by day, no mystery, no anxiety spiral.",
-  },
-  {
-    attribution: "Blake M.",
-    context: "Traveling patient",
-    quote:
-      "I’m not local, and they still made continuity workable. Virtual check-ins kept the plan coherent.",
-  },
-  {
-    attribution: "Skylar J.",
-    context: "Postpartum",
-    quote:
-      "I needed patience and realism, not promises. The team met me where I was and built from there.",
-  },
-  {
-    attribution: "Drew P.",
-    context: "Peels & tone",
-    quote:
-      "Progress was incremental in the best way, my skin looks brighter without looking ‘treated.’",
-  },
-  {
-    attribution: "Harper G.",
-    context: "Budget clarity",
-    quote:
-      "Options were tiered honestly. I never felt pushed toward the most expensive path as the only answer.",
-  },
-  {
-    attribution: "Avery N.",
-    context: "Anxiety-friendly",
-    quote:
-      "They noticed when I was tense and slowed down. Small thing, huge difference in how safe it felt.",
-  },
-  {
-    attribution: "Cameron Y.",
-    context: "Athlete",
-    quote:
-      "Recovery guidance respected my training schedule. Nothing reckless, just smart timing.",
-  },
-  {
-    attribution: "Sidney F.",
-    context: "Second opinion",
-    quote:
-      "I came for a second read on a plan elsewhere. The contrast in thoroughness was obvious.",
-  },
-  {
-    attribution: "Rowan I.",
-    context: "Minimalist goals",
-    quote:
-      "I asked for the smallest effective steps. They didn’t treat that like a compromise, just a design constraint.",
-  },
-  {
-    attribution: "Parker O.",
-    context: "Sun damage",
-    quote:
-      "Prevention and repair were both on the table. I finally understand what my skin actually needs seasonally.",
-  },
-  {
-    attribution: "Sage U.",
-    context: "Confidence",
-    quote:
-      "It’s not vanity, it’s alignment. They never made me feel silly for caring about how I present.",
-  },
-  {
-    attribution: "Lane H.",
-    context: "Follow-through",
-    quote:
-      "The hardest part of wellness is consistency. The rhythm here makes showing up easier.",
-  },
-  {
-    attribution: "Kendall W.",
-    context: "New to aesthetics",
-    quote:
-      "I started from zero knowledge. Education-first care made the whole category feel less intimidating.",
+      "The staff is very friendly and knowledgeable. It’s such a beautiful and relaxing space. I’m excited to go back for my next treatment!",
   },
 ] as const;
 
 export const homeTestimonials = testimonialCopyRows.map((row, i) => ({
   id: `testimonial-${String(i + 1).padStart(2, "0")}`,
-  imageSrc: testimonialPortraitPool[i % testimonialPortraitPool.length],
-  imageAlt: `ARC Wellness patient, ${row.attribution}`,
+  imageSrc:
+    googleReviewerPhotoByAttribution[row.attribution] ?? testimonialPortraitFallback,
+  imageAlt: `Google reviewer ${row.attribution}`,
   quote: row.quote,
   attribution: row.attribution,
   context: row.context,

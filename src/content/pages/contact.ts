@@ -6,8 +6,8 @@ export const contactPage = {
   },
   hero: {
     eyebrow: "Contact",
-    title: "We're Here When",
-    titleEmphasis: "You're Ready",
+    title: "Contact",
+    titleEmphasis: "Us",
     body: "Finding support shouldn't feel like another hurdle. At Arc Wellness, we believe the first step toward healing begins with connection, a message, a call, a quiet moment of reaching out. However you choose to begin, we're here to listen with care, respect, and understanding.",
   },
   channels: [

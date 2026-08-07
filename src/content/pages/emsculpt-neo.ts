@@ -18,6 +18,7 @@ export type EmsculptNeoIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  iconClassName?: string;
 };
 
 export type EmsculptNeoStat = {
@@ -49,6 +50,7 @@ export const emsculptNeoHero = {
   closingLine: "Stronger muscles. Less fat. More confidence.",
   poweredByEyebrow: "Next-generation technology",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
+  poweredByIconClassName: "origin-center scale-[0.92]",
   synergyLine: "RF + HIFEM+ energy, working in synergy.",
   imageSrc: emsculptNeoAsset("emsculpt-neo-hero.webp"),
   imageAlt: "EmSculpt Neo treatment at ARC Wellness",
@@ -56,24 +58,29 @@ export const emsculptNeoHero = {
 
 export const emsculptNeoPillars: readonly EmsculptNeoIconItem[] = [
   {
-    iconSrc: `${EXION_ICON}/magnet.svg`,
+    iconSrc: `${EXION_ICON}/bicep.svg`,
     title: "Build Muscle",
     body: "Strengthen and tone muscles with thousands of supramaximal contractions.",
+    iconClassName: "origin-center scale-[1.4]",
   },
   {
-    iconSrc: `${EXION_ICON}/sun.svg`,
+    iconSrc: `${EXION_ICON}/waist-contour.svg`,
     title: "Burn Fat",
     body: "Reduce stubborn fat in treated areas for a more sculpted appearance.",
+    iconClassName:
+      "origin-center scale-[2.35] object-center translate-x-[2%] translate-y-[8%]",
   },
   {
-    iconSrc: `${EXION_ICON}/lotus.svg`,
+    iconSrc: `${EXION_ICON}/person-sparkle.svg`,
     title: "Contour",
     body: "Enhance your natural shape and achieve a more defined look.",
+    iconClassName: "origin-center scale-[1.35]",
   },
   {
     iconSrc: `${EXION_ICON}/clock.svg`,
     title: "Save Time",
     body: "30 minutes. No downtime. Real results.",
+    iconClassName: "origin-center scale-[1.05]",
   },
 ];
 
@@ -178,7 +185,7 @@ export const emsculptNeoTreatments = {
 
 export const emsculptNeoDifferent = {
   title: "Why EMSCULPT NEO is",
-  titleEmphasis: "different.",
+  titleEmphasis: "different?",
   intro:
     "EMSCULPT NEO is the only non-invasive technology that combines RF and HIFEM+ energy in one platform to build muscle and reduce fat simultaneously — delivering results you can see and feel.",
   backgroundSrc: `${EXION_ASSET}/exion-different-background.webp`,
@@ -188,26 +195,32 @@ export const emsculptNeoDifferent = {
       iconSrc: `${EXION_ICON}/atom.svg`,
       title: "Dual-Action Technology",
       body: "RF + HIFEM+ energy work together simultaneously.",
+      iconClassName: "origin-center scale-[0.92]",
     },
     {
-      iconSrc: `${EXION_ICON}/magnet.svg`,
+      iconSrc: `${EXION_ICON}/bicep.svg`,
       title: "Build Muscle",
       body: "Stimulates thousands of supramaximal contractions.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
-      iconSrc: `${EXION_ICON}/sun.svg`,
+      iconSrc: `${EXION_ICON}/waist-contour.svg`,
       title: "Burn Fat",
       body: "Targets and reduces stubborn fat.",
+      iconClassName:
+        "origin-center scale-[2.35] object-center translate-x-[2%] translate-y-[8%]",
     },
     {
       iconSrc: `${EXION_ICON}/clock.svg`,
       title: "Efficient & Effective",
       body: "Maximum results in 30 minutes with no downtime.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
-      iconSrc: `${EXION_ICON}/lotus.svg`,
+      iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Safe & Comfortable",
       body: "Non-invasive with no disruption to daily life.",
+      iconClassName: "origin-center scale-[1.05]",
     },
   ] as readonly EmsculptNeoIconItem[],
 } as const;
@@ -220,26 +233,31 @@ export const emsculptNeoExperience = {
       iconSrc: `${EXION_ICON}/chat.svg`,
       title: "Consultation",
       body: "We listen to your goals and create a plan tailored to you.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
-      iconSrc: `${EXION_ICON}/book.svg`,
+      iconSrc: `${EXION_ICON}/checklist.svg`,
       title: "Personalized Plan",
       body: "Your treatment plan is customized to target your unique needs.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
       iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Comfortable Treatment",
       body: "Relax during your 30-minute session — no downtime required.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/person-sparkle.svg`,
       title: "Visible Results",
       body: "Noticeable improvements in muscle tone, fat reduction, and body contour.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
       iconSrc: `${EXION_ICON}/calendar-check.svg`,
       title: "Maintain & Enhance",
       body: "Ongoing treatments help you maintain your results and continue to evolve.",
+      iconClassName: "origin-center scale-[1.45]",
     },
   ] as readonly EmsculptNeoIconItem[],
 } as const;

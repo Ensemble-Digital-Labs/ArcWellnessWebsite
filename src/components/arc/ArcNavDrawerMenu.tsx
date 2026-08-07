@@ -17,12 +17,16 @@ import {
 import { CLINIC_INTERIOR_IMAGES } from "@/content/clinicInteriorImages";
 import { MEDICAL_SPA_NAMED_IMAGES } from "@/content/medicalSpaServiceImages";
 import { ArcNavDrawerAccordion } from "@/components/arc/ArcNavDrawerAccordion";
-import { ArcNavDrawerSubLinkRow } from "@/components/arc/ArcNavDrawerSubLinkRow";
+import {
+  ArcNavDrawerSubLinkRow,
+  resolveNavLeafThumb,
+} from "@/components/arc/ArcNavDrawerSubLinkRow";
 import { cn } from "@/lib/utils";
 
 const NAV_PREVIEW = {
   facialAesthetic: "/assets/sections/whole-body/facial-aesthetic-treatment.webp",
   membershipCohort: "/assets/sections/who-we-are/biometric-consultation-room.webp",
+  arc360: "/assets/treatments/arc-360/arc-360-nav-preview.webp",
 } as const;
 
 const DRAWER_META: Record<
@@ -93,11 +97,13 @@ function DrawerSubLink({
   closeMenu,
   reducedMotion,
   canHover,
+  showThumb = true,
 }: {
   leaf: NavLeaf;
   closeMenu: () => void;
   reducedMotion: boolean;
   canHover: boolean;
+  showThumb?: boolean;
 }) {
   return (
     <ArcNavDrawerSubLinkRow
@@ -106,6 +112,7 @@ function DrawerSubLink({
       reducedMotion={reducedMotion}
       canHover={canHover}
       inAccordion
+      showThumb={showThumb}
     />
   );
 }
@@ -155,44 +162,107 @@ function DrawerGroupHeading({
   return <p className={className}>{children}</p>;
 }
 
+/** Hub entry (e.g. Arc 360) — stronger than a plain group heading in the drawer. */
+function DrawerFeaturedHubLink({
+  label,
+  href,
+  closeMenu,
+}: {
+  label: string;
+  href: string;
+  closeMenu: () => void;
+}) {
+  const thumbSrc =
+    resolveNavLeafThumb({ label, href }) ?? NAV_PREVIEW.arc360;
+
+  return (
+    <Link
+      href={href}
+      onClick={closeMenu}
+      className={cn(
+        "group relative flex min-h-[60px] w-full touch-manipulation items-center justify-between gap-3 overflow-hidden rounded-2xl border border-arc-teal/40 bg-arc-teal-muted/70 px-3.5 py-3.5 shadow-[0_10px_28px_rgba(69,136,114,0.12)]",
+        "transition-[background-color,border-color,transform] duration-300",
+        "hover:border-arc-teal hover:bg-arc-teal-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45",
+        "sm:min-h-[68px] sm:px-4 sm:py-4",
+      )}
+    >
+      <span className="min-w-0 flex-1 font-serif text-[1.65rem] font-semibold leading-none tracking-tight text-arc-teal-ink sm:text-[1.85rem]">
+        {label}
+      </span>
+      <span className="relative size-14 shrink-0 overflow-hidden rounded-full bg-arc-cream-deep shadow-[0_8px_20px_rgba(44,44,44,0.18)] ring-2 ring-white/80 sm:size-16">
+        <Image
+          src={thumbSrc}
+          alt=""
+          fill
+          sizes="64px"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          unoptimized
+        />
+      </span>
+    </Link>
+  );
+}
+
 function DrawerColumnGroups({
   columns,
   closeMenu,
   reducedMotion,
   canHover,
+  showThumb = true,
 }: {
   columns: readonly NavColumn[];
   closeMenu: () => void;
   reducedMotion: boolean;
   canHover: boolean;
+  showThumb?: boolean;
 }) {
   return (
     <>
       {columns.map((column, colIndex) =>
-        column.groups.map((group, groupIndex) => (
-          <div key={`${colIndex}-${groupIndex}`} className="space-y-1">
-            {group.heading ? (
-              <DrawerGroupHeading
-                href={group.headingHref}
-                closeMenu={group.headingHref ? closeMenu : undefined}
-              >
-                {group.heading}
-              </DrawerGroupHeading>
-            ) : null}
-            <ul className="mt-1 space-y-1 py-1 pr-1 sm:pr-2">
-              {group.items.map((leaf) => (
-                <li key={leaf.label}>
-                  <DrawerSubLink
-                    leaf={leaf}
-                    closeMenu={closeMenu}
-                    reducedMotion={reducedMotion}
-                    canHover={canHover}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )),
+        column.groups.map((group, groupIndex) => {
+          const isFeaturedHub =
+            Boolean(group.heading) &&
+            Boolean(group.headingHref) &&
+            group.items.length === 0;
+
+          if (isFeaturedHub && group.heading && group.headingHref) {
+            return (
+              <div key={`${colIndex}-${groupIndex}`} className="pb-2 pt-1">
+                <DrawerFeaturedHubLink
+                  label={group.heading}
+                  href={group.headingHref}
+                  closeMenu={closeMenu}
+                />
+              </div>
+            );
+          }
+
+          return (
+            <div key={`${colIndex}-${groupIndex}`} className="space-y-1">
+              {group.heading ? (
+                <DrawerGroupHeading
+                  href={group.headingHref}
+                  closeMenu={group.headingHref ? closeMenu : undefined}
+                >
+                  {group.heading}
+                </DrawerGroupHeading>
+              ) : null}
+              <ul className="mt-1 space-y-1 py-1 pr-1 sm:pr-2">
+                {group.items.map((leaf) => (
+                  <li key={leaf.label}>
+                    <DrawerSubLink
+                      leaf={leaf}
+                      closeMenu={closeMenu}
+                      reducedMotion={reducedMotion}
+                      canHover={canHover}
+                      showThumb={showThumb}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }),
       )}
     </>
   );
@@ -406,6 +476,11 @@ function DrawerNavItem({
             closeMenu={closeMenu}
             reducedMotion={reducedMotion}
             canHover={canHover}
+            showThumb={
+              item.id !== "conditions" &&
+              item.id !== "start-here" &&
+              item.id !== "arc-library"
+            }
           />
         </DrawerExpandable>
       ) : null}

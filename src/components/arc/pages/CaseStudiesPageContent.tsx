@@ -34,11 +34,12 @@ export function CaseStudiesPageContent({ entries }: { entries: readonly InsightE
 
   return (
     <>
-      <ArcInsightsFeedSection id="case-studies" entries={entries} bottomSeam />
+      <ArcInsightsFeedSection id="blogs" entries={entries} bottomSeam />
       <InvestCTASection
         imageSrc={images.heroMedia}
         supportingLine={homeInvestSupport}
         topSeam
+        topSeamOverlap={false}
       />
     </>
   );

@@ -8,7 +8,7 @@ const EXION_ICON = "/assets/treatments/exion/icons";
 const EXION_ASSET = "/assets/treatments/exion";
 const EXOMIND_ASSET = "/assets/treatments/exomind";
 /** Bump when replacing ExoMind rasters so next/image + browser drop stale caches. */
-const EXOMIND_ASSETS_VERSION = "20260727-lasting-card";
+const EXOMIND_ASSETS_VERSION = "20260730-target-card";
 
 function exomindAsset(file: string) {
   return `${EXOMIND_ASSET}/${file}?v=${EXOMIND_ASSETS_VERSION}`;
@@ -18,6 +18,7 @@ export type ExoMindIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  iconClassName?: string;
 };
 
 export type ExoMindStat = {
@@ -47,6 +48,7 @@ export const exomindHero = {
   closingLine: "Better thinking. Better feeling. Better you.",
   poweredByEyebrow: "Next-generation TMS",
   poweredByIconSrc: `${EXION_ICON}/atom.svg`,
+  poweredByIconClassName: "origin-center scale-[0.92]",
   synergyLine: "Safe. Non-invasive. Drug-free. Backed by science.",
   imageSrc: exomindAsset("exomind-hero.webp"),
   imageAlt: "ExoMind TMS treatment at ARC Wellness",
@@ -57,21 +59,25 @@ export const exomindPillars: readonly ExoMindIconItem[] = [
     iconSrc: `${EXION_ICON}/brain.svg`,
     title: "Sharper Focus",
     body: "Improve attention, memory, and mental clarity.",
+    iconClassName: "origin-center scale-[1.15]",
   },
   {
-    iconSrc: `${EXION_ICON}/lotus.svg`,
+    iconSrc: `${EXION_ICON}/meditation.svg`,
     title: "Stress Relief",
     body: "Reduce stress and anxiety with gentle neurostimulation.",
+    iconClassName: "origin-center scale-[0.85]",
   },
   {
     iconSrc: `${EXION_ICON}/sun.svg`,
     title: "Elevated Mood",
     body: "Boost mood and emotional well-being.",
+    iconClassName: "origin-center scale-[1.1]",
   },
   {
     iconSrc: `${EXION_ICON}/battery-energy.svg`,
     title: "More Energy",
     body: "Enhance mental energy and overall brain performance.",
+    iconClassName: "origin-center scale-[1.15]",
   },
 ];
 
@@ -205,29 +211,34 @@ export const exomindDifferent = {
   backgroundAlt: "",
   cards: [
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/target-rings.svg`,
       title: "Professionals & High Performers",
       body: "Sharpen focus, productivity, and mental clarity when demand is high.",
+      iconClassName: "origin-center scale-[1.15]",
     },
     {
       iconSrc: `${EXION_ICON}/book.svg`,
       title: "Students",
       body: "Support memory, concentration, and learning when every hour counts.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
-      iconSrc: `${EXION_ICON}/lotus.svg`,
+      iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Stress or Anxiety",
       body: "Find more balance, calm, and resilience when life feels overwhelming.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
       iconSrc: `${EXION_ICON}/sun.svg`,
       title: "Mood Support",
       body: "Support mood and emotional well-being with drug-free care.",
+      iconClassName: "origin-center scale-[1.35]",
     },
     {
-      iconSrc: `${EXION_ICON}/brain-front.svg`,
+      iconSrc: `${EXION_ICON}/brain.svg`,
       title: "Mental Optimization",
       body: "Stay sharp, focused, and energized — whatever your goals.",
+      iconClassName: "origin-center scale-[1.15]",
     },
   ] as readonly ExoMindIconItem[],
 } as const;
@@ -240,26 +251,31 @@ export const exomindExperience = {
       iconSrc: `${EXION_ICON}/chat.svg`,
       title: "Consultation",
       body: "Discuss your goals and create a personalized plan.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
       iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Your Treatment",
       body: "Relax in a comfortable suite while we prepare your session.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
       iconSrc: `${EXION_ICON}/clock.svg`,
       title: "30 Minutes",
       body: "A painless, non-invasive, and relaxing session.",
+      iconClassName: "origin-center scale-[1.05]",
     },
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/person-sparkle.svg`,
       title: "Feel the Difference",
       body: "Leave feeling refreshed, clearer, and recharged.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
       iconSrc: `${EXION_ICON}/calendar-check.svg`,
       title: "Lasting Results",
       body: "Consistent sessions help lock in lasting benefits.",
+      iconClassName: "origin-center scale-[1.45]",
     },
   ] as readonly ExoMindIconItem[],
 } as const;

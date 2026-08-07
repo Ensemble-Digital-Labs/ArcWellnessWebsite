@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { ArcMarketingShell } from "@/components/arc/ArcMarketingShell";
-import { TreatmentsPageContent } from "@/components/arc/pages/TreatmentsPageContent";
-import { treatmentsHub } from "@/content/pages/treatments";
+import { Arc360PageContent } from "@/components/arc/pages/Arc360PageContent";
+import { arc360Content } from "@/content/pages/arc-360";
 
 export const metadata: Metadata = {
-  title: treatmentsHub.seo.title,
-  description: treatmentsHub.seo.description,
+  title: arc360Content.seo.title,
+  description: arc360Content.seo.description,
 };
 
 export default function TreatmentsPage() {
   return (
     <ArcMarketingShell>
-      <TreatmentsPageContent />
+      <Arc360PageContent />
     </ArcMarketingShell>
   );
 }

@@ -268,7 +268,11 @@ function ArcNavTreatmentLinkRow({
               src={item.thumbSrc}
               alt=""
               fill
-              className="object-cover"
+              className={
+                "thumbObjectClass" in item && item.thumbObjectClass
+                  ? item.thumbObjectClass
+                  : "object-cover"
+              }
               sizes="(max-width: 640px) 168px, 192px"
               unoptimized
             />
@@ -283,7 +287,11 @@ function ArcNavTreatmentLinkRow({
             alt=""
             fill
             sizes="64px"
-            className="object-cover"
+            className={
+              "thumbObjectClass" in item && item.thumbObjectClass
+                ? item.thumbObjectClass
+                : "object-cover"
+            }
             unoptimized
           />
         </span>
@@ -1178,11 +1186,10 @@ export function ArcSiteHeader({
               <Image
                 src={logoSrc}
                 alt={logoAlt}
-                width={720}
-                height={240}
+                width={360}
+                height={148}
                 priority
-                placeholder="empty"
-                unoptimized
+                sizes="(max-width: 768px) 180px, (max-width: 1280px) 260px, 320px"
                 className={ARC_HEADER_LOGO_IMG_CLASS}
               />
             </motion.div>

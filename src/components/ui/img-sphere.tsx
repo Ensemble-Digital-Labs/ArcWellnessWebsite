@@ -587,8 +587,12 @@ export default function SphereImageGrid({
 
   const isTileSelected = (img: ImageData) => {
     if (selectedId == null) return false;
+    // Prefer exact tile id so duplicated testimonial tiles don’t all light up.
+    if (img.id === selectedId) return true;
+    const hasExactTile = images.some((entry) => entry.id === selectedId);
+    if (hasExactTile) return false;
     if (img.testimonialId != null) return img.testimonialId === selectedId;
-    return img.id === selectedId;
+    return false;
   };
 
   const handleTileClick = (image: ImageData) => {

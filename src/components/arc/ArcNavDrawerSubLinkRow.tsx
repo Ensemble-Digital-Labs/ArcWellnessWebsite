@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 const NAV_PREVIEW = {
   facialAesthetic: "/assets/sections/whole-body/facial-aesthetic-treatment.webp",
   membershipCohort: "/assets/sections/who-we-are/biometric-consultation-room.webp",
+  /** Lifestyle flat-lay with gold arcs — Arc 360 hub circle preview. */
+  arc360: "/assets/treatments/arc-360/arc-360-nav-preview.webp",
 } as const;
 
 const navTreatmentPreviewVariants = {
@@ -33,20 +35,37 @@ const thumbByLabel = Object.fromEntries(
   ARC_TREATMENT_NAV_LINKS.map((t) => [t.label.toLowerCase(), t.thumbSrc]),
 ) as Record<string, string>;
 
+const thumbObjectByHref = Object.fromEntries(
+  ARC_TREATMENT_NAV_LINKS.flatMap((t) =>
+    "thumbObjectClass" in t && t.thumbObjectClass
+      ? [[t.href, t.thumbObjectClass] as const]
+      : [],
+  ),
+) as Record<string, string>;
+
+const thumbObjectByLabel = Object.fromEntries(
+  ARC_TREATMENT_NAV_LINKS.flatMap((t) =>
+    "thumbObjectClass" in t && t.thumbObjectClass
+      ? [[t.label.toLowerCase(), t.thumbObjectClass] as const]
+      : [],
+  ),
+) as Record<string, string>;
+
 /** Thumbs for new-menu labels / routes that differ from treatment nav names. */
 const thumbByHrefExtra: Record<string, string> = {
-  "/treatments": NAV_PREVIEW.facialAesthetic,
+  "/treatments": NAV_PREVIEW.arc360,
   "/programs": NAV_PREVIEW.membershipCohort,
   "/financing": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "/contact": CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-  "/case-studies": CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
+  "/blogs": CLINIC_INTERIOR_IMAGES.hallwayAccentSeating,
   "/about": CLINIC_INTERIOR_IMAGES.receptionBacklitLogoWall,
 };
 
 const thumbByLabelAlias: Record<string, string> = {
   infusions: thumbByLabel["infusion therapy"],
   peptides: thumbByLabel["peptide therapy"],
-  fillers: thumbByLabel["rha fillers"],
+  fillers: thumbByLabel["dermal fillers"],
+  "rha fillers": thumbByLabel["dermal fillers"],
   "book a consultation": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "membership options": NAV_PREVIEW.membershipCohort,
   "pricing & financing": CLINIC_INTERIOR_IMAGES.consultationLounge,
@@ -56,7 +75,7 @@ const thumbByLabelAlias: Record<string, string> = {
   "hsa / fsa information": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "how financing works": CLINIC_INTERIOR_IMAGES.consultationLounge,
   "contact our team": CLINIC_INTERIOR_IMAGES.lobbyReceptionDeskProducts,
-  "the arc method": NAV_PREVIEW.facialAesthetic,
+  "arc 360": NAV_PREVIEW.arc360,
 };
 
 const DEFAULT_SUBLINK_THUMB = CLINIC_INTERIOR_IMAGES.consultationLounge;
@@ -71,6 +90,21 @@ export function resolveNavLeafThumb(leaf: NavLeaf): string | undefined {
   return thumbByLabelAlias[key] ?? thumbByLabel[key] ?? DEFAULT_SUBLINK_THUMB;
 }
 
+/** Optional object-position crop for circle previews (e.g. right side of hero). */
+export function resolveNavLeafThumbObjectClass(leaf: NavLeaf): string {
+  if (leaf.href && thumbObjectByHref[leaf.href]) {
+    return thumbObjectByHref[leaf.href];
+  }
+  const key = leaf.label.toLowerCase();
+  // Alias labels (Infusions → Infusion Therapy, etc.) share the treatment object crop.
+  if (key === "infusions") return thumbObjectByLabel["infusion therapy"] ?? "object-cover";
+  if (key === "peptides") return thumbObjectByLabel["peptide therapy"] ?? "object-cover";
+  if (key === "fillers" || key === "rha fillers") {
+    return thumbObjectByLabel["dermal fillers"] ?? "object-cover";
+  }
+  return thumbObjectByLabel[key] ?? "object-cover";
+}
+
 type ArcNavDrawerSubLinkRowProps = {
   leaf: NavLeaf;
   closeMenu: () => void;
@@ -79,6 +113,8 @@ type ArcNavDrawerSubLinkRowProps = {
   thumbSrc?: string;
   /** Passed when rendered inside an accordion panel (kept for call-site clarity). */
   inAccordion?: boolean;
+  /** Hide circular preview thumbs (e.g. Conditions drawer list). Default true. */
+  showThumb?: boolean;
 };
 
 /** Animated sub-link row — matches the previous treatment drawer links (circular hover preview). */
@@ -89,10 +125,12 @@ export function ArcNavDrawerSubLinkRow({
   canHover,
   thumbSrc: thumbSrcProp,
   inAccordion = false,
+  showThumb = true,
 }: ArcNavDrawerSubLinkRowProps) {
   const disabled = !leaf.href || leaf.comingSoon || leaf.future;
   const badge = leaf.future ? "Future" : leaf.comingSoon ? "Soon" : null;
   const thumbSrc = thumbSrcProp ?? (leaf.href ? resolveNavLeafThumb(leaf) : undefined);
+  const thumbObjectClass = resolveNavLeafThumbObjectClass(leaf);
 
   if (disabled) {
     return (
@@ -107,6 +145,26 @@ export function ArcNavDrawerSubLinkRow({
 
   const href = leaf.href!;
   const external = bookingLinkExternalProps(href);
+
+  if (!showThumb) {
+    return (
+      <Link
+        href={href}
+        {...external}
+        onClick={closeMenu}
+        className={cn(
+          "group relative flex min-h-[48px] w-full touch-manipulation items-center rounded-lg py-2 pl-2 pr-2 font-sans text-[0.9375rem] text-arc-charcoal/72 transition-colors duration-200",
+          "hover:bg-arc-teal-muted/45 hover:text-arc-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/40 sm:min-h-[52px]",
+          inAccordion && "pl-1",
+        )}
+      >
+        <span className="relative z-10 min-w-0 flex-1 font-medium leading-snug">
+          {leaf.label}
+        </span>
+      </Link>
+    );
+  }
+
   const thumb = thumbSrc ?? DEFAULT_SUBLINK_THUMB;
 
   return (
@@ -114,6 +172,7 @@ export function ArcNavDrawerSubLinkRow({
       href={href}
       label={leaf.label}
       thumbSrc={thumb}
+      thumbObjectClass={thumbObjectClass}
       closeMenu={closeMenu}
       reducedMotion={reducedMotion}
       canHover={canHover}
@@ -126,6 +185,7 @@ function AnimatedThumbLinkRow({
   href,
   label,
   thumbSrc,
+  thumbObjectClass,
   closeMenu,
   reducedMotion,
   canHover,
@@ -134,6 +194,7 @@ function AnimatedThumbLinkRow({
   href: string;
   label: string;
   thumbSrc: string;
+  thumbObjectClass: string;
   closeMenu: () => void;
   reducedMotion: boolean;
   canHover: boolean;
@@ -211,7 +272,7 @@ function AnimatedThumbLinkRow({
               src={thumbSrc}
               alt=""
               fill
-              className="object-cover"
+              className={thumbObjectClass}
               sizes="(max-width: 640px) 144px, 160px"
               unoptimized
             />
@@ -221,7 +282,14 @@ function AnimatedThumbLinkRow({
 
       {showInlineThumb ? (
         <span className="relative size-14 shrink-0 overflow-hidden rounded-full bg-arc-cream-deep ring-2 ring-arc-charcoal/10 sm:size-16">
-          <Image src={thumbSrc} alt="" fill sizes="64px" className="object-cover" unoptimized />
+          <Image
+            src={thumbSrc}
+            alt=""
+            fill
+            sizes="64px"
+            className={thumbObjectClass}
+            unoptimized
+          />
         </span>
       ) : null}
     </Link>

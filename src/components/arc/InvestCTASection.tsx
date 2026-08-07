@@ -9,7 +9,7 @@ import {
   InvestCTAHeadline,
   InvestCTASignoffBlock,
   investCopyBlockClass,
-  investMobilePanelClass,
+  investMobileStackClass,
   type InvestCTASignoff,
   investSectionShellClass,
 } from "@/components/arc/investCtaShared";
@@ -79,24 +79,14 @@ function InvestCTAContent({
           "xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,0.34fr)_minmax(0,1fr)] xl:items-center xl:justify-normal xl:gap-8",
         )}
       >
-        <div className={cn(investMobilePanelClass, "text-center xl:hidden")}>
+        <div className={cn(investMobileStackClass, "text-center xl:hidden")}>
           <ArcTextReveal variant="heading">
             <InvestCTAHeadline
               headlineMotion={staticMotion}
               className="mx-auto text-center"
             />
           </ArcTextReveal>
-          {supportingLine ? (
-            <ArcTextReveal variant="body" delayIndex={1}>
-              <p
-                className="mx-auto mt-4 max-w-md font-sans text-sm leading-relaxed text-white/92 [text-shadow:0_1px_16px_rgba(0,0,0,0.38)] sm:text-[15px]"
-                style={staticMotion}
-              >
-                {supportingLine}
-              </p>
-            </ArcTextReveal>
-          ) : null}
-          <ArcTextReveal variant="body" delayIndex={supportingLine ? 2 : 1}>
+          <ArcTextReveal variant="body" delayIndex={1}>
             <InvestCTAActions
               motionStyle={staticMotion}
               ctaLabel={ctaLabel}
@@ -105,7 +95,7 @@ function InvestCTAContent({
             />
           </ArcTextReveal>
           <div className="mt-8">
-            <ArcTextReveal variant="heading" delayIndex={supportingLine ? 3 : 2}>
+            <ArcTextReveal variant="heading" delayIndex={2}>
               <InvestCTASignoffBlock
                 signoff={signoff}
                 motionStyle={staticMotion}
@@ -141,8 +131,8 @@ function InvestCTAContent({
 
         <div aria-hidden className="hidden xl:block xl:col-start-2" />
 
-        <div className="hidden xl:col-start-3 xl:flex xl:items-end xl:justify-end">
-          <div className={cn(investCopyBlockClass, "max-w-sm")}>
+        <div className="hidden xl:col-start-3 xl:flex xl:items-end xl:justify-end xl:pr-10 xl:pl-4">
+          <div className={cn(investCopyBlockClass, "max-w-md")}>
             <ArcTextReveal variant="heading">
               <InvestCTASignoffBlock signoff={signoff} motionStyle={staticMotion} />
             </ArcTextReveal>

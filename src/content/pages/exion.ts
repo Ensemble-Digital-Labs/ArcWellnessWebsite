@@ -13,6 +13,7 @@ export type ExionIconItem = {
   iconSrc: string;
   title: string;
   body: string;
+  iconClassName?: string;
 };
 
 export const exionHero = {
@@ -34,7 +35,7 @@ export const exionHero = {
 
 export const exionPillars: readonly ExionIconItem[] = [
   {
-    iconSrc: `${EXION_ICON}/magnet.svg`,
+    iconSrc: `${EXION_ICON}/target-rings.svg`,
     title: "Stimulate",
     body: "Activate natural collagen and elastin production.",
   },
@@ -164,21 +165,25 @@ export const exionDifferent = {
       iconSrc: `${EXION_ICON}/battery-energy.svg`,
       title: "Dual-Energy Technology",
       body: "RF and targeted ultrasound work together to reach multiple depths of the skin for comprehensive rejuvenation.",
+      iconClassName: "origin-center scale-[1.15]",
     },
     {
-      iconSrc: `${EXION_ICON}/atom.svg`,
+      iconSrc: `${EXION_ICON}/cell.svg`,
       title: "Targets Fibroblasts",
       body: "Stimulates the skin's structural cells to increase collagen, elastin, and hyaluronic acid production.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
-      iconSrc: `${EXION_ICON}/face-device.svg`,
+      iconSrc: `${EXION_ICON}/target-rings.svg`,
       title: "Precise & Controlled",
       body: "Delivers energy in measured, controlled ways, exactly where the skin needs it most.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
-      iconSrc: `${EXION_ICON}/clock.svg`,
+      iconSrc: `${EXION_ICON}/shield-check.svg`,
       title: "Safe & Effective",
       body: "Non-invasive treatments with no needles, no surgery, and little to no downtime.",
+      iconClassName: "origin-center scale-[1.7]",
     },
   ] as readonly ExionIconItem[],
 } as const;
@@ -191,26 +196,31 @@ export const exionExperience = {
       iconSrc: `${EXION_ICON}/chat.svg`,
       title: "Consultation",
       body: "We listen to your skin goals and evaluate your skin.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
-      iconSrc: `${EXION_ICON}/book.svg`,
+      iconSrc: `${EXION_ICON}/checklist.svg`,
       title: "Personalized Plan",
       body: "Your treatment plan is tailored to your unique needs.",
+      iconClassName: "origin-center scale-[1.45]",
     },
     {
       iconSrc: `${EXION_ICON}/meditation.svg`,
       title: "Comfortable Treatment",
       body: "Advanced technology delivers powerful results with ease.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
-      iconSrc: `${EXION_ICON}/mind.svg`,
+      iconSrc: `${EXION_ICON}/person-sparkle.svg`,
       title: "Visible Results",
       body: "Noticeable improvement in tone, texture, and firmness.",
+      iconClassName: "origin-center scale-[1.4]",
     },
     {
       iconSrc: `${EXION_ICON}/calendar-check.svg`,
       title: "Maintain & Enhance",
       body: "Ongoing treatments help maintain your best results.",
+      iconClassName: "origin-center scale-[1.45]",
     },
   ] as readonly ExionIconItem[],
 } as const;

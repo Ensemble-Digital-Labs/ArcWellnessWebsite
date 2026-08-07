@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import { INSIGHTS_FEED_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import {
   insightHref,
@@ -23,8 +23,27 @@ import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
+import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
+
+/** Matches Contact / Financing masthead — Birthstone script, not heavy uppercase sans. */
+const INSIGHTS_MASTHEAD_CLASS = cn(
+  "inline-block font-title-emphasis font-normal not-italic leading-[0.9] tracking-tight text-black",
+  "text-[clamp(5.5rem,22vw,7.5rem)] md:text-[clamp(6.5rem,13vw,10.5rem)] lg:text-[clamp(7.75rem,11vw,11.5rem)]",
+  "[text-shadow:0_1px_2px_rgba(255,255,255,0.5)]",
+);
 
 type InsightFilter = "all" | InsightKind;
+
+/**
+ * Blog slugs ready to show on the Arc Desk feed. Others stay hidden until
+ * their editorial layout / copy is finished. `null` = show every blog.
+ */
+const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
+  "insulin-resistance-signs-symptoms",
+]);
+
+/** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
+const INSIGHTS_VISIBLE_TABS: InsightFilter[] = ["all", "blog"];
 
 const TAB_LABELS: Record<InsightFilter, string> = {
   all: "All posts",
@@ -46,29 +65,34 @@ const INSIGHTS_FILTER_TRANSITION = {
   ease: [0.22, 1, 0.36, 1] as const,
 };
 
+function subscribeCanvasColumns(onStoreChange: () => void) {
+  const mqSm = window.matchMedia("(min-width: 640px)");
+  const mqLg = window.matchMedia("(min-width: 1024px)");
+  mqSm.addEventListener("change", onStoreChange);
+  mqLg.addEventListener("change", onStoreChange);
+  return () => {
+    mqSm.removeEventListener("change", onStoreChange);
+    mqLg.removeEventListener("change", onStoreChange);
+  };
+}
+
+function getCanvasColumnCount(): number {
+  if (window.matchMedia("(min-width: 1024px)").matches) return 3;
+  if (window.matchMedia("(min-width: 640px)").matches) return 2;
+  return 1;
+}
+
+/** SSR + first paint: 3-col so laptop doesn’t remount after a 1-col lazy pass. */
+function getCanvasColumnCountServer(): number {
+  return 3;
+}
+
 function useCanvasColumnCount(): number {
-  const [count, setCount] = useState(1);
-
-  useEffect(() => {
-    const mqSm = window.matchMedia("(min-width: 640px)");
-    const mqLg = window.matchMedia("(min-width: 1024px)");
-
-    const sync = () => {
-      if (mqLg.matches) setCount(3);
-      else if (mqSm.matches) setCount(2);
-      else setCount(1);
-    };
-
-    sync();
-    mqSm.addEventListener("change", sync);
-    mqLg.addEventListener("change", sync);
-    return () => {
-      mqSm.removeEventListener("change", sync);
-      mqLg.removeEventListener("change", sync);
-    };
-  }, []);
-
-  return count;
+  return useSyncExternalStore(
+    subscribeCanvasColumns,
+    getCanvasColumnCount,
+    getCanvasColumnCountServer,
+  );
 }
 
 function distributeToColumns(items: readonly InsightEntry[], columnCount: number): InsightEntry[][] {
@@ -79,11 +103,18 @@ function distributeToColumns(items: readonly InsightEntry[], columnCount: number
   return columns;
 }
 
+function isFeedVisibleEntry(entry: InsightEntry): boolean {
+  if (entry.kind !== "blog") return true;
+  if (INSIGHTS_READY_BLOG_SLUGS === null) return true;
+  return INSIGHTS_READY_BLOG_SLUGS.has(entry.slug);
+}
+
 function getCounts(entries: readonly InsightEntry[]) {
+  const visible = entries.filter(isFeedVisibleEntry);
   return {
-    all: entries.length,
-    blog: entries.filter((e) => e.kind === "blog").length,
-    caseStudy: entries.filter((e) => e.kind === "case-study").length,
+    all: visible.length,
+    blog: visible.filter((e) => e.kind === "blog").length,
+    caseStudy: visible.filter((e) => e.kind === "case-study").length,
   };
 }
 
@@ -104,8 +135,37 @@ function formatMetaDate(publishedAt: string): string {
   return publishedAt.toUpperCase();
 }
 
-function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex: number }) {
+/** First row on laptop (3-col) — eager so they don’t wait behind the masthead plate. */
+const INSIGHTS_EAGER_PREVIEW_COUNT = 3;
+
+const INSIGHT_CARD_EASE = [0.22, 1, 0.36, 1] as const;
+
+function InsightCard({
+  entry,
+  columnIndex,
+  rowIndex,
+  priority = false,
+  reduceMotion = false,
+}: {
+  entry: InsightEntry;
+  columnIndex: number;
+  rowIndex: number;
+  priority?: boolean;
+  reduceMotion?: boolean;
+}) {
   const href = insightHref(entry);
+  const cardRef = useRef<HTMLElement>(null);
+  /**
+   * `useInView` + `animate` (not `whileInView` / `initial`) so reveals still play on
+   * first paint — AnimatePresence `initial={false}` would otherwise skip them.
+   */
+  const inView = useInView(cardRef, {
+    once: true,
+    amount: 0.16,
+    margin: "0px 0px -5% 0px",
+  });
+  const show = reduceMotion || inView;
+
   /** Slight aspect variation by column keeps the canvas from feeling grid-locked. */
   const aspectClass =
     columnIndex === 1
@@ -115,7 +175,17 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
         : "aspect-square";
 
   return (
-    <article className="group break-inside-avoid">
+    <motion.article
+      ref={cardRef}
+      className="group break-inside-avoid"
+      initial={false}
+      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+      transition={{
+        duration: reduceMotion ? 0 : 0.7,
+        ease: INSIGHT_CARD_EASE,
+        delay: reduceMotion ? 0 : rowIndex * 0.1 + columnIndex * 0.07,
+      }}
+    >
       <Link
         href={href}
         className="relative block rounded-t-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream"
@@ -126,6 +196,7 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
           className={cn("w-full", aspectClass)}
           imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          priority={priority}
         >
           <div
             className="pointer-events-none absolute inset-0 bg-arc-charcoal/0 transition-colors duration-300 group-hover:bg-arc-charcoal/18 motion-reduce:group-hover:bg-transparent"
@@ -159,25 +230,30 @@ function InsightCard({ entry, columnIndex }: { entry: InsightEntry; columnIndex:
           {kindLabelUpper(entry.kind)}
         </p>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
-function InsightsCanvasGrid({ items }: { items: readonly InsightEntry[] }) {
+function InsightsCanvasGrid({
+  items,
+  reduceMotion,
+}: {
+  items: readonly InsightEntry[];
+  reduceMotion: boolean;
+}) {
   const columnCount = useCanvasColumnCount();
   const columns = useMemo(
     () => distributeToColumns(items, columnCount),
     [items, columnCount],
   );
 
-  const populatedColumns = useMemo(
-    () =>
-      columns
-        .map((columnItems, columnIndex) => ({ columnItems, columnIndex }))
-        .filter(({ columnItems }) => columnItems.length > 0),
-    [columns],
+  const eagerIds = useMemo(
+    () => new Set(items.slice(0, INSIGHTS_EAGER_PREVIEW_COUNT).map((e) => e.id)),
+    [items],
   );
 
+  // Keep empty columns mounted on tablet/laptop so a short list still sits in a
+  // 2/3-col track (cards don't stretch full-bleed when there is only one post).
   return (
     <div
       className={cn(
@@ -187,7 +263,7 @@ function InsightsCanvasGrid({ items }: { items: readonly InsightEntry[] }) {
           : "flex items-start gap-x-8 sm:gap-x-10 lg:gap-x-12 xl:gap-x-16",
       )}
     >
-      {populatedColumns.map(({ columnItems, columnIndex }) => (
+      {columns.map((columnItems, columnIndex) => (
         <div
           key={`col-${columnIndex}`}
           className={cn(
@@ -196,8 +272,15 @@ function InsightsCanvasGrid({ items }: { items: readonly InsightEntry[] }) {
             CANVAS_COLUMN_OFFSET[columnIndex] ?? CANVAS_COLUMN_OFFSET[0],
           )}
         >
-          {columnItems.map((entry) => (
-            <InsightCard key={entry.id} entry={entry} columnIndex={columnIndex} />
+          {columnItems.map((entry, rowIndex) => (
+            <InsightCard
+              key={entry.id}
+              entry={entry}
+              columnIndex={columnIndex}
+              rowIndex={rowIndex}
+              priority={eagerIds.has(entry.id)}
+              reduceMotion={reduceMotion}
+            />
           ))}
         </div>
       ))}
@@ -209,19 +292,24 @@ function InsightsFilterPanel({
   filter,
   items,
   reduceMotion,
+  animateEntrance,
   onSettled,
 }: {
   filter: InsightFilter;
   items: readonly InsightEntry[];
   reduceMotion: boolean;
+  /** False on first paint so cards aren’t hidden while images load. */
+  animateEntrance: boolean;
   onSettled?: () => void;
 }) {
+  const runEntrance = animateEntrance && !reduceMotion;
+
   if (items.length === 0) {
     return (
       <motion.p
-        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+        initial={runEntrance ? { opacity: 0, y: 14 } : false}
         animate={{ opacity: 1, y: 0 }}
-        exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+        exit={runEntrance ? { opacity: 0, y: -8 } : undefined}
         transition={INSIGHTS_FILTER_TRANSITION}
         onAnimationComplete={(latest) => {
           if (
@@ -249,9 +337,9 @@ function InsightsFilterPanel({
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      initial={runEntrance ? { opacity: 0, y: 20 } : false}
       animate={{ opacity: 1, y: 0 }}
-      exit={reduceMotion ? undefined : { opacity: 0, y: -12 }}
+      exit={runEntrance ? { opacity: 0, y: -12 } : undefined}
       transition={INSIGHTS_FILTER_TRANSITION}
       onAnimationComplete={(latest) => {
         if (
@@ -264,7 +352,7 @@ function InsightsFilterPanel({
         }
       }}
     >
-      <InsightsCanvasGrid items={items} />
+      <InsightsCanvasGrid items={items} reduceMotion={reduceMotion} />
     </motion.div>
   );
 }
@@ -289,14 +377,18 @@ export function ArcInsightsFeedSection({
   const readFilterFromUrl = (): InsightFilter => {
     if (typeof window === "undefined") return "all";
     const q = new URLSearchParams(window.location.search).get("filter");
-    if (q === "blog" || q === "case-study") return q;
+    if (q === "blog") return q;
+    // Case-study tab is hidden; ignore stale ?filter=case-study links.
     return "all";
   };
 
   const [filter, setFilter] = useState<InsightFilter>("all");
+  /** Skip grid fade on first paint so preview images aren’t obscured while loading. */
+  const [filterEntranceReady, setFilterEntranceReady] = useState(false);
 
   useEffect(() => {
     setFilter(readFilterFromUrl());
+    setFilterEntranceReady(true);
   }, []);
 
   useEffect(() => {
@@ -324,8 +416,9 @@ export function ArcInsightsFeedSection({
   }, []);
 
   const filtered = useMemo(() => {
-    if (filter === "all") return [...entries];
-    return entries.filter((e) => e.kind === filter);
+    const byTab =
+      filter === "all" ? [...entries] : entries.filter((e) => e.kind === filter);
+    return byTab.filter(isFeedVisibleEntry);
   }, [entries, filter]);
 
   const scheduleScrollLayoutRefresh = () => {
@@ -355,7 +448,7 @@ export function ArcInsightsFeedSection({
     if (reduceMotion) scheduleScrollLayoutRefresh();
   };
 
-  const tabs: InsightFilter[] = ["all", "blog", "case-study"];
+  const tabs: InsightFilter[] = INSIGHTS_VISIBLE_TABS;
 
   return (
     <section
@@ -391,22 +484,25 @@ export function ArcInsightsFeedSection({
                 <h1
                   ref={mastheadTitleRef}
                   id="insights-masthead-title"
-                  className="font-sans text-[clamp(2.75rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-arc-charcoal"
+                  className="leading-[0.9] tracking-tight"
                 >
-                  {feed.masthead}
+                  <TitleEmphasis className={INSIGHTS_MASTHEAD_CLASS}>
+                    From the{" "}
+                    <span className="whitespace-nowrap">Arc Desk</span>
+                  </TitleEmphasis>
                 </h1>
               </ArcTextReveal>
-              <ArcTextReveal variant="body" delayIndex={1} trigger="mount" when>
-                <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/85 sm:text-base md:mt-6">
-                  {feed.subtitle}
-                </p>
-              </ArcTextReveal>
+              {/* Spacer keeps former subtitle gap under the masthead. */}
+              <div
+                className="mx-auto mt-5 h-[2.75rem] max-w-2xl sm:h-[3.25rem] md:mt-6"
+                aria-hidden
+              />
             </header>
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
+      <div className="relative z-20 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
         <div className="mx-auto w-full max-w-[min(100%,1440px)]">
           <div
             id="insights-filter-bar"
@@ -453,6 +549,7 @@ export function ArcInsightsFeedSection({
                 filter={filter}
                 items={filtered}
                 reduceMotion={reduceMotion ?? false}
+                animateEntrance={filterEntranceReady}
                 onSettled={scheduleScrollLayoutRefresh}
               />
             </AnimatePresence>
@@ -465,7 +562,6 @@ export function ArcInsightsFeedSection({
           tone="cream"
           variant="soft"
           scope="background"
-          className="z-20"
         />
       ) : null}
     </section>

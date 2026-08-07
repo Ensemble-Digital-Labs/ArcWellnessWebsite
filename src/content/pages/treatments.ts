@@ -21,6 +21,11 @@ export type TreatmentPage = {
     bullets?: readonly string[];
   }[];
   faqs?: readonly { id: string; question: string; answer: string }[];
+  /**
+   * When true, omitted from Every pathway, nav treatment lists, sitemap, and
+   * static treatment routes. Keep the entry so it can be restored later.
+   */
+  hidden?: boolean;
 };
 
 export const treatmentCategories: Record<
@@ -34,7 +39,7 @@ export const treatmentCategories: Record<
   },
   aesthetics: {
     label: "Arc aesthetics",
-    description: "Injectables, skin technology, and elevated treatment experiences.",
+    description: "Neuromodulators, skin technology, and elevated treatment experiences.",
   },
   wellness: {
     label: "Foundational therapies",
@@ -216,8 +221,8 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Realign Your Core to Its Natural Strength",
     category: "body",
     categoryLabel: "Pelvic health",
-    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaChairPatientLifestyle,
-    imageAlt: "Patient seated on an EmSella chair during pelvic floor treatment",
+    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsellaBtlChairRoom,
+    imageAlt: "EmSella chair and console in an ARC Wellness treatment room",
     intro:
       "Emsella is an advanced, non-invasive treatment that uses High Intensity Focused Electromagnetic Energy (HIFEM) to strengthen the pelvic floor muscles, all while you remain fully clothed.",
     sections: [
@@ -308,8 +313,8 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Restore Your Body to Its Natural Form",
     category: "body",
     categoryLabel: "Body contouring",
-    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoAbdominalTreatmentMale,
-    imageAlt: "EmSculpt Neo abdominal treatment in a wellness clinic",
+    imageSrc: MEDICAL_SPA_NAMED_IMAGES.emsculptNeoConsoleCloseup,
+    imageAlt: "EmSculpt Neo console in an ARC Wellness treatment room",
     intro:
       "Emsculpt Neo is an advanced non-invasive treatment that combines two technologies to simultaneously reduce fat and build muscle.",
     highlights: ["No Pain. No Sweat. No downtime.", "~30 minutes per session", "Often 4 weekly sessions"],
@@ -394,35 +399,72 @@ export const allTreatments: readonly TreatmentPage[] = [
   {
     slug: "emface",
     title: "EmFace",
-    tagline: "The Needle-Free Revolution in Facial Rejuvenation",
+    tagline: "Lift. Tone. Restore.",
     category: "aesthetics",
     categoryLabel: "Facial device",
     imageSrc: MEDICAL_SPA_NAMED_IMAGES.emfaceBtlConsoleFacialTreatment,
     imageAlt: "EmFace facial treatment with BTL console at ARC Wellness",
     intro:
-      "EMFACE is the first and only non-invasive procedure that simultaneously treats facial skin and muscles to lift, tone, and reduce wrinkles, all without needles or downtime.",
+      "EMFACE is the first non-invasive facial treatment that simultaneously strengthens the muscles that support your face while stimulating collagen and elastin deep within the skin—creating subtle lifting, improved definition, smoother skin, and healthier aging without needles, surgery, or downtime.",
     sections: [
       {
         heading: "How It Works",
-        body: "EMFACE combines two powerful technologies in a single 20-minute session: Synchronized Radiofrequency (RF) gently heats the dermal layers to stimulate collagen and elastin; HIFES™ Technology delivers high-intensity electrical pulses to selectively contract and tone facial muscles for a natural lifting effect from within.",
+        body: "EMFACE combines synchronized radiofrequency (RF) and High-Intensity Facial Electrical Stimulation (HIFES™) in a single session: RF gently heats the dermal layers to stimulate collagen and elastin; HIFES™ contracts facial muscles thousands of times for a natural lifting effect from within.",
       },
       {
         heading: "Key Benefits",
         bullets: [
-          "Natural Lift: Average of 23% more lift in targeted areas",
-          "Wrinkle Reduction: Up to 37% reduction in fine lines and wrinkles",
-          "Improved Muscle Tone: Approximately 30% increase in resting muscle tone",
-          "No Needles & No Pain: Often compared to a warm facial massage",
-          "Zero Downtime: Return to daily activities immediately after your lunchtime lift",
+          "Lift: Strengthens facial elevator muscles for cheeks and brows",
+          "Tighten: Stimulates collagen and elastin for firmer skin",
+          "Smooth: Softens fine lines by improving skin quality—not freezing expression",
+          "Restore: Enhances natural contours while preserving expression",
+          "No needles, no surgery, no downtime—about 20 minutes per session",
         ],
       },
       {
-        heading: "Treatment Areas",
-        body: "Forehead (lifts brows, smooths lines), cheeks (volume and definition), jawline and jowls, and submentum (under chin) with dedicated applicators.",
+        heading: "What Can EMFACE Treat?",
+        bullets: [
+          "Forehead lines, frown lines, and crow's feet",
+          "Drooping brows and flattening cheeks",
+          "Mild jowling and loss of facial definition",
+          "Skin laxity and early signs of aging",
+        ],
       },
       {
         heading: "Is EMFACE Right for You?",
-        body: "EMFACE is suitable for almost anyone seeking a non-surgical alternative to a facelift or a preventative anti-aging strategy, especially those who want to avoid needles, seek natural-looking results, and cannot afford recovery time.",
+        body: "EMFACE is suited for adults seeking a natural, non-invasive solution for facial aging, loss of definition, mild skin laxity, or early wrinkles—especially those who want to avoid needles and cannot afford recovery time.",
+      },
+    ],
+    faqs: [
+      {
+        id: "replace-botox",
+        question: "Does EMFACE replace Botox?",
+        answer:
+          "Not always. Many patients choose EMFACE alone for a natural approach, while others combine treatments for comprehensive facial rejuvenation.",
+      },
+      {
+        id: "pain",
+        question: "Does it hurt?",
+        answer:
+          "Most patients describe a warming sensation with rhythmic muscle contractions. There is no recovery period afterward.",
+      },
+      {
+        id: "how-many",
+        question: "How many treatments will I need?",
+        answer:
+          "A typical treatment plan consists of four sessions performed once weekly. Maintenance treatments help preserve long-term results.",
+      },
+      {
+        id: "results",
+        question: "When will I see results?",
+        answer:
+          "Many patients notice subtle improvements after the first few weeks, with continued lifting and skin improvement over the next 2–3 months as collagen remodeling continues.",
+      },
+      {
+        id: "candidate",
+        question: "Who is a good candidate?",
+        answer:
+          "Adults looking for a natural, non-invasive solution for facial aging, loss of definition, mild skin laxity, or early wrinkles.",
       },
     ],
   },
@@ -495,11 +537,14 @@ export const allTreatments: readonly TreatmentPage[] = [
     title: "DAXXIFY®",
     tagline: "Long-lasting neuromodulator",
     category: "aesthetics",
-    categoryLabel: "Injectables",
+    categoryLabel: "Neuromodulators",
     imageSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
     imageAlt: "Daxxify consultation at ARC Wellness",
     intro:
       "DAXXIFY® (daxibotulinumtoxinA-lanm) is a premium, long-lasting injectable treatment designed to temporarily smooth moderate to severe frown lines. It's an FDA-approved neuromodulator formulated with a proprietary peptide.",
+    // DAXXIFY lives on the Neuromodulators service page (`/treatments/neuromodulators`).
+    // Keep entry hidden; `/treatments/daxxify` redirects there (see next.config).
+    hidden: true,
     sections: [
       {
         heading: "Key Benefits",
@@ -525,40 +570,68 @@ export const allTreatments: readonly TreatmentPage[] = [
     ],
   },
   {
-    slug: "rha",
-    title: "RHA®",
-    tagline: "Experience the next generation of dermal fillers",
+    slug: "dermal-fillers",
+    title: "Dermal Fillers",
+    tagline: "Restore. Support. Enhance.",
     category: "aesthetics",
-    categoryLabel: "Injectables",
+    categoryLabel: "Fillers",
     imageSrc: images.services[0],
-    imageAlt: "RHA filler treatment at ARC Wellness",
+    imageAlt: "Dermal filler treatment consultation at ARC Wellness",
     intro:
-      "The RHA® (Resilient Hyaluronic Acid) Collection is the first and only FDA-approved line of fillers specifically designed to treat dynamic wrinkles and folds.",
+      "Natural-looking volume restoration designed to complement your features—not change them. Dermal fillers replace lost structural support from bone, fat, collagen, and hydration changes—restoring balance, contour, and youthful proportions while preserving what makes you uniquely you.",
     sections: [
       {
-        heading: "Why Choose RHA®?",
+        heading: "Aging Happens in Layers",
+        body: "Wrinkles are only part of the story. Facial bones lose support, fat pads shrink and shift, collagen thins, and hyaluronic acid declines. When these layers change together, the face can appear tired, hollow, or less defined. Dermal fillers restore support where it has been lost.",
+      },
+      {
+        heading: "What Fillers Can Improve",
         bullets: [
-          "Designed for Movement: Adapts to your facial expressions for a natural look at rest or in motion",
-          "Cleaner Formula: Preserves the natural structure of hyaluronic acid, similar to the HA in your skin",
-          "Impressive Longevity: Clinically proven results that last up to 15 months",
+          "Cheek volume, jawline definition, and chin projection",
+          "Smile lines, marionette lines, and under-eye hollowness",
+          "Lip hydration, definition, and subtle fullness",
+          "Temples, pre-jowl sulcus, and overall facial symmetry",
         ],
       },
       {
-        heading: "Meet the Collection",
-        bullets: [
-          "RHA Redensity: Delicate areas and fine smoker's lines around the mouth",
-          "RHA 2: Moderate dynamic wrinkles around lips and forehead",
-          "RHA 3: Moderate-to-severe folds including nasolabial and marionette lines",
-          "RHA 4: Deep support and volume for cheeks, jawline, and severe folds",
-        ],
+        heading: "Not Every Face Needs Filler",
+        body: "Volume loss is only one piece of facial aging. Sometimes RF Microneedling, EMFACE, EXION, or lifestyle and longevity factors are the better first step. Our role is to recommend the treatment—or combination—that best supports long-term facial health, not simply add more product.",
       },
       {
-        heading: "What to Expect",
-        body: "A quick in-office treatment typically lasting 30–45 minutes. Each formulation contains lidocaine for comfort. Most patients return to daily activities immediately; mild swelling or bruising may occur and usually subsides within a few days.",
+        heading: "Our Approach",
+        body: "We don't believe more filler creates better results. Every plan begins with a comprehensive facial assessment of proportions, bone structure, volume loss, skin quality, muscle activity, and long-term aging patterns—so you look refreshed, not different.",
+      },
+    ],
+    faqs: [
+      {
+        id: "overfilled",
+        question: "Will I look overfilled?",
+        answer:
+          "Not at Arc Wellness. Our philosophy emphasizes facial balance, subtle restoration, and respecting your natural anatomy.",
       },
       {
-        heading: "Are You a Candidate?",
-        body: "RHA® is ideal for anyone seeking subtle, refreshed results without sacrificing natural expressions. It is safe for all skin types and adults over 21.",
+        id: "noticeable",
+        question: "Will people know I've had filler?",
+        answer:
+          "Most people simply notice that you look more rested and refreshed without identifying exactly why.",
+      },
+      {
+        id: "pain",
+        question: "Does treatment hurt?",
+        answer:
+          "Most fillers contain lidocaine, and we also use topical numbing when appropriate to maximize comfort.",
+      },
+      {
+        id: "duration",
+        question: "How long do fillers last?",
+        answer:
+          "Depending on the product and treatment area, results generally last between 6 and 18 months.",
+      },
+      {
+        id: "reverse",
+        question: "Can fillers be reversed?",
+        answer:
+          "Yes. Most hyaluronic acid fillers can be safely dissolved using an enzyme called hyaluronidase if needed.",
       },
     ],
   },
@@ -568,6 +641,9 @@ export const allTreatments: readonly TreatmentPage[] = [
     tagline: "Elevate your skin and spirit with KNESKO Skin",
     category: "aesthetics",
     categoryLabel: "Skincare",
+    // NOTE: Knesko is not an active offering in nav / Every pathway for now.
+    // Set `hidden: false` (or remove) to restore listings + `/treatments/knesko`.
+    hidden: true,
     imageSrc: CLINIC_INTERIOR_IMAGES.retailKneskoSkinProductDisplay,
     imageAlt: CLINIC_INTERIOR_ALT.retailKneskoSkinProductDisplay,
     intro:
@@ -663,122 +739,542 @@ export const allTreatments: readonly TreatmentPage[] = [
   {
     slug: "peptide-therapy",
     title: "Peptide Therapy",
-    tagline: "Thoughtful Support for Targeted Wellness",
+    tagline: "Precision Medicine.",
     category: "wellness",
     categoryLabel: "Peptides",
-    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
-    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    imageSrc: RETAIL_IMAGES.injectionBarMenuDisplay,
+    imageAlt: "ARC Wellness injection bar and peptide therapy menu display",
     intro:
-      "Peptide Therapy is a science-based approach that works with your body's natural repair, regulation, and communication systems. By guiding processes related to healing, recovery, and regeneration, these therapies offer targeted support where your body needs it most.",
+      "Peptide therapy helps support your body's natural communication systems—encouraging healthier function rather than simply masking symptoms. At Arc Wellness, care is always personalized, physician-guided, and designed for your long-term health goals.",
     highlights: [
-      "Prescribed after medical consultation",
-      "Subcutaneous delivery",
-      "GLOW and Wolverine protocols available",
+      "Physician-guided, personalized plans",
+      "Targeted cellular signaling support",
+      "Part of a broader wellness Blueprint",
     ],
     sections: [
       {
-        heading: "Our Peptide Offerings",
-        body: "All peptides are prescribed following medical consultation to ensure appropriate use, accurate dosing, and alignment with your health profile.",
+        heading: "What Are Peptides?",
+        body: "Peptides are short chains of amino acids—biological messengers that help cells communicate. Rather than replacing what your body does naturally, they encourage processes already built into your physiology.",
       },
       {
-        heading: "GLOW",
-        body: "For collagen stimulation, cellular renewal, and overall skin and hair vitality. Delivered through a subcutaneous injection, $195.",
-      },
-      {
-        heading: "Wolverine",
-        body: "For faster healing, reduced inflammation, and optimal recovery. Delivered through a subcutaneous injection, $175.",
-      },
-      {
-        heading: "Who Thrives with Peptides?",
-        bullets: [
-          "Improve skin health, collagen production, and overall glow",
-          "Support faster healing, tissue repair, and recovery",
-          "Reduce inflammation and physical strain from workouts or overuse",
-          "Enhance mobility, performance, and overall vitality",
-        ],
+        heading: "Why Physician Guidance Matters",
+        body: "Not every peptide is appropriate for every patient. Recommendations consider medical history, medications, laboratory testing, hormone balance, lifestyle, and personal goals.",
       },
     ],
     faqs: [
       {
-        id: "safe",
-        question: "Is peptide therapy safe?",
+        id: "hormones",
+        question: "Are peptides hormones?",
         answer:
-          "Yes. At Arc Wellness, all peptides are recommended and guided by licensed medical providers. Each plan is tailored to your health, goals, and medical history, so you can feel confident knowing your care is personalized and closely monitored.",
+          "No. Peptides are signaling molecules that help cells communicate. Some influence hormone pathways, but peptides themselves are not hormones.",
       },
       {
-        id: "duration",
-        question: "How long will I need to use peptides?",
+        id: "safe",
+        question: "Are peptides safe?",
         answer:
-          "The duration varies depending on your individual goals and how your body responds. Some peptides are used for a few weeks, while others may become part of a longer-term wellness plan. Your provider will work with you to create a schedule that feels right for you.",
+          "When prescribed appropriately and obtained from regulated compounding pharmacies, many peptide therapies have established safety profiles. Treatment should always be guided by an experienced medical provider.",
+      },
+      {
+        id: "delivery",
+        question: "How are peptides given?",
+        answer:
+          "Depending on the peptide, treatment may involve small self-administered injections, oral capsules, nasal sprays, or topical formulations. Your provider will recommend the option best suited for your plan.",
       },
       {
         id: "results",
-        question: "Will I feel results immediately?",
+        question: "How quickly will I notice results?",
         answer:
-          "Some people experience subtle shifts in energy, focus, or recovery within the first few weeks. Other benefits, such as skin improvement or metabolic balance, often develop gradually with consistent use.",
+          "Some patients notice changes within weeks, while others experience gradual improvements over several months. Results depend on the peptide selected, your goals, and your overall health.",
+      },
+      {
+        id: "habits",
+        question: "Will peptides replace healthy habits?",
+        answer:
+          "No. Peptides work best alongside proper nutrition, exercise, sleep, and other healthy lifestyle choices.",
       },
     ],
   },
   {
     slug: "supplements",
     title: "Supplements",
-    tagline: "Your Daily Reset for Everyday Vitality",
+    tagline: "Personalized Nutrition for Lifelong Health",
     category: "wellness",
     categoryLabel: "Nutrition",
     imageSrc: RETAIL_IMAGES.arcSupplementShelvingUnits,
     imageAlt: "ARC Wellness supplement shelving",
     intro:
-      "Supplements can be powerful, but only when they're chosen carefully, dosed correctly, and aligned with the body's real needs. At Arc Wellness, supplements are supportive tools within a broader, physician-guided wellness plan, not generic retail products.",
+      "The right supplement isn't the most popular one—it's the one your body actually needs. At Arc Wellness, we build personalized plans from your biology, labs, and goals—not one-size-fits-all bottles.",
     sections: [
       {
-        heading: "Who Benefits Most from Supplement Support?",
-        bullets: [
-          "High-cognitive work, study, or emotional challenges",
-          "Low energy, poor sleep, or chronic stress",
-          "Recovery from illness, burnout, or hormonal imbalance",
-          "Regular training or physically demanding routines",
-          "Healthy aging, focus, and metabolic balance",
-          "Extending benefits between IV, peptide, or body-based treatments",
-        ],
+        heading: "One Body. One Blueprint.",
+        body: "No two patients have the same biology. We consider laboratory testing, medical history, lifestyle, nutrition, medications, hormone balance, digestive health, inflammation, genetics when appropriate, and your personal health goals before making recommendations.",
       },
       {
-        heading: "Core Supplement Offerings",
-        body: "Clinically backed, pharmaceutical-grade formulations available exclusively through licensed medical providers, including Foundation, Gut Reset, Women's Longevity, and Brain Health protocols.",
+        heading: "Quality & Precision",
+        body: "We carefully select professional-grade supplements from trusted manufacturers. Recommendations are based on your health and laboratory findings—not what's trending online.",
       },
     ],
     faqs: [
       {
-        id: "one",
-        question: "Do I need to take all five supplements, or can I start with just one?",
+        id: "same-multi",
+        question: "Should everyone take the same multivitamin?",
         answer:
-          "Your supplement plan is fully personalized. Some individuals may start with just one or two formulas based on their goals. Your provider will help determine what combination is most supportive for you.",
+          "Not necessarily. Nutritional needs vary significantly based on age, diet, health conditions, medications, and laboratory findings.",
+      },
+      {
+        id: "healthy-diet",
+        question: "Do I need supplements if I eat a healthy diet?",
+        answer:
+          "A nutrient-rich diet is always the foundation of good health. However, factors such as absorption, medications, digestive health, stress, and aging may create additional nutritional needs.",
+      },
+      {
+        id: "which-ones",
+        question: "How do you know which supplements I need?",
+        answer:
+          "Our recommendations are based on a combination of your medical history, symptoms, lifestyle, laboratory testing, and health goals.",
+      },
+      {
+        id: "forever",
+        question: "Will I need supplements forever?",
+        answer:
+          "Not always. Some supplements address temporary needs, while others may provide ongoing support. As your health evolves, so does your personalized plan.",
+      },
+      {
+        id: "replace-meds",
+        question: "Can supplements replace medications?",
+        answer:
+          "No. Supplements are designed to support health, not replace prescribed medical treatment unless recommended by your healthcare provider.",
+      },
+    ],
+  },
+  {
+    slug: "hormone-health",
+    title: "Hormone Health",
+    tagline: "Feel Like Yourself Again.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Your energy has changed. Sleep isn't the same. Your body responds differently. At Arc Wellness, we listen to what your body is telling you—combining your story, comprehensive labs, and physician-guided evaluation to restore balance, function, and quality of life.",
+    highlights: [
+      "Physician-guided hormone evaluation",
+      "Care for women through perimenopause and menopause",
+      "Men's hormone health in metabolic context",
+    ],
+    sections: [
+      {
+        heading: "Hormones Influence More Than You Think",
+        body: "Hormones are woven into energy, metabolism, sleep, cognition, muscle, bone, mood, and sexual wellness. We look at the bigger picture—not simply one number on a lab report.",
+      },
+    ],
+    faqs: [
+      {
+        id: "normal-labs",
+        question: "My labs were \"normal.\" Can hormones still be involved?",
+        answer:
+          "Yes. Feeling different despite \"normal\" labs is a common reason people seek care. We combine your symptoms, history, and comprehensive testing—interpreted by a physician—to understand the bigger picture, not a single number in isolation.",
+      },
+      {
+        id: "women-hrt",
+        question: "Do you offer hormone therapy for perimenopause and menopause?",
+        answer:
+          "When appropriate, bioidentical hormone replacement therapy may become part of a personalized plan. We take time to understand your symptoms, hormones, health history, and goals before recommending treatment.",
+      },
+      {
+        id: "men-testosterone",
+        question: "How do you approach testosterone for men?",
+        answer:
+          "We evaluate testosterone alongside the broader hormonal and metabolic picture. When treatment is appropriate, your plan is carefully personalized and monitored over time—with the goal of helping you move forward feeling stronger.",
+      },
+      {
+        id: "what-to-bring",
+        question: "Do I need to know which hormone is low before I come in?",
+        answer:
+          "No. You simply need to know that something feels different. Uncovering which hormones and systems are involved is our job.",
+      },
+    ],
+  },
+  {
+    slug: "metabolic-health",
+    title: "Metabolic Health",
+    tagline: "Your Metabolism Is Telling a Bigger Story.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Stubborn weight, afternoon crashes, cravings, rising blood sugar, and changing cholesterol often signal a metabolism under strain. At Arc, we don't begin with restriction—we begin with understanding your physiology.",
+    highlights: [
+      "Comprehensive metabolic evaluation",
+      "Muscle preservation as part of care",
+      "GLP-1 therapy when medically appropriate",
+    ],
+    sections: [
+      {
+        heading: "More Than a Number on the Scale",
+        body: "Metabolic health is how your body creates, uses, and stores energy. Blood sugar, hormones, muscle, inflammation, nutrition, sleep, and stress all influence the way your metabolism functions.",
+      },
+    ],
+    faqs: [
+      {
+        id: "scale",
+        question: "Is metabolic health only about weight?",
+        answer:
+          "No. Weight may be part of the story, but it isn't the whole story. We look at glucose and insulin, cholesterol, inflammation, hormones, nutrients, body composition, and lifestyle factors that shape how you feel and function.",
+      },
+      {
+        id: "glp1",
+        question: "Do you use GLP-1 medications for metabolic health?",
+        answer:
+          "When medically appropriate, medical weight management and GLP-1 therapy may be incorporated. Medication isn't the plan—it's one tool within a broader strategy that prioritizes muscle, metabolism, and long-term health.",
+      },
+      {
+        id: "muscle",
+        question: "Why does muscle matter for metabolism?",
+        answer:
+          "Muscle supports glucose regulation, metabolism, strength, mobility, and healthy aging. Preserving lean muscle is an important part of our approach, especially during weight loss.",
+      },
+      {
+        id: "early",
+        question: "Can you help if I don't have a diagnosis yet?",
+        answer:
+          "Yes. Metabolic changes often begin quietly, long before they become a diagnosis. Understanding those signals early helps us protect long-term health and function.",
+      },
+    ],
+  },
+  {
+    slug: "gut-health",
+    title: "Gut Health",
+    tagline: "Your Gut Is Talking. Are You Listening?",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Bloating, unpredictable digestion, new food sensitivities, fatigue, brain fog, or skin changes can all point back to the gut. At Arc, we look beyond the symptom to understand what your gut may be signaling.",
+    highlights: [
+      "Physician-guided gut evaluation",
+      "Advanced testing when appropriate",
+      "Personalized plans—not endless elimination",
+    ],
+    sections: [
+      {
+        heading: "More Than Digestion",
+        body: "Your gut influences nutrient absorption, immune function, brain communication, metabolism, hormones, and inflammation. When that environment is disrupted, effects may reach far beyond your stomach.",
+      },
+    ],
+    faqs: [
+      {
+        id: "symptoms",
+        question: "Can gut issues show up as fatigue or brain fog?",
+        answer:
+          "Yes. Sometimes symptoms are obvious digestive changes; sometimes they show up as fatigue, brain fog, skin changes, or simply feeling uncomfortable in your body. We look beyond the symptom to understand the connections.",
+      },
+      {
+        id: "testing",
+        question: "Do you start with another elimination diet?",
+        answer:
+          "We prefer understanding first. Physician-guided evaluation may include advanced testing for microbiome health, food sensitivities, nutrient absorption, inflammation, intestinal function, and gut–brain connections before guessing which food or supplement to try next.",
+      },
+      {
+        id: "goal",
+        question: "Will I have to avoid foods forever?",
+        answer:
+          "The goal isn't to spend your life avoiding food. It's to create an internal environment where your body can digest, absorb, restore, and function more effectively—with less guessing and more understanding.",
+      },
+      {
+        id: "plan",
+        question: "What might a gut plan include?",
+        answer:
+          "Supporting gut health may involve nutrition, targeted supplementation, lifestyle changes, and medical treatment when appropriate—personalized to what your evaluation shows.",
+      },
+    ],
+  },
+  {
+    slug: "brain-health",
+    title: "Brain Health",
+    tagline: "When Your Mind Doesn't Feel Like You.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "Brain fog, slower recall, harder focus, and fading mental energy deserve curiosity—not dismissal. At Arc, we evaluate the whole-body systems that influence how you think, feel, and stay present.",
+    highlights: [
+      "Whole-body cognitive evaluation",
+      "Personalized brain-support strategies",
+      "ExoMind™ when it complements the plan",
+    ],
+    sections: [
+      {
+        heading: "Your Brain Is Connected to Everything",
+        body: "Hormones, blood sugar, inflammation, cardiovascular health, nutrients, sleep, stress, and gut health can all influence cognition. Improving brain health often means looking beyond the obvious.",
+      },
+    ],
+    faqs: [
+      {
+        id: "fog",
+        question: "Is brain fog something you take seriously?",
+        answer:
+          "Yes. We don't dismiss changes in memory, focus, or mental energy. We get curious about what may be influencing them—hormones, metabolism, sleep, stress, gut health, and more.",
+      },
+      {
+        id: "exomind",
+        question: "How does ExoMind™ fit into brain health?",
+        answer:
+          "For some patients, ExoMind™ may complement a broader plan by supporting areas associated with mood, focus, and emotional wellness. It is considered when clinically appropriate—not as a one-size replacement for whole-body care.",
+      },
+      {
+        id: "age",
+        question: "Is brain care only for later in life?",
+        answer:
+          "No. Caring for your brain isn't something that has to begin later. The best time to protect your future is while you're living it.",
+      },
+      {
+        id: "plan",
+        question: "What might a brain health plan include?",
+        answer:
+          "Plans may include nutrition, supplementation, hormone or metabolic optimization, lifestyle strategies, and advanced therapies when appropriate—designed for how your brain feels today and how we protect it for tomorrow.",
+      },
+    ],
+  },
+  {
+    slug: "longevity",
+    title: "Longevity",
+    tagline: "It Isn't About Living Forever.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.heroLobbyLounge,
+    imageAlt: "ARC Wellness lobby lounge",
+    intro:
+      "Longevity at Arc is about living well for as long as possible—protecting strength, clarity, independence, and the ability to keep living the life you've built. Not simply lifespan. Healthspan.",
+    highlights: [
+      "Function-focused longevity evaluation",
+      "Early recognition of change",
+      "Whole-person plans for healthspan",
+    ],
+    sections: [
+      {
+        heading: "Look Beyond \"Normal.\"",
+        body: "Traditional care often asks whether you have disease. Longevity medicine also asks how well you are functioning—and how we protect it before change begins limiting your life.",
+      },
+    ],
+    faqs: [
+      {
+        id: "forever",
+        question: "Is longevity about living forever?",
+        answer:
+          "No. It's about living well for as long as possible—moving through life with strength, clarity, and independence, and remaining present for the people and plans that matter.",
+      },
+      {
+        id: "normal",
+        question: "How is this different from a regular checkup?",
+        answer:
+          "We look deeper into markers that influence how you age—not only to screen for disease, but to understand function, recognize change earlier, and make informed decisions about protecting healthspan.",
+      },
+      {
+        id: "plan",
+        question: "What does a longevity plan include?",
+        answer:
+          "Plans may bring together nutrition, movement, hormone and metabolic optimization, supplementation, preventive strategies, and advanced therapies based on what your body needs. Healthy aging isn't one treatment.",
+      },
+      {
+        id: "when",
+        question: "When should I start thinking about longevity?",
+        answer:
+          "Your future health is being built today. The best time to protect independence, clarity, and strength is while you are living the life you want to keep.",
+      },
+    ],
+  },
+  {
+    slug: "medical-weight-loss",
+    title: "Medical Weight Loss",
+    tagline: "Weight Loss Should Be About More Than Losing Weight.",
+    category: "wellness",
+    categoryLabel: "Restore & Optimize",
+    imageSrc: CLINIC_INTERIOR_IMAGES.consultationLounge,
+    imageAlt: CLINIC_INTERIOR_ALT.consultationLounge,
+    intro:
+      "When your body no longer responds the way it used to, we look underneath the scale—hormones, insulin resistance, muscle, sleep, stress, and more—then build a physician-guided plan that protects strength while improving composition.",
+    highlights: [
+      "Physician-guided weight-loss evaluation",
+      "GLP-1 therapy when medically appropriate",
+      "Muscle preservation throughout the journey",
+    ],
+    sections: [
+      {
+        heading: "Medication With Intention",
+        body: "When medically appropriate, GLP-1 and other medications can be powerful tools. At Arc, they sit inside a fuller program—nutrition, metabolic and hormone optimization, body composition monitoring, and strategies to preserve lean muscle.",
+      },
+    ],
+    faqs: [
+      {
+        id: "calories",
+        question: "Is weight loss just calories in and calories out?",
+        answer:
+          "Not for everyone. Hormones, insulin resistance, declining muscle, sleep, stress, inflammation, medications, and aging can all influence how your body stores and uses energy. We look at what's happening underneath.",
+      },
+      {
+        id: "glp1",
+        question: "Will I just get a GLP-1 prescription?",
+        answer:
+          "When medically appropriate, GLP-1 and other medications can be powerful tools—but the medication isn't the program. Your plan may also include nutrition, metabolic and hormone optimization, body composition monitoring, supplementation, movement, and muscle-preservation strategies.",
+      },
+      {
+        id: "muscle",
+        question: "Why do you focus on muscle during weight loss?",
+        answer:
+          "Losing pounds while losing strength isn't the outcome we're looking for. Muscle supports metabolism, blood sugar regulation, strength, mobility, bone health, and long-term independence—especially during significant weight loss and as we age.",
+      },
+      {
+        id: "after",
+        question: "What happens after I reach my goal weight?",
+        answer:
+          "Reaching a number on the scale isn't where the journey ends. We help you understand what your body needs to stay well—and what your healthier body allows you to do next.",
+      },
+    ],
+  },
+  {
+    slug: "neuromodulators",
+    title: "Neuromodulators",
+    tagline: "Still You. Just a Little More Refreshed.",
+    category: "aesthetics",
+    categoryLabel: "Neuromodulators",
+    imageSrc: CLINIC_INTERIOR_IMAGES.hallwayDaxxifyBannerWaveArt,
+    imageAlt: CLINIC_INTERIOR_ALT.hallwayDaxxifyBannerWaveArt,
+    intro:
+      "Neuromodulators, including DAXXIFY®, soften the appearance of dynamic lines while preserving what matters most: you still look like you.",
+    highlights: [
+      "Soften dynamic expression lines",
+      "Preserve natural facial movement",
+      "DAXXIFY® when it fits your goals",
+    ],
+    sections: [
+      {
+        heading: "Soften the Lines. Keep the Expression.",
+        body: "Thoughtful placement and intentional dosing create a smoother, rested appearance that still moves naturally with you.",
+      },
+    ],
+    faqs: [
+      {
+        id: "frozen",
+        question: "Will I look frozen?",
+        answer:
+          "That isn't the goal. We focus on thoughtful placement and intentional dosing so your face looks smoother and rested while still moving naturally with you.",
+      },
+      {
+        id: "daxxify",
+        question: "What is DAXXIFY®?",
+        answer:
+          "DAXXIFY® is a peptide-powered neuromodulator designed to temporarily improve the appearance of moderate to severe expression lines. For some patients, results may last longer than many traditional neuromodulators, which can mean more time between treatments.",
+      },
+      {
+        id: "when-to-stop",
+        question: "Do I always need treatment?",
+        answer:
+          "Not always. We consider your facial structure, natural movement, symmetry, and goals first. Sometimes that means treating less, combining thoughtfully, or deciding you don't need something at all.",
+      },
+    ],
+  },
+  {
+    slug: "rf-microneedling",
+    title: "RF Microneedling",
+    tagline: "Renew What Time Has Changed.",
+    category: "aesthetics",
+    categoryLabel: "Skin Rejuvenation",
+    imageSrc: CLINIC_INTERIOR_IMAGES.waitingRoomArmchairGoldArt,
+    imageAlt: CLINIC_INTERIOR_ALT.waitingRoomArmchairGoldArt,
+    intro:
+      "RF Microneedling works beneath the surface to encourage something your skin already knows how to do: renew itself through collagen and elastin remodeling.",
+    highlights: [
+      "Collagen and elastin stimulation",
+      "Face and body treatment areas",
+      "Results that continue to evolve",
+    ],
+    sections: [
+      {
+        heading: "Collagen, Reawakened",
+        body: "Precision microneedling with radiofrequency energy activates your skin's natural healing response for firmer, smoother, more resilient skin over time.",
+      },
+    ],
+    faqs: [
+      {
+        id: "concerns",
+        question: "What can RF Microneedling help with?",
+        answer:
+          "It can be customized for fine lines and wrinkles, skin laxity, uneven texture, acne scars, enlarged pores, crepey skin, and overall skin quality on the face and body.",
       },
       {
         id: "timing",
-        question: "How long does it take to notice benefits from supplements?",
+        question: "When will I see results?",
         answer:
-          "Many people notice subtle changes in energy, focus, or sleep within a few weeks. Some benefits build gradually over time as part of a consistent, personalized wellness plan.",
+          "RF Microneedling isn't an overnight transformation. As collagen rebuilds and tissue remodels, improvements continue over the weeks and months after treatment.",
       },
       {
-        id: "standalone",
-        question: "Can I use these supplements if I'm not receiving IV therapy or peptide treatments?",
+        id: "cover",
+        question: "Is this just another surface treatment?",
         answer:
-          "Absolutely. Our supplements are designed to support overall wellness and can be taken independently. They also complement IV therapy or peptides for those who are using them.",
+          "No. Rather than only treating what you see on the surface, RF Microneedling supports change from within the skin itself, so you're rebuilding, not only covering.",
+      },
+    ],
+  },
+  {
+    slug: "clear-rf",
+    title: "Clear RF",
+    tagline: "Clearer. Smoother. Healthier-Looking Skin.",
+    category: "aesthetics",
+    categoryLabel: "Skin Rejuvenation",
+    imageSrc: CLINIC_INTERIOR_IMAGES.plantBonsaiWindowSill,
+    imageAlt: CLINIC_INTERIOR_ALT.plantBonsaiWindowSill,
+    intro:
+      "Clear RF uses controlled radiofrequency energy to refine tone, texture, pores, redness, and overall skin quality, so your skin looks healthy, not treated.",
+    highlights: [
+      "Tone, texture, and pore refinement",
+      "Support for redness and acne-related concerns",
+      "Alone or layered into a broader plan",
+    ],
+    sections: [
+      {
+        heading: "Refine What's on the Surface. Renew What's Beneath It.",
+        body: "Treatments are customized to the details that change how your skin looks and feels, with the goal of healthier-looking skin before makeup ever goes on.",
+      },
+    ],
+    faqs: [
+      {
+        id: "concerns",
+        question: "What skin concerns can Clear RF address?",
+        answer:
+          "Treatments can be customized for uneven tone and texture, enlarged pores, redness, acne and acne-related concerns, fine lines, uneven pigmentation, and overall skin quality.",
       },
       {
-        id: "which",
-        question: "How do I know which supplements are right for me?",
+        id: "perfect",
+        question: "Is the goal perfect skin?",
         answer:
-          "During your free consultation, your provider will review your health history, lifestyle, and wellness goals. Together, you'll select supplements that are safe, effective, and tailored to you.",
+          "No. Aesthetic care at Arc isn't about erasing every line, pore, or imperfection. It's about understanding what bothers you and choosing treatments intentionally so your skin looks beautifully healthy.",
+      },
+      {
+        id: "combo",
+        question: "Can Clear RF be combined with other treatments?",
+        answer:
+          "Yes. Clear RF may be used alone or incorporated into a broader skin rejuvenation plan alongside other technologies when a layered approach serves your skin.",
       },
     ],
   },
 ];
 
 export function getTreatmentBySlug(slug: string): TreatmentPage | undefined {
-  return allTreatments.find((t) => t.slug === slug);
+  return allTreatments.find((t) => t.slug === slug && !t.hidden);
 }
 
+/** Public treatment slugs (excludes overview hub + hidden entries like Knesko). */
 export function getAllTreatmentSlugs(): string[] {
-  return allTreatments.map((t) => t.slug);
+  return allTreatments
+    .filter((t) => t.slug !== "overview" && !t.hidden)
+    .map((t) => t.slug);
+}
+
+/** Treatments shown in Every pathway / treatment indexes. */
+export function getPublishedTreatments(): readonly TreatmentPage[] {
+  return allTreatments.filter((t) => t.slug !== "overview" && !t.hidden);
 }
