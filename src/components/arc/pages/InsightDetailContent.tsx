@@ -69,7 +69,27 @@ const PROSE =
   "font-sans text-[0.9375rem] leading-[1.75] text-arc-charcoal/85 sm:text-base sm:leading-[1.8]";
 
 const SECTION_HEADING =
-  "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-balance";
+  "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-pretty";
+
+/** Prefer a break after `:` on laptop+ so decade titles don’t orphan the number. */
+function SectionHeading({
+  title,
+  className,
+}: {
+  title: string;
+  className?: string;
+}) {
+  const colon = title.indexOf(": ");
+  if (colon === -1) {
+    return <h2 className={cn(SECTION_HEADING, className)}>{title}</h2>;
+  }
+  return (
+    <h2 className={cn(SECTION_HEADING, className)}>
+      <span className="md:block">{title.slice(0, colon + 1)} </span>
+      <span className="md:block">{title.slice(colon + 2)}</span>
+    </h2>
+  );
+}
 
 function ProseBlock({ paragraphs }: { paragraphs: readonly string[] }) {
   if (!paragraphs.length) return null;
@@ -312,6 +332,8 @@ function FaqRow({
 function ArticleSection({ section }: { section: InsightArticleSection }) {
   return (
     <section className="mt-12 border-t border-arc-charcoal/15 pt-10 sm:mt-14 sm:pt-12">
+      <SectionHeading title={section.title} />
+      <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       {section.image ? (
         <SectionFigure image={section.image} className="mb-8" />
       ) : null}
@@ -324,8 +346,6 @@ function ArticleSection({ section }: { section: InsightArticleSection }) {
           ))}
         </ul>
       ) : null}
-      <h2 className={SECTION_HEADING}>{section.title}</h2>
-      <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={section.body} />
       {section.callout ? <Callout>{section.callout}</Callout> : null}
       {section.list ? <SectionList list={section.list} /> : null}
@@ -356,9 +376,7 @@ function PerspectiveBlock({
       <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.22em] text-arc-teal-ink">
         From the Arc Desk
       </p>
-      <h2 className={cn("mt-3", SECTION_HEADING)}>
-        {article.perspective.title}
-      </h2>
+      <SectionHeading title={article.perspective.title} className="mt-3" />
       <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={article.perspective.body} />
       {cta ? (

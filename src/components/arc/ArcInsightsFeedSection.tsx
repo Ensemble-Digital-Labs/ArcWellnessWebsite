@@ -40,6 +40,7 @@ type InsightFilter = "all" | InsightKind;
  */
 const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "insulin-resistance-signs-symptoms",
+  "how-hormones-change-with-age",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
@@ -191,12 +192,13 @@ function InsightCard({
         className="relative block rounded-t-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream"
       >
         <ArcWindowFrame
-          src={entry.imageSrc}
+          src={entry.imageSrc || undefined}
           alt={entry.imageAlt}
-          className={cn("w-full", aspectClass)}
+          bordered={!entry.imageSrc}
+          className={cn("w-full bg-arc-cream", aspectClass)}
           imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          priority={priority}
+          priority={priority && Boolean(entry.imageSrc)}
         >
           <div
             className="pointer-events-none absolute inset-0 bg-arc-charcoal/0 transition-colors duration-300 group-hover:bg-arc-charcoal/18 motion-reduce:group-hover:bg-transparent"

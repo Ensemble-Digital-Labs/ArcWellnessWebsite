@@ -17,7 +17,9 @@ export default function BlogsHubPage() {
 
   preload(INSIGHTS_FEED_AMBIENT_SRC, { as: "image", fetchPriority: "high" });
   for (const entry of entries.slice(0, 3)) {
-    preload(entry.imageSrc, { as: "image", fetchPriority: "high" });
+    if (entry.imageSrc) {
+      preload(entry.imageSrc, { as: "image", fetchPriority: "high" });
+    }
   }
 
   return (
