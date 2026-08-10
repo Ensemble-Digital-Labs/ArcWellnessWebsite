@@ -130,7 +130,7 @@ function SectionFigure({
 }) {
   return (
     <figure className={cn("overflow-hidden", className)}>
-      <div className="relative aspect-[16/10] w-full border border-arc-charcoal/15 bg-[#ebe4d6]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-arc-charcoal/15 bg-[#ebe4d6] sm:rounded-3xl">
         <Image
           src={image.src}
           alt={image.alt}
