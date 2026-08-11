@@ -196,7 +196,7 @@ function InsightCard({
           alt={entry.imageAlt}
           bordered={!entry.imageSrc}
           className={cn("w-full bg-arc-cream", aspectClass)}
-          imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
+          imageClassName="object-top transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority && Boolean(entry.imageSrc)}
         >

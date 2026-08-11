@@ -139,11 +139,6 @@ function SectionFigure({
           className="object-cover"
         />
       </div>
-      {image.alt ? (
-        <figcaption className="mt-2 font-sans text-xs italic leading-snug text-arc-charcoal/55">
-          {image.alt}
-        </figcaption>
-      ) : null}
     </figure>
   );
 }
