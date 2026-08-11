@@ -40,7 +40,7 @@ type InsightFilter = "all" | InsightKind;
  */
 const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "insulin-resistance-signs-symptoms",
-  "how-hormones-change-with-age",
+  "hormones-through-the-decades-st-louis-mo",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */

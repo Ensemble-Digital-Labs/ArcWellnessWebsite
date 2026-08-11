@@ -118,17 +118,27 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/blogs/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
       {
         source: "/blog/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
       {
         source: "/case-studies/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
+        permanent: true,
+      },
+      {
+        source: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
+        permanent: true,
+      },
+      {
+        source: "/blog/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
     ];
