@@ -80,7 +80,7 @@ function buildBlogJsonLd(entry: InsightEntry) {
         name: item.question,
         acceptedAnswer: {
           "@type": "Answer",
-          text: item.answer,
+          text: item.answer.replace(/\*\*([^*]+)\*\*/g, "$1"),
         },
       })),
     });

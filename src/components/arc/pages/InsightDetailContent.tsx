@@ -71,6 +71,22 @@ const PROSE =
 const SECTION_HEADING =
   "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-pretty";
 
+/** Lightweight `**bold**` markers in CMS copy (e.g. gender cues: **women** / **men**). */
+function renderProseInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    const bold = /^\*\*([^*]+)\*\*$/.exec(part);
+    if (bold) {
+      return (
+        <strong key={i} className="font-semibold text-arc-charcoal">
+          {bold[1]}
+        </strong>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 /** Prefer a break after `:` on laptop+ so decade titles don’t orphan the number. */
 function SectionHeading({
   title,
@@ -97,7 +113,7 @@ function ProseBlock({ paragraphs }: { paragraphs: readonly string[] }) {
     <div className="space-y-4">
       {paragraphs.map((paragraph, i) => (
         <p key={`${paragraph.slice(0, 28)}-${i}`} className={PROSE}>
-          {paragraph}
+          {renderProseInline(paragraph)}
         </p>
       ))}
     </div>
@@ -302,7 +318,7 @@ function FaqRow({
       {reduceMotion ? (
         open ? (
           <div className="border-t border-arc-charcoal/10 px-4 pb-4 pt-0 sm:px-5">
-            <p className={PROSE}>{item.answer}</p>
+            <p className={PROSE}>{renderProseInline(item.answer)}</p>
           </div>
         ) : null
       ) : (
@@ -316,7 +332,7 @@ function FaqRow({
           className="overflow-hidden"
         >
           <div className="border-t border-arc-charcoal/10 px-4 pb-4 pt-3 sm:px-5">
-            <p className={PROSE}>{item.answer}</p>
+            <p className={PROSE}>{renderProseInline(item.answer)}</p>
           </div>
         </motion.div>
       )}

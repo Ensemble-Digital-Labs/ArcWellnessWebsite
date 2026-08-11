@@ -333,7 +333,7 @@
         "There is a strange expectation we place on our bodies: we expect them to function at 45 exactly the way they did at 25.",
         "We expect the same energy. The same sleep. The same metabolism. The same strength. The same ability to recover after a long week, a hard workout, or a late night. And when something begins to change, we often assume we're doing something wrong.",
         "Maybe the weight starts settling differently. Sleep becomes lighter. Muscle is harder to maintain. Your mood feels less predictable. Sexual desire changes, or your energy just isn't quite what it used to be.",
-        "For women, periods may begin changing long before menopause arrives. For men, the changes can be quieter, a gradual shift in testosterone, strength, recovery, body composition, or sexual function over many years.",
+        "For **women**, periods may begin changing long before menopause arrives. For **men**, the changes can be quieter, a gradual shift in testosterone, strength, recovery, body composition, or sexual function over many years.",
         "Somewhere in the middle of all of this, people often say the exact same thing: \"I just don't feel like myself anymore.\"",
         "But perhaps a better question is: what does your body need in this decade?"
       ],
@@ -344,14 +344,14 @@
           "body": [
             "For many people, their 30s still feel relatively familiar. But beneath the surface, this is an incredibly important decade.",
             "Careers are growing. Families are being built. Sleep may be sacrificed. Stress is often high, and exercise and nutrition can easily become whatever fits into an increasingly crowded schedule.",
-            "For women, hormonal patterns may begin to shift toward the latter part of this decade, although there is enormous individual variation. Fertility also changes with age, and subtle changes in cycles can sometimes be among the first signs that the hormonal landscape is evolving.",
-            "Men may not notice a dramatic hormonal transition, either. Testosterone levels generally change gradually with age, and sleep, excess body fat, certain medications, metabolic health, and other medical conditions can also influence testosterone and how someone feels.",
+            "For **women**, hormonal patterns may begin to shift toward the latter part of this decade, although there is enormous individual variation. Fertility also changes with age, and subtle changes in cycles can sometimes be among the first signs that the hormonal landscape is evolving.",
+            "**Men** may not notice a dramatic hormonal transition, either. Testosterone levels generally change gradually with age, and sleep, excess body fat, certain medications, metabolic health, and other medical conditions can also influence testosterone and how someone feels.",
             "This is why we think of your 30s less as a decade of correction and more as a decade of foundation. The habits built here can influence how you enter every decade that follows.",
             "Focus on the Foundation:"
           ],
           "image": {
-            "src": "/assets/insights/how-hormones-change-with-age/hormones-whole-person-decades-diagram.webp",
-            "alt": "Diagram showing hormone health as part of whole-person care across the decades, not a single lab number"
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-whole-person-decades-diagram.webp?v=20260811c",
+            "alt": "Inclusive diagram of a man and woman with sleep, strength, energy, and mood across the decades — hormone health as whole-person care"
           },
           "list": {
             "style": "cards",
@@ -386,12 +386,12 @@
         {
           "title": "Your 40s: When the Signals Often Get Louder",
           "body": [
-            "For many women, the 40s are when the hormonal conversation becomes much more noticeable. Perimenopause can begin years before the final menstrual period, and it doesn't always announce itself with classic hot flashes.",
+            "For many **women**, the 40s are when the hormonal conversation becomes much more noticeable. Perimenopause can begin years before the final menstrual period, and it doesn't always announce itself with classic hot flashes.",
             "Often, it looks like:"
           ],
           "image": {
-            "src": "/assets/insights/how-hormones-change-with-age/hormones-signs-restless-night.webp",
-            "alt": "Quiet night wakefulness — a common midlife hormone shift"
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-signs-restless-night.webp?v=20260811c",
+            "alt": "Man and woman awake at night in midlife — quiet restlessness that can affect both"
           },
           "list": {
             "style": "cards",
@@ -431,15 +431,15 @@
             ]
           },
           "closing": [
-            "Men experience their own midlife changes, although typically without the distinct, rapid hormonal transition women experience with menopause. Changes in testosterone can occur gradually and may overlap with changes in sleep, metabolic health, stress, medications, and lifestyle. Some men notice reduced energy, declining strength, changes in sexual function, or more difficulty maintaining lean muscle.",
+            "**Men** experience their own midlife changes, although typically without the distinct, rapid hormonal transition that **women** experience with menopause. Changes in testosterone can occur gradually and may overlap with changes in sleep, metabolic health, stress, medications, and lifestyle. Some **men** notice reduced energy, declining strength, changes in sexual function, or more difficulty maintaining lean muscle.",
             "The takeaway: the important part is not to assume every midlife symptom is hormonal. But it's equally important not to assume that hormones don't matter. Context is everything."
           ]
         },
         {
           "title": "Your 50s: The Conversation Shifts from Symptoms to Longevity",
           "body": [
-            "For many women, the 50s include the transition into menopause. But menopause is not simply the end of menstrual cycles. Estrogen influences tissues throughout the body, which is one reason the conversation at this stage deserves to be broader than hot flashes alone.",
-            "For men, this decade can also bring more noticeable changes in strength, body composition, energy, or sexual health. When symptoms suggest a hormonal issue, evaluation should look at the whole person rather than treating a testosterone number in isolation.",
+            "For many **women**, the 50s include the transition into menopause. But menopause is not simply the end of menstrual cycles. Estrogen influences tissues throughout the body, which is one reason the conversation at this stage deserves to be broader than hot flashes alone.",
+            "For **men**, this decade can also bring more noticeable changes in strength, body composition, energy, or sexual health. When symptoms suggest a hormonal issue, evaluation should look at the whole person rather than treating a testosterone number in isolation.",
             "This is the decade when we want to think increasingly about what we're preserving. Not just how you feel today, but asking the right questions for tomorrow:"
           ],
           "list": {
@@ -478,8 +478,8 @@
             "The Pillars of Independence:"
           ],
           "image": {
-            "src": "/assets/insights/how-hormones-change-with-age/hormones-longevity-walking.webp",
-            "alt": "Strength and movement to support hormone health and independence with age"
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-longevity-walking.webp?v=20260811c",
+            "alt": "Man and woman walking outdoors — strength and mobility supporting independence with age"
           },
           "list": {
             "style": "cards",
@@ -589,11 +589,11 @@
         "items": [
           {
             "question": "At what age do hormones typically start to change?",
-            "answer": "For many women, subtle hormonal shifts can begin in the late 30s, with perimenopause often becoming noticeable in the 40s. For men, testosterone tends to decline gradually starting in the 30s, though the pace varies widely from person to person."
+            "answer": "For many **women**, subtle hormonal shifts can begin in the late 30s, with perimenopause often becoming noticeable in the 40s. For **men**, testosterone tends to decline gradually starting in the 30s, though the pace varies widely from person to person."
           },
           {
             "question": "Is hormone therapy only for menopause?",
-            "answer": "No. While menopause and perimenopause are common reasons women seek hormone evaluation, men experiencing fatigue, low libido, or changes in body composition related to testosterone may also benefit from a physician-guided evaluation."
+            "answer": "No. While menopause and perimenopause are common reasons **women** seek hormone evaluation, **men** experiencing fatigue, low libido, or changes in body composition related to testosterone may also benefit from a physician-guided evaluation."
           },
           {
             "question": "How do I find hormone therapy near me in St. Louis?",
