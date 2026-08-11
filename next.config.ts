@@ -116,6 +116,21 @@ const nextConfig: NextConfig = {
         destination: "/blogs/insulin-resistance-signs-symptoms",
         permanent: true,
       },
+      {
+        source: "/blogs/hormones-through-the-decades",
+        destination: "/blogs/how-hormones-change-with-age",
+        permanent: true,
+      },
+      {
+        source: "/blog/hormones-through-the-decades",
+        destination: "/blogs/how-hormones-change-with-age",
+        permanent: true,
+      },
+      {
+        source: "/case-studies/hormones-through-the-decades",
+        destination: "/blogs/how-hormones-change-with-age",
+        permanent: true,
+      },
     ];
   },
 };

@@ -289,179 +289,367 @@
     ]
   },
   {
-    "id": "blog-hormones-through-the-decades",
+    "id": "blog-how-hormones-change-with-age",
     "kind": "blog",
-    "slug": "hormones-through-the-decades",
-    "title": "Hormones Through the Decades",
-    "excerpt": "What Changes in Your 30s, 40s, 50s & Beyond",
-    "publishedAt": "28 Jul 2026",
-    "imageSrc": "/assets/insights/hormones-through-the-decades-preview.webp",
-    "imageAlt": "Women of different ages together, reflecting hormone health across the decades",
+    "slug": "how-hormones-change-with-age",
+    "title": "How Your Hormones Change With Age: A Decade-by-Decade Guide",
+    "titleLines": [
+      "How Your Hormones Change With Age:",
+      "A Decade-by-Decade Guide"
+    ],
+    "excerpt": "Your hormones were never meant to stay the same. Understanding how they change through your 30s, 40s, 50s and beyond can help you navigate what comes next.",
+    "publishedAt": "10 Aug 2026",
+    "imageSrc": "/assets/insights/how-hormones-change-with-age/hormones-midlife-strength.webp?v=20260810b",
+    "imageAlt": "Man and woman strength training together to support hormone health and vitality in midlife",
+    "seo": {
+      "title": "How Hormones Change With Age: Your 30s, 40s, 50s & Beyond",
+      "description": "How your hormones shift through your 30s, 40s, 50s and beyond — and what your body actually needs in each decade. Hormone care in South County St. Louis.",
+      "focusKeyword": "how hormones change with age",
+      "secondaryKeywords": [
+        "hormone changes in your 40s",
+        "perimenopause symptoms",
+        "hormone changes in your 50s",
+        "hormone therapy South County St. Louis",
+        "low testosterone in men",
+        "bioidentical hormone therapy"
+      ]
+    },
     "body": [
-      "Your hormones were never meant to stay the same. Understanding how they change can help you navigate what comes next.",
-      "There is a strange expectation we place on our bodies: We expect them to function at 45 exactly the way they did at 25. We expect the same energy, sleep, metabolism, strength, and ability to recover—and when something begins to change, we often assume we're doing something wrong.",
-      "Maybe the weight starts settling differently. Sleep becomes lighter. Muscle is harder to maintain. Your mood feels less predictable. Sexual desire changes, or your energy just isn't quite what it used to be.",
-      "For women, periods may begin changing long before menopause arrives. For men, the changes can be quieter—a gradual shift in testosterone, strength, recovery, body composition, or sexual function over many years. Somewhere in the middle of all of this, people often say the exact same thing: \"I just don't feel like myself anymore.\"",
-      "What does your body need in this decade?",
-      "Your 30s: Building the Foundation",
-      "For many people, their 30s still feel relatively familiar. But beneath the surface, this is an incredibly important decade. Careers are growing. Families are being built. Sleep may be sacrificed. Stress is often high, and exercise and nutrition can easily become whatever fits into an increasingly crowded schedule.",
-      "For women, hormonal patterns may begin to shift toward the latter part of this decade. Fertility also changes with age, and subtle changes in cycles can sometimes be among the first signs that the hormonal landscape is evolving. Men may not notice a dramatic transition—testosterone generally changes gradually, and sleep, body fat, medications, and metabolic health also influence how someone feels.",
-      "This is why we think of your 30s less as a decade of correction and more as a decade of foundation. The habits built here can influence how you enter every decade that follows.",
-      "Build muscle",
-      "Protect metabolic health",
-      "Prioritize sleep",
-      "Understand your baseline",
-      "Know your family history",
-      "Pay attention to changes rather than waiting for them to become problems",
-      "Your 40s: When the Signals Often Get Louder",
-      "For many women, the 40s are when the hormonal conversation becomes much more noticeable. Perimenopause can begin years before the final menstrual period, and it doesn't always announce itself with classic hot flashes.",
-      "Men experience their own midlife changes, typically without the distinct rapid transition of menopause. Changes in testosterone can occur gradually and may overlap with sleep, metabolic health, stress, medications, and lifestyle. Some men notice reduced energy, declining strength, changes in sexual function, or more difficulty maintaining lean muscle.",
-      "The important part is not to assume every midlife symptom is hormonal. But it's equally important not to assume that hormones don't matter. Context is everything.",
-      "Waking up at 3 a.m.",
-      "A shorter or unpredictable cycle",
-      "New, unexplained anxiety",
-      "Brain fog and difficulty concentrating",
-      "Changes in body composition",
-      "Breast tenderness or headaches",
-      "A lower tolerance for stress",
-      "Weight maintenance strategies that suddenly stop working",
-      "Your 50s and Beyond: Longevity and Independence",
-      "For many women, the 50s include the transition into menopause—but menopause is not simply the end of menstrual cycles. Estrogen influences tissues throughout the body, which is one reason the conversation at this stage deserves to be broader than hot flashes alone.",
-      "For men, this decade can also bring more noticeable changes in strength, body composition, energy, or sexual health. When symptoms suggest a hormonal issue, evaluation should look at the whole person rather than treating a testosterone number in isolation.",
-      "Eventually, the question changes again. It becomes less about trying to feel the way you did when you were younger and much more about protecting the things that allow you to live the way you want to live.",
-      "Hormones remain one piece of that picture, but they are never the entire picture. Nutrition, movement, muscle, sleep, connection, purpose, and preventive healthcare matter. Medical decisions—including whether hormone therapy is appropriate—become increasingly individualized.",
-      "Strength & balance: How strong do we want you to be at 70—and how do we protect mobility along the way?",
-      "Bone & muscle: Protecting bone density and maintaining muscle mass as hormonal landscapes shift.",
-      "Heart & metabolism: Supporting cardiovascular and metabolic health as part of the longevity conversation.",
-      "Cognition & connection: Staying engaged, capable, independent—and clear about sexual health as part of whole-person care.",
-      "Hormone Care Shouldn't Begin and End With a Number",
-      "This is where hormone conversations can become too simple: Low number? Replace it. Normal number? Ignore it. But bodies aren't quite that tidy. A thoughtful hormone evaluation starts with the person, not the lab slip.",
-      "Then, we decide whether testing makes sense—and what those results actually mean in context. Sometimes hormone therapy may be appropriate. Sometimes another issue needs attention first. Sometimes lifestyle changes can have a meaningful impact. And sometimes what you're experiencing is a normal transition that simply deserves better support and understanding.",
-      "The goal isn't to chase youth. It's to support health through change.",
-      "What has changed, and when did it change?",
-      "How are you sleeping?",
-      "How is your energy?",
-      "What has happened to your strength and body composition?",
-      "How is your sexual health?",
-      "What medications are you taking?",
-      "What does your metabolic health look like?",
-      "What other medical conditions could be contributing?",
-      "This Is Where the Arc Begins",
-      "At Arc Wellness, we don't see aging as a problem to solve. We see it as something worth preparing for.",
-      "Your 30s shouldn't be managed like your 50s. Your 50s shouldn't be managed like your 70s. And your care shouldn't remain static while your body continues to evolve.",
-      "We believe in understanding where you are now, anticipating what may be ahead, and making thoughtful decisions that support the life you're building. Sometimes that includes hormones. Sometimes it includes nutrition, strength, sleep, metabolic health, or preventive care. Most often, it's a combination.",
-      "Because the goal isn't to keep you frozen at one age. It's to help you move through each one strong, informed, and supported—through your 30s, your 40s, your 50s, and beyond."
+      "Your hormones were never meant to stay the same. Understanding how they change through your 30s, 40s, 50s and beyond can help you navigate what comes next.",
+      "There is a strange expectation we place on our bodies: we expect them to function at 45 exactly the way they did at 25.",
+      "Signs Your Hormones May Be Changing",
+      "Hormone Changes in Your 30s: Building the Foundation",
+      "Hormone Changes in Your 40s: Perimenopause and Midlife Shifts",
+      "Hormone Changes in Your 50s: Menopause and Longevity",
+      "Hormones in Your 60s, 70s & Beyond: Protecting What Keeps You Living Well",
+      "Why Hormone Care Shouldn't Rely on Lab Numbers Alone",
+      "Hormone Support Through Every Decade at Arc Wellness"
     ],
     "article": {
-      "closingLine": "Understanding changes everything.",
       "overview": [
-        "Your hormones were never meant to stay the same. Understanding how they change can help you navigate what comes next.",
-        "There is a strange expectation we place on our bodies: We expect them to function at 45 exactly the way they did at 25. We expect the same energy, sleep, metabolism, strength, and ability to recover—and when something begins to change, we often assume we're doing something wrong.",
+        "There is a strange expectation we place on our bodies: we expect them to function at 45 exactly the way they did at 25.",
+        "We expect the same energy. The same sleep. The same metabolism. The same strength. The same ability to recover after a long week, a hard workout — or a late night. And when something begins to change, we often assume we're doing something wrong.",
         "Maybe the weight starts settling differently. Sleep becomes lighter. Muscle is harder to maintain. Your mood feels less predictable. Sexual desire changes, or your energy just isn't quite what it used to be.",
-        "For women, periods may begin changing long before menopause arrives. For men, the changes can be quieter—a gradual shift in testosterone, strength, recovery, body composition, or sexual function over many years. Somewhere in the middle of all of this, people often say the exact same thing: \"I just don't feel like myself anymore.\""
+        "For women, periods may begin changing long before menopause arrives. For men, the changes can be quieter — a gradual shift in testosterone, strength, recovery, body composition, or sexual function over many years.",
+        "Somewhere in the middle of all of this, people often say the exact same thing: \"I just don't feel like myself anymore.\"",
+        "But perhaps a better question is: what does your body need in this decade?"
       ],
       "overviewCallout": "What does your body need in this decade?",
       "sections": [
         {
-          "title": "Your 30s: Building the Foundation",
+          "title": "Signs Your Hormones May Be Changing",
           "body": [
-            "For many people, their 30s still feel relatively familiar. But beneath the surface, this is an incredibly important decade. Careers are growing. Families are being built. Sleep may be sacrificed. Stress is often high, and exercise and nutrition can easily become whatever fits into an increasingly crowded schedule.",
-            "For women, hormonal patterns may begin to shift toward the latter part of this decade. Fertility also changes with age, and subtle changes in cycles can sometimes be among the first signs that the hormonal landscape is evolving. Men may not notice a dramatic transition—testosterone generally changes gradually, and sleep, body fat, medications, and metabolic health also influence how someone feels.",
-            "This is why we think of your 30s less as a decade of correction and more as a decade of foundation. The habits built here can influence how you enter every decade that follows."
-          ],
-          "list": {
-            "style": "bullets",
-            "items": [
-              "Build muscle",
-              "Protect metabolic health",
-              "Prioritize sleep",
-              "Understand your baseline",
-              "Know your family history",
-              "Pay attention to changes rather than waiting for them to become problems"
-            ]
-          }
-        },
-        {
-          "title": "Your 40s: When the Signals Often Get Louder",
-          "body": [
-            "For many women, the 40s are when the hormonal conversation becomes much more noticeable. Perimenopause can begin years before the final menstrual period, and it doesn't always announce itself with classic hot flashes.",
-            "Men experience their own midlife changes, typically without the distinct rapid transition of menopause. Changes in testosterone can occur gradually and may overlap with sleep, metabolic health, stress, medications, and lifestyle. Some men notice reduced energy, declining strength, changes in sexual function, or more difficulty maintaining lean muscle.",
-            "The important part is not to assume every midlife symptom is hormonal. But it's equally important not to assume that hormones don't matter. Context is everything."
-          ],
-          "list": {
-            "style": "bullets",
-            "items": [
-              "Waking up at 3 a.m.",
-              "A shorter or unpredictable cycle",
-              "New, unexplained anxiety",
-              "Brain fog and difficulty concentrating",
-              "Changes in body composition",
-              "Breast tenderness or headaches",
-              "A lower tolerance for stress",
-              "Weight maintenance strategies that suddenly stop working"
-            ]
-          }
-        },
-        {
-          "title": "Your 50s and Beyond: Longevity and Independence",
-          "body": [
-            "For many women, the 50s include the transition into menopause—but menopause is not simply the end of menstrual cycles. Estrogen influences tissues throughout the body, which is one reason the conversation at this stage deserves to be broader than hot flashes alone.",
-            "For men, this decade can also bring more noticeable changes in strength, body composition, energy, or sexual health. When symptoms suggest a hormonal issue, evaluation should look at the whole person rather than treating a testosterone number in isolation.",
-            "Eventually, the question changes again. It becomes less about trying to feel the way you did when you were younger and much more about protecting the things that allow you to live the way you want to live.",
-            "Hormones remain one piece of that picture, but they are never the entire picture. Nutrition, movement, muscle, sleep, connection, purpose, and preventive healthcare matter. Medical decisions—including whether hormone therapy is appropriate—become increasingly individualized."
+            "Hormonal shifts rarely announce themselves clearly. Common early signals include:"
           ],
           "list": {
             "style": "cards",
             "items": [
               {
-                "label": "Strength & balance",
-                "body": "How strong do we want you to be at 70—and how do we protect mobility along the way?"
+                "label": "Waking at 3 a.m. or lighter, more broken sleep",
+                "body": []
               },
               {
-                "label": "Bone & muscle",
-                "body": "Protecting bone density and maintaining muscle mass as hormonal landscapes shift."
+                "label": "Changes in body composition despite no change in habits",
+                "body": []
               },
               {
-                "label": "Heart & metabolism",
-                "body": "Supporting cardiovascular and metabolic health as part of the longevity conversation."
+                "label": "New or unexplained anxiety, irritability, or brain fog",
+                "body": []
               },
               {
-                "label": "Cognition & connection",
-                "body": "Staying engaged, capable, independent—and clear about sexual health as part of whole-person care."
+                "label": "Shorter, longer, or unpredictable menstrual cycles",
+                "body": []
+              },
+              {
+                "label": "Declining strength or difficulty maintaining muscle",
+                "body": []
+              },
+              {
+                "label": "Lower energy and slower recovery",
+                "body": []
+              },
+              {
+                "label": "Changes in sexual desire or function",
+                "body": []
               }
             ]
+          },
+          "closing": [
+            "Not every symptom is hormonal — but these are the changes worth paying attention to rather than dismissing."
+          ],
+          "image": {
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-signs-restless-night.webp",
+            "alt": "Quiet night wakefulness — an early sign hormones may be shifting"
           }
         },
         {
-          "title": "Hormone Care Shouldn't Begin and End With a Number",
+          "title": "Hormone Changes in Your 30s: Building the Foundation",
           "body": [
-            "This is where hormone conversations can become too simple: Low number? Replace it. Normal number? Ignore it. But bodies aren't quite that tidy. A thoughtful hormone evaluation starts with the person, not the lab slip.",
-            "Then, we decide whether testing makes sense—and what those results actually mean in context. Sometimes hormone therapy may be appropriate. Sometimes another issue needs attention first. Sometimes lifestyle changes can have a meaningful impact. And sometimes what you're experiencing is a normal transition that simply deserves better support and understanding.",
-            "The goal isn't to chase youth. It's to support health through change."
+            "For many people, their 30s still feel relatively familiar. But beneath the surface, this is an incredibly important decade.",
+            "Careers are growing. Families are being built. Sleep may be sacrificed. Stress is often high, and exercise and nutrition can easily become whatever fits into an increasingly crowded schedule.",
+            "For women, hormonal patterns may begin to shift toward the latter part of this decade, although there is enormous individual variation. Fertility also changes with age, and subtle changes in cycles can sometimes be among the first signs that the hormonal landscape is evolving.",
+            "Men may not notice a dramatic hormonal transition either. Testosterone levels generally change gradually with age, and sleep, excess body fat, certain medications, metabolic health, and other medical conditions can also influence testosterone and how someone feels.",
+            "This is why we think of your 30s less as a decade of correction and more as a decade of foundation. The habits built here can influence how you enter every decade that follows.",
+            "How to build a strong hormonal foundation in your 30s:"
           ],
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "What has changed, and when did it change?",
-              "How are you sleeping?",
-              "How is your energy?",
-              "What has happened to your strength and body composition?",
-              "How is your sexual health?",
-              "What medications are you taking?",
-              "What does your metabolic health look like?",
-              "What other medical conditions could be contributing?"
+              {
+                "label": "Build muscle",
+                "body": []
+              },
+              {
+                "label": "Protect metabolic health",
+                "body": []
+              },
+              {
+                "label": "Prioritize sleep",
+                "body": []
+              },
+              {
+                "label": "Understand your baseline",
+                "body": []
+              },
+              {
+                "label": "Know your family history",
+                "body": []
+              },
+              {
+                "label": "Pay attention to changes rather than waiting for them to become problems",
+                "body": []
+              }
             ]
+          },
+          "image": {
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-whole-person-decades-diagram.webp",
+            "alt": "Diagram showing hormone health as part of whole-person care across the decades, not a single lab number"
           }
+        },
+        {
+          "title": "Hormone Changes in Your 40s: Perimenopause and Midlife Shifts",
+          "body": [
+            "For many women, the 40s are when the hormonal conversation becomes much more noticeable. Perimenopause can begin years before the final menstrual period, and it doesn't always announce itself with classic hot flashes.",
+            "What perimenopause often looks like in your 40s:"
+          ],
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "Waking up at 3 a.m.",
+                "body": []
+              },
+              {
+                "label": "A shorter or unpredictable cycle",
+                "body": []
+              },
+              {
+                "label": "New, unexplained anxiety",
+                "body": []
+              },
+              {
+                "label": "Brain fog and difficulty concentrating",
+                "body": []
+              },
+              {
+                "label": "Changes in body composition",
+                "body": []
+              },
+              {
+                "label": "Breast tenderness or headaches",
+                "body": []
+              },
+              {
+                "label": "A lower tolerance for stress",
+                "body": []
+              },
+              {
+                "label": "The realization that the things you've always done to maintain your weight simply aren't working anymore",
+                "body": []
+              }
+            ]
+          },
+          "closing": [
+            "Men experience their own midlife changes, although typically without the distinct, rapid hormonal transition women experience with menopause. Changes in testosterone can occur gradually and may overlap with changes in sleep, metabolic health, stress, medications, and lifestyle. Some men notice reduced energy, declining strength, changes in sexual function, or more difficulty maintaining lean muscle.",
+            "The takeaway: don't assume every midlife symptom is hormonal — but don't assume hormones don't matter, either. Context is everything."
+          ]
+        },
+        {
+          "title": "Hormone Changes in Your 50s: Menopause and Longevity",
+          "body": [
+            "For many women, the 50s include the transition into menopause. But menopause is not simply the end of menstrual cycles. Estrogen influences tissues throughout the body, which is one reason the conversation at this stage deserves to be broader than hot flashes alone.",
+            "For men, this decade can also bring more noticeable changes in strength, body composition, energy, or sexual health. When symptoms suggest a hormonal issue, evaluation should look at the whole person rather than treating a testosterone number in isolation.",
+            "This is the decade when we want to think increasingly about what we're preserving — not just how you feel today, but the right questions for tomorrow:"
+          ],
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "How strong do we want you to be at 70?",
+                "body": []
+              },
+              {
+                "label": "How do we protect your bone density?",
+                "body": []
+              },
+              {
+                "label": "How do we maintain your muscle mass?",
+                "body": []
+              },
+              {
+                "label": "How do we support cardiovascular and metabolic health?",
+                "body": []
+              },
+              {
+                "label": "How do we keep you engaged, capable, and independent?",
+                "body": []
+              }
+            ]
+          },
+          "closing": [
+            "At this stage, hormonal health becomes part of a much larger longevity conversation."
+          ]
+        },
+        {
+          "title": "Hormones in Your 60s, 70s & Beyond: Protecting What Keeps You Living Well",
+          "body": [
+            "Eventually, the question changes again. It becomes less about trying to feel the way you did when you were younger and much more about protecting the things that allow you to live the way you want to live.",
+            "The pillars of independence:"
+          ],
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "Strength and balance",
+                "body": []
+              },
+              {
+                "label": "Cognition",
+                "body": []
+              },
+              {
+                "label": "Bone density",
+                "body": []
+              },
+              {
+                "label": "Metabolic and cardiovascular health",
+                "body": []
+              },
+              {
+                "label": "Sexual health",
+                "body": []
+              },
+              {
+                "label": "Mobility",
+                "body": []
+              }
+            ]
+          },
+          "closing": [
+            "Hormones remain one piece of that picture, but they are never the entire picture. Nutrition matters. Movement matters. Muscle matters tremendously. Sleep, connection, purpose, and preventive healthcare matter.",
+            "Medical decisions — including whether hormone therapy is appropriate — become increasingly individualized based on symptoms, health history, risks, goals, and stage of life.",
+            "Because longevity isn't simply about adding years. It's about protecting the life inside those years."
+          ],
+          "image": {
+            "src": "/assets/insights/how-hormones-change-with-age/hormones-longevity-walking.webp",
+            "alt": "Strength and movement to support hormone health and independence with age"
+          }
+        },
+        {
+          "title": "Why Hormone Care Shouldn't Rely on Lab Numbers Alone",
+          "body": [
+            "This is where hormone conversations can become too simple: low number? Replace it. Normal number? Ignore it.",
+            "But bodies aren't quite that tidy. A thoughtful hormone evaluation starts with the person, not the lab slip.",
+            "The questions that matter:"
+          ],
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "What has changed, and when did it change?",
+                "body": []
+              },
+              {
+                "label": "How are you sleeping?",
+                "body": []
+              },
+              {
+                "label": "How is your energy?",
+                "body": []
+              },
+              {
+                "label": "What has happened to your strength and body composition?",
+                "body": []
+              },
+              {
+                "label": "How is your sexual health?",
+                "body": []
+              },
+              {
+                "label": "What medications are you taking?",
+                "body": []
+              },
+              {
+                "label": "What does your metabolic health look like?",
+                "body": []
+              },
+              {
+                "label": "What other medical conditions could be contributing?",
+                "body": []
+              }
+            ]
+          },
+          "closing": [
+            "Then we decide whether testing makes sense — and what those results actually mean in context.",
+            "Sometimes hormone therapy may be appropriate. Sometimes another issue needs attention first. Sometimes lifestyle changes can have a meaningful impact. And sometimes what you're experiencing is a normal transition that simply deserves better support and understanding.",
+            "The goal isn't to chase youth. It's to support health through change."
+          ]
         }
       ],
       "perspective": {
-        "title": "This Is Where the Arc Begins",
+        "title": "Hormone Support Through Every Decade at Arc Wellness",
         "body": [
           "At Arc Wellness, we don't see aging as a problem to solve. We see it as something worth preparing for.",
           "Your 30s shouldn't be managed like your 50s. Your 50s shouldn't be managed like your 70s. And your care shouldn't remain static while your body continues to evolve.",
           "We believe in understanding where you are now, anticipating what may be ahead, and making thoughtful decisions that support the life you're building. Sometimes that includes hormones. Sometimes it includes nutrition, strength, sleep, metabolic health, or preventive care. Most often, it's a combination.",
-          "Because the goal isn't to keep you frozen at one age. It's to help you move through each one strong, informed, and supported—through your 30s, your 40s, your 50s, and beyond."
+          "Because the goal isn't to keep you frozen at one age. It's to help you move through each one strong, informed, and supported."
+        ],
+        "cta": {
+          "lead": "Ready to talk about hormone health for your decade?",
+          "body": "Schedule a hormone health consultation with Arc Wellness to review your history, symptoms, and the right next steps for you.",
+          "label": "Schedule a hormone health consultation"
+        }
+      },
+      "primaryCtaLabel": "Schedule a hormone health consultation",
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "At what age do hormones start to change?",
+            "answer": "Hormones change gradually throughout adult life. For women, noticeable shifts often begin in the late 30s to 40s as perimenopause approaches, though there is wide individual variation. For men, testosterone tends to decline slowly over many years rather than in a single transition."
+          },
+          {
+            "question": "What are the first signs of perimenopause?",
+            "answer": "Early perimenopause often shows up as changes in sleep, shorter or unpredictable cycles, new anxiety, brain fog, breast tenderness, or shifts in body composition — frequently before classic hot flashes appear."
+          },
+          {
+            "question": "Do men experience hormone changes with age?",
+            "answer": "Yes. Men can experience a gradual decline in testosterone along with changes in energy, strength, body composition, and sexual function. These shifts often overlap with sleep, stress, medications, and metabolic health."
+          },
+          {
+            "question": "Is hormone therapy right for me?",
+            "answer": "It depends on the whole picture — your symptoms, health history, risks, goals, and stage of life — not a single lab value. A thorough evaluation determines whether hormone therapy, lifestyle changes, or another approach makes the most sense."
+          },
+          {
+            "question": "Can lifestyle changes improve hormone-related symptoms?",
+            "answer": "Often, yes. Strength training, quality sleep, nutrition, and metabolic health can meaningfully affect how you feel and are a foundational part of care at any age."
+          }
         ]
+      },
+      "disclaimer": "This article is for educational purposes and is not a substitute for personalized medical advice. Understanding changes everything.",
+      "overviewImage": {
+        "src": "/assets/insights/how-hormones-change-with-age/hormones-midlife-strength.webp?v=20260810b",
+        "alt": "Man and woman strength training together to support hormone health and vitality in midlife"
       }
     }
   },
