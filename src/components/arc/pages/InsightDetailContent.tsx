@@ -408,10 +408,7 @@ function PerspectiveBlock({
 
   return (
     <section className="mt-14 border border-arc-charcoal/20 bg-[#f7f1e6]/80 px-5 py-8 sm:mt-16 sm:px-8 sm:py-10">
-      <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.22em] text-arc-teal-ink">
-        From the Arc Desk
-      </p>
-      <SectionHeading title={article.perspective.title} className="mt-3" />
+      <SectionHeading title={article.perspective.title} />
       <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={article.perspective.body} />
       {cta ? (
