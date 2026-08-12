@@ -71,10 +71,34 @@ const PROSE =
 const SECTION_HEADING =
   "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-pretty";
 
-/** Lightweight `**bold**` markers in CMS copy (e.g. gender cues: **women** / **men**). */
+/** Lightweight CMS markers: `**bold**` and `[label](/path)` links. */
 function renderProseInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
+    const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (link) {
+      const [, label, href] = link;
+      const className =
+        "font-semibold text-arc-teal-ink underline decoration-arc-teal/45 underline-offset-[3px] transition-colors hover:text-arc-charcoal hover:decoration-arc-charcoal/40";
+      if (href.startsWith("/")) {
+        return (
+          <Link key={i} href={href} className={className}>
+            {label}
+          </Link>
+        );
+      }
+      return (
+        <a
+          key={i}
+          href={href}
+          className={className}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {label}
+        </a>
+      );
+    }
     const bold = /^\*\*([^*]+)\*\*$/.exec(part);
     if (bold) {
       return (
