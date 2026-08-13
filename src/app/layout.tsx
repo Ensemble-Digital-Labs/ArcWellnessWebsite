@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Birthstone, DM_Sans, Playfair_Display, Radley } from "next/font/google";
-import { GoogleTagManager } from "@/components/analytics/GoogleTagManager";
+import {
+  GoogleTagManagerHead,
+  GoogleTagManagerNoscript,
+} from "@/components/analytics/GoogleTagManager";
 import { ArcRouteTransition } from "@/components/arc/ArcRouteTransition";
 import "./globals.css";
 
@@ -82,11 +85,14 @@ export default function RootLayout({
       className={`${playfair.variable} ${dmSans.variable} ${birthstone.variable} ${radley.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <GoogleTagManagerHead />
+      </head>
       <body
         className="min-h-full bg-arc-cream text-arc-charcoal"
         suppressHydrationWarning
       >
-        <GoogleTagManager />
+        <GoogleTagManagerNoscript />
         <script dangerouslySetInnerHTML={{ __html: ARC_INTRO_PREPAINT_SCRIPT }} />
         <ArcRouteTransition>{children}</ArcRouteTransition>
       </body>
