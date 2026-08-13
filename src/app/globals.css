@@ -608,7 +608,13 @@ html[data-arc-intro="exiting"] #arc-preloader {
 
 html[data-arc-intro="exiting"] #arc-preloader {
   opacity: 0;
-  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 720ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 767px) {
+  html[data-arc-intro="exiting"] #arc-preloader {
+    transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
 
 .arc-preloader__inner {
@@ -619,14 +625,20 @@ html[data-arc-intro="exiting"] #arc-preloader {
 }
 
 .arc-preloader__logo {
-  width: clamp(150px, 34vw, 250px);
+  width: clamp(140px, 32vw, 220px);
   height: auto;
   opacity: 0;
   transform: translate3d(0, 8px, 0) scale(0.98);
 }
 
 html[data-arc-intro="active"] .arc-preloader__logo {
-  animation: arc-preloader-logo-in 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: arc-preloader-logo-in 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (max-width: 767px) {
+  html[data-arc-intro="active"] .arc-preloader__logo {
+    animation-duration: 480ms;
+  }
 }
 
 @keyframes arc-preloader-logo-in {

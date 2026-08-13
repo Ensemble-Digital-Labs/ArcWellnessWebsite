@@ -1,23 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
-import { ArcLazyOnView } from "@/components/arc/ArcLazyOnView";
+import { ArcServicesShowcaseSlider } from "@/components/arc/ArcServicesShowcaseSlider";
+import { WholeBodyShowcasePoster } from "@/components/arc/WholeBodyShowcasePoster";
 import { SERVICES_SHOWCASE_SLIDES } from "@/content/servicesShowcaseSlides";
 import { ARC_HOME_WHOLE_BODY_TOP_SEAM_SOFT_CLASS } from "@/lib/arc-layout";
-
-const ArcServicesShowcaseSlider = dynamic(
-  () =>
-    import("@/components/arc/ArcServicesShowcaseSlider").then((m) => ({
-      default: m.ArcServicesShowcaseSlider,
-    })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="min-h-[100dvh] w-full bg-arc-cream" aria-hidden />
-    ),
-  },
-);
 
 type WholeBodySectionProps = {
   /** Soft cream feather from founder portrait into the slider. */
@@ -32,8 +19,11 @@ type WholeBodySectionProps = {
  * Whole-body services showcase — one viewport: full-bleed photography with cream
  * category tabs overlaid at the bottom of the same stage.
  *
- * Three.js slider mounts only when near viewport so homepage unused-JS / LCP
- * are not taxed by WebGL on first paint.
+ * Mount path (intentional):
+ * - Homepage defers this section once (`ArcHomeDeferredSections`).
+ * - Permanent first-slide poster sits under the slider so decode / WebGL boot
+ *   never flash cream.
+ * - No nested `ArcLazyOnView` / second `dynamic()` — those caused scroll-in glitches.
  */
 export function WholeBodySection({
   topSeam = false,
@@ -44,7 +34,7 @@ export function WholeBodySection({
       id="services"
       className="relative w-full overflow-x-clip bg-arc-cream max-md:pb-px"
     >
-      <div className="relative w-full">
+      <div className="relative w-full min-h-[100dvh]">
         {topSeam ? (
           <ArcSectionSeamBlend
             edge="top"
@@ -54,12 +44,18 @@ export function WholeBodySection({
             className={ARC_HOME_WHOLE_BODY_TOP_SEAM_SOFT_CLASS}
           />
         ) : null}
-        <ArcLazyOnView placeholderClassName="min-h-[100dvh] w-full bg-arc-cream">
+
+        {/* Permanent photo base — never unmounts when the slider boots. */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <WholeBodyShowcasePoster className="h-full min-h-[100dvh]" priority />
+        </div>
+
+        <div className="relative z-[1]">
           <ArcServicesShowcaseSlider
             slides={SERVICES_SHOWCASE_SLIDES}
             className="w-full max-w-none"
           />
-        </ArcLazyOnView>
+        </div>
       </div>
     </section>
   );

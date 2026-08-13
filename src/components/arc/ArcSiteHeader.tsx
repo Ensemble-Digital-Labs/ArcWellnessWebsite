@@ -1188,8 +1188,10 @@ export function ArcSiteHeader({
                 alt={logoAlt}
                 width={360}
                 height={148}
-                priority
-                sizes="(max-width: 768px) 180px, (max-width: 1280px) 260px, 320px"
+                /** Homepage hides logo in the hero — do not compete with LCP. */
+                priority={!hideLogoInHero}
+                fetchPriority={hideLogoInHero ? "low" : "high"}
+                sizes="(max-width: 768px) 150px, (max-width: 1280px) 240px, 300px"
                 className={ARC_HEADER_LOGO_IMG_CLASS}
               />
             </motion.div>

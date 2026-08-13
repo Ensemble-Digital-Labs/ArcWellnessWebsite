@@ -37,8 +37,13 @@ export const videos = {
 } as const;
 
 export const images = {
-  /** Header wordmark: transparent gold WebP (`public/assets/branding/`). ~720px master for retina header. */
-  logo: "/assets/branding/arc-wellness-logo-transparent-gold.webp?v=20260804-opt",
+  /** Header wordmark: transparent gold WebP (`public/assets/branding/`). ~400px for retina header. */
+  logo: "/assets/branding/arc-wellness-logo-header.webp?v=20260813-lcp",
+  /** Full-size logo master (admin / OG / rare large uses). */
+  logoMaster:
+    "/assets/branding/arc-wellness-logo-transparent-gold.webp?v=20260804-opt",
+  /** Intro splash only — ~320px, keeps LCP bandwidth on the hero. */
+  logoSplash: "/assets/branding/arc-wellness-logo-splash.webp?v=20260813-lcp",
   /** Full-bleed hero background, scroll-zoom in `ScrollExpandHero` (mint wall). */
   heroMedia: "/assets/hero/arc_wellness_mint_wall_hero.webp?v=20260813",
   /** Narrow-viewport LCP twin — same crop, ~1600w / lighter bytes for phones. */

@@ -10,9 +10,9 @@ function heroPath(src: string) {
 const heroMobilePath = heroPath(images.heroMediaMobile);
 const heroDesktopPath = heroPath(images.heroMedia);
 
-/** Match `next/image` URLs the hero will actually request. */
-const heroMobilePreload = `/_next/image?url=${encodeURIComponent(heroMobilePath)}&w=750&q=72`;
-const heroDesktopPreload = `/_next/image?url=${encodeURIComponent(heroDesktopPath)}&w=1080&q=72`;
+/** Match `next/image` URLs the hero will actually request (`quality={82}`). */
+const heroMobilePreload = `/_next/image?url=${encodeURIComponent(heroMobilePath)}&w=750&q=82`;
+const heroDesktopPreload = `/_next/image?url=${encodeURIComponent(heroDesktopPath)}&w=1080&q=82`;
 
 export default function Home() {
   return (
