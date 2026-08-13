@@ -17,6 +17,8 @@ import { images } from "@/content/site";
  * - Splash exit is gated on the viewport-matched hero only (not the logo).
  * - Splash logo is a small dedicated asset with `fetchPriority="low"`.
  * - Mobile hold / fade / max-wait are short so LCP is not trapped behind branding.
+ * - Inner-page hero warmup still runs after LCP settle (q=75 to match service
+ *   `next/image` defaults) so nav to treatments feels cached again.
  */
 
 const WARM_OPTIMIZED_HERO_SRCS: readonly string[] = [
@@ -44,9 +46,16 @@ const MAX_WAIT_MS_MOBILE = 1400;
 const FADE_MS_DESKTOP = 720;
 const FADE_MS_MOBILE = 420;
 const INNER_WARM_AFTER_SPLASH_MS_DESKTOP = 500;
-const INNER_WARM_AFTER_SPLASH_MS_MOBILE = 2800;
-const INNER_WARM_NO_SPLASH_MS_DESKTOP = 2800;
-const INNER_WARM_NO_SPLASH_MS_MOBILE = 5000;
+/** Was 2800 — felt like “no warmup” when navigating soon after landing. */
+const INNER_WARM_AFTER_SPLASH_MS_MOBILE = 1100;
+const INNER_WARM_NO_SPLASH_MS_DESKTOP = 2000;
+const INNER_WARM_NO_SPLASH_MS_MOBILE = 1800;
+
+/**
+ * Must match `next/image` default on service / inner heroes (no `quality` prop → 75).
+ * Warming at 82 caused cache misses so nav still re-downloaded every plate.
+ */
+const INNER_PAGE_WARM_QUALITY = 75;
 
 function isNarrowViewport() {
   return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
@@ -70,11 +79,13 @@ function nextImageVariantUrl(src: string, quality = 82): string {
   return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
 }
 
-function warmSrcList(srcs: readonly string[]) {
+function warmSrcList(srcs: readonly string[], quality = INNER_PAGE_WARM_QUALITY) {
   for (const src of srcs) {
     const img = new window.Image();
     img.decoding = "async";
-    img.src = src.startsWith("/_next/image") ? src : nextImageVariantUrl(src);
+    img.src = src.startsWith("/_next/image")
+      ? src
+      : nextImageVariantUrl(src, quality);
   }
 }
 
@@ -85,24 +96,18 @@ function warmInnerPageHeroAssets() {
     }
   ).connection;
   if (connection?.saveData) return;
+  // Only bail on truly constrained links — 3g/4g/wifi still get service heroes.
   if (
     isNarrowViewport() &&
-    (connection?.effectiveType === "2g" ||
-      connection?.effectiveType === "slow-2g" ||
-      connection?.effectiveType === "3g")
+    (connection?.effectiveType === "2g" || connection?.effectiveType === "slow-2g")
   ) {
     return;
   }
 
   const warm = () => {
-    const srcs = isNarrowViewport()
-      ? ([
-          images.aboutHeroMedia,
-          images.heroMedia,
-          ...SHARED_SITE_BACKGROUND_SRCS.slice(0, 3),
-        ] as const)
-      : WARM_OPTIMIZED_HERO_SRCS;
-    warmSrcList(srcs);
+    // Desktop + phone: warm shared plates + curated service/condition LCP heroes
+    // so first nav after homepage feels instant again.
+    warmSrcList(WARM_OPTIMIZED_HERO_SRCS, INNER_PAGE_WARM_QUALITY);
   };
 
   const idle = (
@@ -110,8 +115,8 @@ function warmInnerPageHeroAssets() {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
     }
   ).requestIdleCallback;
-  if (idle) idle(warm, { timeout: isNarrowViewport() ? 6000 : 3500 });
-  else window.setTimeout(warm, isNarrowViewport() ? 1600 : 800);
+  if (idle) idle(warm, { timeout: isNarrowViewport() ? 4000 : 2500 });
+  else window.setTimeout(warm, isNarrowViewport() ? 900 : 500);
 }
 
 function scheduleInnerPageWarm(delayMs: number): number {
@@ -159,7 +164,12 @@ export function ArcSitePreloader() {
       exitTimer = setTimeout(() => {
         if (cancelled) return;
         html.setAttribute("data-arc-intro", "exiting");
-        warmSrcList(POST_SPLASH_HOMEPAGE_SRCS.map((src) => nextImageVariantUrl(src, 75)));
+        warmSrcList(
+          POST_SPLASH_HOMEPAGE_SRCS.map((src) =>
+            nextImageVariantUrl(src, INNER_PAGE_WARM_QUALITY),
+          ),
+          INNER_PAGE_WARM_QUALITY,
+        );
         removeTimer = setTimeout(() => {
           if (cancelled) return;
           html.removeAttribute("data-arc-intro");
