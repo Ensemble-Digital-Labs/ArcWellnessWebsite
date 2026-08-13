@@ -16,6 +16,9 @@ import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import {
   CreamPlateTiledMedia,
   ServiceEmblemIcon as EmblemIcon,
+  SERVICE_MECHANISM_MEDIA_FRAME_CLASS,
+  SERVICE_MECHANISM_MEDIA_SHELL_CLASS,
+  SERVICE_MECHANISM_VIDEO_TILE_CLASS,
 } from "@/components/arc/servicePlate";
 import {
   TitleEmphasis,
@@ -188,7 +191,7 @@ function ExoMindMechanismScrollVideo() {
   return (
     <div
       ref={frameRef}
-      className="relative aspect-[4/3] w-full min-h-[14.5rem] overflow-hidden rounded-none border-0 border-arc-champagne bg-arc-charcoal sm:aspect-[16/10] sm:min-h-0 sm:rounded-[18px] sm:border-4 lg:aspect-video"
+      className={SERVICE_MECHANISM_VIDEO_TILE_CLASS}
     >
       <iframe
         ref={iframeRef}
@@ -362,7 +365,7 @@ export function ExoMindTreatmentContent({
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-3 -inset-y-2 z-0 rounded-3xl bg-arc-cream/60 md:hidden"
               />
-              <div className="relative z-10">
+              <div className="relative z-10 max-md:pt-3.5">
                 <ArcTextReveal variant="heading" trigger="mount">
                   <h1 className="font-serif text-[clamp(2.25rem,6.5vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:[text-shadow:none]">
                     <span className="block whitespace-nowrap font-semibold leading-none">
@@ -582,9 +585,9 @@ export function ExoMindTreatmentContent({
             <ArcTextReveal
               variant="body"
               delayIndex={2}
-              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full"
+              className={SERVICE_MECHANISM_MEDIA_SHELL_CLASS}
             >
-              <div className="rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+              <div className={SERVICE_MECHANISM_MEDIA_FRAME_CLASS}>
                 <ExoMindMechanismScrollVideo />
               </div>
             </ArcTextReveal>

@@ -21,6 +21,7 @@ import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { homeHeroSecondaryCta } from "@/content/homepage";
 import { siteMeta } from "@/content/siteMeta";
 import { bookingLinkExternalProps } from "@/lib/arcBookingLink";
+import { useMinMd } from "@/lib/useMinMd";
 import {
   ARC_PAGE_RAIL_MAX,
   ARC_CREAM_BLUR_GRADIENT_BOTTOM,
@@ -472,6 +473,8 @@ function splitTitleRestForClosingLine(rest: string): { lead: string; closing: st
 type ScrollExpandHeroProps = {
   /** Full-bleed hero photography, scales with scroll (replaces former center frame + secondary back layer). */
   bgImageSrc: string;
+  /** Optional lighter master for phones — same crop, fewer bytes (LCP). */
+  bgImageSrcMobile?: string;
   title: string;
   /** Plain string or rich nodes (e.g. `<strong>` for emphasis). */
   intro: ReactNode;
@@ -538,6 +541,7 @@ function useArcHeroCopyRevealReady(enabled: boolean) {
 
 export function ScrollExpandHero({
   bgImageSrc,
+  bgImageSrcMobile,
   title,
   intro,
   textBlend,
@@ -555,6 +559,10 @@ export function ScrollExpandHero({
 }: ScrollExpandHeroProps) {
   const [reduceMotion, setReduceMotion] = useState(false);
   const copyRevealReady = useArcHeroCopyRevealReady(copyReveal);
+  const isMinMd = useMinMd();
+  /** Mobile-first: SSR + phones use the light master; md+ uses the laptop master. */
+  const resolvedHeroSrc =
+    bgImageSrcMobile && !isMinMd ? bgImageSrcMobile : bgImageSrc;
 
   const heroRef = useRef<HTMLElement | null>(null);
   const heroBgRef = useRef<HTMLDivElement | null>(null);
@@ -673,7 +681,7 @@ export function ScrollExpandHero({
       window.visualViewport?.removeEventListener("resize", onLayoutChange);
       revert?.();
     };
-  }, [reduceMotion, bgImageSrc, staticBackground]);
+  }, [reduceMotion, resolvedHeroSrc, staticBackground]);
 
   const handleHeroImageReady = () => {
     if (heroImageReadyRef.current) return;
@@ -743,10 +751,11 @@ export function ScrollExpandHero({
               className="absolute inset-0 h-full w-full will-change-transform"
             >
               <Image
-                src={bgImageSrc}
+                src={resolvedHeroSrc}
                 alt=""
                 fill
                 sizes="100vw"
+                quality={82}
                 className="object-cover object-center"
                 priority
                 fetchPriority="high"

@@ -14,6 +14,9 @@ import {
   ServiceWave,
   ServiceWaveInset,
   serviceAboveCrestBottomMaskStyle,
+  SERVICE_MECHANISM_MEDIA_FRAME_CLASS,
+  SERVICE_MECHANISM_MEDIA_INNER_CLASS,
+  SERVICE_MECHANISM_MEDIA_SHELL_CLASS,
   SERVICE_WAVE_H_VAR_CLASS,
   SERVICE_WAVE_MT_CLASS,
 } from "@/components/arc/servicePlate";
@@ -222,7 +225,7 @@ export function Arc360PageContent() {
         <ServiceCreamPlate src={creamPlate.src} />
         <ServiceWaveInset />
 
-        <section className="relative z-10 px-6 py-14 sm:px-10 sm:py-16 md:px-12 md:py-20">
+        <section className="relative z-10 overflow-x-clip px-6 py-14 sm:px-10 sm:py-16 md:px-12 md:py-20">
           <div
             aria-hidden
             className="pointer-events-none absolute -right-10 top-0 z-0 h-72 w-72 rounded-full opacity-40 md:blur-2xl"
@@ -233,11 +236,11 @@ export function Arc360PageContent() {
           />
           <div
             className={cn(
-              "relative z-10 mx-auto grid items-center gap-8 sm:gap-12 lg:grid-cols-[0.85fr_1.25fr] lg:gap-12",
+              "relative z-10 mx-auto grid min-w-0 items-center gap-8 sm:gap-12 lg:grid-cols-[0.85fr_1.25fr] lg:gap-12",
               ARC_PAGE_RAIL_MAX,
             )}
           >
-            <div className="mx-auto max-w-lg text-center lg:mx-0 lg:max-w-none lg:text-left">
+            <div className="mx-auto min-w-0 w-full max-w-lg px-0.5 text-center lg:mx-0 lg:max-w-none lg:px-0 lg:text-left">
               <ArcTextReveal variant="heading">
                 <h2 className="text-balance leading-[0.88] text-arc-teal-ink">
                   {connected.titleLines.map((line, i) => (
@@ -267,7 +270,7 @@ export function Arc360PageContent() {
                       strokeWidth={2}
                       aria-hidden
                     />
-                    <span>{bullet}</span>
+                    <span className="min-w-0 flex-1 text-pretty">{bullet}</span>
                   </li>
                 ))}
               </ul>
@@ -276,10 +279,18 @@ export function Arc360PageContent() {
             <ArcTextReveal
               variant="body"
               delayIndex={2}
-              className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-[calc(100%+1.5rem)] lg:justify-self-end"
+              className={cn(
+                SERVICE_MECHANISM_MEDIA_SHELL_CLASS,
+                "lg:w-[calc(100%+1.5rem)] lg:justify-self-end",
+              )}
             >
-              <div className="rounded-none bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:p-2 md:p-2.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
-                <div className="relative aspect-[4/3] w-full min-h-[18rem] overflow-hidden rounded-none ring-1 ring-arc-champagne/30 sm:aspect-[5/4] sm:min-h-[22rem] sm:rounded-[18px] lg:aspect-[4/3] lg:min-h-[26rem]">
+              <div className={SERVICE_MECHANISM_MEDIA_FRAME_CLASS}>
+                <div
+                  className={cn(
+                    SERVICE_MECHANISM_MEDIA_INNER_CLASS,
+                    "aspect-[4/3] min-h-[18rem] sm:aspect-[5/4] sm:min-h-[22rem] lg:aspect-[4/3] lg:min-h-[26rem]",
+                  )}
+                >
                   <Image
                     src={connected.imageSrc}
                     alt={connected.imageAlt}

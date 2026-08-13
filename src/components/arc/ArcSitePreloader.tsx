@@ -54,18 +54,26 @@ const POST_SPLASH_HOMEPAGE_SRCS: readonly string[] = [
 const NEXT_DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840] as const;
 
 /** Minimum on-screen time so the brand moment never feels like a flicker. */
-const MIN_HOLD_MS = 1400;
+const MIN_HOLD_MS_DESKTOP = 1400;
+const MIN_HOLD_MS_MOBILE = 850;
 /** Hard cap so a slow/failed asset never keeps the splash up. */
-const MAX_WAIT_MS = 3500;
+const MAX_WAIT_MS_DESKTOP = 3500;
+const MAX_WAIT_MS_MOBILE = 2400;
 /** Must match the `data-arc-intro="exiting"` fade duration in `globals.css`. */
 const FADE_MS = 900;
 /**
  * After splash is fully gone, wait briefly then idle-warm other page heroes.
  * Keeps Slow 4G bandwidth on homepage LCP first; navigation warm-up still happens.
  */
-const INNER_WARM_AFTER_SPLASH_MS = 500;
+const INNER_WARM_AFTER_SPLASH_MS_DESKTOP = 500;
+const INNER_WARM_AFTER_SPLASH_MS_MOBILE = 2200;
 /** Return / refresh visits (no splash): let homepage LCP settle before warming others. */
-const INNER_WARM_NO_SPLASH_MS = 2800;
+const INNER_WARM_NO_SPLASH_MS_DESKTOP = 2800;
+const INNER_WARM_NO_SPLASH_MS_MOBILE = 4500;
+
+function isNarrowViewport() {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+}
 
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
@@ -100,19 +108,40 @@ function warmSrcList(srcs: readonly string[]) {
  */
 function warmInnerPageHeroAssets() {
   const connection = (
-    navigator as Navigator & { connection?: { saveData?: boolean } }
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }
   ).connection;
   if (connection?.saveData) return;
+  // Skip bulk hero warming on slow cellular — protects mobile LCP / data.
+  if (
+    isNarrowViewport() &&
+    (connection?.effectiveType === "2g" ||
+      connection?.effectiveType === "slow-2g" ||
+      connection?.effectiveType === "3g")
+  ) {
+    return;
+  }
 
-  const warm = () => warmSrcList(WARM_OPTIMIZED_HERO_SRCS);
+  const warm = () => {
+    // Mobile: only warm the shared homepage-adjacent plates, not every service LCP.
+    const srcs = isNarrowViewport()
+      ? ([
+          images.aboutHeroMedia,
+          images.heroMedia,
+          ...SHARED_SITE_BACKGROUND_SRCS.slice(0, 3),
+        ] as const)
+      : WARM_OPTIMIZED_HERO_SRCS;
+    warmSrcList(srcs);
+  };
 
   const idle = (
     window as Window & {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
     }
   ).requestIdleCallback;
-  if (idle) idle(warm, { timeout: 3500 });
-  else window.setTimeout(warm, 800);
+  if (idle) idle(warm, { timeout: isNarrowViewport() ? 6000 : 3500 });
+  else window.setTimeout(warm, isNarrowViewport() ? 1600 : 800);
 }
 
 function scheduleInnerPageWarm(delayMs: number): number {
@@ -130,7 +159,11 @@ export function ArcSitePreloader() {
 
     if (!splashActive) {
       setRendered(false);
-      const warmTimer = scheduleInnerPageWarm(INNER_WARM_NO_SPLASH_MS);
+      const warmTimer = scheduleInnerPageWarm(
+        isNarrowViewport()
+          ? INNER_WARM_NO_SPLASH_MS_MOBILE
+          : INNER_WARM_NO_SPLASH_MS_DESKTOP,
+      );
       return () => window.clearTimeout(warmTimer);
     }
 
@@ -139,29 +172,38 @@ export function ArcSitePreloader() {
     let removeTimer: ReturnType<typeof setTimeout> | undefined;
     let innerWarmTimer: number | undefined;
     const startedAt = performance.now();
+    const mobile = isNarrowViewport();
+    const minHold = mobile ? MIN_HOLD_MS_MOBILE : MIN_HOLD_MS_DESKTOP;
+    const maxWaitMs = mobile ? MAX_WAIT_MS_MOBILE : MAX_WAIT_MS_DESKTOP;
 
-    // Critical path only: splash logo (raw) + mint hero as next/image serves it.
-    // Avoid fetching the raw ~1.3MB WebP during the hold — that starves Slow 4G LCP.
-    const lcpHeroUrl = nextImageVariantUrl(images.heroMedia);
+    // Critical path only: splash logo + viewport-matched mint hero master.
+    const lcpHeroUrl = nextImageVariantUrl(
+      isNarrowViewport() ? images.heroMediaMobile : images.heroMedia,
+      72,
+    );
     const assetsReady = Promise.all([
       preloadImage(images.logo),
       preloadImage(lcpHeroUrl),
     ]);
-    const maxWait = new Promise<void>((resolve) => setTimeout(resolve, MAX_WAIT_MS));
+    const maxWait = new Promise<void>((resolve) => setTimeout(resolve, maxWaitMs));
 
     void Promise.race([assetsReady, maxWait]).then(() => {
       if (cancelled) return;
-      const remaining = Math.max(0, MIN_HOLD_MS - (performance.now() - startedAt));
+      const remaining = Math.max(0, minHold - (performance.now() - startedAt));
       exitTimer = setTimeout(() => {
         if (cancelled) return;
         html.setAttribute("data-arc-intro", "exiting");
         // Soft-warm below-fold homepage art while the splash fades (same UX, no gate).
-        warmSrcList(POST_SPLASH_HOMEPAGE_SRCS.map((src) => nextImageVariantUrl(src)));
+        warmSrcList(POST_SPLASH_HOMEPAGE_SRCS.map((src) => nextImageVariantUrl(src, 72)));
         removeTimer = setTimeout(() => {
           if (cancelled) return;
           html.removeAttribute("data-arc-intro");
           setRendered(false);
-          innerWarmTimer = scheduleInnerPageWarm(INNER_WARM_AFTER_SPLASH_MS);
+          innerWarmTimer = scheduleInnerPageWarm(
+            mobile
+              ? INNER_WARM_AFTER_SPLASH_MS_MOBILE
+              : INNER_WARM_AFTER_SPLASH_MS_DESKTOP,
+          );
         }, FADE_MS);
       }, remaining);
     });

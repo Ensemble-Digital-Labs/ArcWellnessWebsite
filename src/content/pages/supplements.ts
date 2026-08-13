@@ -41,7 +41,7 @@ export const supplementsContent: ServicePageContent = {
     imageAlt:
       "Personalized professional-grade supplements curated for your biology at ARC Wellness",
     imageObjectClass:
-      "object-cover object-[55%_40%] sm:object-[50%_45%] lg:object-center",
+      "object-cover object-[68%_40%] sm:object-[50%_45%] lg:object-center",
     copyMaxClass: "md:max-w-2xl",
     copyGapClass: "mt-2.5 sm:mt-3",
     closingPillClass: "mt-4 sm:mt-5",

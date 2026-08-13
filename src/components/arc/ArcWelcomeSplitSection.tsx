@@ -14,6 +14,7 @@ import { CLINIC_SPACE_TEASER_AMBIENT_SRC } from "@/content/backgroundDecoration"
 import { ARC_MARBLE_AMBIENT_WASH_CLASS, ARC_HOME_WELLNESS_TOP_SEAM_SOFT_CLASS, ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { whenArcLocomotiveReady } from "@/lib/locomotive";
 import { arcScrollTriggerScrollerProps } from "@/lib/arcScrollMode";
+import { resizeArcScrollViewport } from "@/lib/arcScrollLayoutRefresh";
 import { arcScrollScrubLag } from "@/lib/arcTouchDevice";
 import { useMinMd } from "@/lib/useMinMd";
 import { cn } from "@/lib/utils";
@@ -391,13 +392,22 @@ function WelcomeBackdropScrollBody({
     let revert: (() => void) | null = null;
     let cancelled = false;
 
+    const syncProgress = (value: number) => {
+      progress.set(value);
+      if (value >= COPY_FADE_IN_END) setEditorialRevealReady(true);
+    };
+
     const setup = () => {
       if (cancelled) return;
       const section = sectionRef.current;
       if (!section) return;
 
+      // Kill prior trigger before recreating (md ↔ mobile track height changes).
+      revert?.();
+      revert = null;
+
       const ctx = gsap.context(() => {
-        ScrollTrigger.create({
+        const trigger = ScrollTrigger.create({
           trigger: section,
           ...arcScrollTriggerScrollerProps(),
           start: "top top",
@@ -405,9 +415,14 @@ function WelcomeBackdropScrollBody({
           scrub: arcScrollScrubLag(),
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            progress.set(self.progress);
+            syncProgress(self.progress);
+          },
+          // After layout/resize refresh, MotionValues must catch up without waiting for scroll.
+          onRefresh: (self) => {
+            syncProgress(self.progress);
           },
         });
+        syncProgress(trigger.progress);
       }, section);
 
       revert = () => ctx.revert();
@@ -428,7 +443,27 @@ function WelcomeBackdropScrollBody({
       window.clearTimeout(fallback);
       revert?.();
     };
-  }, [progress]);
+    // Recreate when crossing `md` — track is `150svh` vs `180vh`.
+  }, [progress, isMinMd]);
+
+  /** DevTools / window resize: Lenis + ST end distances shift with sticky 100dvh track. */
+  useEffect(() => {
+    let timer: number | undefined;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        resizeArcScrollViewport();
+        ScrollTrigger.refresh(true);
+      }, 200);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, []);
 
   return (
     <section

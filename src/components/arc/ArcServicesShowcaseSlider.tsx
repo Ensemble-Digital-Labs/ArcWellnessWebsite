@@ -8,8 +8,8 @@ import { useEffect, useRef, useState, type RefObject, type ReactNode } from "rea
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
 import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
 import { cn } from "@/lib/utils";
-import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ARC_SERVICES_SHOWCASE_MOBILE_BOTTOM_LIP_CLASS, ARC_SERVICES_SHOWCASE_NAV_TOP_FEATHER_CLASS } from "@/lib/arc-layout";
+import { useMinMd } from "@/lib/useMinMd";
 import {
   servicesShowcaseFragmentShader,
   servicesShowcaseVertexShader,
@@ -88,9 +88,12 @@ function showcasePhotoObjectPosition(
   const { x, y } = slide.coverAnchorMobile;
   return `${Math.round(x * 100)}% ${Math.round(y * 100)}%`;
 }
-/** Frosted glass chip — sits low on the photo; light type for contrast on imagery. */
+/**
+ * Frosted glass chip — sits low on the photo; light type for contrast on imagery.
+ * Min-heights keep the bottom-anchored chip from jumping when title/desc wrap lengths differ.
+ */
 const SHOWCASE_SLIDE_GLASS_CLASS =
-  "inline-flex w-fit max-w-[min(calc(100vw-5.5rem),40rem)] flex-col items-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:max-w-[min(calc(100vw-6rem),40rem)] sm:gap-2.5 sm:px-7 sm:py-5 md:max-w-[min(calc(100vw-3rem),40rem)]";
+  "inline-flex w-fit min-h-[8.75rem] max-w-[min(calc(100vw-5.5rem),40rem)] flex-col items-center justify-center gap-2 rounded-2xl border border-white/45 bg-arc-charcoal/45 px-5 py-4 text-center shadow-[0_16px_48px_rgba(0,0,0,0.28)] ring-1 ring-white/20 backdrop-blur-xl supports-[backdrop-filter]:bg-arc-charcoal/38 sm:min-h-[9.5rem] sm:max-w-[min(calc(100vw-6rem),40rem)] sm:gap-2.5 sm:px-7 sm:py-5 md:min-h-[9.75rem] md:max-w-[min(calc(100vw-3rem),40rem)]";
 /**
  * Glass title above the overlaid cream tab bar + its top feather.
  * Below `md`: raised so arrow row can sit under the glass chip.
@@ -99,9 +102,11 @@ const SHOWCASE_SLIDE_GLASS_CLASS =
 const SHOWCASE_SLIDE_COPY_WRAP_CLASS =
   "pointer-events-auto absolute inset-x-0 z-[1] flex w-full justify-center px-4 bottom-[calc(min(7vh,3.75rem)+12.5rem)] sm:px-6 md:px-6 md:bottom-[calc(8.25rem+min(7vh,3.75rem)+8rem)]";
 const SHOWCASE_SLIDE_TITLE_CLASS =
-  "max-w-full font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-white";
+  "flex min-h-[2.6em] max-w-full items-center justify-center font-serif text-[1.65rem] font-semibold leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:min-h-[2.5em] sm:text-2xl md:text-[1.85rem] lg:text-3xl [&_span]:text-white";
 const SHOWCASE_SLIDE_DESC_CLASS =
-  "mx-auto max-w-xl font-sans text-sm font-medium leading-relaxed text-white/92 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)] sm:text-[0.9375rem] md:leading-relaxed";
+  "mx-auto flex min-h-[2.75em] max-w-xl items-center justify-center font-sans text-sm font-medium leading-relaxed text-white/92 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)] sm:min-h-[2.5em] sm:text-[0.9375rem] md:leading-relaxed";
+/** Matches Tailwind `duration-700` on the mobile Image crossfade. */
+const MOBILE_CROSSFADE_MS = 700;
 const SHOWCASE_CTRL_BTN_CLASS =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-arc-charcoal/18 bg-white/90 text-arc-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-arc-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc-teal/45";
 /**
@@ -229,11 +234,18 @@ type ShowcaseProps = {
   className?: string;
 };
 
-/** Static crossfade + typography when user prefers reduced motion. */
+/** Image crossfade path for phones / reduced-motion (no WebGL / GSAP). */
 function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
   const [index, setIndex] = useState(0);
   const [mediaNear, setMediaNear] = useState(false);
   const shellRef = useRef<HTMLElement>(null);
+  const slideCount = slides.length;
+
+  const goTo = (next: number) => {
+    if (slideCount <= 0) return;
+    const wrapped = ((next % slideCount) + slideCount) % slideCount;
+    setIndex((prev) => (prev === wrapped ? prev : wrapped));
+  };
 
   useEffect(() => {
     const el = shellRef.current;
@@ -250,13 +262,49 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
     return () => io.disconnect();
   }, []);
 
+  /**
+   * Match WebGL timing: wait for crossfade to settle, then a full dwell,
+   * then advance. Re-arms on every `index` change so manual next/prev/tabs
+   * reset the clock instead of racing a stale interval.
+   */
   useEffect(() => {
-    if (!mediaNear || slides.length <= 1) return;
-    const t = window.setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, SLIDER_CONFIG.settings.autoSlideSpeed);
-    return () => window.clearInterval(t);
-  }, [mediaNear, slides.length]);
+    if (!mediaNear || slideCount <= 1) return;
+
+    let cancelled = false;
+    let fadeTimer: number | null = null;
+    let dwellTimer: number | null = null;
+
+    const clearTimers = () => {
+      if (fadeTimer != null) window.clearTimeout(fadeTimer);
+      if (dwellTimer != null) window.clearTimeout(dwellTimer);
+      fadeTimer = null;
+      dwellTimer = null;
+    };
+
+    const arm = () => {
+      clearTimers();
+      if (document.hidden) return;
+      fadeTimer = window.setTimeout(() => {
+        dwellTimer = window.setTimeout(() => {
+          if (cancelled) return;
+          setIndex((i) => (i + 1) % slideCount);
+        }, SLIDER_CONFIG.settings.autoSlideSpeed);
+      }, MOBILE_CROSSFADE_MS);
+    };
+
+    arm();
+    const onVisibility = () => {
+      if (document.hidden) clearTimers();
+      else arm();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      cancelled = true;
+      clearTimers();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [mediaNear, slideCount, index]);
 
   useEffect(() => {
     const active = document.querySelector<HTMLElement>(
@@ -281,8 +329,8 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
             ? slides.map((s, i) => {
                 const nearby =
                   i === index ||
-                  i === (index + 1) % slides.length ||
-                  i === (index - 1 + slides.length) % slides.length;
+                  i === (index + 1) % slideCount ||
+                  i === (index - 1 + slideCount) % slideCount;
                 if (!nearby) return null;
                 return (
                   <div
@@ -304,6 +352,8 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
                         objectPosition: showcasePhotoObjectPosition(s, false),
                       }}
                       sizes="100vw"
+                      /** Hand-tuned WebP — skip Next/CDN re-encode (was mushing full-bleed photos). */
+                      unoptimized
                       loading={i === index ? "eager" : "lazy"}
                     />
                   </div>
@@ -314,12 +364,8 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
         <div className={SHOWCASE_SLIDE_CONTENT_CLASS}>
           <div className={SHOWCASE_SLIDE_COPY_WRAP_CLASS}>
             <div className={SHOWCASE_SLIDE_GLASS_CLASS}>
-              <ArcTextReveal variant="line" delayIndex={1}>
-                <h2 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h2>
-              </ArcTextReveal>
-              <ArcTextReveal variant="body" delayIndex={2}>
-                <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
-              </ArcTextReveal>
+              <h2 className={SHOWCASE_SLIDE_TITLE_CLASS}>{current.title}</h2>
+              <p className={SHOWCASE_SLIDE_DESC_CLASS}>{current.description}</p>
             </div>
           </div>
         </div>
@@ -329,9 +375,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
             type="button"
             className={SHOWCASE_CTRL_BTN_CLASS}
             aria-label="Previous slide"
-            onClick={() =>
-              setIndex((i) => (i - 1 + slides.length) % slides.length)
-            }
+            onClick={() => goTo(index - 1)}
           >
             <ChevronLeft className="size-5" strokeWidth={1.5} />
           </button>
@@ -342,7 +386,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
             type="button"
             className={SHOWCASE_CTRL_BTN_CLASS}
             aria-label="Next slide"
-            onClick={() => setIndex((i) => (i + 1) % slides.length)}
+            onClick={() => goTo(index + 1)}
           >
             <ChevronRight className="size-5" strokeWidth={1.5} />
           </button>
@@ -356,7 +400,7 @@ function ServicesShowcaseReducedMotion({ slides, className }: ShowcaseProps) {
               data-slide-nav-item=""
               data-active={i === index ? "true" : "false"}
               aria-current={i === index ? "true" : undefined}
-              onClick={() => setIndex(i)}
+              onClick={() => goTo(i)}
               className={cn(
                 "slide-nav-item arc-slide-nav-item",
                 i === index && "active",
@@ -1129,6 +1173,7 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
                 objectPosition: showcasePhotoObjectPosition(slides[0], false),
               }}
               sizes="100vw"
+              unoptimized
               loading="lazy"
             />
           </div>
@@ -1191,6 +1236,13 @@ function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
 export function ArcServicesShowcaseSlider({ slides, className }: ShowcaseProps) {
   const [reduced, setReduced] = useState(false);
+  /** Wait until after mount so SSR + first client paint both use the Image path (no WebGL hydrate flip). */
+  const [allowWebGL, setAllowWebGL] = useState(false);
+  const isMinMd = useMinMd();
+
+  useEffect(() => {
+    setAllowWebGL(true);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -1200,7 +1252,8 @@ export function ArcServicesShowcaseSlider({ slides, className }: ShowcaseProps) 
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  if (reduced) {
+  // Phones / reduced-motion / pre-mount: Image crossfade only.
+  if (reduced || !allowWebGL || !isMinMd) {
     return (
       <ServicesShowcaseReducedMotion slides={slides} className={className} />
     );

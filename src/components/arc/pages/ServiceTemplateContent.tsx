@@ -16,6 +16,9 @@ import {
   ServiceGoldRule as GoldRule,
   ServiceWave,
   serviceAboveCrestBottomMaskStyle as aboveCrestBottomMaskStyle,
+  SERVICE_MECHANISM_MEDIA_FRAME_CLASS,
+  SERVICE_MECHANISM_MEDIA_INNER_CLASS,
+  SERVICE_MECHANISM_MEDIA_SHELL_CLASS,
   SERVICE_WAVE_H_CLASS as WAVE_H_CLASS,
   SERVICE_WAVE_H_VAR_CLASS as WAVE_H_VAR_CLASS,
   SERVICE_WAVE_MT_CLASS as WAVE_MT_CLASS,
@@ -125,7 +128,7 @@ export function ServiceTemplateContent({
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-3 -inset-y-2 z-0 rounded-3xl bg-arc-cream/60 md:hidden"
               />
-              <div className="relative z-10">
+              <div className="relative z-10 max-md:pt-3.5">
                 <ArcTextReveal variant="heading" trigger="mount">
                   <h1 className="font-serif text-[clamp(2rem,7.2vw,4rem)] font-normal leading-none tracking-tight text-arc-charcoal [text-shadow:0_1px_12px_rgba(245,240,232,0.85)] md:text-[clamp(2.25rem,6.5vw,4rem)] md:[text-shadow:none]">
                     <span className="block font-semibold leading-none md:whitespace-nowrap">
@@ -319,17 +322,17 @@ export function ServiceTemplateContent({
             >
               <div className="min-w-0 overflow-x-clip">
                 <ArcTextReveal variant="heading">
-                  <h2 className="mx-auto max-w-[18.5rem] text-balance leading-[0.9] text-arc-teal-ink sm:max-w-none">
+                  <h2 className="text-balance leading-[0.88] text-arc-teal-ink">
                     {mechanism.titleLines.map((line, i) => (
                       <span
                         key={line}
                         className={cn(
-                          "font-title-emphasis block max-w-full tracking-tight text-arc-teal-ink",
+                          "font-title-emphasis block tracking-tight text-arc-teal-ink",
                           "[text-shadow:0_1px_2px_rgba(255,255,255,0.45),0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent),-0.015em_0_0_color-mix(in_srgb,currentColor_30%,transparent)]",
                           i > 0 && "-mt-[0.12em]",
                         )}
                         style={{
-                          fontSize: "clamp(1.95rem, 7.2vw, 4.35rem)",
+                          fontSize: "clamp(2.85rem, 8.5vw, 4.35rem)",
                           fontSizeAdjust: "none",
                         }}
                       >
@@ -401,15 +404,17 @@ export function ServiceTemplateContent({
             {hasMechanismMedia ? (
               <div className="relative min-w-0 w-full">
                 <ArcTextReveal variant="body" delayIndex={2} className="block">
-                  {/* Full-bleed like EXION — bleed lives on the media shell only, not the text column. */}
-                  <div className="relative -mx-6 w-[calc(100%+3rem)] max-w-none sm:-mx-10 sm:w-[calc(100%+5rem)] lg:mx-0 lg:w-full">
-                    <div className="overflow-hidden rounded-none border-y border-arc-champagne/30 bg-arc-cream/40 p-0 shadow-none sm:rounded-[28px] sm:border sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]">
+                  <div className={SERVICE_MECHANISM_MEDIA_SHELL_CLASS}>
+                    <div className={SERVICE_MECHANISM_MEDIA_FRAME_CLASS}>
                       <div
                         className={cn(
-                          "relative w-full min-h-[14.5rem] overflow-hidden rounded-none sm:min-h-0 sm:rounded-[18px]",
+                          SERVICE_MECHANISM_MEDIA_INNER_CLASS,
                           mechanism.videoEmbedSrc
                             ? "aspect-video"
-                            : (mechanism.imageAspectClass ?? "aspect-[3/2]"),
+                            : cn(
+                                "min-h-[17rem] sm:min-h-0",
+                                mechanism.imageAspectClass ?? "aspect-[3/2]",
+                              ),
                         )}
                       >
                         {mechanism.videoEmbedSrc ? (

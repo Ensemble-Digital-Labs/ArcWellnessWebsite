@@ -39,8 +39,10 @@ export const videos = {
 export const images = {
   /** Header wordmark: transparent gold WebP (`public/assets/branding/`). ~720px master for retina header. */
   logo: "/assets/branding/arc-wellness-logo-transparent-gold.webp?v=20260804-opt",
-  /** Full-bleed hero background, scroll-zoom in `ScrollExpandHero` (mint wall, 4K WebP). */
-  heroMedia: "/assets/hero/arc_wellness_mint_wall_hero_HD_4K_web.webp",
+  /** Full-bleed hero background, scroll-zoom in `ScrollExpandHero` (mint wall). */
+  heroMedia: "/assets/hero/arc_wellness_mint_wall_hero.webp?v=20260813",
+  /** Narrow-viewport LCP twin — same crop, ~1600w / lighter bytes for phones. */
+  heroMediaMobile: "/assets/hero/arc_wellness_mint_wall_hero_mobile.webp?v=20260813",
   /** About page `ScrollChapterIntroSection` plate — cream + gold silk drape with light streaks. */
   aboutHeroMedia: "/assets/hero/about-hero-silk-gold.webp",
   /** Alternate hero plate, entrance glass doors (contact / showcase). */
@@ -80,7 +82,7 @@ export const images = {
     "/assets/sections/whole-body/body-contouring-session.webp",
     "/assets/sections/who-we-are/biometric-consultation-room.webp",
     "/assets/hero/arc-wellness-lobby-lounge.webp",
-    "/assets/hero/arc_wellness_mint_wall_hero_HD_4K_web.webp",
+    "/assets/hero/arc_wellness_mint_wall_hero.webp?v=20260813",
   ],
   /** Production St. Louis clinic interiors, `public/assets/sections/clinic-interiors/` */
   clinicInteriors: CLINIC_INTERIOR_IMAGES,
