@@ -3,7 +3,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState, type RefObject, type ReactNode } from "react";
 import type { ServicesShowcaseSlide } from "@/content/servicesShowcaseSlides";
 import { servicesShowcaseNavLabel } from "@/content/servicesShowcaseSlides";
@@ -62,9 +61,7 @@ const SHOWCASE_MEDIA_STAGE_CLASS =
  * not dead center — tall phone viewports otherwise show too much lower empty frame.
  * Laptop+ pins near the top so the subject sits high above the cream tabs.
  */
-const SHOWCASE_PHOTO_OBJECT_CLASS =
-  "object-cover object-[center_20%] sm:object-[center_18%] lg:object-top";
-/** Matches `SHOWCASE_PHOTO_OBJECT_CLASS` for the WebGL cover UV. */
+/** Matches CSS `object-cover` + object-position for the WebGL cover UV. */
 const SHOWCASE_COVER_ANCHOR_MOBILE = { x: 0.5, y: 0.2 } as const;
 const SHOWCASE_COVER_ANCHOR_LAPTOP = { x: 0.5, y: 0 } as const;
 const SHOWCASE_LAPTOP_COVER_MQ = "(min-width: 1024px)";
@@ -77,15 +74,6 @@ function showcaseCoverAnchorForSlide(
   return slide?.coverAnchorMobile ?? SHOWCASE_COVER_ANCHOR_MOBILE;
 }
 
-/** CSS object-position for reduced-motion / poster fallbacks. */
-function showcasePhotoObjectPosition(
-  slide: ServicesShowcaseSlide | undefined,
-  laptop: boolean,
-): string | undefined {
-  if (laptop || !slide?.coverAnchorMobile) return undefined;
-  const { x, y } = slide.coverAnchorMobile;
-  return `${Math.round(x * 100)}% ${Math.round(y * 100)}%`;
-}
 /**
  * Frosted glass chip — sits low on the photo; light type for contrast on imagery.
  * Min-heights keep the bottom-anchored chip from jumping when title/desc wrap lengths differ.
@@ -225,12 +213,14 @@ type ShowcaseProps = {
 };
 
 
-/** Desktop WebGL / glass-wipe showcase. Mount only from md+ via dynamic import. */
+/** Desktop WebGL-only showcase. Mount from md+ via dynamic import.
+ * No CSS Image resting layer — that dual handoff was shifting the crop on kick-in.
+ * WholeBody permanent poster covers decode until `webglReady`.
+ */
 export function WebGLShowcase({ slides, className }: ShowcaseProps) {
   const [webglReady, setWebglReady] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const posterSrc = slides[0]?.imageSrc;
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -265,9 +255,8 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
     /** Browser timer id, avoid `NodeJS.Timeout` union from Node typings */
     let autoSlideTimer: number | null = null;
     let rafId = 0;
-    // Start false so we do not fetch slide textures until near the viewport.
+    // Start false so we do not run the render loop until the stage is on-screen.
     let isInView = false;
-    let nearLoadObserver: IntersectionObserver | null = null;
 
     const gsapCtx = gsap.context(() => {}, root);
 
@@ -293,8 +282,8 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
           (t) => {
             t.minFilter = THREE.LinearFilter;
             t.magFilter = THREE.LinearFilter;
-            // Pass-through: custom ShaderMaterial has no colorspace chunks; marking
-            // SRGB + default output encoding made slide photography look too dark.
+            // Raw sRGB bytes — custom ShaderMaterial has no colorspace chunks.
+            // Pair with SRGB canvas output so resting frames match CSS <Image>.
             t.colorSpace = THREE.NoColorSpace;
             t.userData = {
               size: new THREE.Vector2(t.image.width, t.image.height),
@@ -575,6 +564,7 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
       isTransitioning = true;
       applyCoverAnchors(currentSlideIndex, targetIndex);
+      shaderMaterial.uniforms.uProgress.value = 0;
       shaderMaterial.uniforms.uTexture1.value = currentTexture;
       shaderMaterial.uniforms.uTexture2.value = targetTexture;
       shaderMaterial.uniforms.uTexture1Size.value =
@@ -728,31 +718,7 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
     coverMq?.addEventListener("change", onCoverMqChange);
 
     (async () => {
-      // Section already deferred + poster-backed; skip wait when already near.
-      await new Promise<void>((resolve) => {
-        if (disposed) {
-          resolve();
-          return;
-        }
-        const rect = root.getBoundingClientRect();
-        const alreadyNear =
-          rect.bottom > -320 && rect.top < window.innerHeight + 320;
-        if (alreadyNear) {
-          resolve();
-          return;
-        }
-        nearLoadObserver = new IntersectionObserver(
-          (entries) => {
-            if (!entries.some((e) => e.isIntersecting)) return;
-            nearLoadObserver?.disconnect();
-            nearLoadObserver = null;
-            resolve();
-          },
-          { rootMargin: "320px 0px", threshold: 0.01 },
-        );
-        nearLoadObserver.observe(root);
-      });
-
+      // Boot WebGL as soon as this deferred island mounts (poster covers scroll-in).
       if (disposed) return;
 
       scene = new THREE.Scene();
@@ -762,7 +728,7 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
         antialias: true,
         alpha: false,
       });
-      // Keep photographic slides at natural brightness (no ACES / double sRGB).
+      // Raw sRGB samples out without re-encoding (matches photographic WebPs).
       renderer.toneMapping = THREE.NoToneMapping;
       renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
       renderer.setClearColor(0xf0e3d7, 1);
@@ -864,6 +830,7 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
         sliderEnabled = true;
         updateShaderUniforms();
         root.classList.add("arc-showcase-loaded");
+        resize();
         if (renderer && scene && camera) renderer.render(scene, camera);
         setWebglReady(true);
         safeStartTimer(500);
@@ -919,8 +886,6 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
 
     return () => {
       disposed = true;
-      nearLoadObserver?.disconnect();
-      nearLoadObserver = null;
       viewportObserver.disconnect();
       prevEl?.removeEventListener("click", onPrev);
       nextEl?.removeEventListener("click", onNext);
@@ -953,29 +918,15 @@ export function WebGLShowcase({ slides, className }: ShowcaseProps) {
       aria-label="Whole-body care highlights"
     >
       <div ref={rootRef} className={SHOWCASE_MEDIA_STAGE_CLASS}>
-        {posterSrc ? (
-          <div className="absolute inset-0 z-0" aria-hidden>
-            <Image
-              src={posterSrc}
-              alt=""
-              fill
-              className={SHOWCASE_PHOTO_OBJECT_CLASS}
-              style={{
-                objectPosition: showcasePhotoObjectPosition(slides[0], false),
-              }}
-              sizes="100vw"
-              unoptimized
-              priority
-              fetchPriority="high"
-            />
-          </div>
-        ) : null}
         <canvas
           ref={canvasRef}
           className={cn(
-            "webgl-canvas absolute inset-0 z-[0] block h-full w-full transition-opacity duration-500 ease-out",
+            "webgl-canvas absolute inset-0 z-0 block h-full w-full",
+            // Soft reveal over the WholeBody poster once textures are ready —
+            // no CSS Image layer, so crop cannot “kick” mid-handoff.
             webglReady ? "opacity-100" : "opacity-0",
           )}
+          style={{ transition: webglReady ? "opacity 180ms ease-out" : undefined }}
           aria-hidden
         />
         <div className={SHOWCASE_CTRL_PREV_WRAP_CLASS}>

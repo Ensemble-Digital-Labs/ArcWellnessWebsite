@@ -39,7 +39,7 @@ export function WholeBodyShowcasePoster({
         src={firstSlideSrc}
         alt=""
         fill
-        className="object-cover object-[center_20%] lg:object-top"
+        className="object-cover object-[center_20%] md:object-[center_20%] lg:object-top"
         sizes="100vw"
         unoptimized
         priority={priority}

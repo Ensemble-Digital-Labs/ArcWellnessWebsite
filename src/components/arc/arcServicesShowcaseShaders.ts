@@ -59,8 +59,12 @@ export const servicesShowcaseFragmentShader = /* glsl */ `
   }
 
   vec4 glassEffect(vec2 uv, float progress) {
-    float time = progress * 5.0 * uSpeedMultiplier;
     vec2 uv1 = getCoverUV(uv, uTexture1Size, uCoverAnchor1);
+    // Identity rest frame — must match CSS object-cover of texture1 (no wipe FX).
+    if (progress <= 0.0001) {
+      return texture2D(uTexture1, uv1);
+    }
+    float time = progress * 5.0 * uSpeedMultiplier;
     vec2 uv2 = getCoverUV(uv, uTexture2Size, uCoverAnchor2);
     float maxR = length(uResolution) * 0.85;
     float br = progress * maxR;

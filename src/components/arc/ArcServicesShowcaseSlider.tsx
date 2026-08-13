@@ -37,7 +37,10 @@ function usePrefersReducedMotion() {
   );
 }
 
-/** Desktop WebGL chunk — loading null so WholeBody poster stays visible. */
+/**
+ * Desktop WebGL — loading null so WholeBody poster stays put until textures ready.
+ * WebGL is the only slide renderer on laptop (no CSS Image dual layer).
+ */
 const WebGLShowcase = dynamic(
   () =>
     import("@/components/arc/ArcServicesShowcaseWebGL").then((m) => ({
@@ -335,26 +338,20 @@ function ServicesShowcaseImage({ slides, className }: ShowcaseProps) {
 }
 
 /**
- * Whole-body showcase router:
- * - Phone / reduced-motion → Image crossfade (stable)
- * - Laptop+ → WebGL glass wipe, loaded as a separate chunk over the permanent poster
+ * Whole-body showcase:
+ * - Phone / reduced-motion → Image crossfade
+ * - Laptop+ → WebGL only (poster underlay until ready; glass wipes between slides)
  */
 export function ArcServicesShowcaseSlider({ slides, className }: ShowcaseProps) {
   const reduced = usePrefersReducedMotion();
   const isMinMd = useMinMd();
 
-  // Warm the WebGL chunk on desktop after paint so scroll-in rarely waits on download.
   useEffect(() => {
     if (reduced || !isMinMd) return;
-    let cancelled = false;
-    const warm = () => {
-      if (!cancelled) void import("@/components/arc/ArcServicesShowcaseWebGL");
-    };
-    const t = window.setTimeout(warm, 800);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(t);
-    };
+    const t = window.setTimeout(() => {
+      void import("@/components/arc/ArcServicesShowcaseWebGL");
+    }, 900);
+    return () => window.clearTimeout(t);
   }, [reduced, isMinMd]);
 
   if (reduced || !isMinMd) {
