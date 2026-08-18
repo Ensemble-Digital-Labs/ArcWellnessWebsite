@@ -126,7 +126,7 @@ export function ArcConcernsPinnedSection({
           alt=""
           fill
           priority={false}
-          sizes="100vw"
+          sizes="(max-width: 1280px) 100vw, 1600px"
           className="object-cover object-[50%_40%]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-arc-cream/78 via-arc-cream/52 to-arc-cream/40" />

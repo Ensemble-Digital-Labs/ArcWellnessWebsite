@@ -3,6 +3,7 @@
 import { AnimatePresence, useReducedMotion } from "framer-motion";
 import { motion } from "framer-motion";
 import { Star, X } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import {
   useEffect,
@@ -19,9 +20,7 @@ import { PinnedSection } from "@/components/arc/PinnedSection";
 import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
-import SphereImageGrid, {
-  type ImageData,
-} from "@/components/ui/img-sphere";
+import type { ImageData } from "@/components/ui/img-sphere";
 import { TESTIMONIALS_SECTION_BACKGROUND_SRC } from "@/content/backgroundDecoration";
 import {
   TESTIMONIAL_SPHERE_TILE_COUNT,
@@ -37,6 +36,16 @@ import {
 } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { useArcHorizontalSwipeNavigate } from "@/lib/useArcHorizontalSwipeNavigate";
+
+const SphereImageGrid = dynamic(
+  () => import("@/components/ui/img-sphere"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="mx-auto aspect-square w-full max-w-[600px]" aria-hidden />
+    ),
+  },
+);
 
 export type ArcTestimonialItem = {
   id: string;

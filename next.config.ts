@@ -52,7 +52,13 @@ const nextConfig: NextConfig = {
     "/admin/**": ["data/**"],
   },
   images: {
-    formats: ["image/avif", "image/webp"],
+    formats: ["image/webp"],
+    /**
+     * Next 16 defaults to `qualities: [75]` only — any other `quality={…}` on
+     * `<Image>` is clamped to 75. Allow sharper encodes for heroes / full-bleed.
+     * AVIF omitted: at equivalent quality it often looks softer/painterly on photos.
+     */
+    qualities: [60, 72, 75, 82, 88, 92, 95, 100],
     /** Cache optimized variants at the CDN (Netlify image transform). */
     minimumCacheTTL: 60 * 60 * 24 * 365,
     /** Local `/public` assets — omit `search` so `?v=` cache-bust query strings are allowed. */
@@ -118,17 +124,27 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/blogs/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
       {
         source: "/blog/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
       {
         source: "/case-studies/hormones-through-the-decades",
-        destination: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
+        permanent: true,
+      },
+      {
+        source: "/blogs/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
+        permanent: true,
+      },
+      {
+        source: "/blog/how-hormones-change-with-age",
+        destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
     ];

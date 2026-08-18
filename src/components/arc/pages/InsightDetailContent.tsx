@@ -71,6 +71,46 @@ const PROSE =
 const SECTION_HEADING =
   "font-title-emphasis font-normal not-italic text-[clamp(2.25rem,6vw,3.25rem)] leading-[0.95] tracking-tight text-arc-teal-ink text-pretty";
 
+/** Lightweight CMS markers: `**bold**` and `[label](/path)` links. */
+function renderProseInline(text: string) {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (link) {
+      const [, label, href] = link;
+      const className =
+        "font-semibold text-arc-teal-ink underline decoration-arc-teal/45 underline-offset-[3px] transition-colors hover:text-arc-charcoal hover:decoration-arc-charcoal/40";
+      if (href.startsWith("/")) {
+        return (
+          <Link key={i} href={href} className={className}>
+            {label}
+          </Link>
+        );
+      }
+      return (
+        <a
+          key={i}
+          href={href}
+          className={className}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {label}
+        </a>
+      );
+    }
+    const bold = /^\*\*([^*]+)\*\*$/.exec(part);
+    if (bold) {
+      return (
+        <strong key={i} className="font-semibold text-arc-charcoal">
+          {bold[1]}
+        </strong>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 /** Prefer a break after `:` on laptop+ so decade titles don’t orphan the number. */
 function SectionHeading({
   title,
@@ -97,7 +137,7 @@ function ProseBlock({ paragraphs }: { paragraphs: readonly string[] }) {
     <div className="space-y-4">
       {paragraphs.map((paragraph, i) => (
         <p key={`${paragraph.slice(0, 28)}-${i}`} className={PROSE}>
-          {paragraph}
+          {renderProseInline(paragraph)}
         </p>
       ))}
     </div>
@@ -302,7 +342,7 @@ function FaqRow({
       {reduceMotion ? (
         open ? (
           <div className="border-t border-arc-charcoal/10 px-4 pb-4 pt-0 sm:px-5">
-            <p className={PROSE}>{item.answer}</p>
+            <p className={PROSE}>{renderProseInline(item.answer)}</p>
           </div>
         ) : null
       ) : (
@@ -316,7 +356,7 @@ function FaqRow({
           className="overflow-hidden"
         >
           <div className="border-t border-arc-charcoal/10 px-4 pb-4 pt-3 sm:px-5">
-            <p className={PROSE}>{item.answer}</p>
+            <p className={PROSE}>{renderProseInline(item.answer)}</p>
           </div>
         </motion.div>
       )}
@@ -368,10 +408,7 @@ function PerspectiveBlock({
 
   return (
     <section className="mt-14 border border-arc-charcoal/20 bg-[#f7f1e6]/80 px-5 py-8 sm:mt-16 sm:px-8 sm:py-10">
-      <p className="font-sans text-[0.65rem] font-bold uppercase tracking-[0.22em] text-arc-teal-ink">
-        From the Arc Desk
-      </p>
-      <SectionHeading title={article.perspective.title} className="mt-3" />
+      <SectionHeading title={article.perspective.title} />
       <Hairline className="mt-4 mb-6 max-w-[6rem] bg-arc-champagne" />
       <ProseBlock paragraphs={article.perspective.body} />
       {cta ? (

@@ -32,6 +32,23 @@ export const SERVICE_WAVE_MT_CLASS =
 export const SERVICE_WAVE_H_VAR_CLASS =
   "[--service-wave-h:60px] sm:[--service-wave-h:90px] lg:[--service-wave-h:120px]";
 
+/**
+ * Mechanism media (image / video) under the pillars icon row.
+ * Mobile: wide near-bleed champagne round frame (small side gutters so corners read).
+ */
+export const SERVICE_MECHANISM_MEDIA_SHELL_CLASS =
+  "relative min-w-0 -mx-4 w-[calc(100%+2rem)] max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:mx-0 lg:w-full";
+
+export const SERVICE_MECHANISM_MEDIA_FRAME_CLASS =
+  "overflow-hidden rounded-[1.35rem] border border-arc-champagne/35 bg-arc-cream/40 p-1 shadow-[0_16px_40px_rgba(44,44,44,0.1)] sm:rounded-[28px] sm:border-arc-champagne/25 sm:p-2 md:p-3.5 md:shadow-[0_28px_80px_rgba(44,44,44,0.14)]";
+
+export const SERVICE_MECHANISM_MEDIA_INNER_CLASS =
+  "relative w-full overflow-hidden rounded-[1.05rem] sm:rounded-[18px]";
+
+/** Bunny / iframe video tile — match 16:9 so embeds don’t letterbox inside the frame. */
+export const SERVICE_MECHANISM_VIDEO_TILE_CLASS =
+  "relative aspect-video w-full overflow-hidden rounded-[1.05rem] border-2 border-arc-champagne bg-arc-charcoal sm:rounded-[18px] sm:border-4";
+
 const ABOVE_CREST_BOTTOM_MASK = [
   `linear-gradient(#fff 0%, #fff calc(100% - var(--service-wave-h)), transparent calc(100% - var(--service-wave-h)))`,
   `url("data:image/svg+xml,${encodeURIComponent(
