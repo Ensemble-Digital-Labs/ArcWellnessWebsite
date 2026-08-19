@@ -10,12 +10,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Official GTM snippets must be first in <head> / <body>. Next.js cannot do that;
-# this edge function injects them into the HTML response Googlebot fetches.
-[[edge_functions]]
-  function = "google-tag-manager"
-  path = "/*"
-
 # Long-lived cache for static media in /public (filenames are content-hashed or versioned manually).
 [[headers]]
   for = "/assets/*"
