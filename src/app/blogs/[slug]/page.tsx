@@ -35,9 +35,13 @@ function buildBlogJsonLd(entry: InsightEntry) {
   const pageUrl = `${SITE_URL}/blogs/${entry.slug}`;
   const description =
     entry.seo?.description?.trim() || entry.excerpt;
-  const headline = entry.seo?.title?.replace(/\s*\|\s*Arc Wellness\s*$/i, "").trim() || entry.title;
+  const headline =
+    entry.seo?.schemaHeadline?.trim() ||
+    entry.seo?.title?.replace(/\s*\|\s*Arc Wellness(?:,\s*STL)?\s*$/i, "").trim() ||
+    entry.title;
   const date = publishedAtToIso(entry.publishedAt);
-  const image = entry.imageSrc ? absoluteAssetUrl(entry.imageSrc) : undefined;
+  const imageSrc = entry.seo?.schemaImage?.trim() || entry.imageSrc;
+  const image = imageSrc ? absoluteAssetUrl(imageSrc) : undefined;
 
   const article: Record<string, unknown> = {
     "@context": "https://schema.org",

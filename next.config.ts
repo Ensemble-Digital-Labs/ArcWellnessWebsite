@@ -147,6 +147,11 @@ const nextConfig: NextConfig = {
         destination: "/blogs/hormones-through-the-decades-st-louis-mo",
         permanent: true,
       },
+      {
+        source: "/blogs/inflammation-your-bodys-built-in-alarm-system",
+        destination: "/blogs/understanding-chronic-inflammation",
+        permanent: true,
+      },
     ];
   },
 };

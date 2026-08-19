@@ -126,6 +126,10 @@ export type InsightEntry = {
   seo?: {
     title?: string;
     description?: string;
+    /** JSON-LD Article `headline` when it should differ from the meta title. */
+    schemaHeadline?: string;
+    /** JSON-LD / Open Graph image path when it should differ from `imageSrc`. */
+    schemaImage?: string;
     focusKeyword?: string;
     secondaryKeywords?: readonly string[];
   };

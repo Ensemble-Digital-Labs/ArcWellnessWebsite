@@ -234,13 +234,13 @@ function SectionList({ list }: { list: InsightSectionList }) {
               {titleOnly ? (
                 <div className="flex gap-3">
                   <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-                  <p className="font-serif text-lg leading-snug tracking-tight text-arc-teal-ink sm:text-xl">
+                  <p className="font-serif text-lg leading-snug tracking-tight text-balance text-arc-teal-ink sm:text-xl">
                     {item.label}
                   </p>
                 </div>
               ) : (
                 <>
-                  <p className="font-serif text-lg tracking-tight text-arc-teal-ink sm:text-xl">
+                  <p className="text-center font-serif text-lg leading-snug tracking-tight text-balance whitespace-pre-line text-arc-teal-ink sm:text-xl">
                     {item.label}
                   </p>
                   {lines ? (
@@ -249,7 +249,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
                         {lines.map((line) => (
                           <li key={line} className="flex gap-2.5">
                             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-                            <span className="font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]">
+                            <span className="font-sans text-sm leading-relaxed text-pretty text-arc-charcoal/80 sm:text-[0.9375rem]">
                               {line}
                             </span>
                           </li>

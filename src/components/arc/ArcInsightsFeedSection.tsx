@@ -41,6 +41,7 @@ type InsightFilter = "all" | InsightKind;
 const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "insulin-resistance-signs-symptoms",
   "hormones-through-the-decades-st-louis-mo",
+  "understanding-chronic-inflammation",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
