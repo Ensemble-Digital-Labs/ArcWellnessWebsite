@@ -769,8 +769,8 @@
             "You may experience:"
           ],
           "image": {
-            "src": "/assets/insights/understanding-chronic-inflammation/quiet-symptoms-fatigue.webp?v=20260819b",
-            "alt": "Editorial infographic of a human body outline with soft highlight points for fatigue, brain fog, joints, and sleep — subtle signs of chronic inflammation"
+            "src": "/assets/insights/understanding-chronic-inflammation/quiet-symptoms-fatigue.webp?v=20260819d",
+            "alt": "Man in his 30s at a desk in flat afternoon light, rubbing his temples mid-yawn — understated fatigue and brain fog from chronic inflammation"
           },
           "list": {
             "style": "cards",
@@ -837,10 +837,16 @@
             "One of the most encouraging things about chronic inflammation is that the exact same habits that support a long, vibrant life also help support a healthy inflammatory response.",
             "That includes:"
           ],
-          "image": {
-            "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-strength.webp?v=20260819b",
-            "alt": "Editorial flat-lay infographic of whole foods, dumbbells, and rest symbols on cream marble — habits that support a healthy inflammatory response"
-          },
+          "images": [
+            {
+              "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-strength.webp?v=20260819e",
+              "alt": "Editorial flat-lay of whole foods, dumbbells, and rest symbols on cream marble — nutrition and recovery habits that support a healthy inflammatory response"
+            },
+            {
+              "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-movement.webp?v=20260819e",
+              "alt": "Woman in her 30s performing a dumbbell curl in a bright gym — strength training as a foundation for healthy inflammation balance"
+            }
+          ],
           "list": {
             "style": "cards",
             "items": [

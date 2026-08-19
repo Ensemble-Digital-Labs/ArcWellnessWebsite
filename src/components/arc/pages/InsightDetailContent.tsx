@@ -164,9 +164,11 @@ function MetaPill({ children }: { children: string }) {
 function SectionFigure({
   image,
   className,
+  sizes = "(max-width: 768px) 100vw, 42rem",
 }: {
   image: InsightSectionImage;
   className?: string;
+  sizes?: string;
 }) {
   return (
     <figure className={cn("overflow-hidden", className)}>
@@ -175,7 +177,7 @@ function SectionFigure({
           src={image.src}
           alt={image.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 42rem"
+          sizes={sizes}
           className="object-cover"
         />
       </div>
@@ -373,10 +375,22 @@ function ArticleSection({ section }: { section: InsightArticleSection }) {
         <SectionFigure image={section.image} className="mb-8" />
       ) : null}
       {section.images?.length ? (
-        <ul className="mb-8 grid gap-4 sm:grid-cols-3">
+        <ul
+          className={cn(
+            "mb-8 grid gap-4",
+            section.images.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3",
+          )}
+        >
           {section.images.map((fig) => (
             <li key={fig.src}>
-              <SectionFigure image={fig} />
+              <SectionFigure
+                image={fig}
+                sizes={
+                  section.images!.length === 2
+                    ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 21rem"
+                    : "(max-width: 768px) 100vw, 14rem"
+                }
+              />
             </li>
           ))}
         </ul>
