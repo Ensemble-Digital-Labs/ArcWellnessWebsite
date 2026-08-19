@@ -619,7 +619,7 @@
     ],
     "excerpt": "When it protects you, and when it starts working against you.",
     "publishedAt": "19 Aug 2026",
-    "imageSrc": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819",
+    "imageSrc": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819b",
     "imageAlt": "Adult in a calm wellness setting with subtle warm highlights suggesting the body's natural inflammatory response",
     "body": [
       "Inflammation has become one of the biggest buzzwords in modern healthcare. It's blamed for fatigue, weight gain, joint pain, brain fog, heart disease, autoimmune conditions, aging, and even wrinkles.",
@@ -708,7 +708,7 @@
     ],
     "article": {
       "overviewImage": {
-        "src": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819",
+        "src": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819b",
         "alt": "Adult in a calm wellness setting with subtle warm highlights suggesting the body's natural inflammatory response"
       },
       "overview": [
@@ -727,7 +727,7 @@
             "And in this situation, it is exactly what you want. Without it, wounds wouldn't heal, simple infections would spread rapidly, and your body would struggle to repair itself. Inflammation is your body's natural, essential repair system."
           ],
           "image": {
-            "src": "/assets/insights/understanding-chronic-inflammation/healing-first-responder.webp?v=20260819",
+            "src": "/assets/insights/understanding-chronic-inflammation/healing-first-responder.webp?v=20260819b",
             "alt": "Editorial medical illustration of a minor skin wound with immune cells and healing response — acute inflammation as the body's repair system"
           }
         },
@@ -769,7 +769,7 @@
             "You may experience:"
           ],
           "image": {
-            "src": "/assets/insights/understanding-chronic-inflammation/quiet-symptoms-fatigue.webp?v=20260819",
+            "src": "/assets/insights/understanding-chronic-inflammation/quiet-symptoms-fatigue.webp?v=20260819b",
             "alt": "Editorial infographic of a human body outline with soft highlight points for fatigue, brain fog, joints, and sleep — subtle signs of chronic inflammation"
           },
           "list": {
@@ -838,7 +838,7 @@
             "That includes:"
           ],
           "image": {
-            "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-strength.webp?v=20260819",
+            "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-strength.webp?v=20260819b",
             "alt": "Editorial flat-lay infographic of whole foods, dumbbells, and rest symbols on cream marble — habits that support a healthy inflammatory response"
           },
           "list": {
@@ -910,7 +910,7 @@
       "title": "Understanding Chronic Inflammation | Arc Wellness, STL",
       "description": "Not all inflammation is bad. Arc Wellness in St. Louis explains acute vs. chronic inflammation, warning signs, and how to support your body.",
       "schemaHeadline": "Understanding Chronic Inflammation in St. Louis, MO",
-      "schemaImage": "/assets/blog/understanding-chronic-inflammation.webp",
+      "schemaImage": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819b",
       "focusKeyword": "chronic inflammation",
       "secondaryKeywords": [
         "understanding chronic inflammation",
