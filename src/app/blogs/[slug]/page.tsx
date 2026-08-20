@@ -14,7 +14,7 @@ type PageProps = {
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://arcwellness.netlify.app";
+  "https://arcwellness.net";
 
 const PUBLISHER_LOGO = `${SITE_URL}/assets/branding/arc-wellness-logo-transparent-gold.webp`;
 

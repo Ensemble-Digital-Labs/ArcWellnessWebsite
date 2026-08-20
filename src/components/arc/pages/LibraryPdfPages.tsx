@@ -44,8 +44,8 @@ function PdfPageCanvas({
       const context = canvas.getContext("2d", { alpha: false });
       if (!context) return;
 
-      // Installed pdfjs types require canvasContext (not the newer `canvas` field).
-      renderTask = page.render({ canvasContext: context, viewport });
+      // pdfjs-dist v6 RenderParameters requires `canvas` (canvasContext optional).
+      renderTask = page.render({ canvas, canvasContext: context, viewport });
       await renderTask.promise;
     };
 

@@ -1,5 +1,5 @@
 const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://arcwellness.netlify.app";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://arcwellness.net";
 
 export function isBookingUrl(href: string): boolean {
   const trimmed = href.trim();

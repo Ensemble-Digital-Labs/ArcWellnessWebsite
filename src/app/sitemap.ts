@@ -6,7 +6,10 @@ import { getInsightEntries } from "@/lib/insightsStore";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://arcwellness.netlify.app";
+  "https://arcwellness.net";
+
+/** Required for `output: "export"` (GoDaddy static build). */
+export const dynamic = "force-static";
 
 /** Public marketing routes for search engines (excludes admin + dev demos). */
 export default function sitemap(): MetadataRoute.Sitemap {

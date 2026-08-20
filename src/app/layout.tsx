@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Birthstone, DM_Sans, Playfair_Display, Radley } from "next/font/google";
+import {
+  StaticExportGoogleTagManagerHead,
+  StaticExportGoogleTagManagerNoscript,
+} from "@/components/analytics/GoogleTagManager";
 import { ArcRouteTransition } from "@/components/arc/ArcRouteTransition";
 import "./globals.css";
 
@@ -67,7 +71,7 @@ export const metadata: Metadata = {
  * Skips entirely under reduced-motion. A failsafe timeout clears the flag/attr
  * so JS/hydration stalls can never trap the user behind the overlay.
  */
-const ARC_INTRO_PREPAINT_SCRIPT = `(function(){try{var d=document.documentElement;if(location.pathname!=="/")return;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("arc-intro-seen")==="1")return;sessionStorage.setItem("arc-intro-seen","1");d.setAttribute("data-arc-intro","active");window.setTimeout(function(){if(d.getAttribute("data-arc-intro"))d.removeAttribute("data-arc-intro");},6000);}catch(e){}})();`;
+const ARC_INTRO_PREPAINT_SCRIPT = `(function(){try{var d=document.documentElement;var p=location.pathname;if(p!=="/"&&p!=="")return;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("arc-intro-seen")==="1")return;sessionStorage.setItem("arc-intro-seen","1");d.setAttribute("data-arc-intro","active");window.setTimeout(function(){if(d.getAttribute("data-arc-intro"))d.removeAttribute("data-arc-intro");},6000);}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -82,6 +86,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <StaticExportGoogleTagManagerHead />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
@@ -89,6 +94,7 @@ export default function RootLayout({
         className="min-h-full bg-arc-cream text-arc-charcoal"
         suppressHydrationWarning
       >
+        <StaticExportGoogleTagManagerNoscript />
         <script dangerouslySetInnerHTML={{ __html: ARC_INTRO_PREPAINT_SCRIPT }} />
         <ArcRouteTransition>{children}</ArcRouteTransition>
       </body>

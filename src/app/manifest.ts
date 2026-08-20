@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+/** Required for `output: "export"` (GoDaddy static build). */
+export const dynamic = "force-static";
+
 /** Web app manifest — Android / “Add to Home Screen” icons for every route. */
 export default function manifest(): MetadataRoute.Manifest {
   return {

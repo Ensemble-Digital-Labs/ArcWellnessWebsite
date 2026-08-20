@@ -1,0 +1,40 @@
+Arc Wellness — GoDaddy cPanel deploy
+====================================
+
+WHAT THIS IS
+  A fully static export of the Next.js marketing site for Apache/cPanel.
+  No Node.js process is required on the server.
+
+WHERE TO PUT FILES
+  Extract the zip contents into:
+    public_html/arcwellness.net/
+
+  After extract you must see (directly in that folder):
+    index.html
+    .htaccess
+    _next/
+    assets/
+    DEPLOY.txt
+
+  Do NOT leave files nested like:
+    public_html/arcwellness.net/out/index.html
+
+DOMAIN / DNS
+  - Addon (or primary) domain: arcwellness.net
+  - Document root: public_html/arcwellness.net
+  - Point A/CNAME for arcwellness.net and www.arcwellness.net at this host
+  - Enable AutoSSL / Let's Encrypt for both hostnames
+
+URL CANONICALIZATION (.htaccess)
+  All of these redirect to https://arcwellness.net/...
+    http://arcwellness.net
+    http://www.arcwellness.net
+    https://www.arcwellness.net
+
+NOT INCLUDED (needs Node / Netlify)
+  /admin/* and /api/admin/*
+  Blog/insight edits via admin are frozen at build time from data/*.json
+
+REBUILD LOCALLY
+  npm install
+  npm run build:godaddy

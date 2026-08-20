@@ -7,6 +7,7 @@ import {
 } from "@/content/backgroundDecoration";
 import { SERVICE_PAGE_LCP_HERO_SRCS, SHARED_SITE_BACKGROUND_SRCS } from "@/content/servicePageLcpHeroes";
 import { images } from "@/content/site";
+import { isStaticExport } from "@/lib/staticExport";
 
 /**
  * Homepage intro preloader — a branded cream splash that appears on the FIRST
@@ -72,6 +73,8 @@ function preloadImage(src: string): Promise<void> {
 
 /** Build the optimized URL next/image requests for a full-bleed `sizes="100vw"` plate on this screen. */
 function nextImageVariantUrl(src: string, quality = 82): string {
+  // Static Apache hosting serves public files directly — no image optimizer.
+  if (isStaticExport) return src;
   const target = Math.ceil(window.innerWidth * Math.min(window.devicePixelRatio || 1, 2.5));
   const width =
     NEXT_DEVICE_SIZES.find((w) => w >= target) ??
@@ -83,9 +86,10 @@ function warmSrcList(srcs: readonly string[], quality = INNER_PAGE_WARM_QUALITY)
   for (const src of srcs) {
     const img = new window.Image();
     img.decoding = "async";
-    img.src = src.startsWith("/_next/image")
-      ? src
-      : nextImageVariantUrl(src, quality);
+    img.src =
+      src.startsWith("/_next/image") || isStaticExport
+        ? src
+        : nextImageVariantUrl(src, quality);
   }
 }
 
