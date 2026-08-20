@@ -22,7 +22,7 @@ function PdfPageCanvas({
     if (!wrap || !canvas) return;
 
     let cancelled = false;
-    let renderTask: { cancel: () => void } | null = null;
+    let renderTask: { cancel: () => void; promise: Promise<void> } | null = null;
 
     const render = async () => {
       const page = await pdf.getPage(pageNumber);
@@ -44,7 +44,8 @@ function PdfPageCanvas({
       const context = canvas.getContext("2d", { alpha: false });
       if (!context) return;
 
-      renderTask = page.render({ canvas, canvasContext: context, viewport });
+      // Installed pdfjs types require canvasContext (not the newer `canvas` field).
+      renderTask = page.render({ canvasContext: context, viewport });
       await renderTask.promise;
     };
 
@@ -85,17 +86,18 @@ export function LibraryPdfPages({ src }: { src: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    let task: { destroy: () => Promise<void> } | null = null;
+    let destroyTask: (() => Promise<unknown>) | null = null;
 
     const load = async () => {
       const pdfjs = await import("pdfjs-dist");
       pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
-      task = pdfjs.getDocument({
+      const loadingTask = pdfjs.getDocument({
         url: src,
         disableRange: true,
         disableStream: true,
       });
-      const doc = await task.promise;
+      destroyTask = () => loadingTask.destroy();
+      const doc = await loadingTask.promise;
       if (cancelled) {
         return;
       }
@@ -110,9 +112,7 @@ export function LibraryPdfPages({ src }: { src: string }) {
 
     return () => {
       cancelled = true;
-      if (typeof task?.destroy === "function") {
-        void task.destroy().catch(() => {});
-      }
+      void destroyTask?.().catch(() => {});
     };
   }, [src]);
 
