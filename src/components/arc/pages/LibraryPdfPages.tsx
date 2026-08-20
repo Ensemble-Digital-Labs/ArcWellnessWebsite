@@ -104,10 +104,14 @@ export function LibraryPdfPages({ src }: { src: string }) {
       setPdf(doc);
     };
 
-    void load().catch(() => {
-      if (!cancelled) {
-        setError("This booklet could not be opened here. Use Download to view it.");
-      }
+    void load().catch((reason: unknown) => {
+      if (cancelled) return;
+      const name =
+        reason && typeof reason === "object" && "name" in reason
+          ? String((reason as { name?: string }).name)
+          : "";
+      if (name === "AbortException" || name === "RenderingCancelledException") return;
+      setError("This booklet could not be opened here. Use Download to view it.");
     });
 
     return () => {
