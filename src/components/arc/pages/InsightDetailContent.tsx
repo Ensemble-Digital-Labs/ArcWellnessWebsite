@@ -40,11 +40,11 @@ type InsightDetailContentProps = {
 type NextStep = { label: string; href: string };
 
 function backHref(kind: InsightKind): string {
-  return kind === "blog" ? "/blogs?filter=blog" : "/blogs";
+  return kind === "blog" ? "/library/education?filter=blog" : "/library/education";
 }
 
 function backLabel(kind: InsightKind): string {
-  return kind === "blog" ? "All blogs" : "From the Arc Desk";
+  return kind === "blog" ? "All blogs" : "Education";
 }
 
 function kindLabel(kind: InsightKind): string {
@@ -456,9 +456,6 @@ function ContinuePath({ nextSteps }: { nextSteps: readonly NextStep[] }) {
       aria-label="Continue"
     >
       <h2 className={SECTION_HEADING}>Continue your path</h2>
-      <p className={cn(PROSE, "mx-auto mt-3 max-w-xl")}>
-        Ready for personalized care, or want to keep reading?
-      </p>
       <ul className="mx-auto mt-6 max-w-xl divide-y divide-arc-charcoal/15 border-y border-arc-charcoal/15">
         {nextSteps.map((step) => (
           <li key={step.label}>
@@ -788,10 +785,6 @@ function LegacyEditorial({
 
 export function InsightDetailContent({ entry }: InsightDetailContentProps) {
   const nextSteps: readonly NextStep[] = [
-    {
-      label: entry.article?.primaryCtaLabel?.trim() || "Book a consultation",
-      href: siteMeta.bookingUrl,
-    },
     { label: backLabel(entry.kind), href: backHref(entry.kind) },
     { label: "Explore treatments", href: "/treatments" },
   ];

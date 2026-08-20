@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     root: appRoot,
   },
   /** Keep heavy native / 3D deps out of the Netlify server handler zip. */
-  serverExternalPackages: ["three", "gsap", "sharp", "exceljs"],
+  serverExternalPackages: ["three", "gsap", "sharp", "exceljs", "pdfjs-dist"],
   /**
    * Admin API routes read `data/*.json` and write uploads under `public/assets/insights/uploads`.
    * Without excludes, `fs` + `path.join(process.cwd(), "public", ...)` traces all of `public/assets`
@@ -98,8 +98,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/library/table",
+        destination: "/library/education",
+        permanent: false,
+      },
+      {
         source: "/case-studies",
-        destination: "/blogs",
+        destination: "/library/education",
         permanent: true,
       },
       {

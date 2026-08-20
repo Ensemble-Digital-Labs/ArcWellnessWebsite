@@ -199,8 +199,8 @@ export function AdminInsightsManager({
           <h1 className="mt-2 font-serif text-3xl font-semibold">Insights posts</h1>
           <p className="mt-2 max-w-xl text-sm text-arc-charcoal/65">
             Edit blogs and case studies shown on{" "}
-            <Link href="/blogs" className="underline underline-offset-2">
-              /blogs
+            <Link href="/library/education" className="underline underline-offset-2">
+              /library/education
             </Link>
             .
           </p>

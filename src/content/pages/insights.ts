@@ -178,18 +178,18 @@ export function flattenInsightArticle(article: InsightArticle): string[] {
 
 export const insightsPage = {
   seo: {
-    title: "From the Arc Desk | Arc Wellness, St. Louis",
+    title: "Education | Arc Wellness Library, St. Louis",
     description:
-      "Real patient stories, clinical insights, and wellness education from Arc Wellness in St. Louis—covering metabolic health, hormones, recovery, and more.",
+      "Clinical insights and wellness education from Arc Wellness in St. Louis — metabolic health, hormones, inflammation, recovery, and more.",
   },
   hero: {
-    eyebrow: "From the Arc Desk",
+    eyebrow: "Education",
     title: "Stories &",
     titleEmphasis: "perspectives",
     body: "Real outcomes, thoughtful education, and the science behind our approach, written for patients who want clarity, not jargon.",
   },
   feed: {
-    masthead: "From the Arc Desk",
+    masthead: "Education",
   },
 } as const;
 

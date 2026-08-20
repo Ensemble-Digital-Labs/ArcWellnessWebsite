@@ -36,7 +36,7 @@ export const primaryNav = [
   { label: "Services", href: "/treatments" },
   { label: "Conditions", href: "/conditions" },
   { label: "Start Here", href: "/start-here" },
-  { label: "Arc Library", href: "/blogs" },
+  { label: "Arc Library", href: "/library/education" },
   // NOTE (Aug 2026): Financing tab hidden from primaryNav; restore with the ARC_NAV financing item.
   // { label: "Financing", href: "/financing" },
   { label: "Contact", href: "/contact" },

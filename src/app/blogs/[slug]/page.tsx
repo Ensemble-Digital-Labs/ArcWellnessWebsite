@@ -103,7 +103,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const entry = getInsightEntryBySlug(slug);
-  if (!entry) return { title: "From the Arc Desk | Arc Wellness" };
+  if (!entry) return { title: "Education | Arc Wellness" };
   const title =
     entry.seo?.title?.trim() || `${entry.title} | Arc Wellness`;
   const description =
