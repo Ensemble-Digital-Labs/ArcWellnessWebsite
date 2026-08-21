@@ -1,38 +1,37 @@
-import { isStaticExport } from "@/lib/staticExport";
-
 /** Same container as Arc landing pages (e.g. emsella.arcwellness.net). */
 export const GTM_ID =
   process.env.NEXT_PUBLIC_GTM_ID?.trim() || "GTM-P5JNDDHR";
 
-const GTM_HEAD_SCRIPT = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+/**
+ * Google’s official GTM install, as React:
+ * 1) bootstrap script in `<head>`
+ * 2) noscript iframe immediately after `<body>`
+ *
+ * Inline `<script>`, not `next/script` — Next’s Script loader moves the snippet
+ * into a body loader that Search Console rejects.
+ *
+ * Renders on Netlify and GoDaddy static export. Do not also inject GTM from a
+ * Netlify edge function or tags will duplicate.
+ */
+export function GoogleTagManagerHead() {
+  if (!GTM_ID) return null;
+
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_ID}');`;
-
-/**
- * GTM for GoDaddy/cPanel static export only.
- *
- * On Netlify, `netlify/edge-functions/google-tag-manager.ts` injects the official
- * snippets first-in-head / first-in-body. Do not render these there or tags duplicate.
- * Apache static hosting has no edge function, so we bake the snippets into HTML.
- */
-export function StaticExportGoogleTagManagerHead() {
-  if (!isStaticExport || !GTM_ID) return null;
-  return (
-    <>
-      {/* Google Tag Manager */}
-      <script
-        id="google-tag-manager"
-        dangerouslySetInnerHTML={{ __html: GTM_HEAD_SCRIPT }}
-      />
-      {/* End Google Tag Manager */}
-    </>
+})(window,document,'script','dataLayer','${GTM_ID}');`,
+      }}
+    />
   );
 }
 
-export function StaticExportGoogleTagManagerNoscript() {
-  if (!isStaticExport || !GTM_ID) return null;
+export function GoogleTagManagerNoscript() {
+  if (!GTM_ID) return null;
+
   return (
     <noscript>
       <iframe
@@ -40,7 +39,6 @@ export function StaticExportGoogleTagManagerNoscript() {
         height="0"
         width="0"
         style={{ display: "none", visibility: "hidden" }}
-        title="Google Tag Manager"
       />
     </noscript>
   );
