@@ -126,6 +126,10 @@ export type InsightEntry = {
   seo?: {
     title?: string;
     description?: string;
+    /** JSON-LD Article `headline` when it should differ from the meta title. */
+    schemaHeadline?: string;
+    /** JSON-LD / Open Graph image path when it should differ from `imageSrc`. */
+    schemaImage?: string;
     focusKeyword?: string;
     secondaryKeywords?: readonly string[];
   };
@@ -174,18 +178,18 @@ export function flattenInsightArticle(article: InsightArticle): string[] {
 
 export const insightsPage = {
   seo: {
-    title: "Patient Stories & Case Studies | Arc Wellness, St. Louis",
+    title: "Education | Arc Wellness Library, St. Louis",
     description:
-      "Real patient stories and outcomes from Arc Wellness in St. Louis, covering EmSculpt Neo, Daxxify, peptide therapy, and more. Results vary by patient.",
+      "Clinical insights and wellness education from Arc Wellness in St. Louis — metabolic health, hormones, inflammation, recovery, and more.",
   },
   hero: {
-    eyebrow: "From the Arc Desk",
+    eyebrow: "Education",
     title: "Stories &",
     titleEmphasis: "perspectives",
     body: "Real outcomes, thoughtful education, and the science behind our approach, written for patients who want clarity, not jargon.",
   },
   feed: {
-    masthead: "From the Arc Desk",
+    masthead: "Education",
   },
 } as const;
 

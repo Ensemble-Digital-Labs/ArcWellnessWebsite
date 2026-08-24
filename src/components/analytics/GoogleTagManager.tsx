@@ -9,6 +9,9 @@ export const GTM_ID =
  *
  * Inline `<script>`, not `next/script` — Next’s Script loader moves the snippet
  * into a body loader that Search Console rejects.
+ *
+ * Renders on Netlify and GoDaddy static export. Do not also inject GTM from a
+ * Netlify edge function or tags will duplicate.
  */
 export function GoogleTagManagerHead() {
   if (!GTM_ID) return null;

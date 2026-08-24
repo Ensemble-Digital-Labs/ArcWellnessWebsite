@@ -16,6 +16,10 @@
 # next.js
 /.next/
 /out/
+.godaddy-exclude/
+
+# GoDaddy static deploy artifact (rebuild with npm run build:godaddy)
+/deploy/godaddy/arcwellness-net-cpanel.zip
 
 # stray local copy (only build artifacts; real app lives at repo root)
 /arc-wellness/
@@ -24,7 +28,8 @@
 /extraction tool/
 /learning/
 /local-envdev/
-/scripts/
+/scripts/*
+!/scripts/build-godaddy-static.mjs
 /design/
 /documents/
 /.cursor/

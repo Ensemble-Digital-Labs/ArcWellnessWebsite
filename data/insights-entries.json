@@ -609,40 +609,37 @@
     }
   },
   {
-    "id": "blog-inflammation-your-bodys-built-in-alarm-system",
+    "id": "blog-understanding-chronic-inflammation",
     "kind": "blog",
-    "slug": "inflammation-your-bodys-built-in-alarm-system",
+    "slug": "understanding-chronic-inflammation",
     "title": "Inflammation: Your Body's Built-In Alarm System",
-    "excerpt": "When it protects you—and when it starts working against you.",
-    "publishedAt": "21 Jul 2026",
-    "imageSrc": "/assets/insights/inflammation-your-bodys-built-in-alarm-system-preview.webp",
-    "imageAlt": "Woman holding her shoulder and abdomen with glowing inflammation hotspots",
+    "titleLines": [
+      "Inflammation:",
+      "Your Body's Built-In Alarm System"
+    ],
+    "excerpt": "When it protects you, and when it starts working against you.",
+    "publishedAt": "19 Aug 2026",
+    "imageSrc": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819c",
+    "imageAlt": "Editorial medical illustration of a gender-neutral human figure with warm glow points at joints and abdomen — chronic inflammation across the body",
     "body": [
       "Inflammation has become one of the biggest buzzwords in modern healthcare. It's blamed for fatigue, weight gain, joint pain, brain fog, heart disease, autoimmune conditions, aging, and even wrinkles.",
       "Wander down any grocery store aisle, and you will find shelves lined with products proudly claiming to be \"anti-inflammatory.\" A quick scroll through social media makes it sound as though all inflammation is a toxic enemy you must vanquish.",
       "But the truth is much more interesting.",
-      "Inflammation isn't your enemy. It's one of the most important ways your body protects you. The problem is when it never gets the chance to turn off.",
-      "When Inflammation Helps—and When It Doesn't",
-      "Your body was entirely designed to create inflammation. Imagine you accidentally cut your finger while cooking dinner. Within seconds, your body begins responding. Blood vessels change. Specialized immune cells arrive. The area becomes red, warm, swollen, and tender. That's inflammation—and in this situation, it is exactly what you want.",
-      "Without it, wounds wouldn't heal, simple infections would spread rapidly, and your body would struggle to repair itself. Inflammation is your body's natural, essential repair system.",
-      "Now imagine your home's smoke alarm. When there's a real fire, you want it to sound. But if that alarm continued blaring for weeks after the fire was out, it would stop protecting you and start disrupting your life. The exact same thing happens inside your body when the inflammatory response continues long after it has served its purpose.",
-      "Acute (the helper)",
-      "Chronic (the disruptor)",
-      "Purpose",
-      "Protects and heals the body",
-      "Harms healthy tissues over time",
-      "Trigger",
-      "Direct injury, cut, or acute infection",
-      "Chronic stress, poor diet, lifestyle factors",
-      "Duration",
-      "Short-term (days to weeks)",
-      "Long-term (months to years)",
-      "Symptoms",
-      "Localized redness, heat, swelling, pain",
-      "Systemic fatigue, brain fog, stealthy changes",
-      "The Quiet Threat: What Does It Feel Like?",
+      "Inflammation isn't your enemy. In fact, it's one of the most important ways your body protects you. The problem is when it never gets the chance to turn off.",
+      "The Biological First Responder",
+      "Your body was entirely designed to create inflammation.",
+      "Imagine you accidentally cut your finger while cooking dinner. Within seconds, your body begins responding. Blood vessels change. Specialized immune cells arrive. Chemical messengers signal that help is on the way. The area becomes red, warm, swollen, and tender.",
+      "That's inflammation.",
+      "And in this situation, it is exactly what you want. Without it, wounds wouldn't heal, simple infections would spread rapidly, and your body would struggle to repair itself. Inflammation is your body's natural, essential repair system.",
+      "When the Alarm Never Shuts Off",
+      "Now, imagine your home's smoke alarm. When there's a real fire, you want it to sound. It saves lives. But if that alarm continued blaring for weeks after the fire was out, it would stop protecting you and start disrupting your life.",
+      "The exact same thing happens inside your body.",
+      "Sometimes the inflammatory response continues long after it has served its vital purpose. Instead of helping the body heal, this ongoing inflammation begins affecting how your body functions.",
+      "Acute Inflammation (The Helper): Purpose — Protects and heals the body; Trigger — Direct injury, cut, or acute infection; Duration — Short-term (days to weeks); Symptoms — Localized redness, heat, swelling, pain",
+      "Chronic Inflammation (The Disruptor): Purpose — Harms healthy tissues over time; Trigger — Chronic stress, poor diet, lifestyle factors; Duration — Long-term (months to years); Symptoms — Systemic fatigue, brain fog, stealthy changes",
+      "The Quiet Threat: What Does Chronic Inflammation Feel Like?",
       "Unlike a cut or an infection, chronic inflammation is often incredibly quiet. Most people don't wake up and \"feel inflamed.\" Instead, they notice subtle, frustrating changes that develop gradually over time.",
-      "These symptoms are not specific to inflammation alone—many different medical conditions can cause them. But when several occur together, they are clear clues that your overall health deserves a closer look.",
+      "You may experience:",
       "Persistent fatigue",
       "Brain fog or difficulty concentrating",
       "Achy joints or muscles",
@@ -653,154 +650,283 @@
       "Frequent illness",
       "Skin changes or breakouts",
       "Digestive complaints",
-      "What Triggers the Alarm—and Can You Measure It?",
-      "There is rarely one single cause for chronic inflammation. It is a highly complex response influenced by many aspects of daily life. Genetics also play a role. This is precisely why inflammation isn't something we can \"treat\" with one magical supplement or a single superfood.",
-      "When inflammation remains elevated over time, it casts a shadow over multiple body systems—including pathways studied in cardiovascular disease, type 2 diabetes, metabolic syndrome, fatty liver disease, arthritis, autoimmune conditions, neurodegenerative diseases, and some cancers. Inflammation doesn't necessarily cause these conditions by itself, but it is one critical piece of a much larger puzzle.",
-      "Sometimes providers may use laboratory markers such as C-reactive protein (CRP) when clinically appropriate. These markers can be useful, but they don't tell the entire story. A laboratory result is just one data point.",
-      "Reducing chronic inflammation isn't about chasing a laboratory number. It's about supporting overall health.",
+      "These symptoms are not specific to inflammation alone, many different medical conditions can cause them. But when several occur together, they are clear clues that your overall health deserves a closer look.",
+      "What is Triggering the Alarm?",
+      "There is rarely one single cause for chronic inflammation. It is a highly complex response influenced by many aspects of our daily lives, including:",
       "Poor sleep",
       "Chronic stress",
       "Smoking or vaping",
-      "Excess visceral body fat",
+      "Excess visceral (abdominal) body fat",
       "Diets high in ultra-processed foods",
       "Physical inactivity",
       "Poor metabolic health",
-      "Autoimmune disease, infections, environmental exposures",
+      "Autoimmune diseases",
+      "Certain infections",
+      "Environmental exposures",
       "Untreated chronic medical conditions",
-      "Turning Down the Heat",
+      "Genetics also play a role. Some people are simply more susceptible than others. This is precisely why inflammation isn't something we can \"treat\" with one magical supplement or a single superfood. We have to work to understand why the body is generating that response in the first place.",
+      "The Bigger Picture: Beyond Sore Joints",
+      "When inflammation remains elevated over time, it casts a shadow over multiple body systems. Researchers continue to study its driving role in serious conditions such as cardiovascular disease, type 2 diabetes, metabolic syndrome, fatty liver disease, arthritis, autoimmune conditions, neurodegenerative diseases, and some cancers.",
+      "Inflammation doesn't necessarily cause these conditions all by itself, but it is one critical piece of a much larger puzzle.",
+      "Can You Measure Inflammation?",
+      "Sometimes. Healthcare providers may use laboratory markers such as C-reactive protein (CRP) or other tests when clinically appropriate.",
+      "These markers can provide highly useful information, but they don't tell the entire story. A laboratory result is just one data point. Your symptoms, medical history, nutrition, sleep quality, stress levels, physical activity, and metabolic health all matter immensely. Numbers should always be interpreted in the context of your actual life.",
+      "Reducing chronic inflammation isn't about chasing a laboratory number. It's about supporting overall health.",
+      "Turning Down the Heat: Supporting Natural Balance",
       "One of the most encouraging things about chronic inflammation is that the exact same habits that support a long, vibrant life also help support a healthy inflammatory response.",
+      "That includes:",
+      "Eating a diet rich in vegetables, fruits, legumes, nuts, healthy fats, and quality protein",
+      "Building and maintaining muscle through strength training",
+      "Walking and moving throughout the day",
+      "Prioritizing truly restorative sleep",
+      "Managing and mitigating chronic stress",
+      "Maintaining a healthy weight when appropriate",
+      "Avoiding tobacco products",
+      "Treating underlying medical conditions",
       "Notice a trend? These aren't secret \"anti-inflammatory tricks.\" They are simply the unshakeable foundations of good health.",
-      "Eat a diet rich in vegetables, fruits, legumes, nuts, healthy fats, and quality protein",
-      "Build and maintain muscle through strength training",
-      "Walk and move throughout the day",
-      "Prioritize truly restorative sleep",
-      "Manage and mitigate chronic stress",
-      "Maintain a healthy weight when appropriate",
-      "Avoid tobacco products",
-      "Treat underlying medical conditions",
-      "This Is Where the Arc Begins",
+      "Arc Wellness Perspective",
       "At Arc Wellness, we don't believe inflammation is something to fear. We believe it's something to understand.",
-      "Your body isn't trying to work against you. More often than not, it's simply responding to something it perceives as a threat or a challenge. Our role is to step back, look at the whole picture, and ask better questions: Why is your body responding this way? Is there an underlying medical condition? Could nutrition, sleep, stress, hormones, or metabolic health be contributing?",
-      "Our goal isn't simply to quiet your symptoms. It's to help create an environment where your body can heal, recover, and function exactly the way it was beautifully designed to."
+      "Your body isn't trying to work against you. More often than not, it's simply responding to something it perceives as a threat or a challenge. Our role is to step back, look at the whole picture, and ask better questions:",
+      "Why is your body responding this way?",
+      "Is there an underlying medical condition?",
+      "Could your nutrition, sleep, stress, hormones, or metabolic health be contributing?",
+      "What changes are likely to have the greatest impact, not just for today, but for the decades ahead?",
+      "Our goal isn't simply to quiet your symptoms. It's to help create an environment where your body can heal, recover, and function exactly the way it was beautifully designed to.",
+      "Understand what's behind your symptoms.",
+      "If you're in the St. Louis area, our physician-led team is here to help you look at the whole picture—not just a single lab marker.",
+      "Book a consultation",
+      "Frequently Asked Questions",
+      "Is all inflammation bad?",
+      "No. Acute inflammation is a healthy, essential response that helps your body heal from injury and infection. It only becomes a concern when it turns chronic and continues long after the original trigger is gone.",
+      "How do I know if I have chronic inflammation?",
+      "Chronic inflammation often shows up as a cluster of subtle symptoms, persistent fatigue, brain fog, achy joints, poor sleep, or slower recovery, rather than one obvious sign. A physician-guided evaluation, sometimes including markers like CRP, combined with a look at your metabolic health and lifestyle, gives a clearer picture than any single lab number alone.",
+      "Can chronic inflammation be reversed?",
+      "In many cases, yes. Chronic inflammation often responds well to the same foundational habits that support overall health: better sleep, regular movement, a nutrient-dense diet, stress management, and treatment of any underlying medical conditions.",
+      "Where can I get inflammation testing and support in St. Louis?",
+      "Arc Wellness offers physician-led evaluations at our St. Louis, MO location that look beyond a single lab marker to your full health picture, including hormone health, gut health, and long-term longevity planning.",
+      "This article is for educational purposes and is not a substitute for personalized medical advice."
     ],
     "article": {
-      "closingLine": "Inflammation isn't your enemy—until it never turns off.",
+      "overviewImage": {
+        "src": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819c",
+        "alt": "Editorial medical illustration of a gender-neutral human figure with warm glow points at joints and abdomen — chronic inflammation across the body"
+      },
       "overview": [
         "Inflammation has become one of the biggest buzzwords in modern healthcare. It's blamed for fatigue, weight gain, joint pain, brain fog, heart disease, autoimmune conditions, aging, and even wrinkles.",
         "Wander down any grocery store aisle, and you will find shelves lined with products proudly claiming to be \"anti-inflammatory.\" A quick scroll through social media makes it sound as though all inflammation is a toxic enemy you must vanquish.",
         "But the truth is much more interesting."
       ],
-      "overviewCallout": "Inflammation isn't your enemy. It's one of the most important ways your body protects you. The problem is when it never gets the chance to turn off.",
+      "overviewCallout": "Inflammation isn't your enemy. In fact, it's one of the most important ways your body protects you. The problem is when it never gets the chance to turn off.",
       "sections": [
         {
-          "title": "When Inflammation Helps—and When It Doesn't",
+          "title": "The Biological First Responder",
           "body": [
-            "Your body was entirely designed to create inflammation. Imagine you accidentally cut your finger while cooking dinner. Within seconds, your body begins responding. Blood vessels change. Specialized immune cells arrive. The area becomes red, warm, swollen, and tender. That's inflammation—and in this situation, it is exactly what you want.",
-            "Without it, wounds wouldn't heal, simple infections would spread rapidly, and your body would struggle to repair itself. Inflammation is your body's natural, essential repair system.",
-            "Now imagine your home's smoke alarm. When there's a real fire, you want it to sound. But if that alarm continued blaring for weeks after the fire was out, it would stop protecting you and start disrupting your life. The exact same thing happens inside your body when the inflammatory response continues long after it has served its purpose."
+            "Your body was entirely designed to create inflammation.",
+            "Imagine you accidentally cut your finger while cooking dinner. Within seconds, your body begins responding. Blood vessels change. Specialized immune cells arrive. Chemical messengers signal that help is on the way. The area becomes red, warm, swollen, and tender.",
+            "That's inflammation.",
+            "And in this situation, it is exactly what you want. Without it, wounds wouldn't heal, simple infections would spread rapidly, and your body would struggle to repair itself. Inflammation is your body's natural, essential repair system."
+          ],
+          "image": {
+            "src": "/assets/insights/understanding-chronic-inflammation/healing-first-responder.webp?v=20260819b",
+            "alt": "Editorial medical illustration of a minor skin wound with immune cells and healing response — acute inflammation as the body's repair system"
+          }
+        },
+        {
+          "title": "When the Alarm Never Shuts Off",
+          "body": [
+            "Now, imagine your home's smoke alarm. When there's a real fire, you want it to sound. It saves lives. But if that alarm continued blaring for weeks after the fire was out, it would stop protecting you and start disrupting your life.",
+            "The exact same thing happens inside your body.",
+            "Sometimes the inflammatory response continues long after it has served its vital purpose. Instead of helping the body heal, this ongoing inflammation begins affecting how your body functions."
           ],
           "list": {
-            "style": "compare",
-            "leftTitle": "Acute (the helper)",
-            "rightTitle": "Chronic (the disruptor)",
-            "rows": [
+            "style": "cards",
+            "items": [
               {
-                "label": "Purpose",
-                "left": "Protects and heals the body",
-                "right": "Harms healthy tissues over time"
+                "label": "Acute inflammation\n(The Helper)",
+                "body": [
+                  "Purpose — Protects and heals the body",
+                  "Trigger — Direct injury, cut, or acute infection",
+                  "Duration — Short-term (days to weeks)",
+                  "Symptoms — Localized redness, heat, swelling, pain"
+                ]
               },
               {
-                "label": "Trigger",
-                "left": "Direct injury, cut, or acute infection",
-                "right": "Chronic stress, poor diet, lifestyle factors"
-              },
-              {
-                "label": "Duration",
-                "left": "Short-term (days to weeks)",
-                "right": "Long-term (months to years)"
-              },
-              {
-                "label": "Symptoms",
-                "left": "Localized redness, heat, swelling, pain",
-                "right": "Systemic fatigue, brain fog, stealthy changes"
+                "label": "Chronic inflammation\n(The Disruptor)",
+                "body": [
+                  "Purpose — Harms healthy tissues over time",
+                  "Trigger — Chronic stress, poor diet, lifestyle\u00A0factors",
+                  "Duration — Long-term (months to years)",
+                  "Symptoms — Systemic fatigue, brain fog, stealthy\u00A0changes"
+                ]
               }
             ]
           }
         },
         {
-          "title": "The Quiet Threat: What Does It Feel Like?",
+          "title": "The Quiet Threat: What Does Chronic Inflammation Feel Like?",
           "body": [
             "Unlike a cut or an infection, chronic inflammation is often incredibly quiet. Most people don't wake up and \"feel inflamed.\" Instead, they notice subtle, frustrating changes that develop gradually over time.",
-            "These symptoms are not specific to inflammation alone—many different medical conditions can cause them. But when several occur together, they are clear clues that your overall health deserves a closer look."
+            "You may experience:"
           ],
+          "image": {
+            "src": "/assets/insights/understanding-chronic-inflammation/quiet-symptoms-fatigue.webp?v=20260819d",
+            "alt": "Man in his 30s at a desk in flat afternoon light, rubbing his temples mid-yawn — understated fatigue and brain fog from chronic inflammation"
+          },
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "Persistent fatigue",
-              "Brain fog or difficulty concentrating",
-              "Achy joints or muscles",
-              "Slower recovery after exercise",
-              "Chronically low energy",
-              "Poor sleep",
-              "Increased abdominal weight gain",
-              "Frequent illness",
-              "Skin changes or breakouts",
-              "Digestive complaints"
+              { "label": "Persistent fatigue", "body": [] },
+              { "label": "Brain fog or difficulty concentrating", "body": [] },
+              { "label": "Achy joints or muscles", "body": [] },
+              { "label": "Slower recovery after exercise", "body": [] },
+              { "label": "Chronically low energy", "body": [] },
+              { "label": "Poor sleep", "body": [] },
+              { "label": "Increased abdominal weight gain", "body": [] },
+              { "label": "Frequent illness", "body": [] },
+              { "label": "Skin changes or breakouts", "body": [] },
+              { "label": "Digestive complaints", "body": [] }
             ]
-          }
+          },
+          "closing": [
+            "These symptoms are not specific to inflammation alone, many different medical conditions can cause them. But when several occur together, they are clear clues that your overall health deserves a closer look."
+          ]
         },
         {
-          "title": "What Triggers the Alarm—and Can You Measure It?",
+          "title": "What is Triggering the Alarm?",
           "body": [
-            "There is rarely one single cause for chronic inflammation. It is a highly complex response influenced by many aspects of daily life. Genetics also play a role. This is precisely why inflammation isn't something we can \"treat\" with one magical supplement or a single superfood.",
-            "When inflammation remains elevated over time, it casts a shadow over multiple body systems—including pathways studied in cardiovascular disease, type 2 diabetes, metabolic syndrome, fatty liver disease, arthritis, autoimmune conditions, neurodegenerative diseases, and some cancers. Inflammation doesn't necessarily cause these conditions by itself, but it is one critical piece of a much larger puzzle.",
-            "Sometimes providers may use laboratory markers such as C-reactive protein (CRP) when clinically appropriate. These markers can be useful, but they don't tell the entire story. A laboratory result is just one data point."
+            "There is rarely one single cause for chronic inflammation. It is a highly complex response influenced by many aspects of our daily lives, including:"
           ],
-          "callout": "Reducing chronic inflammation isn't about chasing a laboratory number. It's about supporting overall health.",
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "Poor sleep",
-              "Chronic stress",
-              "Smoking or vaping",
-              "Excess visceral body fat",
-              "Diets high in ultra-processed foods",
-              "Physical inactivity",
-              "Poor metabolic health",
-              "Autoimmune disease, infections, environmental exposures",
-              "Untreated chronic medical conditions"
+              { "label": "Poor sleep", "body": [] },
+              { "label": "Chronic stress", "body": [] },
+              { "label": "Smoking or vaping", "body": [] },
+              { "label": "Excess visceral (abdominal) body fat", "body": [] },
+              { "label": "Diets high in ultra-processed foods", "body": [] },
+              { "label": "Physical inactivity", "body": [] },
+              { "label": "Poor metabolic health", "body": [] },
+              { "label": "Autoimmune diseases", "body": [] },
+              { "label": "Certain infections", "body": [] },
+              { "label": "Environmental exposures", "body": [] },
+              { "label": "Untreated chronic medical conditions", "body": [] }
             ]
-          }
+          },
+          "closing": [
+            "Genetics also play a role. Some people are simply more susceptible than others. This is precisely why inflammation isn't something we can \"treat\" with one magical supplement or a single superfood. We have to work to understand why the body is generating that response in the first place."
+          ]
         },
         {
-          "title": "Turning Down the Heat",
+          "title": "The Bigger Picture: Beyond Sore Joints",
+          "body": [
+            "When inflammation remains elevated over time, it casts a shadow over multiple body systems. Researchers continue to study its driving role in serious conditions such as cardiovascular disease, type 2 diabetes, metabolic syndrome, fatty liver disease, arthritis, autoimmune conditions, neurodegenerative diseases, and some cancers.",
+            "Inflammation doesn't necessarily cause these conditions all by itself, but it is one critical piece of a much larger puzzle."
+          ]
+        },
+        {
+          "title": "Can You Measure Inflammation?",
+          "body": [
+            "Sometimes. Healthcare providers may use laboratory markers such as C-reactive protein (CRP) or other tests when clinically appropriate.",
+            "These markers can provide highly useful information, but they don't tell the entire story. A laboratory result is just one data point. Your symptoms, medical history, nutrition, sleep quality, stress levels, physical activity, and metabolic health all matter immensely. Numbers should always be interpreted in the context of your actual life."
+          ],
+          "callout": "Reducing chronic inflammation isn't about chasing a laboratory number. It's about supporting overall health."
+        },
+        {
+          "title": "Turning Down the Heat: Supporting Natural Balance",
           "body": [
             "One of the most encouraging things about chronic inflammation is that the exact same habits that support a long, vibrant life also help support a healthy inflammatory response.",
-            "Notice a trend? These aren't secret \"anti-inflammatory tricks.\" They are simply the unshakeable foundations of good health."
+            "That includes:"
+          ],
+          "images": [
+            {
+              "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-strength.webp?v=20260819e",
+              "alt": "Editorial flat-lay of whole foods, dumbbells, and rest symbols on cream marble — nutrition and recovery habits that support a healthy inflammatory response"
+            },
+            {
+              "src": "/assets/insights/understanding-chronic-inflammation/foundational-habits-movement.webp?v=20260819e",
+              "alt": "Woman in her 30s performing a dumbbell curl in a bright gym — strength training as a foundation for healthy inflammation balance"
+            }
           ],
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "Eat a diet rich in vegetables, fruits, legumes, nuts, healthy fats, and quality protein",
-              "Build and maintain muscle through strength training",
-              "Walk and move throughout the day",
-              "Prioritize truly restorative sleep",
-              "Manage and mitigate chronic stress",
-              "Maintain a healthy weight when appropriate",
-              "Avoid tobacco products",
-              "Treat underlying medical conditions"
+              {
+                "label": "Eat a diet rich in vegetables, fruits, legumes, nuts, healthy fats, and quality protein",
+                "body": []
+              },
+              {
+                "label": "Build and maintain muscle through strength training",
+                "body": []
+              },
+              { "label": "Walk and move throughout the day", "body": [] },
+              { "label": "Prioritize truly restorative sleep", "body": [] },
+              { "label": "Manage and mitigate chronic stress", "body": [] },
+              { "label": "Maintain a healthy weight when appropriate", "body": [] },
+              { "label": "Avoid tobacco products", "body": [] },
+              { "label": "Treat underlying medical conditions", "body": [] }
             ]
-          }
+          },
+          "closing": [
+            "Notice a trend? These aren't secret \"anti-inflammatory tricks.\" They are simply the unshakeable foundations of good health."
+          ]
         }
       ],
       "perspective": {
-        "title": "This Is Where the Arc Begins",
+        "title": "Arc Wellness Perspective",
         "body": [
           "At Arc Wellness, we don't believe inflammation is something to fear. We believe it's something to understand.",
-          "Your body isn't trying to work against you. More often than not, it's simply responding to something it perceives as a threat or a challenge. Our role is to step back, look at the whole picture, and ask better questions: Why is your body responding this way? Is there an underlying medical condition? Could nutrition, sleep, stress, hormones, or metabolic health be contributing?",
+          "Your body isn't trying to work against you. More often than not, it's simply responding to something it perceives as a threat or a challenge. Our role is to step back, look at the whole picture, and ask better questions:",
+          "Why is your body responding this way?",
+          "Is there an underlying medical condition?",
+          "Could your nutrition, sleep, stress, hormones, or metabolic health be contributing?",
+          "What changes are likely to have the greatest impact, not just for today, but for the decades ahead?",
       "Our goal isn't simply to quiet your symptoms. It's to help create an environment where your body can heal, recover, and function exactly the way it was beautifully designed to."
-    ]
-      }
+        ],
+        "cta": {
+          "lead": "Understand what's behind your symptoms.",
+          "body": "If you're in the St. Louis area, our physician-led team is here to help you look at the whole picture—not just a single lab marker.",
+          "label": "Book a consultation"
+        }
+      },
+      "primaryCtaLabel": "Book a consultation",
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "Is all inflammation bad?",
+            "answer": "No. Acute inflammation is a healthy, essential response that helps your body heal from injury and infection. It only becomes a concern when it turns chronic and continues long after the original trigger is gone."
+          },
+          {
+            "question": "How do I know if I have chronic inflammation?",
+            "answer": "Chronic inflammation often shows up as a cluster of subtle symptoms, persistent fatigue, brain fog, achy joints, poor sleep, or slower recovery, rather than one obvious sign. A physician-guided evaluation, sometimes including markers like CRP, combined with a look at your metabolic health and lifestyle, gives a clearer picture than any single lab number alone."
+          },
+          {
+            "question": "Can chronic inflammation be reversed?",
+            "answer": "In many cases, yes. Chronic inflammation often responds well to the same foundational habits that support overall health: better sleep, regular movement, a nutrient-dense diet, stress management, and treatment of any underlying medical conditions."
+          },
+          {
+            "question": "Where can I get inflammation testing and support in St. Louis?",
+            "answer": "Arc Wellness offers physician-led evaluations at our St. Louis, MO location that look beyond a single lab marker to your full health picture, including hormone health, gut health, and long-term longevity planning."
+          }
+        ]
+      },
+      "disclaimer": "This article is for educational purposes and is not a substitute for personalized medical advice."
+    },
+    "seo": {
+      "title": "Understanding Chronic Inflammation | Arc Wellness, STL",
+      "description": "Not all inflammation is bad. Arc Wellness in St. Louis explains acute vs. chronic inflammation, warning signs, and how to support your body.",
+      "schemaHeadline": "Understanding Chronic Inflammation in St. Louis, MO",
+      "schemaImage": "/assets/insights/understanding-chronic-inflammation/hero-preview.webp?v=20260819c",
+      "focusKeyword": "chronic inflammation",
+      "secondaryKeywords": [
+        "understanding chronic inflammation",
+        "acute vs chronic inflammation",
+        "inflammation symptoms",
+        "CRP testing",
+        "anti-inflammatory diet",
+        "inflammation St. Louis",
+        "Arc Wellness"
+      ]
     }
   },
   {

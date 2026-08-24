@@ -14,7 +14,7 @@ type PageProps = {
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://arcwellness.netlify.app";
+  "https://arcwellness.net";
 
 const PUBLISHER_LOGO = `${SITE_URL}/assets/branding/arc-wellness-logo-transparent-gold.webp`;
 
@@ -35,9 +35,13 @@ function buildBlogJsonLd(entry: InsightEntry) {
   const pageUrl = `${SITE_URL}/blogs/${entry.slug}`;
   const description =
     entry.seo?.description?.trim() || entry.excerpt;
-  const headline = entry.seo?.title?.replace(/\s*\|\s*Arc Wellness\s*$/i, "").trim() || entry.title;
+  const headline =
+    entry.seo?.schemaHeadline?.trim() ||
+    entry.seo?.title?.replace(/\s*\|\s*Arc Wellness(?:,\s*STL)?\s*$/i, "").trim() ||
+    entry.title;
   const date = publishedAtToIso(entry.publishedAt);
-  const image = entry.imageSrc ? absoluteAssetUrl(entry.imageSrc) : undefined;
+  const imageSrc = entry.seo?.schemaImage?.trim() || entry.imageSrc;
+  const image = imageSrc ? absoluteAssetUrl(imageSrc) : undefined;
 
   const article: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -99,7 +103,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const entry = getInsightEntryBySlug(slug);
-  if (!entry) return { title: "From the Arc Desk | Arc Wellness" };
+  if (!entry) return { title: "Education | Arc Wellness" };
   const title =
     entry.seo?.title?.trim() || `${entry.title} | Arc Wellness`;
   const description =

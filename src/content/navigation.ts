@@ -384,12 +384,15 @@ export const ARC_LIBRARY_MENU_PRESERVED: readonly NavColumn[] = [
   },
 ];
 
-/** ARC LIBRARY — Start Here–style slim panel (live links only). */
+/** ARC LIBRARY — three live sections (desk · education · table). */
 const arcLibraryMenu: readonly NavColumn[] = [
   {
     groups: [
       {
-        items: [leaf("From the Arc Desk", "/blogs")],
+        items: [
+          leaf("Education", "/library/education"),
+          leaf("From the Arc Desk", "/library/desk"),
+        ],
       },
     ],
   },
@@ -513,7 +516,7 @@ const ARC_NAV_TOP_ITEMS_SOURCE: readonly NavTopItem[] = [
   {
     id: "arc-library",
     label: "Arc Library",
-    href: "/blogs",
+    href: "/library/education",
     columns: arcLibraryMenu,
     panelAlign: "tab",
   },

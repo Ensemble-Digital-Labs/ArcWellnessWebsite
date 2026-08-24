@@ -7,8 +7,12 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import { INSIGHTS_FEED_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import {
+  ArcLibraryMasthead,
+  type ArcLibraryMastheadCopy,
+} from "@/components/arc/ArcLibraryMasthead";
+import { libraryEducationPage } from "@/content/pages/library-education";
+import {
   insightHref,
-  insightsPage,
   type InsightEntry,
   type InsightKind,
 } from "@/content/pages/insights";
@@ -21,16 +25,11 @@ import {
 import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
-import { ArcTextReveal } from "@/components/arc/ArcTextReveal";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
-import { TitleEmphasis } from "@/components/arc/TitleEmphasis";
 
-/** Matches Contact / Financing masthead — Birthstone script, not heavy uppercase sans. */
-const INSIGHTS_MASTHEAD_CLASS = cn(
-  "inline-block font-title-emphasis font-normal not-italic leading-[0.9] tracking-tight text-black",
-  "text-[clamp(5.5rem,22vw,7.5rem)] md:text-[clamp(6.5rem,13vw,10.5rem)] lg:text-[clamp(7.75rem,11vw,11.5rem)]",
-  "[text-shadow:0_1px_2px_rgba(255,255,255,0.5)]",
-);
+
+const DEFAULT_EDUCATION_MASTHEAD: ArcLibraryMastheadCopy =
+  libraryEducationPage.masthead;
 
 type InsightFilter = "all" | InsightKind;
 
@@ -41,6 +40,7 @@ type InsightFilter = "all" | InsightKind;
 const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "insulin-resistance-signs-symptoms",
   "hormones-through-the-decades-st-louis-mo",
+  "understanding-chronic-inflammation",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
@@ -363,12 +363,18 @@ export function ArcInsightsFeedSection({
   id = "insights-feed",
   entries,
   bottomSeam = false,
+  masthead = DEFAULT_EDUCATION_MASTHEAD,
+  filterAriaLabel = libraryEducationPage.filterAriaLabel,
+  filterUnderlineId = "insights-filter-underline",
 }: {
   id?: string;
   entries: readonly InsightEntry[];
   bottomSeam?: boolean;
+  masthead?: ArcLibraryMastheadCopy;
+  filterAriaLabel?: string;
+  /** Unique layoutId per hub so underline motion does not clash across routes. */
+  filterUnderlineId?: string;
 }) {
-  const { feed } = insightsPage;
   const pathname = usePathname();
   const sectionRef = useRef<HTMLElement>(null);
   const mastheadTitleRef = useRef<HTMLHeadingElement>(null);
@@ -481,25 +487,11 @@ export function ArcInsightsFeedSection({
           )}
         >
           <div className="mx-auto w-full max-w-[min(100%,1440px)]">
-            <header className="pb-10 text-center sm:pb-12 md:pb-14">
-              <ArcTextReveal variant="heading" trigger="mount" when>
-                <h1
-                  ref={mastheadTitleRef}
-                  id="insights-masthead-title"
-                  className="leading-[0.9] tracking-tight"
-                >
-                  <TitleEmphasis className={INSIGHTS_MASTHEAD_CLASS}>
-                    From the{" "}
-                    <span className="whitespace-nowrap">Arc Desk</span>
-                  </TitleEmphasis>
-                </h1>
-              </ArcTextReveal>
-              {/* Spacer keeps former subtitle gap under the masthead. */}
-              <div
-                className="mx-auto mt-5 h-[2.75rem] max-w-2xl sm:h-[3.25rem] md:mt-6"
-                aria-hidden
-              />
-            </header>
+            <ArcLibraryMasthead
+              copy={masthead}
+              titleRef={mastheadTitleRef}
+              titleId="insights-masthead-title"
+            />
           </div>
         </div>
       </div>
@@ -510,7 +502,7 @@ export function ArcInsightsFeedSection({
             id="insights-filter-bar"
             className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b-2 border-arc-charcoal/25 pt-8 sm:gap-x-10 sm:pt-10 md:gap-x-14"
             role="tablist"
-            aria-label="Filter insights"
+            aria-label={filterAriaLabel}
           >
             {tabs.map((tab) => {
               const active = filter === tab;
@@ -534,7 +526,7 @@ export function ArcInsightsFeedSection({
                   ) : null}
                   {active ? (
                     <motion.span
-                      layoutId="insights-filter-underline"
+                      layoutId={filterUnderlineId}
                       className="absolute inset-x-0 bottom-0 h-[2px] bg-arc-charcoal"
                       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                     />

@@ -71,7 +71,7 @@ export const metadata: Metadata = {
  * Skips entirely under reduced-motion. A failsafe timeout clears the flag/attr
  * so JS/hydration stalls can never trap the user behind the overlay.
  */
-const ARC_INTRO_PREPAINT_SCRIPT = `(function(){try{var d=document.documentElement;if(location.pathname!=="/")return;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("arc-intro-seen")==="1")return;sessionStorage.setItem("arc-intro-seen","1");d.setAttribute("data-arc-intro","active");window.setTimeout(function(){if(d.getAttribute("data-arc-intro"))d.removeAttribute("data-arc-intro");},6000);}catch(e){}})();`;
+const ARC_INTRO_PREPAINT_SCRIPT = `(function(){try{var d=document.documentElement;var p=location.pathname;if(p!=="/"&&p!=="")return;if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("arc-intro-seen")==="1")return;sessionStorage.setItem("arc-intro-seen","1");d.setAttribute("data-arc-intro","active");window.setTimeout(function(){if(d.getAttribute("data-arc-intro"))d.removeAttribute("data-arc-intro");},6000);}catch(e){}})();`;
 
 export default function RootLayout({
   children,

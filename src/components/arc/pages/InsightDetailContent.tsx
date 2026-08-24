@@ -40,11 +40,11 @@ type InsightDetailContentProps = {
 type NextStep = { label: string; href: string };
 
 function backHref(kind: InsightKind): string {
-  return kind === "blog" ? "/blogs?filter=blog" : "/blogs";
+  return kind === "blog" ? "/library/education?filter=blog" : "/library/education";
 }
 
 function backLabel(kind: InsightKind): string {
-  return kind === "blog" ? "All blogs" : "From the Arc Desk";
+  return kind === "blog" ? "All blogs" : "Education";
 }
 
 function kindLabel(kind: InsightKind): string {
@@ -164,9 +164,11 @@ function MetaPill({ children }: { children: string }) {
 function SectionFigure({
   image,
   className,
+  sizes = "(max-width: 768px) 100vw, 42rem",
 }: {
   image: InsightSectionImage;
   className?: string;
+  sizes?: string;
 }) {
   return (
     <figure className={cn("overflow-hidden", className)}>
@@ -175,7 +177,7 @@ function SectionFigure({
           src={image.src}
           alt={image.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 42rem"
+          sizes={sizes}
           className="object-cover"
         />
       </div>
@@ -234,13 +236,13 @@ function SectionList({ list }: { list: InsightSectionList }) {
               {titleOnly ? (
                 <div className="flex gap-3">
                   <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-                  <p className="font-serif text-lg leading-snug tracking-tight text-arc-teal-ink sm:text-xl">
+                  <p className="font-serif text-lg leading-snug tracking-tight text-balance text-arc-teal-ink sm:text-xl">
                     {item.label}
                   </p>
                 </div>
               ) : (
                 <>
-                  <p className="font-serif text-lg tracking-tight text-arc-teal-ink sm:text-xl">
+                  <p className="text-center font-serif text-lg leading-snug tracking-tight text-balance whitespace-pre-line text-arc-teal-ink sm:text-xl">
                     {item.label}
                   </p>
                   {lines ? (
@@ -249,7 +251,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
                         {lines.map((line) => (
                           <li key={line} className="flex gap-2.5">
                             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-                            <span className="font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]">
+                            <span className="font-sans text-sm leading-relaxed text-pretty text-arc-charcoal/80 sm:text-[0.9375rem]">
                               {line}
                             </span>
                           </li>
@@ -373,10 +375,22 @@ function ArticleSection({ section }: { section: InsightArticleSection }) {
         <SectionFigure image={section.image} className="mb-8" />
       ) : null}
       {section.images?.length ? (
-        <ul className="mb-8 grid gap-4 sm:grid-cols-3">
+        <ul
+          className={cn(
+            "mb-8 grid gap-4",
+            section.images.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3",
+          )}
+        >
           {section.images.map((fig) => (
             <li key={fig.src}>
-              <SectionFigure image={fig} />
+              <SectionFigure
+                image={fig}
+                sizes={
+                  section.images!.length === 2
+                    ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 21rem"
+                    : "(max-width: 768px) 100vw, 14rem"
+                }
+              />
             </li>
           ))}
         </ul>
@@ -442,9 +456,6 @@ function ContinuePath({ nextSteps }: { nextSteps: readonly NextStep[] }) {
       aria-label="Continue"
     >
       <h2 className={SECTION_HEADING}>Continue your path</h2>
-      <p className={cn(PROSE, "mx-auto mt-3 max-w-xl")}>
-        Ready for personalized care, or want to keep reading?
-      </p>
       <ul className="mx-auto mt-6 max-w-xl divide-y divide-arc-charcoal/15 border-y border-arc-charcoal/15">
         {nextSteps.map((step) => (
           <li key={step.label}>
@@ -774,10 +785,6 @@ function LegacyEditorial({
 
 export function InsightDetailContent({ entry }: InsightDetailContentProps) {
   const nextSteps: readonly NextStep[] = [
-    {
-      label: entry.article?.primaryCtaLabel?.trim() || "Book a consultation",
-      href: siteMeta.bookingUrl,
-    },
     { label: backLabel(entry.kind), href: backHref(entry.kind) },
     { label: "Explore treatments", href: "/treatments" },
   ];

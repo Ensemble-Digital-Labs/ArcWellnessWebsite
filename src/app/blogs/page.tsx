@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: insightsPage.seo.description,
 };
 
-/** From the Arc Desk hub — blogs + desk posts (`/blogs`). */
+/** Education hub — redirects to `/library/education`; kept for legacy imports. */
 export default function BlogsHubPage() {
   const entries = getInsightEntries();
 

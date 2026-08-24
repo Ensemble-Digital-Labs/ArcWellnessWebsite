@@ -43,7 +43,7 @@ function TikTokIcon({ className }: { className?: string }) {
 const footerLinks = {
   About: [
     { label: "Our story", href: "/about" },
-    { label: "From the Arc Desk", href: "/blogs" },
+    { label: "Arc Library", href: "/library/education" },
     { label: "Contact", href: "/contact" },
   ],
   Services: [
