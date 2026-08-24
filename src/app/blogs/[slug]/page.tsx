@@ -42,20 +42,25 @@ function buildBlogJsonLd(entry: InsightEntry) {
   const date = publishedAtToIso(entry.publishedAt);
   const imageSrc = entry.seo?.schemaImage?.trim() || entry.imageSrc;
   const image = imageSrc ? absoluteAssetUrl(imageSrc) : undefined;
+  const specialty = entry.seo?.medicalSpecialty?.trim();
+  const condition = entry.seo?.medicalCondition?.trim();
+  const isMedical = Boolean(specialty || condition);
 
   const article: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": isMedical ? ["BlogPosting", "MedicalWebPage"] : "BlogPosting",
     headline,
     description,
+    url: pageUrl,
     author: {
       "@type": "Organization",
       name: "Arc Wellness",
-      url: `${SITE_URL}/about`,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Arc Wellness",
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
         url: PUBLISHER_LOGO,
@@ -70,6 +75,19 @@ function buildBlogJsonLd(entry: InsightEntry) {
   if (date) {
     article.datePublished = date;
     article.dateModified = date;
+  }
+  if (specialty) article.specialty = specialty;
+  if (isMedical) {
+    article.medicalAudience = {
+      "@type": "MedicalAudience",
+      audienceType: "Patient",
+    };
+  }
+  if (condition) {
+    article.about = {
+      "@type": "MedicalCondition",
+      name: condition,
+    };
   }
 
   const schemas: Record<string, unknown>[] = [article];

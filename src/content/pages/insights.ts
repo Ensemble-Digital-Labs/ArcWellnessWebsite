@@ -132,6 +132,9 @@ export type InsightEntry = {
     schemaImage?: string;
     focusKeyword?: string;
     secondaryKeywords?: readonly string[];
+    /** When set, JSON-LD also emits MedicalWebPage + related medical fields. */
+    medicalSpecialty?: string;
+    medicalCondition?: string;
   };
 };
 
