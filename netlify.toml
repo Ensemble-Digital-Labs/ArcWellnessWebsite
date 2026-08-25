@@ -6,8 +6,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  # pdfjs-dist pulls optional @napi-rs/canvas natives; omit them on Netlify CI.
+  # pdfjs-dist pulls optional @napi-rs/canvas natives; omit them on Netlify CI only.
   NPM_FLAGS = "--omit=optional"
+  NPM_CONFIG_OMIT = "optional"
+  PNPM_FLAGS = "--config.optional=false"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
