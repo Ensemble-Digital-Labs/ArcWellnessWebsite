@@ -74,6 +74,8 @@ export type InsightArticle = {
   closingLine?: string;
   /** Optional emphasis line under overview prose. */
   overviewCallout?: string;
+  /** Optional byline under the excerpt (e.g. medically reviewed credit). */
+  authorCredit?: string;
   sections: readonly InsightArticleSection[];
   perspective: {
     title: string;
@@ -128,6 +130,8 @@ export type InsightEntry = {
     description?: string;
     /** JSON-LD Article `headline` when it should differ from the meta title. */
     schemaHeadline?: string;
+    /** JSON-LD description when it should differ from meta description. */
+    schemaDescription?: string;
     /** JSON-LD / Open Graph image path when it should differ from `imageSrc`. */
     schemaImage?: string;
     focusKeyword?: string;
@@ -135,6 +139,10 @@ export type InsightEntry = {
     /** When set, JSON-LD also emits MedicalWebPage + related medical fields. */
     medicalSpecialty?: string;
     medicalCondition?: string;
+    /** Person author for medical schema (falls back to Organization). */
+    authorName?: string;
+    /** Absolute or site path for the author Person URL. */
+    authorUrl?: string;
   };
 };
 

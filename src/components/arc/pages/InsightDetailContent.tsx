@@ -87,13 +87,16 @@ function renderProseInline(text: string) {
           </Link>
         );
       }
+      const isTelOrMail =
+        href.startsWith("tel:") || href.startsWith("mailto:");
       return (
         <a
           key={i}
           href={href}
           className={className}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...(isTelOrMail
+            ? {}
+            : { rel: "noopener noreferrer", target: "_blank" })}
         >
           {label}
         </a>
@@ -252,7 +255,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
                           <li key={line} className="flex gap-2.5">
                             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
                             <span className="font-sans text-sm leading-relaxed text-pretty text-arc-charcoal/80 sm:text-[0.9375rem]">
-                              {line}
+                              {renderProseInline(line)}
                             </span>
                           </li>
                         ))}
@@ -260,7 +263,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
                     ) : null
                   ) : (
                     <p className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]">
-                      {item.body}
+                      {renderProseInline(item.body)}
                     </p>
                   )}
                 </>
@@ -431,7 +434,9 @@ function PerspectiveBlock({
             {cta.lead}
           </p>
           {cta.body ? (
-            <p className={cn(PROSE, "mx-auto mt-3 max-w-xl")}>{cta.body}</p>
+            <p className={cn(PROSE, "mx-auto mt-3 max-w-xl")}>
+              {renderProseInline(cta.body)}
+            </p>
           ) : null}
           <Link
             href={bookingHref}
@@ -526,6 +531,12 @@ function TypedEditorial({
                 {entry.excerpt}
               </p>
             </ArcTextReveal>
+
+            {article.authorCredit ? (
+              <p className="mx-auto mt-4 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/60 sm:text-[0.9375rem]">
+                {article.authorCredit}
+              </p>
+            ) : null}
 
             {article.closingLine ? (
               <p className="mx-auto mt-5 max-w-md font-serif text-sm italic text-arc-teal-ink sm:text-base">
