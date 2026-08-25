@@ -261,11 +261,11 @@ function SectionList({ list }: { list: InsightSectionList }) {
                         ))}
                       </ul>
                     ) : null
-                  ) : (
+                  ) : typeof item.body === "string" ? (
                     <p className="mt-2 font-sans text-sm leading-relaxed text-arc-charcoal/80 sm:text-[0.9375rem]">
                       {renderProseInline(item.body)}
                     </p>
-                  )}
+                  ) : null}
                 </>
               )}
             </li>
