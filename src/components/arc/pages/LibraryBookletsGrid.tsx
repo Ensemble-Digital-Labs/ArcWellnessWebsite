@@ -11,7 +11,10 @@ import {
   ARC_HEADLINE_TITLE_EMPHASIS_TEAL_CLASS,
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
-import type { LibraryBooklet } from "@/content/library/desk";
+import {
+  libraryBookletDownloadSrc,
+  type LibraryBooklet,
+} from "@/content/library/desk";
 import { ARC_FULLSCREEN_MODAL_Z_CLASS } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
@@ -67,8 +70,8 @@ function BookletPdfOverlay({
           </h2>
           <div className="flex shrink-0 items-center gap-2">
             <a
-              href={booklet.pdfSrc}
-              download
+              href={libraryBookletDownloadSrc(booklet)}
+              download={`${booklet.slug}.pdf`}
               className={cn(
                 cardButtonClass,
                 "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
@@ -180,8 +183,8 @@ function BookletCard({
           Read
         </button>
         <a
-          href={booklet.pdfSrc}
-          download
+          href={libraryBookletDownloadSrc(booklet)}
+          download={`${booklet.slug}.pdf`}
           className={cn(
             cardButtonClass,
             "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",

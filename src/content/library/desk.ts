@@ -6,7 +6,10 @@ export type LibraryBooklet = {
   subtitleLines?: readonly string[];
   description: string;
   pageCount: number;
+  /** On-site reader (may be a smaller web PDF). */
   pdfSrc: string;
+  /** Optional full-quality file for Download; falls back to `pdfSrc`. */
+  downloadSrc?: string;
   coverSrc: string;
   coverAlt: string;
 };
@@ -67,4 +70,8 @@ export function getLibraryBooklet(slug: string): LibraryBooklet | undefined {
 
 export function libraryBookletHref(slug: string): string {
   return `/library/desk/${slug}`;
+}
+
+export function libraryBookletDownloadSrc(booklet: LibraryBooklet): string {
+  return booklet.downloadSrc ?? booklet.pdfSrc;
 }

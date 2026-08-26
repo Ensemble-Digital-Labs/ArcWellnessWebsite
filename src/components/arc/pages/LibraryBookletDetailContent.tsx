@@ -4,7 +4,10 @@ import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import type { LibraryBooklet } from "@/content/library/desk";
+import {
+  libraryBookletDownloadSrc,
+  type LibraryBooklet,
+} from "@/content/library/desk";
 import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
@@ -57,8 +60,8 @@ export function LibraryBookletDetailContent({
                 Open PDF
               </a>
               <a
-                href={booklet.pdfSrc}
-                download
+                href={libraryBookletDownloadSrc(booklet)}
+                download={`${booklet.slug}.pdf`}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-arc-charcoal/20 px-6 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-arc-charcoal transition-colors hover:border-arc-teal-ink hover:text-arc-teal-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2"
               >
                 <Download className="size-4" aria-hidden />
