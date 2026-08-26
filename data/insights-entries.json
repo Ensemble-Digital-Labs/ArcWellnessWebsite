@@ -1039,9 +1039,9 @@
       "Gut–brain axis: It has a close relationship with your brain through what researchers call the [gut–brain axis](/treatments/gut-health).",
       "Common Signs Your Gut May Need Attention",
       "Not every digestive symptom points to a serious condition. Many can be temporary and resolve on their own. But if symptoms become persistent, frequent, or begin affecting your quality of life, they deserve a closer look.",
+      "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring.",
       "Non-digestive signs that may be worth exploring: Brain fog; Low energy; Iron deficiency or vitamin deficiencies; Skin changes; Difficulty maintaining a healthy weight; [Ongoing inflammation](/blogs/understanding-chronic-inflammation); Changes in mood",
       "Common digestive signs: Frequent bloating; Constipation; Diarrhea; Alternating constipation and diarrhea; Excessive gas; Acid reflux or frequent heartburn; Stomach discomfort after eating; Feeling overly full after small meals; Food intolerances or increasing food sensitivities; Nausea; Abdominal pain or cramping; Unexplained fatigue after meals",
-      "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring.",
       "The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system.",
       "What Causes Digestive Problems?",
       "There isn't one single answer. Digestive symptoms can result from many different conditions, including:",
@@ -1151,7 +1151,8 @@
         {
           "title": "Common Signs Your Gut May Need Attention",
           "body": [
-            "Not every digestive symptom points to a serious condition. Many can be temporary and resolve on their own. But if symptoms become persistent, frequent, or begin affecting your quality of life, they deserve a closer look."
+            "Not every digestive symptom points to a serious condition. Many can be temporary and resolve on their own. But if symptoms become persistent, frequent, or begin affecting your quality of life, they deserve a closer look.",
+            "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring."
           ],
           "list": {
             "style": "cards",
@@ -1188,7 +1189,6 @@
             ]
           },
           "closing": [
-            "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring.",
             "The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system."
           ],
           "image": {

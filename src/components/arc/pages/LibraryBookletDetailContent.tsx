@@ -86,7 +86,8 @@ export function LibraryBookletDetailContent({
             ) : (
               <div
                 data-pdf-scroll
-                className="max-h-[80dvh] min-h-[70dvh] overflow-y-auto overscroll-contain bg-[#ebe4d6]"
+                data-arc-modal-scroll
+                className="max-h-[80dvh] min-h-[70dvh] touch-pan-y overflow-y-auto overscroll-contain bg-[#ebe4d6]"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
                 <LibraryPdfPages src={booklet.pdfSrc} />

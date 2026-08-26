@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Download, FileText, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -17,6 +17,7 @@ import {
   type LibraryBooklet,
 } from "@/content/library/desk";
 import { ARC_FULLSCREEN_MODAL_Z_CLASS } from "@/lib/arc-layout";
+import { lockArcPageScrollForModal } from "@/lib/arcModalScrollLock";
 import { cn } from "@/lib/utils";
 
 const cardButtonClass =
@@ -32,9 +33,8 @@ function BookletPdfOverlay({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
+    const unlock = lockArcPageScrollForModal();
+    closeRef.current?.focus({ preventScroll: true });
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -42,8 +42,8 @@ function BookletPdfOverlay({
     window.addEventListener("keydown", onKey);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKey);
+      unlock();
     };
   }, [onClose]);
 
@@ -53,6 +53,7 @@ function BookletPdfOverlay({
         "fixed inset-0 flex h-[100dvh] flex-col bg-arc-charcoal/70 p-3 backdrop-blur-[2px] sm:p-5",
         ARC_FULLSCREEN_MODAL_Z_CLASS,
       )}
+      data-lenis-prevent
       role="dialog"
       aria-modal="true"
       aria-labelledby="booklet-pdf-title"
@@ -96,7 +97,8 @@ function BookletPdfOverlay({
         </header>
         <div
           data-pdf-scroll
-          className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+          data-arc-modal-scroll
+          className="min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
           <LibraryPdfPages src={booklet.pdfSrc} />
@@ -217,6 +219,7 @@ export function LibraryBookletsGrid({
   };
 }) {
   const [openBooklet, setOpenBooklet] = useState<LibraryBooklet | null>(null);
+  const closeBooklet = useCallback(() => setOpenBooklet(null), []);
   const single = booklets.length === 1;
 
   return (
@@ -254,7 +257,7 @@ export function LibraryBookletsGrid({
       </ul>
 
       {openBooklet ? (
-        <BookletPdfOverlay booklet={openBooklet} onClose={() => setOpenBooklet(null)} />
+        <BookletPdfOverlay booklet={openBooklet} onClose={closeBooklet} />
       ) : null}
     </>
   );
