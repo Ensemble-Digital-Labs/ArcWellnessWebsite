@@ -5,6 +5,26 @@ import type { PDFDocumentProxy } from "pdfjs-dist";
 
 const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
 
+/** Phone CSS width is small; undersampled canvases look soft, especially photo spreads. */
+const MIN_BITMAP_WIDTH_NARROW = 2000;
+const MIN_BITMAP_WIDTH_WIDE = 1400;
+const MAX_BITMAP_WIDTH = 3200;
+
+function targetBitmapWidth(cssWidth: number): number {
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const narrow = window.matchMedia("(max-width: 767px)").matches;
+  const minBitmap = narrow ? MIN_BITMAP_WIDTH_NARROW : MIN_BITMAP_WIDTH_WIDE;
+  return Math.min(Math.max(Math.floor(cssWidth * dpr), minBitmap), MAX_BITMAP_WIDTH);
+}
+
+function isPdfjsCancelled(reason: unknown): boolean {
+  const name =
+    reason && typeof reason === "object" && "name" in reason
+      ? String((reason as { name?: string }).name)
+      : "";
+  return name === "RenderingCancelledException" || name === "AbortException";
+}
+
 function PdfPageCanvas({
   pdf,
   pageNumber,
@@ -22,6 +42,9 @@ function PdfPageCanvas({
     if (!wrap || !canvas) return;
 
     let cancelled = false;
+    let visible = false;
+    let lastBitmapWidth = 0;
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     let renderTask: { cancel: () => void; promise: Promise<void> } | null = null;
 
     const render = async () => {
@@ -29,11 +52,14 @@ function PdfPageCanvas({
       if (cancelled) return;
 
       const base = page.getViewport({ scale: 1 });
-      setAspect(base.height / base.width);
+      const nextAspect = base.height / base.width;
+      setAspect((prev) => (Math.abs(prev - nextAspect) < 0.001 ? prev : nextAspect));
 
       const cssWidth = wrap.clientWidth || window.innerWidth;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-      const scale = (cssWidth / base.width) * pixelRatio;
+      const bitmapWidth = targetBitmapWidth(cssWidth);
+      if (bitmapWidth === lastBitmapWidth && canvas.width > 0) return;
+
+      const scale = bitmapWidth / base.width;
       const viewport = page.getViewport({ scale });
 
       canvas.width = Math.floor(viewport.width);
@@ -43,27 +69,54 @@ function PdfPageCanvas({
 
       const context = canvas.getContext("2d", { alpha: false });
       if (!context) return;
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
 
+      renderTask?.cancel();
       // pdfjs-dist v6 RenderParameters requires `canvas` (canvasContext optional).
       renderTask = page.render({ canvas, canvasContext: context, viewport });
-      await renderTask.promise;
+      try {
+        await renderTask.promise;
+        lastBitmapWidth = bitmapWidth;
+      } catch (reason) {
+        if (cancelled || isPdfjsCancelled(reason)) return;
+        throw reason;
+      }
+    };
+
+    const requestRender = () => {
+      void render().catch((reason: unknown) => {
+        if (cancelled || isPdfjsCancelled(reason)) return;
+        console.error(reason);
+      });
     };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void render();
-        }
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        visible = true;
+        requestRender();
       },
       { root: wrap.closest("[data-pdf-scroll]"), rootMargin: "240px 0px" },
     );
 
     observer.observe(wrap);
 
+    const resizeObserver = new ResizeObserver(() => {
+      if (!visible) return;
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        requestRender();
+      }, 160);
+    });
+    resizeObserver.observe(wrap);
+
     return () => {
       cancelled = true;
       observer.disconnect();
+      resizeObserver.disconnect();
+      if (resizeTimer) clearTimeout(resizeTimer);
       renderTask?.cancel();
     };
   }, [pdf, pageNumber]);
