@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
-import { LibraryPdfPages } from "@/components/arc/pages/LibraryPdfPages";
+import { LibraryPdfPages, LibraryPdfScroller } from "@/components/arc/pages/LibraryPdfPages";
 import {
   libraryBookletAllowsDownload,
   libraryBookletDownloadSrc,
@@ -84,14 +84,9 @@ export function LibraryBookletDetailContent({
                 className="aspect-[3/4] w-full min-h-[70dvh] bg-[#ebe4d6] sm:aspect-[4/3] sm:min-h-[80dvh]"
               />
             ) : (
-              <div
-                data-pdf-scroll
-                data-arc-modal-scroll
-                className="max-h-[80dvh] min-h-[70dvh] touch-pan-y overflow-y-auto overscroll-contain bg-[#ebe4d6]"
-                style={{ WebkitOverflowScrolling: "touch" }}
-              >
+              <LibraryPdfScroller className="max-h-[80dvh] min-h-[70dvh] bg-[#ebe4d6]">
                 <LibraryPdfPages src={booklet.pdfSrc} />
-              </div>
+              </LibraryPdfScroller>
             )}
           </div>
 

@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type {
   PDFDocumentLoadingTask,
   PDFDocumentProxy,
   PDFPageProxy,
   RenderTask,
 } from "pdfjs-dist";
+
+import { cn } from "@/lib/utils";
 
 const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
 
@@ -381,6 +383,175 @@ export function LibraryPdfPages({ src }: { src: string }) {
           defaultAspect={defaultAspect}
         />
       ))}
+    </div>
+  );
+}
+
+const MIN_PDF_ZOOM = 1;
+const MAX_PDF_ZOOM = 3.5;
+
+function pinchDistance(touches: TouchList) {
+  const first = touches[0];
+  const second = touches[1];
+  if (!first || !second) return 0;
+  return Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY);
+}
+
+function pinchMidpoint(touches: TouchList) {
+  const first = touches[0];
+  const second = touches[1];
+  if (!first || !second) return { x: 0, y: 0 };
+  return {
+    x: (first.clientX + second.clientX) / 2,
+    y: (first.clientY + second.clientY) / 2,
+  };
+}
+
+/** Scroll shell with iPhone pinch / double-tap zoom for stacked PDF pages. */
+export function LibraryPdfScroller({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const sizerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    const sizer = sizerRef.current;
+    const inner = innerRef.current;
+    if (!scroller || !sizer || !inner) return;
+
+    let zoom = 1;
+    let pinching = false;
+    let pinchStartDist = 1;
+    let pinchStartZoom = 1;
+    let lastTapAt = 0;
+    let lastTapX = 0;
+    let lastTapY = 0;
+
+    const applyZoom = (next: number, clientX: number, clientY: number) => {
+      const clamped = Math.min(MAX_PDF_ZOOM, Math.max(MIN_PDF_ZOOM, next));
+      const prev = zoom;
+      if (Math.abs(clamped - prev) < 0.004) return;
+
+      const rect = scroller.getBoundingClientRect();
+      const originX = clientX - rect.left + scroller.scrollLeft;
+      const originY = clientY - rect.top + scroller.scrollTop;
+      const ratio = clamped / prev;
+
+      zoom = clamped;
+      if (clamped === 1) {
+        inner.style.transform = "none";
+        inner.style.width = "100%";
+        sizer.style.width = "100%";
+        sizer.style.height = "auto";
+        scroller.scrollLeft = 0;
+        return;
+      }
+
+      inner.style.transformOrigin = "0 0";
+      inner.style.transform = `scale(${clamped})`;
+      sizer.style.width = `${clamped * 100}%`;
+      inner.style.width = `${100 / clamped}%`;
+      sizer.style.height = `${inner.offsetHeight * clamped}px`;
+      scroller.scrollLeft = originX * ratio - (clientX - rect.left);
+      scroller.scrollTop = originY * ratio - (clientY - rect.top);
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length >= 2) {
+        pinching = true;
+        pinchStartDist = pinchDistance(event.touches) || 1;
+        pinchStartZoom = zoom;
+        lastTapAt = 0;
+        return;
+      }
+
+      const touch = event.touches[0];
+      if (!touch) return;
+      const now = performance.now();
+      const nearLast = Math.hypot(touch.clientX - lastTapX, touch.clientY - lastTapY) < 44;
+      if (now - lastTapAt < 280 && nearLast) {
+        event.preventDefault();
+        applyZoom(zoom > 1.05 ? 1 : 2, touch.clientX, touch.clientY);
+        lastTapAt = 0;
+        return;
+      }
+      lastTapAt = now;
+      lastTapX = touch.clientX;
+      lastTapY = touch.clientY;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!pinching || event.touches.length < 2) return;
+      event.preventDefault();
+      const point = pinchMidpoint(event.touches);
+      applyZoom(
+        pinchStartZoom * (pinchDistance(event.touches) / pinchStartDist),
+        point.x,
+        point.y,
+      );
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      if (event.touches.length < 2) pinching = false;
+    };
+
+    const preventSafariGesture = (event: Event) => {
+      event.preventDefault();
+    };
+
+    const syncHeight = () => {
+      if (zoom === 1) {
+        sizer.style.height = "auto";
+        return;
+      }
+      sizer.style.height = `${inner.offsetHeight * zoom}px`;
+    };
+
+    scroller.addEventListener("touchstart", onTouchStart, { passive: false });
+    scroller.addEventListener("touchmove", onTouchMove, { passive: false });
+    scroller.addEventListener("touchend", onTouchEnd);
+    scroller.addEventListener("touchcancel", onTouchEnd);
+    scroller.addEventListener("gesturestart", preventSafariGesture);
+    scroller.addEventListener("gesturechange", preventSafariGesture);
+    scroller.addEventListener("gestureend", preventSafariGesture);
+
+    const resizeObserver = new ResizeObserver(syncHeight);
+    resizeObserver.observe(inner);
+
+    return () => {
+      scroller.removeEventListener("touchstart", onTouchStart);
+      scroller.removeEventListener("touchmove", onTouchMove);
+      scroller.removeEventListener("touchend", onTouchEnd);
+      scroller.removeEventListener("touchcancel", onTouchEnd);
+      scroller.removeEventListener("gesturestart", preventSafariGesture);
+      scroller.removeEventListener("gesturechange", preventSafariGesture);
+      scroller.removeEventListener("gestureend", preventSafariGesture);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={scrollerRef}
+      data-pdf-scroll
+      data-arc-modal-scroll
+      className={cn(
+        "min-h-0 overflow-auto overscroll-contain [touch-action:pan-x_pan-y]",
+        className,
+      )}
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
+      <div ref={sizerRef} className="relative w-full">
+        <div ref={innerRef} className="w-full origin-top-left">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

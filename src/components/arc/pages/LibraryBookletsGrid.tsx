@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { Download, FileText, X } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { LibraryPdfPages } from "@/components/arc/pages/LibraryPdfPages";
+import { LibraryPdfPages, LibraryPdfScroller } from "@/components/arc/pages/LibraryPdfPages";
 import {
   ARC_HEADLINE_TITLE_EMPHASIS_TEAL_CLASS,
   TitleEmphasis,
@@ -95,14 +95,9 @@ function BookletPdfOverlay({
             </button>
           </div>
         </header>
-        <div
-          data-pdf-scroll
-          data-arc-modal-scroll
-          className="min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
+        <LibraryPdfScroller className="min-h-0 flex-1">
           <LibraryPdfPages src={booklet.pdfSrc} />
-        </div>
+        </LibraryPdfScroller>
       </div>
     </div>,
     document.body,
