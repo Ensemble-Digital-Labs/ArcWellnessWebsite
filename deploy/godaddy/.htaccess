@@ -27,7 +27,6 @@ DirectoryIndex index.html
   RewriteRule ^treatments/nutrient-therapy/?$ /treatments/infusion-therapy/ [L,R=301]
   RewriteRule ^treatments/daxxify/?$ /treatments/neuromodulators/ [L,R=301]
   RewriteRule ^treatments/rha/?$ /treatments/dermal-fillers/ [L,R=301]
-  RewriteRule ^library/table/?$ /library/education/ [L,R=302]
   RewriteRule ^case-studies/?$ /library/education/ [L,R=301]
   RewriteRule ^case-studies/(.+)/?$ /blogs/$1/ [L,R=301]
   RewriteRule ^blog/insulin-resistance-signs-symptoms/?$ /blogs/insulin-resistance-signs-symptoms/ [L,R=301]

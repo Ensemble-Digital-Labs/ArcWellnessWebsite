@@ -22,6 +22,10 @@ export const libraryDeskPage = {
     emphasis: "Arc Desk",
     emphasisNowrap: true,
   },
+  collectionHeading: {
+    lead: "Our",
+    emphasis: "booklets",
+  },
 } as const;
 
 export const LIBRARY_BOOKLETS: readonly LibraryBooklet[] = [

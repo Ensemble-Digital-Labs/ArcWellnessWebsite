@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 
 import { ArcLibraryMasthead } from "@/components/arc/ArcLibraryMasthead";
+import { LibraryBookletsGrid } from "@/components/arc/pages/LibraryBookletsGrid";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
 import { INSIGHTS_FEED_AMBIENT_SRC } from "@/content/backgroundDecoration";
+import { LIBRARY_TABLE_BOOKLETS } from "@/content/library/table";
 import { libraryTablePage } from "@/content/pages/library-table";
 import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
@@ -19,9 +21,10 @@ import {
 } from "@/lib/arcInsightsHeaderSync";
 import { cn } from "@/lib/utils";
 
-/** From the Arc Table — recipes and nutrition (recipe book coming soon). */
+/** From the Arc Table — recipes and nutrition booklets. */
 export function LibraryTablePageContent() {
   const mastheadTitleRef = useRef<HTMLHeadingElement>(null);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const mastheadTitle = mastheadTitleRef.current;
@@ -46,8 +49,6 @@ export function LibraryTablePageContent() {
       resetInsightsHeaderChrome();
     };
   }, []);
-
-  const { intro, comingSoon } = libraryTablePage;
 
   return (
     <>
@@ -86,51 +87,11 @@ export function LibraryTablePageContent() {
 
         <div className="relative z-20 bg-arc-cream px-5 pb-20 sm:px-8 sm:pb-24 md:px-12 md:pb-28 lg:px-16 xl:px-20">
           <div className={cn("mx-auto w-full", ARC_PAGE_RAIL_MAX)}>
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="font-serif text-2xl leading-snug text-arc-charcoal sm:text-3xl">
-                {intro.title}
-              </h2>
-              <div className="mt-6 space-y-4">
-                {intro.body.map((paragraph) => (
-                  <p
-                    key={paragraph.slice(0, 40)}
-                    className="font-sans text-base leading-relaxed text-arc-charcoal/80 sm:text-lg"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            <aside className="mx-auto mt-12 max-w-2xl rounded-3xl border border-arc-charcoal/12 bg-white/90 px-6 py-8 text-center shadow-[0_12px_40px_rgba(45,45,45,0.06)] sm:px-10 sm:py-10">
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-arc-teal-ink">
-                {comingSoon.eyebrow}
-              </p>
-              <h3 className="mt-3 font-serif text-xl leading-snug text-arc-charcoal sm:text-2xl">
-                {comingSoon.title}
-              </h3>
-              <p className="mt-4 font-sans text-base leading-relaxed text-arc-charcoal/80">
-                {comingSoon.body}
-              </p>
-            </aside>
-
-            <nav
-              className="mx-auto mt-12 flex max-w-xl flex-col items-center gap-3 sm:flex-row sm:justify-center"
-              aria-label="Explore other Arc Library sections"
-            >
-              <Link
-                href="/library/education"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-arc-charcoal/20 px-6 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-arc-charcoal transition-colors hover:border-arc-teal-ink hover:text-arc-teal-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2"
-              >
-                Education
-              </Link>
-              <Link
-                href="/library/desk"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-arc-charcoal/20 px-6 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-arc-charcoal transition-colors hover:border-arc-teal-ink hover:text-arc-teal-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50 focus-visible:ring-offset-2"
-              >
-                From the Arc Desk
-              </Link>
-            </nav>
+            <LibraryBookletsGrid
+              booklets={LIBRARY_TABLE_BOOKLETS}
+              reduceMotion={reduceMotion ?? false}
+              heading={libraryTablePage.collectionHeading}
+            />
           </div>
         </div>
 

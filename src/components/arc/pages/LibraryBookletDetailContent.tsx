@@ -10,18 +10,26 @@ import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 
-export function LibraryBookletDetailContent({ booklet }: { booklet: LibraryBooklet }) {
+export function LibraryBookletDetailContent({
+  booklet,
+  backHref = "/library/desk",
+  backLabel = "From the Arc Desk",
+}: {
+  booklet: LibraryBooklet;
+  backHref?: string;
+  backLabel?: string;
+}) {
   return (
     <>
       <article className="bg-arc-cream pb-16 pt-28 sm:pb-20 sm:pt-32">
         <div className={cn("mx-auto px-5 sm:px-8 md:px-12", ARC_PAGE_RAIL_MAX)}>
           <div className="flex justify-center">
             <Link
-              href="/library/desk"
+              href={backHref}
               className="inline-flex items-center gap-2.5 font-sans text-sm font-semibold uppercase tracking-[0.16em] text-arc-charcoal/70 transition-colors hover:text-arc-teal-ink sm:text-base"
             >
               <ArrowLeft className="size-4" aria-hidden />
-              From the Arc Desk
+              {backLabel}
             </Link>
           </div>
 
