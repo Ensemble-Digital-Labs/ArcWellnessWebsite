@@ -10,6 +10,8 @@ export type LibraryBooklet = {
   pdfSrc: string;
   /** Optional full-quality file for Download; falls back to `pdfSrc`. */
   downloadSrc?: string;
+  /** When false, Read only — no Download / Open PDF. Default true. */
+  allowDownload?: boolean;
   coverSrc: string;
   coverAlt: string;
 };
@@ -74,4 +76,8 @@ export function libraryBookletHref(slug: string): string {
 
 export function libraryBookletDownloadSrc(booklet: LibraryBooklet): string {
   return booklet.downloadSrc ?? booklet.pdfSrc;
+}
+
+export function libraryBookletAllowsDownload(booklet: LibraryBooklet): boolean {
+  return booklet.allowDownload !== false;
 }

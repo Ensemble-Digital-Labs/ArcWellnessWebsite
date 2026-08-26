@@ -12,6 +12,7 @@ import {
   TitleEmphasis,
 } from "@/components/arc/TitleEmphasis";
 import {
+  libraryBookletAllowsDownload,
   libraryBookletDownloadSrc,
   type LibraryBooklet,
 } from "@/content/library/desk";
@@ -69,17 +70,19 @@ function BookletPdfOverlay({
             {booklet.title}
           </h2>
           <div className="flex shrink-0 items-center gap-2">
-            <a
-              href={libraryBookletDownloadSrc(booklet)}
-              download={`${booklet.slug}.pdf`}
-              className={cn(
-                cardButtonClass,
-                "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
-              )}
-            >
-              <Download className="size-4" aria-hidden />
-              <span className="hidden sm:inline">Download</span>
-            </a>
+            {libraryBookletAllowsDownload(booklet) ? (
+              <a
+                href={libraryBookletDownloadSrc(booklet)}
+                download={`${booklet.slug}.pdf`}
+                className={cn(
+                  cardButtonClass,
+                  "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
+                )}
+              >
+                <Download className="size-4" aria-hidden />
+                <span className="hidden sm:inline">Download</span>
+              </a>
+            ) : null}
             <button
               ref={closeRef}
               type="button"
@@ -182,17 +185,19 @@ function BookletCard({
           <FileText className="size-4" aria-hidden />
           Read
         </button>
-        <a
-          href={libraryBookletDownloadSrc(booklet)}
-          download={`${booklet.slug}.pdf`}
-          className={cn(
-            cardButtonClass,
-            "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
-          )}
-        >
-          <Download className="size-4" aria-hidden />
-          Download
-        </a>
+        {libraryBookletAllowsDownload(booklet) ? (
+          <a
+            href={libraryBookletDownloadSrc(booklet)}
+            download={`${booklet.slug}.pdf`}
+            className={cn(
+              cardButtonClass,
+              "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
+            )}
+          >
+            <Download className="size-4" aria-hidden />
+            Download
+          </a>
+        ) : null}
       </div>
     </motion.article>
   );

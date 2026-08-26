@@ -13,7 +13,7 @@ export const LIBRARY_TABLE_BOOKLETS: readonly LibraryBooklet[] = [
       "An invitation to slow down, cook again, and rediscover the pleasure of eating well — whole foods, simple techniques, and meals that nourish without feeling restrictive.",
     pageCount: 161,
     pdfSrc: "/assets/library/table/the-nourishing-table.pdf?v=20260825e",
-    downloadSrc: "/assets/library/table/the-nourishing-table-print.pdf",
+    allowDownload: false,
     coverSrc: "/assets/library/table/the-nourishing-table-cover.webp?v=20260825",
     coverAlt:
       "The Nourishing Table cover — roast chicken, salad, bread, and olives on a rustic table",
