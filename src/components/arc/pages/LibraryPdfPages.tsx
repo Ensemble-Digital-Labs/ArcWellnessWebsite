@@ -62,6 +62,9 @@ function releaseCanvas(canvas: HTMLCanvasElement) {
 const livePageDrops = new Map<number, () => void>();
 const MAX_LIVE_PAGES = 6;
 
+/** True while a pinch-zoom is changing the scroller — skip canvas drop so pages don’t flash. */
+let pdfTransformActive = false;
+
 function pageIsInPaintWindow(wrap: HTMLElement, root: Element | null, marginPx = 120) {
   const rootRect = root
     ? root.getBoundingClientRect()
@@ -72,7 +75,7 @@ function pageIsInPaintWindow(wrap: HTMLElement, root: Element | null, marginPx =
 
 function claimLivePage(pageNumber: number, drop: () => void) {
   livePageDrops.set(pageNumber, drop);
-  if (livePageDrops.size <= MAX_LIVE_PAGES) return;
+  if (pdfTransformActive || livePageDrops.size <= MAX_LIVE_PAGES) return;
 
   let farthest = pageNumber;
   let farthestDist = -1;
@@ -140,6 +143,7 @@ function PdfPageCanvas({
     };
 
     const dropPaint = () => {
+      if (pdfTransformActive) return;
       visible = false;
       lastBitmapWidth = 0;
       lastCssWidth = 0;
@@ -149,7 +153,7 @@ function PdfPageCanvas({
     };
 
     const render = async () => {
-      if (cancelled || !visible) return;
+      if (cancelled || !visible || pdfTransformActive) return;
 
       const scrollRoot = wrap.closest("[data-pdf-scroll]");
       if (!pageIsInPaintWindow(wrap, scrollRoot)) {
@@ -219,7 +223,7 @@ function PdfPageCanvas({
 
     const requestRender = () => {
       void enqueuePaint(async () => {
-        if (cancelled || !visible) return;
+        if (cancelled || !visible || pdfTransformActive) return;
         try {
           await render();
         } catch (reason: unknown) {
@@ -233,12 +237,14 @@ function PdfPageCanvas({
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (pdfTransformActive) return;
         const hit = entries.some((entry) => entry.isIntersecting);
         if (enterTimer) {
           clearTimeout(enterTimer);
           enterTimer = null;
         }
         if (!hit) {
+          if (pdfTransformActive) return;
           dropPaint();
           return;
         }
@@ -258,13 +264,13 @@ function PdfPageCanvas({
     observer.observe(wrap);
 
     const onScroll = () => {
-      if (cancelled || !visible) return;
+      if (cancelled || !visible || pdfTransformActive) return;
       if (!pageIsInPaintWindow(wrap, scrollRoot)) dropPaint();
     };
     scrollRoot?.addEventListener("scroll", onScroll, { passive: true });
 
     const resizeObserver = new ResizeObserver(() => {
-      if (!visible) return;
+      if (!visible || pdfTransformActive) return;
       const cssWidth = wrap.clientWidth;
       if (Math.abs(cssWidth - lastCssWidth) < RESIZE_WIDTH_SLACK_PX) return;
       if (resizeTimer) clearTimeout(resizeTimer);
@@ -407,7 +413,11 @@ function pinchMidpoint(touches: TouchList) {
   };
 }
 
-/** Scroll shell with iPhone pinch / double-tap zoom for stacked PDF pages. */
+function isCoarsePointer() {
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
+/** Scroll shell with iPhone pinch-zoom for stacked PDF pages. */
 export function LibraryPdfScroller({
   children,
   className,
@@ -424,93 +434,136 @@ export function LibraryPdfScroller({
     const sizer = sizerRef.current;
     const inner = innerRef.current;
     if (!scroller || !sizer || !inner) return;
+    if (!isCoarsePointer()) return;
 
     let zoom = 1;
+    let baseWidth = scroller.clientWidth;
     let pinching = false;
     let pinchStartDist = 1;
     let pinchStartZoom = 1;
-    let lastTapAt = 0;
-    let lastTapX = 0;
-    let lastTapY = 0;
+    let moveRaf = 0;
+    let pendingMid = { x: 0, y: 0 };
+    let pendingDist = 0;
+    let unlockTimer: ReturnType<typeof setTimeout> | null = null;
+    let contentX = 0;
+    let contentY = 0;
+    let scrollX0 = 0;
+    let scrollY0 = 0;
+    let lastViewX = 0;
+    let lastViewY = 0;
 
-    const applyZoom = (next: number, clientX: number, clientY: number) => {
-      const clamped = Math.min(MAX_PDF_ZOOM, Math.max(MIN_PDF_ZOOM, next));
-      const prev = zoom;
-      if (Math.abs(clamped - prev) < 0.004) return;
-
-      const rect = scroller.getBoundingClientRect();
-      const originX = clientX - rect.left + scroller.scrollLeft;
-      const originY = clientY - rect.top + scroller.scrollTop;
-      const ratio = clamped / prev;
-
-      zoom = clamped;
-      if (clamped === 1) {
+    const layoutZoom = (next: number) => {
+      if (next <= 1.001) {
         inner.style.transform = "none";
-        inner.style.width = "100%";
-        sizer.style.width = "100%";
-        sizer.style.height = "auto";
-        scroller.scrollLeft = 0;
+        inner.style.width = "";
+        sizer.style.width = "";
+        sizer.style.height = "";
         return;
       }
-
       inner.style.transformOrigin = "0 0";
-      inner.style.transform = `scale(${clamped})`;
-      sizer.style.width = `${clamped * 100}%`;
-      inner.style.width = `${100 / clamped}%`;
-      sizer.style.height = `${inner.offsetHeight * clamped}px`;
-      scroller.scrollLeft = originX * ratio - (clientX - rect.left);
-      scroller.scrollTop = originY * ratio - (clientY - rect.top);
+      inner.style.transform = `scale(${next})`;
+      inner.style.width = `${baseWidth}px`;
+      sizer.style.width = `${baseWidth * next}px`;
+      sizer.style.height = `${inner.scrollHeight * next}px`;
+    };
+
+    const applyLiveZoom = (next: number, clientX: number, clientY: number) => {
+      const clamped = Math.min(MAX_PDF_ZOOM, Math.max(MIN_PDF_ZOOM, next));
+      const rect = scroller.getBoundingClientRect();
+      lastViewX = clientX - rect.left;
+      lastViewY = clientY - rect.top;
+      zoom = clamped;
+      const tx = lastViewX + scrollX0 - contentX * clamped;
+      const ty = lastViewY + scrollY0 - contentY * clamped;
+      inner.style.transformOrigin = "0 0";
+      inner.style.transform = `translate(${tx}px, ${ty}px) scale(${clamped})`;
+    };
+
+    const bakeZoom = () => {
+      const clamped = zoom <= 1.001 ? 1 : zoom;
+      zoom = clamped;
+      layoutZoom(clamped);
+      void scroller.offsetHeight;
+      if (clamped === 1) {
+        scroller.scrollLeft = 0;
+        scroller.scrollTop = Math.max(0, contentY - lastViewY);
+        return;
+      }
+      scroller.scrollLeft = contentX * clamped - lastViewX;
+      scroller.scrollTop = contentY * clamped - lastViewY;
+    };
+
+    const beginPinch = (clientX: number, clientY: number) => {
+      pdfTransformActive = true;
+      pinching = true;
+      if (unlockTimer) {
+        clearTimeout(unlockTimer);
+        unlockTimer = null;
+      }
+      baseWidth = scroller.clientWidth || baseWidth;
+      scrollX0 = scroller.scrollLeft;
+      scrollY0 = scroller.scrollTop;
+      const rect = scroller.getBoundingClientRect();
+      lastViewX = clientX - rect.left;
+      lastViewY = clientY - rect.top;
+      contentX = (scrollX0 + lastViewX) / zoom;
+      contentY = (scrollY0 + lastViewY) / zoom;
+    };
+
+    const endPinch = () => {
+      pinching = false;
+      bakeZoom();
+      if (unlockTimer) clearTimeout(unlockTimer);
+      unlockTimer = setTimeout(() => {
+        pdfTransformActive = false;
+        unlockTimer = null;
+      }, 200);
     };
 
     const onTouchStart = (event: TouchEvent) => {
-      if (event.touches.length >= 2) {
-        pinching = true;
-        pinchStartDist = pinchDistance(event.touches) || 1;
-        pinchStartZoom = zoom;
-        lastTapAt = 0;
-        return;
-      }
+      if (event.touches.length < 2) return;
+      const mid = pinchMidpoint(event.touches);
+      beginPinch(mid.x, mid.y);
+      pinchStartDist = pinchDistance(event.touches) || 1;
+      pinchStartZoom = zoom;
+    };
 
-      const touch = event.touches[0];
-      if (!touch) return;
-      const now = performance.now();
-      const nearLast = Math.hypot(touch.clientX - lastTapX, touch.clientY - lastTapY) < 44;
-      if (now - lastTapAt < 280 && nearLast) {
-        event.preventDefault();
-        applyZoom(zoom > 1.05 ? 1 : 2, touch.clientX, touch.clientY);
-        lastTapAt = 0;
-        return;
-      }
-      lastTapAt = now;
-      lastTapX = touch.clientX;
-      lastTapY = touch.clientY;
+    const flushPinch = () => {
+      moveRaf = 0;
+      if (!pinching) return;
+      applyLiveZoom(
+        pinchStartZoom * (pendingDist / pinchStartDist),
+        pendingMid.x,
+        pendingMid.y,
+      );
     };
 
     const onTouchMove = (event: TouchEvent) => {
       if (!pinching || event.touches.length < 2) return;
       event.preventDefault();
-      const point = pinchMidpoint(event.touches);
-      applyZoom(
-        pinchStartZoom * (pinchDistance(event.touches) / pinchStartDist),
-        point.x,
-        point.y,
-      );
+      pendingDist = pinchDistance(event.touches) || pinchStartDist;
+      pendingMid = pinchMidpoint(event.touches);
+      if (!moveRaf) moveRaf = requestAnimationFrame(flushPinch);
     };
 
     const onTouchEnd = (event: TouchEvent) => {
-      if (event.touches.length < 2) pinching = false;
+      if (event.touches.length >= 2) return;
+      if (moveRaf) {
+        cancelAnimationFrame(moveRaf);
+        moveRaf = 0;
+        if (pinching && pendingDist > 0) {
+          applyLiveZoom(
+            pinchStartZoom * (pendingDist / pinchStartDist),
+            pendingMid.x,
+            pendingMid.y,
+          );
+        }
+      }
+      if (pinching) endPinch();
     };
 
     const preventSafariGesture = (event: Event) => {
       event.preventDefault();
-    };
-
-    const syncHeight = () => {
-      if (zoom === 1) {
-        sizer.style.height = "auto";
-        return;
-      }
-      sizer.style.height = `${inner.offsetHeight * zoom}px`;
     };
 
     scroller.addEventListener("touchstart", onTouchStart, { passive: false });
@@ -521,10 +574,10 @@ export function LibraryPdfScroller({
     scroller.addEventListener("gesturechange", preventSafariGesture);
     scroller.addEventListener("gestureend", preventSafariGesture);
 
-    const resizeObserver = new ResizeObserver(syncHeight);
-    resizeObserver.observe(inner);
-
     return () => {
+      pdfTransformActive = false;
+      if (unlockTimer) clearTimeout(unlockTimer);
+      if (moveRaf) cancelAnimationFrame(moveRaf);
       scroller.removeEventListener("touchstart", onTouchStart);
       scroller.removeEventListener("touchmove", onTouchMove);
       scroller.removeEventListener("touchend", onTouchEnd);
@@ -532,7 +585,6 @@ export function LibraryPdfScroller({
       scroller.removeEventListener("gesturestart", preventSafariGesture);
       scroller.removeEventListener("gesturechange", preventSafariGesture);
       scroller.removeEventListener("gestureend", preventSafariGesture);
-      resizeObserver.disconnect();
     };
   }, []);
 
