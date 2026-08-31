@@ -35,6 +35,7 @@ function isInsideModalScroller(target: EventTarget | null): boolean {
 
 function blockPageScrollGesture(event: Event) {
   if (!isArcModalScrollLockActive()) return;
+  if ("touches" in event && (event as TouchEvent).touches.length > 1) return;
   if (isInsideModalScroller(event.target)) return;
   event.preventDefault();
   event.stopPropagation();

@@ -119,11 +119,6 @@ if (!isGodaddyStatic) {
       permanent: true,
     },
     {
-      source: "/library/table",
-      destination: "/library/education",
-      permanent: false,
-    },
-    {
       source: "/case-studies",
       destination: "/library/education",
       permanent: true,

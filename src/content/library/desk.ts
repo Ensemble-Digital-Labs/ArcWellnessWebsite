@@ -6,7 +6,12 @@ export type LibraryBooklet = {
   subtitleLines?: readonly string[];
   description: string;
   pageCount: number;
+  /** On-site reader (may be a smaller web PDF). */
   pdfSrc: string;
+  /** Optional full-quality file for Download; falls back to `pdfSrc`. */
+  downloadSrc?: string;
+  /** When false, Read only — no Download / Open PDF. Default true. */
+  allowDownload?: boolean;
   coverSrc: string;
   coverAlt: string;
 };
@@ -21,6 +26,10 @@ export const libraryDeskPage = {
     before: "From the ",
     emphasis: "Arc Desk",
     emphasisNowrap: true,
+  },
+  collectionHeading: {
+    lead: "Our",
+    emphasis: "booklets",
   },
 } as const;
 
@@ -37,6 +46,7 @@ export const LIBRARY_BOOKLETS: readonly LibraryBooklet[] = [
       "Work with your hormones, not against them — fasting, metabolism, and nourishment aligned to your cycle, from menstrual through luteal phases.",
     pageCount: 7,
     pdfSrc: "/assets/library/desk/rooted-in-rhythm.pdf",
+    allowDownload: false,
     coverSrc: "/assets/library/desk/rooted-in-rhythm-cover.webp?v=20260819f",
     coverAlt: "Rooted in Rhythm booklet cover — hormonal rhythm and cycle-aligned wellness",
   },
@@ -52,6 +62,7 @@ export const LIBRARY_BOOKLETS: readonly LibraryBooklet[] = [
       "Nutrition, movement, sleep, mindfulness, and the foundations Arc Wellness builds on — from breakfast reset and gut health to the Lifestyle Compass.",
     pageCount: 39,
     pdfSrc: "/assets/library/desk/wellness-redefined.pdf",
+    allowDownload: false,
     coverSrc: "/assets/library/desk/wellness-redefined-cover.webp?v=20260819f",
     coverAlt: "Wellness, Redefined booklet cover — whole-body wellness and lifestyle foundations",
   },
@@ -63,4 +74,12 @@ export function getLibraryBooklet(slug: string): LibraryBooklet | undefined {
 
 export function libraryBookletHref(slug: string): string {
   return `/library/desk/${slug}`;
+}
+
+export function libraryBookletDownloadSrc(booklet: LibraryBooklet): string {
+  return booklet.downloadSrc ?? booklet.pdfSrc;
+}
+
+export function libraryBookletAllowsDownload(booklet: LibraryBooklet): boolean {
+  return booklet.allowDownload !== false;
 }

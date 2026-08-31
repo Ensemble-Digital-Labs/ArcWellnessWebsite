@@ -520,7 +520,7 @@
           "title": "Hormone Care Shouldn't Begin and End With a Number",
           "body": [
             "This is where hormone conversations can become too simple: low number? Replace it. Normal number? Ignore it.",
-      "But bodies aren't quite that tidy. A thoughtful hormone evaluation starts with the person, not the lab slip.",
+            "But bodies aren't quite that tidy. A thoughtful hormone evaluation starts with the person, not the lab slip.",
             "The questions we need to ask:"
           ],
           "list": {
@@ -570,11 +570,11 @@
       "perspective": {
         "title": "Supporting You Through the Decades: Right Here in St. Louis",
         "body": [
-      "At Arc Wellness, we don't see aging as a problem to solve. We see it as something worth preparing for.",
-      "Your 30s shouldn't be managed like your 50s. Your 50s shouldn't be managed like your 70s. And your care shouldn't remain static while your body continues to evolve.",
+          "At Arc Wellness, we don't see aging as a problem to solve. We see it as something worth preparing for.",
+          "Your 30s shouldn't be managed like your 50s. Your 50s shouldn't be managed like your 70s. And your care shouldn't remain static while your body continues to evolve.",
           "We believe in understanding where you are now, anticipating what may be ahead, and making thoughtful decisions that support the life you're building. Sometimes that includes hormones. Sometimes it includes nutrition, strength, sleep, [metabolic health](/treatments/metabolic-health), or [preventive, longevity-focused care](/treatments/longevity). Most often, it's a combination.",
-      "Because the goal isn't to keep you frozen at one age. It's to help you move through each one strong, informed, and supported.",
-      "Through your 30s. Your 40s. Your 50s. And beyond.",
+          "Because the goal isn't to keep you frozen at one age. It's to help you move through each one strong, informed, and supported.",
+          "Through your 30s. Your 40s. Your 50s. And beyond.",
           "Understanding changes everything, and it starts with a conversation. If you're in the St. Louis area and ready to talk through what your hormones and your body may be telling you, our [physician-led team](/about) at Arc Wellness is here to help."
         ],
         "cta": {
@@ -754,9 +754,9 @@
                 "label": "Chronic inflammation\n(The Disruptor)",
                 "body": [
                   "Purpose — Harms healthy tissues over time",
-                  "Trigger — Chronic stress, poor diet, lifestyle\u00A0factors",
+                  "Trigger — Chronic stress, poor diet, lifestyle factors",
                   "Duration — Long-term (months to years)",
-                  "Symptoms — Systemic fatigue, brain fog, stealthy\u00A0changes"
+                  "Symptoms — Systemic fatigue, brain fog, stealthy changes"
                 ]
               }
             ]
@@ -775,16 +775,46 @@
           "list": {
             "style": "cards",
             "items": [
-              { "label": "Persistent fatigue", "body": [] },
-              { "label": "Brain fog or difficulty concentrating", "body": [] },
-              { "label": "Achy joints or muscles", "body": [] },
-              { "label": "Slower recovery after exercise", "body": [] },
-              { "label": "Chronically low energy", "body": [] },
-              { "label": "Poor sleep", "body": [] },
-              { "label": "Increased abdominal weight gain", "body": [] },
-              { "label": "Frequent illness", "body": [] },
-              { "label": "Skin changes or breakouts", "body": [] },
-              { "label": "Digestive complaints", "body": [] }
+              {
+                "label": "Persistent fatigue",
+                "body": []
+              },
+              {
+                "label": "Brain fog or difficulty concentrating",
+                "body": []
+              },
+              {
+                "label": "Achy joints or muscles",
+                "body": []
+              },
+              {
+                "label": "Slower recovery after exercise",
+                "body": []
+              },
+              {
+                "label": "Chronically low energy",
+                "body": []
+              },
+              {
+                "label": "Poor sleep",
+                "body": []
+              },
+              {
+                "label": "Increased abdominal weight gain",
+                "body": []
+              },
+              {
+                "label": "Frequent illness",
+                "body": []
+              },
+              {
+                "label": "Skin changes or breakouts",
+                "body": []
+              },
+              {
+                "label": "Digestive complaints",
+                "body": []
+              }
             ]
           },
           "closing": [
@@ -799,17 +829,50 @@
           "list": {
             "style": "cards",
             "items": [
-              { "label": "Poor sleep", "body": [] },
-              { "label": "Chronic stress", "body": [] },
-              { "label": "Smoking or vaping", "body": [] },
-              { "label": "Excess visceral (abdominal) body fat", "body": [] },
-              { "label": "Diets high in ultra-processed foods", "body": [] },
-              { "label": "Physical inactivity", "body": [] },
-              { "label": "Poor metabolic health", "body": [] },
-              { "label": "Autoimmune diseases", "body": [] },
-              { "label": "Certain infections", "body": [] },
-              { "label": "Environmental exposures", "body": [] },
-              { "label": "Untreated chronic medical conditions", "body": [] }
+              {
+                "label": "Poor sleep",
+                "body": []
+              },
+              {
+                "label": "Chronic stress",
+                "body": []
+              },
+              {
+                "label": "Smoking or vaping",
+                "body": []
+              },
+              {
+                "label": "Excess visceral (abdominal) body fat",
+                "body": []
+              },
+              {
+                "label": "Diets high in ultra-processed foods",
+                "body": []
+              },
+              {
+                "label": "Physical inactivity",
+                "body": []
+              },
+              {
+                "label": "Poor metabolic health",
+                "body": []
+              },
+              {
+                "label": "Autoimmune diseases",
+                "body": []
+              },
+              {
+                "label": "Certain infections",
+                "body": []
+              },
+              {
+                "label": "Environmental exposures",
+                "body": []
+              },
+              {
+                "label": "Untreated chronic medical conditions",
+                "body": []
+              }
             ]
           },
           "closing": [
@@ -858,12 +921,30 @@
                 "label": "Build and maintain muscle through strength training",
                 "body": []
               },
-              { "label": "Walk and move throughout the day", "body": [] },
-              { "label": "Prioritize truly restorative sleep", "body": [] },
-              { "label": "Manage and mitigate chronic stress", "body": [] },
-              { "label": "Maintain a healthy weight when appropriate", "body": [] },
-              { "label": "Avoid tobacco products", "body": [] },
-              { "label": "Treat underlying medical conditions", "body": [] }
+              {
+                "label": "Walk and move throughout the day",
+                "body": []
+              },
+              {
+                "label": "Prioritize truly restorative sleep",
+                "body": []
+              },
+              {
+                "label": "Manage and mitigate chronic stress",
+                "body": []
+              },
+              {
+                "label": "Maintain a healthy weight when appropriate",
+                "body": []
+              },
+              {
+                "label": "Avoid tobacco products",
+                "body": []
+              },
+              {
+                "label": "Treat underlying medical conditions",
+                "body": []
+              }
             ]
           },
           "closing": [
@@ -880,7 +961,7 @@
           "Is there an underlying medical condition?",
           "Could your nutrition, sleep, stress, hormones, or metabolic health be contributing?",
           "What changes are likely to have the greatest impact, not just for today, but for the decades ahead?",
-      "Our goal isn't simply to quiet your symptoms. It's to help create an environment where your body can heal, recover, and function exactly the way it was beautifully designed to."
+          "Our goal isn't simply to quiet your symptoms. It's to help create an environment where your body can heal, recover, and function exactly the way it was beautifully designed to."
         ],
         "cta": {
           "lead": "Understand what's behind your symptoms.",
@@ -934,31 +1015,55 @@
     "kind": "blog",
     "slug": "is-your-gut-trying-to-tell-you-something",
     "title": "Is Your Gut Trying to Tell You Something?",
+    "titleLines": [
+      "Is Your Gut Trying to Tell You Something?",
+      "Understanding the Everyday Signs of Digestive Imbalance"
+    ],
     "excerpt": "Understanding the Everyday Signs of Digestive Imbalance",
-    "publishedAt": "14 Jul 2026",
-    "imageSrc": "/assets/insights/is-your-gut-trying-to-tell-you-something-preview.webp",
-    "imageAlt": "Woman resting with a hand on her abdomen, noticing digestive discomfort",
+    "publishedAt": "24 Aug 2026",
+    "imageSrc": "/assets/insights/is-your-gut-trying-to-tell-you-something/hero-gut-model.webp?v=20260824",
+    "imageAlt": "Teal and gold anatomical gut model on cream — an informative view of the digestive system",
     "body": [
       "Your digestive system is remarkably good at getting your attention. Sometimes it's obvious—a stomach bug or a bout of food poisoning. But more often, the signs are subtle.",
       "You feel bloated after meals. You battle constipation or frequent diarrhea. Certain foods suddenly don't agree with you, or you experience heartburn more often than you used to. You always seem to have \"a sensitive stomach.\"",
       "Over time, many people begin accepting these symptoms as normal: \"I've always been this way.\" \"It's just stress.\" \"It's probably getting older.\"",
       "But while digestive symptoms are common, they shouldn't simply be ignored. Your gut is one of the hardest-working systems in your body, and when something isn't functioning well, it often affects much more than digestion alone.",
+      "Your gut is one of the hardest-working systems in your body—and when something isn't functioning well, it often affects much more than digestion alone.",
       "Your Gut Does Much More Than Digest Food",
       "When most people think about digestive health, they think about the stomach. In reality, your gastrointestinal tract is responsible for far more than breaking down meals.",
-      "When your digestive system is functioning well, you rarely think about it. When it isn't, the effects can ripple throughout your entire body.",
-      "Nutrient absorption: It is the primary center where nutrients are absorbed into the body.",
-      "Microbiome: It is home to trillions of bacteria that make up your gut microbiome.",
-      "Immune signal: It communicates constantly with your immune system.",
-      "Gut–brain axis: It influences blood sugar, vitamins, mood, and focus through continuous conversation with the brain.",
+      "It even has a close relationship with your brain through what researchers call the [gut–brain axis](/treatments/gut-health). When your digestive system is functioning well, you rarely think about it. When it isn't, the effects can ripple throughout your entire body.",
+      "Nutrient absorption: It is the primary center where nutrients are absorbed.",
+      "Gut microbiome: It is home to trillions of bacteria that make up your gut microbiome.",
+      "Immune communication: It communicates constantly with your immune system.",
+      "Metabolism & vitamins: It influences how your body processes food, [regulates blood sugar](/treatments/metabolic-health), and produces certain vitamins.",
+      "Gut–brain axis: It has a close relationship with your brain through what researchers call the [gut–brain axis](/treatments/gut-health).",
       "Common Signs Your Gut May Need Attention",
       "Not every digestive symptom points to a serious condition. Many can be temporary and resolve on their own. But if symptoms become persistent, frequent, or begin affecting your quality of life, they deserve a closer look.",
-      "Sometimes people experience symptoms outside the digestive tract as well. The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system.",
-      "Digestive signs: Frequent bloating, constipation, diarrhea, alternating patterns, gas, reflux, discomfort after eating, early fullness, food sensitivities, nausea, abdominal pain, or fatigue after meals.",
-      "Beyond the gut: Brain fog, low energy, iron or vitamin deficiencies, skin changes, difficulty maintaining a healthy weight, ongoing inflammation, and changes in mood.",
-      "Causes, Connections, and Real Healing",
-      "There isn't one single answer. Digestive symptoms can result from diet and nutrition, stress, food intolerances, IBS, GERD, celiac disease, inflammatory bowel disease, gallbladder disease, medications, infections, and changes in the gut microbiome—sometimes more than one at once.",
-      "Have you ever noticed your stomach \"dropping\" when you're nervous? The digestive system and the brain communicate continuously. Stress can change digestion. Poor digestion can affect how you feel. Sleep influences gut health—and gut health can influence sleep.",
-      "One of the biggest misconceptions about gut health is the idea that your digestive system simply needs to be \"reset\" with a harsh detox or cleanse. In reality, your gut is already remarkably good at maintaining itself. What it often needs is consistency.",
+      "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring.",
+      "Non-digestive signs that may be worth exploring: Brain fog; Low energy; Iron deficiency or vitamin deficiencies; Skin changes; Difficulty maintaining a healthy weight; [Ongoing inflammation](/blogs/understanding-chronic-inflammation); Changes in mood",
+      "Common digestive signs: Frequent bloating; Constipation; Diarrhea; Alternating constipation and diarrhea; Excessive gas; Acid reflux or frequent heartburn; Stomach discomfort after eating; Feeling overly full after small meals; Food intolerances or increasing food sensitivities; Nausea; Abdominal pain or cramping; Unexplained fatigue after meals",
+      "The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system.",
+      "What Causes Digestive Problems?",
+      "There isn't one single answer. Digestive symptoms can result from many different conditions, including:",
+      "Diet and nutrition",
+      "Stress",
+      "Food intolerances",
+      "Irritable bowel syndrome (IBS)",
+      "Gastroesophageal reflux disease (GERD)",
+      "Celiac disease",
+      "Inflammatory bowel disease (Crohn's disease or ulcerative colitis)",
+      "Gallbladder disease",
+      "Certain medications",
+      "Infections",
+      "Changes in the gut microbiome",
+      "Sometimes more than one factor is contributing at the same time. That's why simply treating a symptom on the surface doesn't always solve the underlying problem.",
+      "Your Gut and Your Brain Are Constantly Talking",
+      "Have you ever noticed your stomach \"dropping\" when you're nervous? Or lost your appetite during a stressful week? That's not your imagination.",
+      "The digestive system and the brain communicate continuously through the [gut–brain axis](/treatments/gut-health). Stress can change digestion. Poor digestion can affect how you feel. Sleep influences gut health. Gut health can influence sleep. One system affects the other.",
+      "Understanding those connections often helps explain why improving digestive health isn't always about one medication or one food. Sometimes it's about supporting the entire system.",
+      "Healing Doesn't Usually Happen Through a Cleanse",
+      "One of the biggest misconceptions about gut health is the idea that your digestive system simply needs to be \"reset\" with a harsh detox or cleanse. In reality, your gut is already remarkably good at maintaining itself.",
+      "What it often needs is consistency:",
       "A diet rich in fiber",
       "A variety of colorful fruits and vegetables",
       "Beans and lentils",
@@ -968,9 +1073,9 @@
       "Regular movement",
       "Quality sleep",
       "Stress management",
+      "Supporting your gut isn't about perfection. It's about creating an environment where it can function the way it was designed to—and when appropriate, identifying medical conditions that deserve proper treatment.",
       "When Should You Talk to Your Healthcare Provider?",
-      "Digestive symptoms that are persistent, worsening, or interfering with daily life deserve medical evaluation. You should also seek immediate medical attention if you experience red-flag symptoms.",
-      "These symptoms don't necessarily mean something serious is happening, but they should never be ignored.",
+      "Digestive symptoms that are persistent, worsening, or interfering with daily life deserve medical evaluation. You should also seek immediate medical attention if you experience red-flag symptoms such as:",
       "Blood in your stool",
       "Unintentional weight loss",
       "Persistent vomiting",
@@ -978,20 +1083,34 @@
       "Severe abdominal pain",
       "Black or tar-colored stools",
       "Symptoms that wake you from sleep regularly",
-      "This Is Where the Arc Begins",
+      "These symptoms don't necessarily mean something serious is happening, but they should never be ignored.",
+      "The Arc Perspective",
       "At Arc Wellness, we believe digestive health is about more than relieving symptoms. It's about understanding why those symptoms are happening in the first place.",
       "Sometimes the answer is as simple as improving nutrition or increasing fiber. Sometimes stress, sleep, or medications are playing a larger role. Sometimes further medical evaluation is needed.",
       "Our goal isn't to label every digestive complaint as \"leaky gut\" or assume every symptom comes from the microbiome. Our goal is to understand the whole picture—your symptoms, your history, your lifestyle, and your overall health—so we can help you make informed decisions about what comes next.",
-      "Because when your digestive system functions well, everything from your energy to your nutrition, metabolism, and daily comfort can benefit."
+      "Because when your digestive system functions well, everything from your energy to your nutrition, [metabolism](/treatments/metabolic-health), and daily comfort can benefit.",
+      "Understand what's behind your symptoms.",
+      "If you're in the St. Louis area, our physician-led team is here to help you look at the whole picture—not just a single symptom.",
+      "Book a consultation",
+      "Frequently Asked Questions",
+      "What are the signs of poor gut health?",
+      "Gut imbalance often shows up as a cluster of everyday symptoms rather than one obvious sign—frequent bloating, constipation or diarrhea, heartburn, discomfort after eating, or increasing food sensitivities. Some people also notice symptoms outside the digestive tract, such as brain fog, low energy, or skin changes. When several occur together or become persistent, they deserve a closer look.",
+      "Can gut problems cause symptoms outside the stomach?",
+      "They can be connected. The body works as an interconnected system, and the gut communicates constantly with the immune system and the brain through the [gut–brain axis](/treatments/gut-health). While symptoms like fatigue, mood changes, or ongoing inflammation have many possible causes, digestive health is one piece of the puzzle worth exploring.",
+      "Do I need a cleanse or detox to reset my gut?",
+      "Usually not. Your gut is already remarkably good at maintaining itself, and a harsh cleanse isn't what it needs. More often it responds to consistency—fiber, colorful fruits and vegetables, whole grains, healthy fats, hydration, movement, quality sleep, and stress management.",
+      "Where can I get gut health testing and support in St. Louis?",
+      "Arc Wellness offers physician-led evaluations at our St. Louis, MO location that look beyond a single symptom to your full health picture—your history, lifestyle, nutrition, and overall health—so you can make informed decisions about what comes next. Learn more about our [gut health](/treatments/gut-health) care.",
+      "This article is for educational purposes and is not a substitute for personalized medical advice."
     ],
     "article": {
-      "closingLine": "Common isn't the same as normal.",
       "overview": [
         "Your digestive system is remarkably good at getting your attention. Sometimes it's obvious—a stomach bug or a bout of food poisoning. But more often, the signs are subtle.",
         "You feel bloated after meals. You battle constipation or frequent diarrhea. Certain foods suddenly don't agree with you, or you experience heartburn more often than you used to. You always seem to have \"a sensitive stomach.\"",
         "Over time, many people begin accepting these symptoms as normal: \"I've always been this way.\" \"It's just stress.\" \"It's probably getting older.\"",
         "But while digestive symptoms are common, they shouldn't simply be ignored. Your gut is one of the hardest-working systems in your body, and when something isn't functioning well, it often affects much more than digestion alone."
       ],
+      "overviewCallout": "Your gut is one of the hardest-working systems in your body—and when something isn't functioning well, it often affects much more than digestion alone.",
       "sections": [
         {
           "title": "Your Gut Does Much More Than Digest Food",
@@ -1004,94 +1123,302 @@
             "items": [
               {
                 "label": "Nutrient absorption",
-                "body": "It is the primary center where nutrients are absorbed into the body."
+                "body": "It is the primary center where nutrients are absorbed."
               },
               {
-                "label": "Microbiome",
+                "label": "Gut microbiome",
                 "body": "It is home to trillions of bacteria that make up your gut microbiome."
               },
               {
-                "label": "Immune signal",
+                "label": "Immune communication",
                 "body": "It communicates constantly with your immune system."
               },
               {
+                "label": "Metabolism & vitamins",
+                "body": "It influences how your body processes food, [regulates blood sugar](/treatments/metabolic-health), and produces certain vitamins."
+              },
+              {
                 "label": "Gut–brain axis",
-                "body": "It influences blood sugar, vitamins, mood, and focus through continuous conversation with the brain."
+                "body": "It has a close relationship with your brain through what researchers call the [gut–brain axis](/treatments/gut-health)."
               }
             ]
+          },
+          "image": {
+            "src": "/assets/insights/is-your-gut-trying-to-tell-you-something/gut-more-than-digestion-diagram.webp?v=20260824",
+            "alt": "Diagram of the gut connected to nutrients, microbiome, immunity, and the brain"
           }
         },
         {
           "title": "Common Signs Your Gut May Need Attention",
           "body": [
             "Not every digestive symptom points to a serious condition. Many can be temporary and resolve on their own. But if symptoms become persistent, frequent, or begin affecting your quality of life, they deserve a closer look.",
-            "Sometimes people experience symptoms outside the digestive tract as well. The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system."
+            "Sometimes people experience symptoms outside the digestive tract as well. While these symptoms can have many different causes, digestive health is one piece of the puzzle that may be worth exploring."
           ],
           "list": {
             "style": "cards",
             "items": [
               {
-                "label": "Digestive signs",
-                "body": "Frequent bloating, constipation, diarrhea, alternating patterns, gas, reflux, discomfort after eating, early fullness, food sensitivities, nausea, abdominal pain, or fatigue after meals."
+                "label": "Non-digestive signs that may be worth exploring",
+                "body": [
+                  "Brain fog",
+                  "Low energy",
+                  "Iron deficiency or vitamin deficiencies",
+                  "Skin changes",
+                  "Difficulty maintaining a healthy weight",
+                  "[Ongoing inflammation](/blogs/understanding-chronic-inflammation)",
+                  "Changes in mood"
+                ]
               },
               {
-                "label": "Beyond the gut",
-                "body": "Brain fog, low energy, iron or vitamin deficiencies, skin changes, difficulty maintaining a healthy weight, ongoing inflammation, and changes in mood."
+                "label": "Common digestive signs",
+                "body": [
+                  "Frequent bloating",
+                  "Constipation",
+                  "Diarrhea",
+                  "Alternating constipation and diarrhea",
+                  "Excessive gas",
+                  "Acid reflux or frequent heartburn",
+                  "Stomach discomfort after eating",
+                  "Feeling overly full after small meals",
+                  "Food intolerances or increasing food sensitivities",
+                  "Nausea",
+                  "Abdominal pain or cramping",
+                  "Unexplained fatigue after meals"
+                ]
               }
             ]
+          },
+          "closing": [
+            "The important point isn't to assume your gut is causing every symptom. It's to recognize that the body works as an interconnected system."
+          ],
+          "image": {
+            "src": "/assets/insights/is-your-gut-trying-to-tell-you-something/signs-digestive-discomfort.webp?v=20260824",
+            "alt": "Woman resting with a hand on her abdomen, noticing everyday digestive discomfort"
           }
         },
         {
-          "title": "Causes, Connections, and Real Healing",
+          "title": "What Causes Digestive Problems?",
           "body": [
-            "There isn't one single answer. Digestive symptoms can result from diet and nutrition, stress, food intolerances, IBS, GERD, celiac disease, inflammatory bowel disease, gallbladder disease, medications, infections, and changes in the gut microbiome—sometimes more than one at once.",
-            "Have you ever noticed your stomach \"dropping\" when you're nervous? The digestive system and the brain communicate continuously. Stress can change digestion. Poor digestion can affect how you feel. Sleep influences gut health—and gut health can influence sleep.",
-            "One of the biggest misconceptions about gut health is the idea that your digestive system simply needs to be \"reset\" with a harsh detox or cleanse. In reality, your gut is already remarkably good at maintaining itself. What it often needs is consistency."
+            "There isn't one single answer. Digestive symptoms can result from many different conditions, including:"
           ],
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "A diet rich in fiber",
-              "A variety of colorful fruits and vegetables",
-              "Beans and lentils",
-              "Whole grains",
-              "Healthy fats",
-              "Adequate hydration",
-              "Regular movement",
-              "Quality sleep",
-              "Stress management"
+              {
+                "label": "Diet and nutrition",
+                "body": []
+              },
+              {
+                "label": "Stress",
+                "body": []
+              },
+              {
+                "label": "Food intolerances",
+                "body": []
+              },
+              {
+                "label": "Irritable bowel syndrome (IBS)",
+                "body": []
+              },
+              {
+                "label": "Gastroesophageal reflux disease (GERD)",
+                "body": []
+              },
+              {
+                "label": "Celiac disease",
+                "body": []
+              },
+              {
+                "label": "Inflammatory bowel disease (Crohn's disease or ulcerative colitis)",
+                "body": []
+              },
+              {
+                "label": "Gallbladder disease",
+                "body": []
+              },
+              {
+                "label": "Certain medications",
+                "body": []
+              },
+              {
+                "label": "Infections",
+                "body": []
+              },
+              {
+                "label": "Changes in the gut microbiome",
+                "body": []
+              }
             ]
+          },
+          "closing": [
+            "Sometimes more than one factor is contributing at the same time. That's why simply treating a symptom on the surface doesn't always solve the underlying problem."
+          ]
+        },
+        {
+          "title": "Your Gut and Your Brain Are Constantly Talking",
+          "body": [
+            "Have you ever noticed your stomach \"dropping\" when you're nervous? Or lost your appetite during a stressful week? That's not your imagination.",
+            "The digestive system and the brain communicate continuously through the [gut–brain axis](/treatments/gut-health). Stress can change digestion. Poor digestion can affect how you feel. Sleep influences gut health. Gut health can influence sleep. One system affects the other.",
+            "Understanding those connections often helps explain why improving digestive health isn't always about one medication or one food. Sometimes it's about supporting the entire system."
+          ]
+        },
+        {
+          "title": "Healing Doesn't Usually Happen Through a Cleanse",
+          "body": [
+            "One of the biggest misconceptions about gut health is the idea that your digestive system simply needs to be \"reset\" with a harsh detox or cleanse. In reality, your gut is already remarkably good at maintaining itself.",
+            "What it often needs is consistency:"
+          ],
+          "list": {
+            "style": "cards",
+            "items": [
+              {
+                "label": "A diet rich in fiber",
+                "body": []
+              },
+              {
+                "label": "A variety of colorful fruits and vegetables",
+                "body": []
+              },
+              {
+                "label": "Beans and lentils",
+                "body": []
+              },
+              {
+                "label": "Whole grains",
+                "body": []
+              },
+              {
+                "label": "Healthy fats",
+                "body": []
+              },
+              {
+                "label": "Adequate hydration",
+                "body": []
+              },
+              {
+                "label": "Regular movement",
+                "body": []
+              },
+              {
+                "label": "Quality sleep",
+                "body": []
+              },
+              {
+                "label": "Stress management",
+                "body": []
+              }
+            ]
+          },
+          "closing": [
+            "Supporting your gut isn't about perfection. It's about creating an environment where it can function the way it was designed to—and when appropriate, identifying medical conditions that deserve proper treatment."
+          ],
+          "image": {
+            "src": "/assets/insights/is-your-gut-trying-to-tell-you-something/gut-healing-daily-habits.webp?v=20260824n",
+            "alt": "Fiber-rich breakfast with berries, lemon water, and almonds — everyday habits that support gut health"
           }
         },
         {
           "title": "When Should You Talk to Your Healthcare Provider?",
           "body": [
-            "Digestive symptoms that are persistent, worsening, or interfering with daily life deserve medical evaluation. You should also seek immediate medical attention if you experience red-flag symptoms.",
-            "These symptoms don't necessarily mean something serious is happening, but they should never be ignored."
+            "Digestive symptoms that are persistent, worsening, or interfering with daily life deserve medical evaluation. You should also seek immediate medical attention if you experience red-flag symptoms such as:"
           ],
           "list": {
-            "style": "bullets",
+            "style": "cards",
             "items": [
-              "Blood in your stool",
-              "Unintentional weight loss",
-              "Persistent vomiting",
-              "Difficulty swallowing",
-              "Severe abdominal pain",
-              "Black or tar-colored stools",
-              "Symptoms that wake you from sleep regularly"
+              {
+                "label": "Blood in your stool",
+                "body": []
+              },
+              {
+                "label": "Unintentional weight loss",
+                "body": []
+              },
+              {
+                "label": "Persistent vomiting",
+                "body": []
+              },
+              {
+                "label": "Difficulty swallowing",
+                "body": []
+              },
+              {
+                "label": "Severe abdominal pain",
+                "body": []
+              },
+              {
+                "label": "Black or tar-colored stools",
+                "body": []
+              },
+              {
+                "label": "Symptoms that wake you from sleep regularly",
+                "body": []
+              }
             ]
-          }
+          },
+          "closing": [
+            "These symptoms don't necessarily mean something serious is happening, but they should never be ignored."
+          ]
         }
       ],
       "perspective": {
-        "title": "This Is Where the Arc Begins",
+        "title": "The Arc Perspective",
         "body": [
-      "At Arc Wellness, we believe digestive health is about more than relieving symptoms. It's about understanding why those symptoms are happening in the first place.",
-      "Sometimes the answer is as simple as improving nutrition or increasing fiber. Sometimes stress, sleep, or medications are playing a larger role. Sometimes further medical evaluation is needed.",
-      "Our goal isn't to label every digestive complaint as \"leaky gut\" or assume every symptom comes from the microbiome. Our goal is to understand the whole picture—your symptoms, your history, your lifestyle, and your overall health—so we can help you make informed decisions about what comes next.",
-      "Because when your digestive system functions well, everything from your energy to your nutrition, metabolism, and daily comfort can benefit."
-    ]
+          "At Arc Wellness, we believe digestive health is about more than relieving symptoms. It's about understanding why those symptoms are happening in the first place.",
+          "Sometimes the answer is as simple as improving nutrition or increasing fiber. Sometimes stress, sleep, or medications are playing a larger role. Sometimes further medical evaluation is needed.",
+          "Our goal isn't to label every digestive complaint as \"leaky gut\" or assume every symptom comes from the microbiome. Our goal is to understand the whole picture—your symptoms, your history, your lifestyle, and your overall health—so we can help you make informed decisions about what comes next.",
+          "Because when your digestive system functions well, everything from your energy to your nutrition, [metabolism](/treatments/metabolic-health), and daily comfort can benefit."
+        ],
+        "cta": {
+          "lead": "Understand what's behind your symptoms.",
+          "body": "If you're in the St. Louis area, our physician-led team is here to help you look at the whole picture—not just a single symptom.",
+          "label": "Book a consultation"
+        }
+      },
+      "primaryCtaLabel": "Book a consultation",
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "What are the signs of poor gut health?",
+            "answer": "Gut imbalance often shows up as a cluster of everyday symptoms rather than one obvious sign—frequent bloating, constipation or diarrhea, heartburn, discomfort after eating, or increasing food sensitivities. Some people also notice symptoms outside the digestive tract, such as brain fog, low energy, or skin changes. When several occur together or become persistent, they deserve a closer look."
+          },
+          {
+            "question": "Can gut problems cause symptoms outside the stomach?",
+            "answer": "They can be connected. The body works as an interconnected system, and the gut communicates constantly with the immune system and the brain through the [gut–brain axis](/treatments/gut-health). While symptoms like fatigue, mood changes, or ongoing inflammation have many possible causes, digestive health is one piece of the puzzle worth exploring."
+          },
+          {
+            "question": "Do I need a cleanse or detox to reset my gut?",
+            "answer": "Usually not. Your gut is already remarkably good at maintaining itself, and a harsh cleanse isn't what it needs. More often it responds to consistency—fiber, colorful fruits and vegetables, whole grains, healthy fats, hydration, movement, quality sleep, and stress management."
+          },
+          {
+            "question": "Where can I get gut health testing and support in St. Louis?",
+            "answer": "Arc Wellness offers physician-led evaluations at our St. Louis, MO location that look beyond a single symptom to your full health picture—your history, lifestyle, nutrition, and overall health—so you can make informed decisions about what comes next. Learn more about our [gut health](/treatments/gut-health) care."
+          }
+        ]
+      },
+      "disclaimer": "This article is for educational purposes and is not a substitute for personalized medical advice.",
+      "overviewImage": {
+        "src": "/assets/insights/is-your-gut-trying-to-tell-you-something/hero-gut-model.webp?v=20260824",
+        "alt": "Teal and gold anatomical gut model on cream — an informative view of the digestive system"
       }
+    },
+    "seo": {
+      "title": "Signs of Digestive Imbalance in St. Louis | Arc Wellness, STL",
+      "description": "Bloating, fatigue, or foods that don't agree with you? Arc Wellness in St. Louis explains the everyday signs of digestive imbalance and how to support your gut.",
+      "schemaHeadline": "Is Your Gut Trying to Tell You Something?",
+      "schemaDescription": "Arc Wellness in St. Louis explains the everyday signs of digestive imbalance—bloating, fatigue, food sensitivities—and how to support your gut.",
+      "schemaImage": "/assets/insights/is-your-gut-trying-to-tell-you-something/hero-gut-model.webp?v=20260824",
+      "focusKeyword": "gut health St. Louis",
+      "secondaryKeywords": [
+        "signs of digestive imbalance",
+        "gut-brain axis",
+        "digestive health St. Louis",
+        "gut health testing near me"
+      ],
+      "medicalSpecialty": "Gastroenterology",
+      "medicalCondition": "Digestive health",
+      "authorName": "Dr. Danish Jabbar, MD",
+      "authorUrl": "/about"
     }
   },
   {

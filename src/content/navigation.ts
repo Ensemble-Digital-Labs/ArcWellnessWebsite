@@ -392,6 +392,7 @@ const arcLibraryMenu: readonly NavColumn[] = [
         items: [
           leaf("Education", "/library/education"),
           leaf("From the Arc Desk", "/library/desk"),
+          leaf("From the Arc Table", "/library/table"),
         ],
       },
     ],
