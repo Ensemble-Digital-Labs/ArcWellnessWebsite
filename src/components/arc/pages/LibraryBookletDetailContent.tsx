@@ -4,10 +4,12 @@ import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 
 import { InvestCTASection } from "@/components/arc/InvestCTASection";
+import { LibraryBookFlipReader } from "@/components/arc/pages/LibraryBookFlipReader";
 import { LibraryPdfPages, LibraryPdfScroller } from "@/components/arc/pages/LibraryPdfPages";
 import {
   libraryBookletAllowsDownload,
   libraryBookletDownloadSrc,
+  libraryBookletUsesFlipReader,
   type LibraryBooklet,
 } from "@/content/library/desk";
 import { homeInvestSupport } from "@/content/homepage";
@@ -76,13 +78,22 @@ export function LibraryBookletDetailContent({
             ) : null}
           </header>
 
-          <div className="mx-auto mt-12 max-w-5xl overflow-hidden rounded-2xl border border-arc-charcoal/15 bg-white shadow-[0_16px_48px_rgba(45,45,45,0.08)]">
+          <div
+            className={cn(
+              "mx-auto mt-12 overflow-hidden rounded-2xl border border-arc-charcoal/15 bg-white shadow-[0_16px_48px_rgba(45,45,45,0.08)]",
+              libraryBookletUsesFlipReader(booklet) ? "max-w-6xl" : "max-w-5xl",
+            )}
+          >
             {canDownload ? (
               <iframe
                 title={`${booklet.title} PDF`}
                 src={`${booklet.pdfSrc}#view=FitH`}
                 className="aspect-[3/4] w-full min-h-[70dvh] bg-[#ebe4d6] sm:aspect-[4/3] sm:min-h-[80dvh]"
               />
+            ) : libraryBookletUsesFlipReader(booklet) ? (
+              <div className="flex min-h-[70dvh] max-h-[80dvh] flex-col bg-[#ebe4d6]">
+                <LibraryBookFlipReader src={booklet.pdfSrc} />
+              </div>
             ) : (
               <LibraryPdfScroller className="max-h-[80dvh] min-h-[70dvh] bg-[#ebe4d6]">
                 <LibraryPdfPages src={booklet.pdfSrc} />

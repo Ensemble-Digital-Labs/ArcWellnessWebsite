@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { Download, FileText, X } from "lucide-react";
 import { motion } from "framer-motion";
 
+import { LibraryBookFlipReader, PageJumpField, resetIosViewportZoom, type FlipPager } from "@/components/arc/pages/LibraryBookFlipReader";
 import { LibraryPdfPages, LibraryPdfScroller } from "@/components/arc/pages/LibraryPdfPages";
 import {
   ARC_HEADLINE_TITLE_EMPHASIS_TEAL_CLASS,
@@ -14,6 +15,7 @@ import {
 import {
   libraryBookletAllowsDownload,
   libraryBookletDownloadSrc,
+  libraryBookletUsesFlipReader,
   type LibraryBooklet,
 } from "@/content/library/desk";
 import { ARC_FULLSCREEN_MODAL_Z_CLASS } from "@/lib/arc-layout";
@@ -31,6 +33,7 @@ function BookletPdfOverlay({
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const unlock = lockArcPageScrollForModal();
@@ -44,14 +47,70 @@ function BookletPdfOverlay({
     return () => {
       window.removeEventListener("keydown", onKey);
       unlock();
+      resetIosViewportZoom();
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const root = overlayRef.current;
+    if (!root) return;
+
+    const sync = () => {
+      const typing =
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement;
+      const coarse = window.matchMedia("(pointer: coarse)").matches;
+      const vv = window.visualViewport;
+      const pageZoomed = Boolean(vv && vv.scale > 1.01);
+
+      if (!coarse || typing || pageZoomed) {
+        root.style.top = "";
+        root.style.left = "";
+        root.style.width = "";
+        root.style.height = "";
+        root.style.right = "";
+        root.style.bottom = "";
+        return;
+      }
+
+      if (vv) {
+        const top = Math.round(vv.offsetTop);
+        const left = Math.round(vv.offsetLeft);
+        const width = Math.round(vv.width);
+        const height = Math.round(vv.height);
+        root.style.top = `${top}px`;
+        root.style.left = `${left}px`;
+        root.style.width = `${width}px`;
+        root.style.height = `${height}px`;
+        root.style.right = "auto";
+        root.style.bottom = "auto";
+        return;
+      }
+
+      root.style.height = `${window.innerHeight}px`;
+    };
+
+    sync();
+    window.visualViewport?.addEventListener("resize", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
+
+  const isFlip = libraryBookletUsesFlipReader(booklet);
+  const [pager, setPager] = useState<FlipPager | null>(null);
+
   return createPortal(
     <div
+      ref={overlayRef}
       className={cn(
-        "fixed inset-0 flex h-[100dvh] flex-col bg-arc-charcoal/70 p-3 backdrop-blur-[2px] sm:p-5",
+        "fixed inset-0 flex h-[100svh] max-h-[100dvh] flex-col overflow-hidden",
         ARC_FULLSCREEN_MODAL_Z_CLASS,
+        isFlip
+          ? "bg-[#2a2724]"
+          : "bg-arc-charcoal/70 p-3 backdrop-blur-[2px] sm:p-5",
       )}
       data-lenis-prevent
       role="dialog"
@@ -60,44 +119,86 @@ function BookletPdfOverlay({
       onClick={onClose}
     >
       <div
-        className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-arc-cream shadow-[0_24px_80px_rgba(0,0,0,0.28)]"
+        className={cn(
+          "relative mx-auto flex h-full min-h-0 w-full flex-col overflow-hidden",
+          isFlip
+            ? "max-w-none bg-[#2a2724]"
+            : "max-w-6xl rounded-2xl bg-arc-cream shadow-[0_24px_80px_rgba(0,0,0,0.28)]",
+        )}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-arc-charcoal/12 px-4 py-3 sm:px-5">
-          <h2
-            id="booklet-pdf-title"
-            className="min-w-0 truncate font-serif text-lg text-arc-charcoal sm:text-xl"
-          >
-            {booklet.title}
-          </h2>
-          <div className="flex shrink-0 items-center gap-2">
-            {libraryBookletAllowsDownload(booklet) ? (
-              <a
-                href={libraryBookletDownloadSrc(booklet)}
-                download={`${booklet.slug}.pdf`}
-                className={cn(
-                  cardButtonClass,
-                  "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
-                )}
+        {isFlip ? (
+          <div className="pointer-events-none relative z-40 grid shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 bg-[#1a1816] px-3 py-2 pt-[max(0.5rem,env(safe-area-inset-top))] sm:px-4">
+            <div className="min-w-0">
+              <h2
+                id="booklet-pdf-title"
+                className="truncate font-serif text-base text-white/90 max-sm:sr-only sm:text-lg"
               >
-                <Download className="size-4" aria-hidden />
-                <span className="hidden sm:inline">Download</span>
-              </a>
-            ) : null}
-            <button
-              ref={closeRef}
-              type="button"
-              onClick={onClose}
-              className="inline-flex size-11 items-center justify-center rounded-full text-arc-charcoal transition-colors hover:bg-arc-charcoal/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50"
-              aria-label="Close booklet"
-            >
-              <X className="size-5" aria-hidden />
-            </button>
+                {booklet.title}
+              </h2>
+            </div>
+            {pager ? (
+              <PageJumpField
+                page={pager.page}
+                pageCount={pager.pageCount}
+                goToPage={pager.goToPage}
+              />
+            ) : (
+              <span className="w-11" aria-hidden />
+            )}
+            <div className="flex justify-end">
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={onClose}
+                className="pointer-events-auto inline-flex size-11 items-center justify-center rounded-full bg-white/12 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                aria-label="Close booklet"
+              >
+                <X className="size-5" aria-hidden />
+              </button>
+            </div>
           </div>
-        </header>
-        <LibraryPdfScroller className="min-h-0 flex-1">
-          <LibraryPdfPages src={booklet.pdfSrc} />
-        </LibraryPdfScroller>
+        ) : (
+          <header className="flex shrink-0 items-center justify-between gap-3 border-b border-arc-charcoal/12 px-4 py-3 sm:px-5">
+            <h2
+              id="booklet-pdf-title"
+              className="min-w-0 truncate font-serif text-lg text-arc-charcoal sm:text-xl"
+            >
+              {booklet.title}
+            </h2>
+            <div className="flex shrink-0 items-center gap-2">
+              {libraryBookletAllowsDownload(booklet) ? (
+                <a
+                  href={libraryBookletDownloadSrc(booklet)}
+                  download={`${booklet.slug}.pdf`}
+                  className={cn(
+                    cardButtonClass,
+                    "border border-arc-charcoal/20 bg-transparent text-arc-charcoal hover:border-arc-teal-ink hover:text-arc-teal-ink",
+                  )}
+                >
+                  <Download className="size-4" aria-hidden />
+                  <span className="hidden sm:inline">Download</span>
+                </a>
+              ) : null}
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={onClose}
+                className="inline-flex size-11 items-center justify-center rounded-full text-arc-charcoal transition-colors hover:bg-arc-charcoal/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/50"
+                aria-label="Close booklet"
+              >
+                <X className="size-5" aria-hidden />
+              </button>
+            </div>
+          </header>
+        )}
+        {isFlip ? (
+          <LibraryBookFlipReader src={booklet.pdfSrc} onPager={setPager} />
+        ) : (
+          <LibraryPdfScroller className="min-h-0 flex-1">
+            <LibraryPdfPages src={booklet.pdfSrc} />
+          </LibraryPdfScroller>
+        )}
       </div>
     </div>,
     document.body,

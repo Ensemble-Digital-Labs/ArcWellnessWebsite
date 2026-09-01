@@ -12,6 +12,8 @@ export type LibraryBooklet = {
   downloadSrc?: string;
   /** When false, Read only — no Download / Open PDF. Default true. */
   allowDownload?: boolean;
+  /** Overlay reader. Default `"scroll"`. `"flip"` is the recipe-book page-turn viewer. */
+  reader?: "scroll" | "flip";
   coverSrc: string;
   coverAlt: string;
 };
@@ -82,4 +84,8 @@ export function libraryBookletDownloadSrc(booklet: LibraryBooklet): string {
 
 export function libraryBookletAllowsDownload(booklet: LibraryBooklet): boolean {
   return booklet.allowDownload !== false;
+}
+
+export function libraryBookletUsesFlipReader(booklet: LibraryBooklet): boolean {
+  return booklet.reader === "flip";
 }

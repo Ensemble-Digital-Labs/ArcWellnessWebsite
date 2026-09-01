@@ -14,6 +14,7 @@ export const LIBRARY_TABLE_BOOKLETS: readonly LibraryBooklet[] = [
     pageCount: 159,
     pdfSrc: "/assets/library/table/the-nourishing-table.pdf?v=20260826",
     allowDownload: false,
+    reader: "flip",
     coverSrc: "/assets/library/table/the-nourishing-table-cover.webp?v=20260826",
     coverAlt:
       "The Nourishing Table cover — roast chicken, salad, bread, and olives on a rustic table",
