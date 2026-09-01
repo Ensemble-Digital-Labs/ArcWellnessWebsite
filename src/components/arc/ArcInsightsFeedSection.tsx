@@ -42,6 +42,7 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "hormones-through-the-decades-st-louis-mo",
   "understanding-chronic-inflammation",
   "is-your-gut-trying-to-tell-you-something",
+  "why-youre-tired-even-when-your-labs-are-normal",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
