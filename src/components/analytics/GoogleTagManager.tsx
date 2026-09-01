@@ -10,8 +10,10 @@ export const GTM_ID =
  * Inline `<script>`, not `next/script` — Next’s Script loader moves the snippet
  * into a body loader that Search Console rejects.
  *
- * Renders on Netlify and GoDaddy static export. Do not also inject GTM from a
- * Netlify edge function or tags will duplicate.
+ * On Netlify this is the runtime install. On GoDaddy static export, Next still
+ * inserts a hidden streaming div before the noscript (Search Console fails).
+ * `npm run build:godaddy` post-processes HTML to place official snippets
+ * first-in-head and immediately after `<body>`.
  */
 export function GoogleTagManagerHead() {
   if (!GTM_ID) return null;
