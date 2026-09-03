@@ -173,6 +173,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/understanding-chronic-inflammation",
       permanent: true,
     },
+    {
+      source: "/blog/hair-loss-on-a-glp-1-explained",
+      destination: "/blogs/hair-loss-on-a-glp-1-explained",
+      permanent: true,
+    },
   ];
 }
 

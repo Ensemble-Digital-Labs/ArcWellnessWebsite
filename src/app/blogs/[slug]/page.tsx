@@ -115,7 +115,13 @@ function buildBlogJsonLd(entry: InsightEntry) {
       audienceType: "Patient",
     };
   }
-  if (condition) {
+  const schemaAbout = entry.seo?.schemaAbout?.filter((item) => item.name?.trim());
+  if (schemaAbout?.length) {
+    article.about = schemaAbout.map((item) => ({
+      "@type": item.type?.trim() || "Thing",
+      name: item.name.trim(),
+    }));
+  } else if (condition) {
     article.about = {
       "@type": "MedicalCondition",
       name: condition,
