@@ -192,7 +192,7 @@ function Callout({ children }: { children: string }) {
   return (
     <aside className="my-8 border-y border-arc-champagne/70 bg-[#f7f1e6]/70 px-5 py-5 sm:px-7 sm:py-6">
       <p className="font-serif text-base leading-snug text-arc-charcoal sm:text-lg">
-        {children}
+        {renderProseInline(children)}
       </p>
     </aside>
   );
@@ -208,7 +208,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
           <li key={item} className="flex gap-3">
             <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
             <span className="font-serif text-base leading-snug text-arc-charcoal sm:text-lg">
-              {item}
+              {renderProseInline(item)}
             </span>
           </li>
         ))}
@@ -218,7 +218,7 @@ function SectionList({ list }: { list: InsightSectionList }) {
         {list.items.map((item) => (
           <li key={item} className="flex gap-2.5">
             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-arc-teal-ink" />
-            <span className={PROSE}>{item}</span>
+            <span className={PROSE}>{renderProseInline(item)}</span>
           </li>
         ))}
       </ul>
@@ -514,6 +514,12 @@ function TypedEditorial({
               ) : null}
             </div>
 
+            {article.closingLine ? (
+              <p className="mx-auto mt-6 max-w-2xl font-sans text-sm font-semibold tracking-[0.08em] text-arc-teal-ink sm:text-base">
+                {article.closingLine}
+              </p>
+            ) : null}
+
             <ArcTextReveal variant="heading" trigger="mount">
               <h1 className="mt-6 font-title-emphasis font-normal not-italic text-[clamp(2.75rem,10vw,5rem)] leading-[0.95] tracking-tight text-arc-teal-ink">
                 {entry.titleLines?.length
@@ -526,21 +532,18 @@ function TypedEditorial({
               </h1>
             </ArcTextReveal>
 
-            <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
-              <p className="mx-auto mt-5 max-w-2xl font-sans text-base font-medium leading-relaxed text-arc-charcoal/75 sm:text-lg">
-                {entry.excerpt}
-              </p>
-            </ArcTextReveal>
+            {entry.excerpt &&
+            entry.excerpt.trim() !== entry.seo?.description?.trim() ? (
+              <ArcTextReveal variant="body" trigger="mount" delayIndex={1}>
+                <p className="mx-auto mt-5 max-w-2xl font-sans text-base font-medium leading-relaxed text-arc-charcoal/75 sm:text-lg">
+                  {entry.excerpt}
+                </p>
+              </ArcTextReveal>
+            ) : null}
 
             {article.authorCredit ? (
               <p className="mx-auto mt-4 max-w-2xl font-sans text-sm leading-relaxed text-arc-charcoal/60 sm:text-[0.9375rem]">
                 {article.authorCredit}
-              </p>
-            ) : null}
-
-            {article.closingLine ? (
-              <p className="mx-auto mt-5 max-w-md font-serif text-sm italic text-arc-teal-ink sm:text-base">
-                {article.closingLine}
               </p>
             ) : null}
           </header>

@@ -139,6 +139,11 @@ export type InsightEntry = {
     /** When set, JSON-LD also emits MedicalWebPage + related medical fields. */
     medicalSpecialty?: string;
     medicalCondition?: string;
+    /**
+     * JSON-LD `about` entities (MedicalCondition, Thing, etc.).
+     * Falls back to a single MedicalCondition from `medicalCondition`.
+     */
+    schemaAbout?: readonly { type?: string; name: string }[];
     /** Person author for medical schema (falls back to Organization). */
     authorName?: string;
     /** Absolute or site path for the author Person URL. */
