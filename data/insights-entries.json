@@ -1591,8 +1591,8 @@
     "id": "blog-hair-loss-on-a-glp-1-explained",
     "kind": "blog",
     "slug": "hair-loss-on-a-glp-1-explained",
-    "title": "What to Know About Hair Loss on a GLP-1",
-    "excerpt": "Losing hair while on a GLP-1? Learn why it happens, the role of protein and nutrition, and how Arc Wellness helps you keep your results and your hair.",
+    "title": "Losing Weight… and Your Hair?",
+    "excerpt": "What to Know About Hair Loss on a GLP-1",
     "publishedAt": "03 Sep 2026",
     "imageSrc": "/assets/insights/hair-loss-on-a-glp-1-explained/hero-examining-hair.webp?v=20260903b",
     "imageAlt": "Woman looking in the mirror and parting her hair to check her scalp",
@@ -1665,7 +1665,6 @@
       "Reach out if hair loss is severe, keeps worsening, lasts beyond several months, occurs in patches, involves scalp irritation or scarring, or comes with other new symptoms. It may point to thyroid dysfunction, anemia, hormonal changes, or another condition that needs evaluation."
     ],
     "article": {
-      "closingLine": "Losing Weight… and Your Hair?",
       "overview": [
         "You are losing the weight. Your clothes are fitting better. You are feeling better about yourself. Maybe you are finally seeing changes you have been working toward for years.",
         "And then one fine day, you look down in the shower and think…",
@@ -1861,6 +1860,36 @@
           "GLP-1 medications can be incredibly useful tools, but medication is only one part of a successful weight-loss program. Nutrition, strength, metabolic health, appropriate supplementation, laboratory monitoring, and sustainable habits matter too.",
           "Because losing weight shouldn't mean losing the things you wanted to keep.",
           "**Especially your hair.**"
+        ],
+        "cta": {
+          "lead": "Don't let this shed light on your confidence. Let's get to the root of it.",
+          "body": "Hormones, stress, nutrition, thyroid, hair loss rarely has one cause. Our physician-led team looks at the whole picture.",
+          "label": "Schedule your Arc Wellness consultation."
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "Does a GLP-1 like semaglutide or tirzepatide directly cause hair loss?",
+            "answer": "Not usually in a direct way. Most GLP-1–related hair shedding is telogen effluvium, a temporary shedding pattern triggered by rapid weight loss and reduced nutritional intake rather than the medication itself."
+          },
+          {
+            "question": "What is telogen effluvium?",
+            "answer": "Telogen effluvium is a temporary, diffuse hair shedding that happens when a physical stressor  such as rapid weight loss, illness, surgery, or nutritional deficiency  pushes more hairs than normal into the resting (telogen) phase at the same time."
+          },
+          {
+            "question": "How much protein do I need on a GLP-1 to protect my hair?",
+            "answer": "Needs vary by person, but protein should be included at every meal from sources like eggs, fish, poultry, lean meats, beans, lentils, cottage cheese, Greek yogurt, and tofu. Arc Wellness can help calculate a target based on your weight, activity level, and goals."
+          },
+          {
+            "question": "How long does GLP-1-related hair shedding last?",
+            "answer": "Shedding often becomes noticeable two to three months after the triggering event and generally improves within a few months of correcting the underlying cause. Full regrowth and returning to previous fullness can take six months or longer."
+          },
+          {
+            "question": "When should I see a provider about hair loss during weight loss?",
+            "answer": "Reach out if hair loss is severe, keeps worsening, lasts beyond several months, occurs in patches, involves scalp irritation or scarring, or comes with other new symptoms. It may point to thyroid dysfunction, anemia, hormonal changes, or another condition that needs evaluation."
+          }
         ]
       }
     },
