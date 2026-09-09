@@ -167,7 +167,7 @@ function MetaPill({ children }: { children: string }) {
 function SectionFigure({
   image,
   className,
-  sizes = "(max-width: 768px) 100vw, 42rem",
+  sizes = "(max-width: 768px) 100vw, 48rem",
 }: {
   image: InsightSectionImage;
   className?: string;
@@ -181,6 +181,7 @@ function SectionFigure({
           alt={image.alt}
           fill
           sizes={sizes}
+          quality={88}
           className="object-cover"
         />
       </div>
@@ -390,8 +391,8 @@ function ArticleSection({ section }: { section: InsightArticleSection }) {
                 image={fig}
                 sizes={
                   section.images!.length === 2
-                    ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 21rem"
-                    : "(max-width: 768px) 100vw, 14rem"
+                    ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 24rem"
+                    : "(max-width: 768px) 100vw, 16rem"
                 }
               />
             </li>
