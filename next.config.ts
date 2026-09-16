@@ -178,6 +178,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/hair-loss-on-a-glp-1-explained",
       permanent: true,
     },
+    {
+      source: "/blog/nervous-system-dysregulation-symptoms-causes-healing",
+      destination: "/blogs/nervous-system-dysregulation-symptoms-causes-healing",
+      permanent: true,
+    },
   ];
 }
 
