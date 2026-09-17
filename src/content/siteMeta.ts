@@ -21,6 +21,8 @@ export const siteMeta = {
   phone: "636-400-5500",
   phoneTel: "+16364005500",
   email: "info@arcwellness.net",
+  /** n8n production webhook for Arc Wellness Website Form. */
+  contactWebhookUrl: "https://n8n-automation.techsoit.com/webhook/websitecontactForm",
   hours: ["Monday – Friday: 9 AM – 5 PM"],
   bookingUrl: "https://booking.mangomint.com/892312",
   social: {
