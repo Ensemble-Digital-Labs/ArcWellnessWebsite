@@ -45,6 +45,7 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "why-youre-tired-even-when-your-labs-are-normal",
   "hair-loss-on-a-glp-1-explained",
   "nervous-system-dysregulation-symptoms-causes-healing",
+  "the-skinny-on-fiber",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */

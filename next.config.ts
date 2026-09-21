@@ -183,6 +183,16 @@ if (!isGodaddyStatic) {
       destination: "/blogs/nervous-system-dysregulation-symptoms-causes-healing",
       permanent: true,
     },
+    {
+      source: "/blog/the-skinny-on-fiber",
+      destination: "/blogs/the-skinny-on-fiber",
+      permanent: true,
+    },
+    {
+      source: "/library/table/the-skinny-on-fiber",
+      destination: "/blogs/the-skinny-on-fiber",
+      permanent: true,
+    },
   ];
 }
 

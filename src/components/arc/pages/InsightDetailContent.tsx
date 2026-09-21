@@ -589,7 +589,7 @@ function TypedEditorial({
                     "mt-8 text-arc-charcoal/60",
                   )}
                 >
-                  {article.disclaimer}
+                  {renderProseInline(article.disclaimer)}
                 </p>
               ) : null}
             </section>
@@ -600,7 +600,7 @@ function TypedEditorial({
                 "mt-12 text-arc-charcoal/60",
               )}
             >
-              {article.disclaimer}
+              {renderProseInline(article.disclaimer)}
             </p>
           ) : null}
 
