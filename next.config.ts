@@ -193,6 +193,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/the-skinny-on-fiber",
       permanent: true,
     },
+    {
+      source: "/blog/all-calories-arent-created-equal",
+      destination: "/blogs/all-calories-arent-created-equal",
+      permanent: true,
+    },
   ];
 }
 
