@@ -2473,7 +2473,7 @@
             "items": [
               {
                 "label": "Oat → steamed and rolled → rolled oats.",
-                "body": "Still recognizably an oat."
+                "body": []
               },
               {
                 "label": "Food components → refined/extracted ingredients → formulation + additives → cereal.",
@@ -2490,7 +2490,7 @@
           "title": "So Why Does Food Quality Matter?",
           "body": [
             "Whole and minimally processed foods often bring more than calories alone. Depending on the food, they may provide fiber, protein, healthy fats, vitamins, minerals, and naturally occurring plant compounds such as polyphenols.",
-            "Diets high in ultra-processed foods, on the other hand, can make it easier to consume large amounts of refined carbohydrates, added sugars, sodium, and calorie-dense foods while leaving less room for fiber-rich whole foods. Research has also linked dietary patterns high in [ultra-processed foods](https://nutritionsource.hsph.harvard.edu/processed-foods/) with a number of poorer health outcomes. That does not mean one protein bar causes disease, and it certainly does not mean every processed food belongs in the same category."
+            "Diets high in ultra-processed foods, on the other hand, can make it easier to consume large amounts of refined carbohydrates, added sugars, sodium, and calorie-dense foods while leaving less room for fiber-rich whole foods. Research has also linked dietary patterns high in ultra-processed foods with a number of poorer health outcomes. That does not mean one protein bar causes disease, and it certainly does not mean every processed food belongs in the same category."
           ],
           "callout": "It means our overall pattern matters.",
           "closing": [
