@@ -178,6 +178,26 @@ if (!isGodaddyStatic) {
       destination: "/blogs/hair-loss-on-a-glp-1-explained",
       permanent: true,
     },
+    {
+      source: "/blog/nervous-system-dysregulation-symptoms-causes-healing",
+      destination: "/blogs/nervous-system-dysregulation-symptoms-causes-healing",
+      permanent: true,
+    },
+    {
+      source: "/blog/the-skinny-on-fiber",
+      destination: "/blogs/the-skinny-on-fiber",
+      permanent: true,
+    },
+    {
+      source: "/library/table/the-skinny-on-fiber",
+      destination: "/blogs/the-skinny-on-fiber",
+      permanent: true,
+    },
+    {
+      source: "/blog/all-calories-arent-created-equal",
+      destination: "/blogs/all-calories-arent-created-equal",
+      permanent: true,
+    },
   ];
 }
 
