@@ -2566,5 +2566,268 @@
       "authorName": "Dr. Danish Jabbar, MD",
       "authorUrl": "/about"
     }
+  },
+  {
+    "id": "blog-not-all-preservatives-are-created-equal",
+    "kind": "blog",
+    "slug": "not-all-preservatives-are-created-equal",
+    "title": "Not All Preservatives Are Created Equal",
+    "excerpt": "Why Doesn't My Bread Mold?",
+    "publishedAt": "28 Sep 2026",
+    "imageSrc": "/assets/insights/not-all-preservatives-are-created-equal/featured.webp?v=20260928",
+    "imageAlt": "Loaf of homemade bread next to a packaged store-bought loaf on a kitchen counter",
+    "body": [
+      "Remember the days when the bread from the store was soft and flavorful, but if you didn't eat it quickly enough it turned into a science experiment? Now, sometimes it seems like the bread itself is the science experiment because some loaves appear to last forever. What changed? Why can a typical store-bought loaf last considerably longer than the bread we make at home? And maybe the bigger question—is that necessarily a good thing?",
+      "Inquiring minds want to know…",
+      "What Does \"Safe\" Actually Mean?",
+      "Your Gut Is More Than a Food Processor",
+      "Perishable Isn't a Dirty Word",
+      "So…Should My Bread Mold?",
+      "Frequently Asked Questions"
+    ],
+    "article": {
+      "overview": [
+        "Remember the days when the bread from the store was soft and flavorful, but if you didn't eat it quickly enough it turned into a science experiment? Now, sometimes it seems like the bread itself is the science experiment because some loaves appear to last forever. What changed? Why can a typical store-bought loaf last considerably longer than the bread we make at home? And maybe the bigger question—is that necessarily a good thing?"
+      ],
+      "overviewImage": {
+        "src": "/assets/insights/not-all-preservatives-are-created-equal/featured.webp?v=20260928",
+        "alt": "Loaf of homemade bread next to a packaged store-bought loaf on a kitchen counter"
+      },
+      "sections": [
+        {
+          "title": "Inquiring minds want to know…",
+          "body": [
+            "Traditional bread is pretty simple: flour, water, yeast or sourdough starter, salt and maybe a little sugar. Once these ingredients are mixed together, they immediately begin to change. Dough is formed, it rises and expands, and then that beautiful dough baby is baked to golden perfection.",
+            "Once baked, however, the clock starts ticking. If it isn't eaten quickly enough, bread begins to lose moisture, becomes stale and eventually—hello, science experiment—mold begins to grow. The circle of food life. Naturally, food has a usable lifespan whether or not a manufacturing company prints an expiration date on the package.",
+            "So, with our quick home-ec lesson out of the way, how does some store-bought bread stay soft and mold-free so much longer? Part of the answer is modern food preservation and formulation. And that opens a much bigger conversation.",
+            "Long before refrigeration, people needed ways to keep food edible until they were ready to eat it. Salt, smoking, drying, curing, fermentation, vinegar, sugar and cool storage were all used for preservation. Later, canning gave us another powerful way to keep food safe for long periods. These methods worked remarkably well, and many are still used today.",
+            "But there is an interesting difference between traditional preservation and much of modern food preservation: traditionally, we expected preserved food to change. Fresh cucumbers became pickles. Cabbage became sauerkraut. Milk became cheese. Fresh fruit became jam or dried fruit. Meat was salted, smoked or cured. Nobody expected food preserved for months to look and taste exactly as it did the day it was harvested.",
+            "Today, we often do.",
+            "We want peaches when peaches aren't in season. We want strawberries shipped hundreds or thousands of miles. We want crackers that remain crispy, cereal that doesn't taste stale and bread that stays soft long enough to survive manufacturing, transportation, the grocery-store shelf and another week or two sitting in our pantry.",
+            "As our food supply became industrialized, preservation took on a new job. The question was no longer simply, \"How do we keep this food from spoiling?\" It also became, \"How do we manufacture this food in enormous quantities, transport it long distances, keep it safe, maintain its texture and flavor, make every package taste the same and give consumers enough time to buy and eat it?\"",
+            "That is where the modern food-preservation toolbox becomes much larger.",
+            "Today's foods may contain substances such as calcium propionate, potassium sorbate, sodium benzoate, sodium nitrite, BHA, BHT and EDTA, among many others. They don't all do the same thing. Some inhibit mold or yeast. Some discourage bacterial growth. Some prevent fats from becoming rancid. Others help protect flavor, color or quality.",
+            "Before we turn the word \"chemical\" into the bad guy, though, there is something important to understand: everything is made of chemicals. Salt is sodium chloride. Vinegar contains acetic acid. Vitamin C is ascorbic acid. Vitamin E compounds called tocopherols can even function as preservatives. A long chemical-sounding name alone doesn't tell us whether an ingredient is good, bad or somewhere in between.",
+            "Perhaps the better question is simply: Why is it there?",
+            "Take a look at the ingredient list on a commercially produced loaf of bread. Depending on the brand, you may find far more than flour, water, yeast and salt. There can be preservatives, emulsifiers, dough conditioners, enzymes, added sugars, oils and enriched flour. Each ingredient generally has a job. Calcium propionate, for example, is commonly used in commercially produced bread because it helps inhibit mold growth. Other ingredients may help dough move efficiently through industrial equipment, create a consistent crumb, keep bread softer longer or maintain the texture consumers expect.",
+            "None of those goals is inherently sinister. Preventing mold matters. Preventing foodborne illness matters. Reducing food waste matters. Producing affordable food on a massive scale matters.",
+            "But somewhere along the way, I think our definition of \"better food\" became tangled up with our definition of \"better product.\""
+          ],
+          "callout": "Those aren't necessarily the same thing.",
+          "closing": [
+            "A better commercial product may survive transportation better, stay soft longer, have a predictable appearance, cost less to manufacture and remain sellable longer. A better **food** should probably have another requirement: it should nourish the person eating it.",
+            "And that brings us to the FDA."
+          ],
+          "image": {
+            "src": "/assets/insights/not-all-preservatives-are-created-equal/bread-mold.webp?v=20260928",
+            "alt": "A moldy slice of bread beside a fresh slice — homemade bread spoils; many store loaves last much longer"
+          }
+        },
+        {
+          "title": "What Does \"Safe\" Actually Mean?",
+          "body": [
+            "This is where I had to do some digging, because I had always assumed that if an ingredient was allowed in our food supply, the FDA had independently tested and approved it before manufacturers could use it.",
+            "That isn't quite how the system works.",
+            "Food additives requiring FDA approval go through a premarket review process in which safety information, anticipated exposure and the proposed conditions of use are evaluated. But there is another category called GRAS, which stands for **Generally Recognized as Safe**. A substance meeting the requirements for GRAS use does not require the same FDA premarket approval process as a food additive. Manufacturers are still legally responsible for ensuring that their ingredients are safe and comply with the law, and companies can submit GRAS notices to the FDA for review, but that notification process is voluntary.",
+            "That distinction matters. It does not mean GRAS ingredients are automatically unsafe, and it doesn't mean manufacturers can legally put anything they want into our food. But it does mean that \"it's in our food, therefore the FDA independently tested and approved it\" isn't always accurate.",
+            "I think consumers deserve to understand that distinction.",
+            "The FDA evaluates food additives using a safety standard intended to establish a reasonable certainty that an ingredient will not cause harm under its intended conditions of use. And thank goodness we have food-safety regulation. Our modern food system feeds hundreds of millions of people, and we absolutely want protection from contamination, toxins, dangerous microorganisms and ingredients demonstrated to cause harm.",
+            "But I've started asking a slightly different question: Is \"safe to consume\" necessarily the same thing as \"good to consume regularly?\"",
+            "A food can meet regulatory safety standards and still not be particularly nutritious. Sugar is legal. Refined flour is legal. A diet consisting largely of cookies, chips and soda would still be a terrible idea. So perhaps asking whether each individual ingredient is technically permitted isn't the only question we should be asking.",
+            "Maybe we should also look at the food as a whole."
+          ],
+          "image": {
+            "src": "/assets/insights/not-all-preservatives-are-created-equal/preservatives-science.webp?v=20260928",
+            "alt": "Packaged bread beside bowls of refined ingredients — modern preservation and formulation"
+          }
+        },
+        {
+          "title": "Maybe We're Asking the Wrong Question",
+          "body": [
+            "At this point, I could give you a list of preservatives, tell you which ones have been studied, which ones I personally try to limit, and send you into your pantry with a magnifying glass and a trash bag.",
+            "But I don't think that's the answer.",
+            "Maybe instead of obsessing over whether every individual preservative is good or bad, we should ask ourselves a much simpler question: How much of my diet actually needs preservatives in the first place?",
+            "An apple doesn't need calcium propionate. An egg doesn't need an emulsifier. A pot of homemade soup doesn't need to remain shelf-stable until 2028. The bread I make at home doesn't need to survive three weeks in a warehouse, another week on a grocery-store shelf and two more weeks in my pantry."
+          ],
+          "callout": "It only needs to be food.",
+          "closing": [
+            "And maybe that's where we've gotten a little lost.",
+            "For most of human history, our diets were made primarily from foods that were grown, raised, harvested, cooked, fermented, dried or otherwise prepared relatively close to the way they existed in nature. Then our food environment changed dramatically.",
+            "We learned how to refine ingredients, separate foods into their individual components, recombine those components, add flavors, colors, emulsifiers, stabilizers and preservatives, package the finished product and make it last for months—or sometimes years. Food science became remarkably good at creating products that are inexpensive, convenient, consistent and shelf-stable.",
+            "But our digestive system didn't suddenly receive a software update.",
+            "And researchers are now asking an important question: What happens when foods designed largely for convenience, consistency and shelf life begin replacing the whole and minimally processed foods humans historically ate?",
+            "The answer is still being studied, but we're learning enough that I think it is worth paying attention."
+          ]
+        },
+        {
+          "title": "Your Gut Is More Than a Food Processor",
+          "body": [
+            "When we eat, we aren't simply putting calories into a machine. Our gastrointestinal tract contains an enormous community of microorganisms collectively known as the [gut microbiome](/treatments/gut-health). What we eat influences which organisms thrive there and what compounds they produce.",
+            "[Whole plant foods provide fiber](/blogs/the-skinny-on-fiber) and other compounds that our gut microbes can use. Those microbes, in turn, produce substances such as short-chain fatty acids that participate in maintaining the intestinal environment and communicating with our metabolic and immune systems.",
+            "Now compare that with a dietary pattern dominated by ultra-processed foods. These foods are often lower in intact food structure and fiber and can be higher in refined starches, added sugars, sodium and fats. Many also contain combinations of emulsifiers, stabilizers, sweeteners, colors and other additives that simply aren't necessary when we're preparing the same basic foods at home.",
+            "Researchers are investigating whether characteristics of ultra-processed diets—and certain additives in particular—can alter the gut microbiome, [intestinal barrier](/blogs/is-your-gut-trying-to-tell-you-something) and inflammatory signaling. Laboratory and animal research has raised concerns about some additives, while human research continues to develop.",
+            "That distinction is important. We cannot truthfully say that every preservative, emulsifier or artificial sweetener causes inflammation or disease. The science simply isn't there.",
+            "But that doesn't mean there is nothing worth paying attention to."
+          ]
+        },
+        {
+          "title": "From the Gut to the Rest of the Body",
+          "body": [
+            "Inflammation itself isn't bad. It is part of the body's normal immune response. We need inflammation to fight infection and heal injuries.",
+            "The concern is [chronic, low-grade inflammation](/blogs/understanding-chronic-inflammation), when inflammatory signaling remains elevated over time. Chronic inflammation is involved in the biology of numerous conditions, including cardiovascular disease and [metabolic disorders](/treatments/metabolic-health), and inflammatory pathways are also being studied in relation to [neurological disease](/treatments/brain-health).",
+            "Does that mean eating a piece of packaged bread [causes diabetes](/blogs/insulin-resistance-signs-symptoms), Alzheimer's disease or a heart attack?"
+          ],
+          "callout": "Absolutely not.",
+          "closing": [
+            "And I don't want us turning food into something we're afraid to eat.",
+            "The science doesn't support that conclusion.",
+            "What the science increasingly suggests is that we should step back from obsessing over one ingredient and pay attention to our overall dietary pattern.",
+            "A large 2024 review examined research involving nearly 10 million people and found that greater consumption of ultra-processed foods was associated with numerous adverse health outcomes. The strength of evidence differed depending on the condition, and much of the research was observational, which means it cannot prove cause and effect. But associations have been observed across cardiovascular, metabolic, gastrointestinal and mental-health outcomes.",
+            "Even more interesting to me is what happened when researchers actually controlled what people ate.",
+            "In a National Institutes of Health study, participants were given an ultra-processed diet and a minimally processed diet for two weeks each. The diets presented to them were designed to be matched for calories, sugar, fat, carbohydrates and fiber, and participants were allowed to eat as much or as little as they wanted.",
+            "When eating the ultra-processed diet, participants consumed [roughly 500 additional calories per day](/blogs/all-calories-arent-created-equal) and [gained weight](/treatments/medical-weight-loss). On the minimally processed diet, they ate less and lost weight.",
+            "That does not prove that preservatives caused the difference.",
+            "It tells us something much more interesting: the whole food environment matters.",
+            "Texture matters. Food structure matters. How quickly we eat may matter. Fiber and satiety matter. Palatability matters. Processing matters. And researchers are still working to understand how all of those pieces fit together.",
+            "So instead of waiting until science identifies which individual ingredient may contribute to which individual disease, I keep coming back to a much simpler idea:",
+            "Why wouldn't we simply start eating more foods that don't require all of those ingredients in the first place?"
+          ]
+        },
+        {
+          "title": "Maybe We Need to Get Back in the Kitchen",
+          "body": [
+            "And no, I'm not suggesting we all quit our jobs, buy a cow and start churning butter before breakfast.",
+            "We have lives.",
+            "We have careers, children, appointments and approximately 47 things we're supposed to accomplish before dinner.",
+            "Convenience isn't the enemy.",
+            "But cooking more often at home may be one of the simplest ways to quietly change the quality of our diets without memorizing a list of 200 ingredients we're supposed to avoid.",
+            "Research has found that people who eat home-cooked meals more frequently tend to have better overall diet quality, including greater fruit and vegetable intake and better adherence to healthy dietary patterns. Other research using U.S. data has associated more frequent home cooking with lower intake of calories, fat and sugar. These studies don't prove that cooking itself magically makes someone healthy, but the pattern makes sense.",
+            "When we cook at home, we decide what goes into the food.",
+            "Instead of trying to manufacture something that has to remain identical for months, we can use flour, eggs, beans, vegetables, olive oil, fish, chicken, fruit, herbs, spices, butter and salt.",
+            "Food starts looking like…well…food again.",
+            "And something interesting happens when we make that shift. We don't have to spend nearly as much time asking whether potassium sorbate is safe, whether an emulsifier affects our microbiome or why a package of muffins has seventeen ingredients.",
+            "We simply start needing fewer foods that require them.",
+            "That doesn't mean everything needs to be homemade. Frozen vegetables can be incredibly useful. Canned beans can make dinner happen on a busy Tuesday. Sardines don't exactly swim into my kitchen voluntarily. Fermented foods, canned foods and frozen foods can absolutely belong in a healthy diet.",
+            "The distinction I'm beginning to make isn't preserved versus unpreserved."
+          ],
+          "callout": "It's food versus formulation.",
+          "closing": [
+            "Am I buying something made primarily from recognizable foods that happens to have been preserved for convenience? Or am I buying a product engineered from refined ingredients, additives, flavors, stabilizers and preservatives specifically so it can remain inexpensive, consistent, appealing and shelf-stable for a very long time?",
+            "Those aren't necessarily nutritionally equivalent choices."
+          ]
+        },
+        {
+          "title": "Perishable Isn't a Dirty Word",
+          "body": [
+            "Maybe we've become so accustomed to shelf stability that we've forgotten something incredibly basic:"
+          ],
+          "callout": "Real food spoils.",
+          "closing": [
+            "Strawberries soften. Avocados turn brown. Milk sours. Vegetables wilt. Homemade soup eventually needs to be thrown away.",
+            "And bread molds.",
+            "That doesn't mean a food is automatically healthier simply because it spoils quickly, and it certainly doesn't mean preserved food is automatically unhealthy.",
+            "Freezing is preservation. Canning is preservation. Fermentation is preservation. Drying is preservation. Refrigeration is preservation.",
+            "All of those methods can absolutely be part of a healthy diet.",
+            "Maybe the goal isn't to fear preservation.",
+            "Maybe it's to recognize the difference between preserving food and engineering a food product primarily around shelf life."
+          ],
+          "image": {
+            "src": "/assets/insights/not-all-preservatives-are-created-equal/traditional-preservation.webp?v=20260928",
+            "alt": "Pickles, sauerkraut, jam, salt, smoked meat, and dried fruit — traditional ways of preserving food"
+          }
+        }
+      ],
+      "perspective": {
+        "title": "So…Should My Bread Mold?",
+        "body": [
+          "Maybe that isn't really the question anymore.",
+          "The mold was simply what made me start asking questions.",
+          "The bigger question became: How much of my food am I willing to outsource to a manufacturing process?",
+          "I don't need perfection. I'm still going to buy food from the grocery store. I'm still going to eat at restaurants. I'm still going to open packages. And occasionally convenience is going to win because that's life.",
+          "This isn't about becoming afraid of food.",
+          "It's about shifting the balance.",
+          "[Cook dinner instead of opening dinner](/library/table/the-nourishing-table) a little more often. Make the soup. Bake the bread when you have time. Wash and cut the vegetables. Eat the apple. Freeze the leftovers. Keep foods in your refrigerator that actually have a lifespan measured in days rather than years.",
+          "And when you do buy something in a package, turn it around and read the ingredients. Ask what they are and why they're there. You don't have to know every chemical name or memorize a list of ingredients to avoid. [Just become curious about your food again.](/contact)",
+          "Because somewhere along the way, we became incredibly good at engineering food that can survive manufacturing, transportation, warehouses, grocery-store shelves and months in our pantries.",
+          "Maybe the more important question isn't how long our food can survive.",
+          "Maybe it's whether the way we're eating is helping **us** thrive."
+        ],
+        "cta": {
+          "lead": "Maybe it's whether the way we're eating is helping us thrive.",
+          "body": "If you're in the St. Louis area, our physician-led team can help you look at gut health, inflammation, and how you actually eat.",
+          "label": "Book a consultation"
+        }
+      },
+      "primaryCtaLabel": "Book a consultation",
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "Why doesn't store-bought bread mold as quickly as homemade bread?",
+            "answer": "Many commercial loaves contain preservatives such as calcium propionate, which helps inhibit mold growth, along with emulsifiers, dough conditioners and enzymes that keep bread softer longer. Homemade bread is usually just flour, water, yeast and salt, so it goes stale and molds within days."
+          },
+          {
+            "question": "What does GRAS mean on food ingredients?",
+            "answer": "GRAS stands for Generally Recognized as Safe. A substance that meets GRAS requirements does not go through the same FDA premarket approval process as a food additive. Manufacturers remain legally responsible for ingredient safety, and submitting a GRAS notice to the FDA is voluntary."
+          },
+          {
+            "question": "Are food preservatives bad for you?",
+            "answer": "Not automatically. Salt, vinegar, vitamin C and vitamin E compounds all work as preservatives. Preservatives help prevent mold, foodborne illness and food waste. The bigger concern is an overall diet built around ultra-processed products rather than any single preservative."
+          },
+          {
+            "question": "How do ultra-processed foods affect gut health?",
+            "answer": "Ultra-processed foods are often lower in fiber and intact food structure and can contain additives such as emulsifiers and stabilizers. Researchers are studying how these diets may affect the gut microbiome, the intestinal barrier and inflammatory signaling. Animal research has raised concerns, and human research is still developing."
+          },
+          {
+            "question": "Can ultra-processed foods cause weight gain?",
+            "answer": "In an NIH controlled study, people eating an ultra-processed diet consumed roughly 500 more calories per day and gained weight, while the same people lost weight on a minimally processed diet. Observational research has also linked higher ultra-processed food intake with cardiovascular, metabolic, gastrointestinal and mental health outcomes."
+          },
+          {
+            "question": "What is the difference between preserved food and formulated food?",
+            "answer": "Preserved food is a recognizable food kept longer through freezing, canning, fermenting, drying or refrigeration. Formulated food is a product engineered from refined ingredients, additives, flavors and preservatives so it stays inexpensive, consistent and shelf-stable for a long time."
+          },
+          {
+            "question": "How can I eat fewer preservatives without giving up convenience?",
+            "answer": "Cook at home a little more often, keep frozen vegetables and canned beans on hand, choose foods with short ingredient lists and read labels to understand why each ingredient is there. You do not need to memorize a list of ingredients to avoid."
+          },
+          {
+            "question": "Where can I get help with gut health and inflammation in St. Louis?",
+            "answer": "Arc Wellness is a physician-led practice in St. Louis, MO offering gut health, metabolic health and longevity care. Contact the team to schedule a consultation."
+          }
+        ]
+      }
+    },
+    "seo": {
+      "title": "Are Food Preservatives Bad for You? | Arc Wellness",
+      "description": "Why doesn't store-bought bread mold? Arc Wellness in St. Louis explains food preservatives, GRAS rules and how ultra-processed foods affect gut health.",
+      "schemaHeadline": "Not All Preservatives Are Created Equal",
+      "schemaDescription": "Why doesn't store-bought bread mold? Arc Wellness in St. Louis explains food preservatives, GRAS rules and how ultra-processed foods affect gut health.",
+      "schemaImage": "/assets/insights/not-all-preservatives-are-created-equal/featured.webp?v=20260928",
+      "focusKeyword": "food preservatives",
+      "secondaryKeywords": [
+        "are preservatives bad for you",
+        "ultra-processed foods and gut health",
+        "GRAS food ingredients",
+        "calcium propionate in bread",
+        "why doesn't store bread mold",
+        "preservatives and inflammation"
+      ],
+      "schemaAbout": [
+        {
+          "type": "Thing",
+          "name": "Food preservatives"
+        },
+        {
+          "type": "Thing",
+          "name": "Ultra-processed food"
+        },
+        {
+          "type": "Thing",
+          "name": "Gut microbiome"
+        }
+      ],
+      "authorName": "Dr. Danish Jabbar, MD",
+      "authorUrl": "/about"
+    }
   }
 ]

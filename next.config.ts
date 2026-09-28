@@ -198,6 +198,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/all-calories-arent-created-equal",
       permanent: true,
     },
+    {
+      source: "/blog/not-all-preservatives-are-created-equal",
+      destination: "/blogs/not-all-preservatives-are-created-equal",
+      permanent: true,
+    },
   ];
 }
 
