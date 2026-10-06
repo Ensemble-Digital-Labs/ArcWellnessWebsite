@@ -70,7 +70,7 @@ function startLoad(src: string): CacheEntry {
         disableAutoFetch: false,
         rangeChunkSize: 65536,
       });
-      loadingTask.onProgress = (progress) => {
+      loadingTask.onProgress = (progress: PdfLoadProgress) => {
         entry.loaded = progress.loaded;
         entry.total = progress.total;
         notify(entry);
