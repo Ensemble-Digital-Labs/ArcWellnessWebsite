@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
 
+import { loadLibraryPdfBuffer } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
 const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
@@ -402,9 +403,11 @@ export function PageJumpField({
 /** Recipe-book page-turn reader: one page on phones, two-page spreads from tablet up. */
 export function LibraryBookFlipReader({
   src,
+  coverSrc,
   onPager,
 }: {
   src: string;
+  coverSrc?: string;
   onPager?: (pager: FlipPager) => void;
 }) {
   const reduceMotion = useReducedMotion();
@@ -420,6 +423,7 @@ export function LibraryBookFlipReader({
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
   const [aspect, setAspect] = useState(DEFAULT_ASPECT);
   const [error, setError] = useState<string | null>(null);
+  const [loadProgress, setLoadProgress] = useState({ loaded: 0, total: 0 });
   const [spread, setSpread] = useState(false);
   const [viewPage, setViewPage] = useState(1);
   const [flip, setFlip] = useState<FlipState | null>(null);
@@ -525,10 +529,12 @@ export function LibraryBookFlipReader({
     const load = async () => {
       const pdfjs = await import("pdfjs-dist");
       pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
+      const buffer = await loadLibraryPdfBuffer(src, (progress) => {
+        if (!cancelled) setLoadProgress(progress);
+      });
+      if (cancelled) return;
       loadingTask = pdfjs.getDocument({
-        url: src,
-        disableRange: true,
-        disableStream: true,
+        data: new Uint8Array(buffer),
       });
       const doc = await loadingTask.promise;
       if (cancelled) {
@@ -944,10 +950,27 @@ export function LibraryBookFlipReader({
   }
 
   if (!pdf) {
+    const pct =
+      loadProgress.total > 0
+        ? Math.min(100, Math.round((loadProgress.loaded / loadProgress.total) * 100))
+        : null;
     return (
-      <p className="flex min-h-0 flex-1 items-center justify-center px-4 py-10 text-center font-sans text-sm text-white/70">
-        Loading booklet…
-      </p>
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-6 py-10">
+        {coverSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={coverSrc}
+            alt=""
+            className="h-40 w-auto max-w-[11rem] rounded-lg object-cover opacity-85 shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:h-52 sm:max-w-[14rem]"
+          />
+        ) : null}
+        <p className="text-center font-sans text-sm text-white/75" role="status">
+          {pct == null ? "Loading booklet…" : `Loading booklet · ${pct}%`}
+        </p>
+        <p className="max-w-xs text-center font-sans text-xs leading-relaxed text-white/45">
+          The first open can take a moment on a slower connection.
+        </p>
+      </div>
     );
   }
 

@@ -20,6 +20,7 @@ import {
 } from "@/content/library/desk";
 import { ARC_FULLSCREEN_MODAL_Z_CLASS } from "@/lib/arc-layout";
 import { lockArcPageScrollForModal } from "@/lib/arcModalScrollLock";
+import { prefetchLibraryPdf } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
 const cardButtonClass =
@@ -193,7 +194,7 @@ function BookletPdfOverlay({
           </header>
         )}
         {isFlip ? (
-          <LibraryBookFlipReader src={booklet.pdfSrc} onPager={setPager} />
+          <LibraryBookFlipReader src={booklet.pdfSrc} coverSrc={booklet.coverSrc} onPager={setPager} />
         ) : (
           <LibraryPdfScroller className="min-h-0 flex-1">
             <LibraryPdfPages src={booklet.pdfSrc} />
@@ -216,6 +217,8 @@ function BookletCard({
   reduceMotion: boolean;
   onRead: (booklet: LibraryBooklet) => void;
 }) {
+  const warmPdf = () => prefetchLibraryPdf(booklet.pdfSrc);
+
   return (
     <motion.article
       className="flex h-full flex-col rounded-3xl border border-arc-charcoal/12 bg-white/85 p-6 text-center shadow-[0_12px_40px_rgba(45,45,45,0.06)] sm:p-8"
@@ -223,6 +226,9 @@ function BookletCard({
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      onPointerEnter={warmPdf}
+      onPointerDown={warmPdf}
+      onFocusCapture={warmPdf}
     >
       <button
         type="button"
