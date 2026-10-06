@@ -203,6 +203,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/not-all-preservatives-are-created-equal",
       permanent: true,
     },
+    {
+      source: "/blog/winter-blues-seasonal-mood-changes",
+      destination: "/blogs/winter-blues-seasonal-mood-changes",
+      permanent: true,
+    },
   ];
 }
 

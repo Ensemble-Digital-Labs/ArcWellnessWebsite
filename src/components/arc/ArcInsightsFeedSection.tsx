@@ -48,6 +48,7 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "the-skinny-on-fiber",
   "all-calories-arent-created-equal",
   "not-all-preservatives-are-created-equal",
+  "winter-blues-seasonal-mood-changes",
 ]);
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
