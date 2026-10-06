@@ -8,7 +8,7 @@ import type {
   RenderTask,
 } from "pdfjs-dist";
 
-import { loadLibraryPdfBuffer } from "@/lib/libraryPdfCache";
+import { loadLibraryPdfBytes } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
 const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
@@ -323,11 +323,9 @@ export function LibraryPdfPages({ src }: { src: string }) {
     const load = async () => {
       const pdfjs = await import("pdfjs-dist");
       pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
-      const buffer = await loadLibraryPdfBuffer(src);
+      const data = await loadLibraryPdfBytes(src);
       if (cancelled) return;
-      loadingTask = pdfjs.getDocument({
-        data: new Uint8Array(buffer),
-      });
+      loadingTask = pdfjs.getDocument({ data });
       const doc = await loadingTask.promise;
       if (cancelled) {
         destroyTask();

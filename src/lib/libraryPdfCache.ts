@@ -1,11 +1,10 @@
 "use client";
 
 /**
- * Shared fetch for library PDFs so hover/Read share one download, and reopen
- * does not hit the network again in this session.
+ * Shared fetch for library PDFs so hover/Read share one download.
  *
- * The Nourishing Table file is ~53MB and is not linearized, so pdf.js cannot
- * paint page 1 until the whole file is present.
+ * pdf.js may transfer the ArrayBuffer into its worker. We keep an owned copy
+ * in this cache and hand getDocument a fresh slice on every open.
  */
 
 export type PdfLoadProgress = {
@@ -14,7 +13,7 @@ export type PdfLoadProgress = {
 };
 
 type CacheEntry = {
-  promise: Promise<ArrayBuffer>;
+  promise: Promise<Uint8Array>;
   loaded: number;
   total: number;
   listeners: Set<(progress: PdfLoadProgress) => void>;
@@ -48,12 +47,12 @@ function notify(entry: CacheEntry) {
 async function readResponse(
   response: Response,
   onChunk: (loaded: number, total: number) => void,
-): Promise<ArrayBuffer> {
+): Promise<Uint8Array> {
   const total = Number(response.headers.get("content-length")) || 0;
   if (!response.body) {
-    const buffer = await response.arrayBuffer();
-    onChunk(buffer.byteLength, total || buffer.byteLength);
-    return buffer;
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    onChunk(bytes.byteLength, total || bytes.byteLength);
+    return bytes;
   }
 
   const reader = response.body.getReader();
@@ -76,7 +75,7 @@ async function readResponse(
     offset += chunk.byteLength;
   }
   onChunk(loaded, total || loaded);
-  return out.buffer;
+  return out;
 }
 
 function startLoad(src: string): CacheEntry {
@@ -124,17 +123,43 @@ export function prefetchLibraryPdf(src: string) {
   if (!entries.has(src)) startLoad(src);
 }
 
-export function loadLibraryPdfBuffer(
+async function loadOwnedPdfBytes(
   src: string,
   onProgress?: (progress: PdfLoadProgress) => void,
-): Promise<ArrayBuffer> {
+): Promise<Uint8Array> {
   prefetchLibraryPdfRuntime();
-  const entry = entries.get(src) ?? startLoad(src);
+  let entry = entries.get(src) ?? startLoad(src);
   if (onProgress) {
     onProgress({ loaded: entry.loaded, total: entry.total });
     entry.listeners.add(onProgress);
   }
-  return entry.promise.finally(() => {
-    if (onProgress) entry.listeners.delete(onProgress);
-  });
+  try {
+    const owned = await entry.promise;
+    if (owned.byteLength === 0) {
+      entries.delete(src);
+      entry = startLoad(src);
+      if (onProgress) {
+        entry.listeners.add(onProgress);
+      }
+      const retry = await entry.promise;
+      if (retry.byteLength === 0) {
+        throw new Error("PDF buffer is empty");
+      }
+      return retry;
+    }
+    return owned;
+  } finally {
+    if (onProgress) {
+      entries.get(src)?.listeners.delete(onProgress);
+    }
+  }
+}
+
+/** Fresh bytes for pdf.js — never pass the cached buffer directly (it can be transferred). */
+export async function loadLibraryPdfBytes(
+  src: string,
+  onProgress?: (progress: PdfLoadProgress) => void,
+): Promise<Uint8Array> {
+  const owned = await loadOwnedPdfBytes(src, onProgress);
+  return owned.slice();
 }

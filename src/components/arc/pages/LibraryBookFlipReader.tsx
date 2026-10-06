@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
 
-import { loadLibraryPdfBuffer } from "@/lib/libraryPdfCache";
+import { loadLibraryPdfBytes } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
 const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
@@ -529,13 +529,11 @@ export function LibraryBookFlipReader({
     const load = async () => {
       const pdfjs = await import("pdfjs-dist");
       pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
-      const buffer = await loadLibraryPdfBuffer(src, (progress) => {
+      const data = await loadLibraryPdfBytes(src, (progress) => {
         if (!cancelled) setLoadProgress(progress);
       });
       if (cancelled) return;
-      loadingTask = pdfjs.getDocument({
-        data: new Uint8Array(buffer),
-      });
+      loadingTask = pdfjs.getDocument({ data });
       const doc = await loadingTask.promise;
       if (cancelled) {
         destroyTask();
@@ -918,12 +916,13 @@ export function LibraryBookFlipReader({
   const labelPage = flip?.phase === "leaf" ? flip.from : viewPage;
 
   useEffect(() => {
+    if (!pdf) return;
     onPager?.({
       page: labelPage,
       pageCount,
       goToPage,
     });
-  }, [goToPage, labelPage, onPager, pageCount]);
+  }, [goToPage, labelPage, onPager, pageCount, pdf]);
 
   const expanded =
     spread &&
