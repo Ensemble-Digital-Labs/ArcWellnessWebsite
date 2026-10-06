@@ -28,15 +28,26 @@ const cardButtonClass =
 
 function BookletPdfOverlay({
   booklet,
+  open,
   onClose,
 }: {
   booklet: LibraryBooklet;
+  open: boolean;
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (open) return;
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && overlayRef.current?.contains(active)) {
+      active.blur();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
     const unlock = lockArcPageScrollForModal();
     closeRef.current?.focus({ preventScroll: true });
 
@@ -50,9 +61,10 @@ function BookletPdfOverlay({
       unlock();
       resetIosViewportZoom();
     };
-  }, [onClose]);
+  }, [open, onClose]);
 
   useEffect(() => {
+    if (!open) return;
     const root = overlayRef.current;
     if (!root) return;
 
@@ -98,26 +110,33 @@ function BookletPdfOverlay({
       window.visualViewport?.removeEventListener("resize", sync);
       window.removeEventListener("resize", sync);
     };
-  }, []);
+  }, [open]);
 
   const isFlip = libraryBookletUsesFlipReader(booklet);
   const [pager, setPager] = useState<FlipPager | null>(null);
+
+  useEffect(() => {
+    setPager(null);
+  }, [booklet.pdfSrc]);
 
   return createPortal(
     <div
       ref={overlayRef}
       className={cn(
-        "fixed inset-0 flex h-[100svh] max-h-[100dvh] flex-col overflow-hidden",
+        "fixed inset-0 h-[100svh] max-h-[100dvh] flex-col overflow-hidden",
+        open ? "flex" : "hidden",
         ARC_FULLSCREEN_MODAL_Z_CLASS,
         isFlip
           ? "bg-[#2a2724]"
           : "bg-arc-charcoal/70 p-3 backdrop-blur-[2px] sm:p-5",
       )}
-      data-lenis-prevent
+      {...(open ? { "data-lenis-prevent": true } : {})}
       role="dialog"
-      aria-modal="true"
+      aria-modal={open}
+      aria-hidden={!open}
+      inert={!open}
       aria-labelledby="booklet-pdf-title"
-      onClick={onClose}
+      onClick={open ? onClose : undefined}
     >
       <div
         className={cn(
@@ -194,7 +213,12 @@ function BookletPdfOverlay({
           </header>
         )}
         {isFlip ? (
-          <LibraryBookFlipReader src={booklet.pdfSrc} coverSrc={booklet.coverSrc} onPager={setPager} />
+          <LibraryBookFlipReader
+            src={booklet.pdfSrc}
+            coverSrc={booklet.coverSrc}
+            onPager={setPager}
+            active={open}
+          />
         ) : (
           <LibraryPdfScroller className="min-h-0 flex-1">
             <LibraryPdfPages src={booklet.pdfSrc} />
@@ -320,8 +344,13 @@ export function LibraryBookletsGrid({
     emphasis: string;
   };
 }) {
-  const [openBooklet, setOpenBooklet] = useState<LibraryBooklet | null>(null);
-  const closeBooklet = useCallback(() => setOpenBooklet(null), []);
+  const [readerBooklet, setReaderBooklet] = useState<LibraryBooklet | null>(null);
+  const [readerOpen, setReaderOpen] = useState(false);
+  const openReader = useCallback((booklet: LibraryBooklet) => {
+    setReaderBooklet(booklet);
+    setReaderOpen(true);
+  }, []);
+  const closeReader = useCallback(() => setReaderOpen(false), []);
   const single = booklets.length === 1;
 
   return (
@@ -352,14 +381,14 @@ export function LibraryBookletsGrid({
               booklet={booklet}
               index={index}
               reduceMotion={reduceMotion}
-              onRead={setOpenBooklet}
+              onRead={openReader}
             />
           </li>
         ))}
       </ul>
 
-      {openBooklet ? (
-        <BookletPdfOverlay booklet={openBooklet} onClose={closeBooklet} />
+      {readerBooklet ? (
+        <BookletPdfOverlay booklet={readerBooklet} open={readerOpen} onClose={closeReader} />
       ) : null}
     </>
   );

@@ -97,6 +97,12 @@ const nextConfig: NextConfig = {
 };
 
 if (!isGodaddyStatic) {
+  nextConfig.headers = async () => [
+    {
+      source: "/assets/:path*",
+      headers: [{ key: "Accept-Ranges", value: "bytes" }],
+    },
+  ];
   nextConfig.redirects = async () => [
     {
       source: "/book",

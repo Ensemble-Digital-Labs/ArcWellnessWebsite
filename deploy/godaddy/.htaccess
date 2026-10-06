@@ -62,6 +62,10 @@ DirectoryIndex index.html
   <FilesMatch "\.(?:js|mjs|css|woff2?|ttf|otf|eot|png|jpe?g|gif|webp|avif|svg|ico|mp4|webm|pdf)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+  # pdf.js needs byte ranges so a linearized booklet can show page 1 early.
+  <FilesMatch "\.pdf$">
+    Header set Accept-Ranges "bytes"
+  </FilesMatch>
   <FilesMatch "\.(?:html)$">
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </FilesMatch>

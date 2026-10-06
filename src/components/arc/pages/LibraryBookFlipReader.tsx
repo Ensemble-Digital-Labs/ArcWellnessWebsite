@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 
-import { loadLibraryPdfBytes } from "@/lib/libraryPdfCache";
+import {
+  loadLibraryPdfDocument,
+  readLibraryReaderPage,
+  writeLibraryReaderPage,
+} from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
-const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
 const SPREAD_QUERY = "(min-width: 768px) and (min-height: 520px)";
 const MAX_BITMAP = 1800;
 const DEFAULT_ASPECT = 1.403;
@@ -405,10 +408,13 @@ export function LibraryBookFlipReader({
   src,
   coverSrc,
   onPager,
+  active = true,
 }: {
   src: string;
   coverSrc?: string;
   onPager?: (pager: FlipPager) => void;
+  /** When the overlay is shown again, remeasure the stage after `display: none`. */
+  active?: boolean;
 }) {
   const reduceMotion = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -425,8 +431,9 @@ export function LibraryBookFlipReader({
   const [error, setError] = useState<string | null>(null);
   const [loadProgress, setLoadProgress] = useState({ loaded: 0, total: 0 });
   const [spread, setSpread] = useState(false);
-  const [viewPage, setViewPage] = useState(1);
+  const [viewPage, setViewPage] = useState(() => readLibraryReaderPage(src));
   const [flip, setFlip] = useState<FlipState | null>(null);
+  const pageSrcRef = useRef(src);
   const [stage, setStage] = useState({ w: 0, h: 0 });
 
   flipRef.current = flip;
@@ -480,16 +487,22 @@ export function LibraryBookFlipReader({
   }, []);
 
   useEffect(() => {
-    setViewPage((page) => {
-      if (!spread) return page;
-      if (page <= 1) return 1;
-      return page % 2 === 0 ? page : page - 1;
-    });
-  }, [spread]);
+    if (pageSrcRef.current !== src) {
+      pageSrcRef.current = src;
+      setViewPage(readLibraryReaderPage(src));
+      return;
+    }
+    writeLibraryReaderPage(src, viewPage);
+  }, [src, viewPage]);
+
+  useEffect(() => {
+    if (!pdf) return;
+    setViewPage((page) => snapToViewPage(page, pdf.numPages, spread));
+  }, [pdf, spread]);
 
   useEffect(() => {
     const el = stageRef.current;
-    if (!el) return;
+    if (!el || !active) return;
 
     const measure = () => {
       const w = el.clientWidth;
@@ -513,32 +526,16 @@ export function LibraryBookFlipReader({
       observer.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [pdf]);
+  }, [active, pdf]);
 
   useEffect(() => {
     let cancelled = false;
-    let loadingTask: PDFDocumentLoadingTask | null = null;
-
-    const destroyTask = () => {
-      const task = loadingTask;
-      loadingTask = null;
-      if (typeof task?.destroy !== "function") return;
-      void task.destroy().catch(() => {});
-    };
 
     const load = async () => {
-      const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
-      const data = await loadLibraryPdfBytes(src, (progress) => {
+      const doc = await loadLibraryPdfDocument(src, (progress) => {
         if (!cancelled) setLoadProgress(progress);
       });
       if (cancelled) return;
-      loadingTask = pdfjs.getDocument({ data });
-      const doc = await loadingTask.promise;
-      if (cancelled) {
-        destroyTask();
-        return;
-      }
       try {
         const first = await doc.getPage(1);
         const viewport = first.getViewport({ scale: 1 });
@@ -548,22 +545,17 @@ export function LibraryBookFlipReader({
       } catch {
         /* keep default */
       }
-      if (cancelled) {
-        destroyTask();
-        return;
-      }
+      if (cancelled) return;
       setPdf(doc);
     };
 
     void load().catch((reason: unknown) => {
-      destroyTask();
       if (cancelled || isPdfjsCancelled(reason)) return;
       setError("This booklet could not be opened here. Close and try again.");
     });
 
     return () => {
       cancelled = true;
-      destroyTask();
     };
   }, [src]);
 
@@ -967,7 +959,7 @@ export function LibraryBookFlipReader({
           {pct == null ? "Loading booklet…" : `Loading booklet · ${pct}%`}
         </p>
         <p className="max-w-xs text-center font-sans text-xs leading-relaxed text-white/45">
-          The first open can take a moment on a slower connection.
+          Opening the first pages. The rest of the booklet continues in the background.
         </p>
       </div>
     );
