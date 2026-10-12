@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import { INSIGHTS_FEED_AMBIENT_SRC } from "@/content/backgroundDecoration";
 import {
@@ -16,6 +17,7 @@ import {
   type InsightEntry,
   type InsightKind,
 } from "@/content/pages/insights";
+import { sortInsightEntriesLatestFirst } from "@/lib/insightsSort";
 import { refreshArcScrollLayout } from "@/lib/arcScrollLayoutRefresh";
 import {
   updateInsightsHeaderChrome,
@@ -50,6 +52,8 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "not-all-preservatives-are-created-equal",
   "winter-blues-seasonal-mood-changes",
 ]);
+
+const INSIGHTS_PAGE_SIZE = 12;
 
 /** Case-study tab hidden for now — restore `"case-study"` when that feed ships. */
 const INSIGHTS_VISIBLE_TABS: InsightFilter[] = ["all", "blog"];
@@ -127,6 +131,19 @@ function getCounts(entries: readonly InsightEntry[]) {
   };
 }
 
+function parseInsightsPage(raw: string | null): number {
+  const n = Number(raw);
+  return Number.isInteger(n) && n >= 1 ? n : 1;
+}
+
+function insightsFeedQuery(filter: InsightFilter, page: number): string {
+  const params = new URLSearchParams();
+  if (filter === "blog") params.set("filter", "blog");
+  if (page > 1) params.set("page", String(page));
+  const query = params.toString();
+  return query ? `?${query}` : "";
+}
+
 function tabCount(
   filter: InsightFilter,
   counts: ReturnType<typeof getCounts>,
@@ -175,18 +192,10 @@ function InsightCard({
   });
   const show = reduceMotion || inView;
 
-  /** Slight aspect variation by column keeps the canvas from feeling grid-locked. */
-  const aspectClass =
-    columnIndex === 1
-      ? "aspect-[4/5]"
-      : columnIndex === 2
-        ? "aspect-[5/6]"
-        : "aspect-square";
-
   return (
     <motion.article
       ref={cardRef}
-      className="group break-inside-avoid"
+      className="group flex h-full flex-col break-inside-avoid"
       initial={false}
       animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
       transition={{
@@ -203,7 +212,7 @@ function InsightCard({
           src={entry.imageSrc || undefined}
           alt={entry.imageAlt}
           bordered={!entry.imageSrc}
-          className={cn("w-full bg-arc-cream", aspectClass)}
+          className="aspect-[4/5] w-full bg-arc-cream"
           imageClassName="object-top transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transition-none"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority && Boolean(entry.imageSrc)}
@@ -223,8 +232,8 @@ function InsightCard({
         </ArcWindowFrame>
       </Link>
 
-      <div className="mt-5 sm:mt-6">
-        <h3 className="font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-arc-charcoal sm:text-lg lg:text-xl">
+      <div className="mt-5 flex min-h-[6.25rem] flex-col sm:mt-6">
+        <h3 className="line-clamp-2 min-h-[2.6em] font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-arc-charcoal sm:min-h-[2.5em] sm:text-lg lg:text-xl">
           <Link
             href={href}
             className="underline-offset-[5px] transition-[color,text-decoration] duration-200 hover:text-arc-teal hover:underline focus-visible:outline-none focus-visible:underline"
@@ -367,6 +376,75 @@ function InsightsFilterPanel({
   );
 }
 
+function InsightsPagination({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (next: number) => void;
+}) {
+  if (pageCount <= 1) return null;
+
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+
+  return (
+    <nav
+      className="mt-16 flex flex-wrap items-center justify-center gap-2 sm:mt-20"
+      aria-label="Education posts pages"
+    >
+      <button
+        type="button"
+        onClick={() => onChange(page - 1)}
+        disabled={page <= 1}
+        className={cn(
+          "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border font-sans text-xs font-semibold uppercase tracking-[0.16em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
+          page <= 1
+            ? "cursor-not-allowed border-arc-charcoal/10 text-arc-charcoal/30"
+            : "border-arc-charcoal/20 text-arc-charcoal hover:border-arc-charcoal hover:bg-arc-charcoal hover:text-white",
+        )}
+        aria-label="Previous page"
+      >
+        <ChevronLeft className="size-4" aria-hidden />
+      </button>
+      {pages.map((n) => {
+        const active = n === page;
+        return (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border font-sans text-xs font-semibold tabular-nums tracking-[0.12em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
+              active
+                ? "border-arc-charcoal bg-arc-charcoal text-white"
+                : "border-arc-charcoal/20 text-arc-charcoal hover:border-arc-charcoal",
+            )}
+          >
+            {n}
+          </button>
+        );
+      })}
+      <button
+        type="button"
+        onClick={() => onChange(page + 1)}
+        disabled={page >= pageCount}
+        className={cn(
+          "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border font-sans text-xs font-semibold uppercase tracking-[0.16em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arc-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-arc-cream",
+          page >= pageCount
+            ? "cursor-not-allowed border-arc-charcoal/10 text-arc-charcoal/30"
+            : "border-arc-charcoal/20 text-arc-charcoal hover:border-arc-charcoal hover:bg-arc-charcoal hover:text-white",
+        )}
+        aria-label="Next page"
+      >
+        <ChevronRight className="size-4" aria-hidden />
+      </button>
+    </nav>
+  );
+}
+
 export function ArcInsightsFeedSection({
   id = "insights-feed",
   entries,
@@ -398,12 +476,19 @@ export function ArcInsightsFeedSection({
     return "all";
   };
 
+  const readPageFromUrl = (): number => {
+    if (typeof window === "undefined") return 1;
+    return parseInsightsPage(new URLSearchParams(window.location.search).get("page"));
+  };
+
   const [filter, setFilter] = useState<InsightFilter>("all");
+  const [page, setPage] = useState(1);
   /** Skip grid fade on first paint so preview images aren’t obscured while loading. */
   const [filterEntranceReady, setFilterEntranceReady] = useState(false);
 
   useEffect(() => {
     setFilter(readFilterFromUrl());
+    setPage(readPageFromUrl());
     setFilterEntranceReady(true);
   }, []);
 
@@ -433,9 +518,24 @@ export function ArcInsightsFeedSection({
 
   const filtered = useMemo(() => {
     const byTab =
-      filter === "all" ? [...entries] : entries.filter((e) => e.kind === filter);
-    return byTab.filter(isFeedVisibleEntry);
+      filter === "all" ? entries : entries.filter((e) => e.kind === filter);
+    return sortInsightEntriesLatestFirst(byTab.filter(isFeedVisibleEntry));
   }, [entries, filter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / INSIGHTS_PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const paged = useMemo(
+    () =>
+      filtered.slice(
+        (currentPage - 1) * INSIGHTS_PAGE_SIZE,
+        currentPage * INSIGHTS_PAGE_SIZE,
+      ),
+    [filtered, currentPage],
+  );
+
+  useEffect(() => {
+    if (page !== currentPage) setPage(currentPage);
+  }, [page, currentPage]);
 
   const scheduleScrollLayoutRefresh = () => {
     if (scrollRefreshTimerRef.current !== null) {
@@ -456,11 +556,35 @@ export function ArcInsightsFeedSection({
     [],
   );
 
+  const writeFeedUrl = (nextFilter: InsightFilter, nextPage: number) => {
+    window.history.replaceState(
+      null,
+      "",
+      `${pathname}${insightsFeedQuery(nextFilter, nextPage)}`,
+    );
+  };
+
+  const scrollToFeed = () => {
+    document.getElementById("insights-filter-bar")?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
   const selectFilter = (tab: InsightFilter) => {
     if (tab === filter) return;
     setFilter(tab);
-    const query = tab === "all" ? "" : `?filter=${tab}`;
-    window.history.replaceState(null, "", `${pathname}${query}`);
+    setPage(1);
+    writeFeedUrl(tab, 1);
+    if (reduceMotion) scheduleScrollLayoutRefresh();
+  };
+
+  const selectPage = (next: number) => {
+    const clamped = Math.min(pageCount, Math.max(1, next));
+    if (clamped === currentPage) return;
+    setPage(clamped);
+    writeFeedUrl(filter, clamped);
+    scrollToFeed();
     if (reduceMotion) scheduleScrollLayoutRefresh();
   };
 
@@ -508,7 +632,7 @@ export function ArcInsightsFeedSection({
         <div className="mx-auto w-full max-w-[min(100%,1440px)]">
           <div
             id="insights-filter-bar"
-            className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b-2 border-arc-charcoal/25 pt-8 sm:gap-x-10 sm:pt-10 md:gap-x-14"
+            className="flex flex-wrap items-end justify-center gap-x-6 gap-y-3 border-b-2 border-arc-charcoal/25 pt-8 scroll-mt-28 sm:gap-x-10 sm:pt-10 sm:scroll-mt-32 md:gap-x-14"
             role="tablist"
             aria-label={filterAriaLabel}
           >
@@ -547,14 +671,19 @@ export function ArcInsightsFeedSection({
           <div className="relative mt-0">
             <AnimatePresence mode="wait" initial={false}>
               <InsightsFilterPanel
-                key={filter}
+                key={`${filter}-${currentPage}`}
                 filter={filter}
-                items={filtered}
+                items={paged}
                 reduceMotion={reduceMotion ?? false}
                 animateEntrance={filterEntranceReady}
                 onSettled={scheduleScrollLayoutRefresh}
               />
             </AnimatePresence>
+            <InsightsPagination
+              page={currentPage}
+              pageCount={pageCount}
+              onChange={selectPage}
+            />
           </div>
         </div>
       </div>
