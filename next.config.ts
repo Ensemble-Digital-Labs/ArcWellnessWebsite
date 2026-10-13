@@ -214,6 +214,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/winter-blues-seasonal-mood-changes",
       permanent: true,
     },
+    {
+      source: "/blog/why-sleep-matters-for-your-health",
+      destination: "/blogs/why-sleep-matters-for-your-health",
+      permanent: true,
+    },
   ];
 }
 
