@@ -219,6 +219,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/why-sleep-matters-for-your-health",
       permanent: true,
     },
+    {
+      source: "/blog/your-skin-is-talking",
+      destination: "/blogs/your-skin-is-talking",
+      permanent: true,
+    },
   ];
 }
 

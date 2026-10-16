@@ -52,6 +52,7 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "not-all-preservatives-are-created-equal",
   "winter-blues-seasonal-mood-changes",
   "why-sleep-matters-for-your-health",
+  "your-skin-is-talking",
 ]);
 
 const INSIGHTS_PAGE_SIZE = 12;
