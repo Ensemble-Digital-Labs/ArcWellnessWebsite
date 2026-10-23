@@ -224,6 +224,11 @@ if (!isGodaddyStatic) {
       destination: "/blogs/your-skin-is-talking",
       permanent: true,
     },
+    {
+      source: "/blog/what-is-functional-health",
+      destination: "/blogs/what-is-functional-health",
+      permanent: true,
+    },
   ];
 }
 

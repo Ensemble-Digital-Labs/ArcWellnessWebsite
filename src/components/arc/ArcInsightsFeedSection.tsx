@@ -53,6 +53,7 @@ const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "winter-blues-seasonal-mood-changes",
   "why-sleep-matters-for-your-health",
   "your-skin-is-talking",
+  "what-is-functional-health",
 ]);
 
 const INSIGHTS_PAGE_SIZE = 12;
