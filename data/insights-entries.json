@@ -191,8 +191,14 @@
           "At [Arc Wellness](/), we believe healthcare should look beyond isolated symptoms and laboratory numbers. Our [functional wellness approach](/programs) considers the whole person, helping identify the factors that may be contributing to metabolic concerns and creating practical, individualized strategies for better health.",
           "You don't have to fear sugar, eliminate carbohydrates, or completely overhaul your life overnight. You simply need to understand your body a little better and begin making choices that support it.",
           "**Because the goal isn't just to keep your blood sugar normal. It's to help your entire body function well, today and for years to come.**"
-        ]
+        ],
+        "cta": {
+          "lead": "Ready to look beyond a single blood sugar number?",
+          "body": "Book a consultation with Arc Wellness to review your energy, cravings, hormones, and metabolic health — and map practical next steps.",
+          "label": "Book a consultation"
+        }
       },
+      "primaryCtaLabel": "Book a consultation",
       "faq": {
         "title": "Frequently Asked Questions",
         "items": [
