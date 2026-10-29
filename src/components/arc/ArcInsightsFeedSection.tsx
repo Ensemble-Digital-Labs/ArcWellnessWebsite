@@ -40,6 +40,7 @@ type InsightFilter = "all" | InsightKind;
  * their editorial layout / copy is finished. `null` = show every blog.
  */
 const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
+  "blood-sugar-isnt-just-about-diabetes",
   "insulin-resistance-signs-symptoms",
   "hormones-through-the-decades-st-louis-mo",
   "understanding-chronic-inflammation",
