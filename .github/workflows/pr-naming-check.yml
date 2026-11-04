@@ -18,9 +18,10 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: |
-          if [[ ! "$TITLE" =~ ^(\[?[A-Z][A-Z0-9]*-[0-9]+\]?\s*)?(feat|fix|chore|docs|refactor|test|style|ci|build|perf)(\([a-z0-9-]+\))?!?:\s+.+ ]]; then
-            echo "::error::PR title must follow: [TICKET-ID] type(scope): description"
-            echo "Examples: [ARC-123] feat: Add hero CTA | fix: Resolve mobile nav"
+          # Ticket id is optional. Use [[:space:]] — bash ERE does not support \s.
+          if [[ ! "$TITLE" =~ ^(\[?[A-Z][A-Z0-9]*-[0-9]+\]?[[:space:]]*)?(feat|fix|chore|docs|refactor|test|style|ci|build|perf)(\([a-z0-9-]+\))?!?:[[:space:]]+.+$ ]]; then
+            echo "::error::PR title must follow: type(scope): description (optional [TICKET-ID] prefix)"
+            echo "Examples: chore(ci): add deploy workflows | [ARC-123] feat: add hero CTA | fix: resolve mobile nav"
             echo "Got: $TITLE"
             exit 1
           fi
