@@ -9,8 +9,8 @@
  */
 
 const GITHUB_API = 'https://api.github.com';
-const APPROVE_RE = /\b(approve|approved|lgtm)\b/i;
-const DENY_RE = /\b(deny|denied)\b/i;
+const APPROVE_COMMANDS = new Set(['approve', 'approved', 'lgtm']);
+const DENY_COMMANDS = new Set(['deny', 'denied']);
 
 /** Match @actions/core / runner: INPUT_<NAME>, hyphens preserved (e.g. github-token → INPUT_GITHUB-TOKEN). */
 function getInput(name, { required = false, defaultValue = '' } = {}) {
@@ -113,10 +113,11 @@ function canApprove(login) {
 }
 
 function classifyComment(body) {
-  const text = (body || '').trim();
+  const text = (body || '').trim().toLowerCase();
   if (!text) return null;
-  if (DENY_RE.test(text)) return 'deny';
-  if (APPROVE_RE.test(text)) return 'approve';
+  // Exact command only — avoid matching sentences like "I don't approve".
+  if (DENY_COMMANDS.has(text)) return 'deny';
+  if (APPROVE_COMMANDS.has(text)) return 'approve';
   return null;
 }
 
@@ -203,7 +204,7 @@ async function main() {
     `${issueBody}${relatedSection()}\n` +
     `---\n**Approvers:** ${approvers.map((a) => `@${a}`).join(', ')}\n` +
     `**Required approvals:** ${minimumApprovals}\n\n` +
-    `Comment \`approve\`, \`approved\`, or \`lgtm\` to proceed. Comment \`deny\` or \`denied\` to cancel.\n` +
+    `Reply with **only** one of: \`approve\`, \`approved\`, \`lgtm\`, \`deny\`, or \`denied\` (exact word, nothing else).\n` +
     `This approval issue is **closed automatically** after approve or deny.`;
 
   const issue = await github(`/repos/${owner}/${repo}/issues`, {

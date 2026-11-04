@@ -51,7 +51,7 @@ jobs:
           github-token: ${{ github.token }}
           approvers: ${{ vars.PRODUCTION_DEPLOY_APPROVERS }}
           minimum-approvals: "1"
-          exclude-workflow-initiator: "false"
+          exclude-workflow-initiator: "true"
           workflow-actor: ${{ github.actor }}
           parent-issue-number: ${{ steps.parent.outputs.issue_number || '' }}
           pr-number: ${{ steps.parent.outputs.pr_number || '' }}
@@ -67,8 +67,8 @@ jobs:
             | Target | https://arcwellness.net |
             | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
 
-            Comment **approve**, **approved**, or **lgtm** on this issue to deploy.
-            Comment **deny** or **denied** to cancel.
+            Reply with **only** one of: `approve`, `approved`, `lgtm`, `deny`, or `denied`
+            (exact word — the person who triggered this run cannot approve it).
 
   deploy:
     needs: [approval]
