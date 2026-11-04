@@ -1,0 +1,39 @@
+name: Branch Naming Convention
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [staging, main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check:
+    name: Branch Name Convention
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        env:
+          BRANCH: ${{ github.head_ref }}
+          BASE: ${{ github.base_ref }}
+        run: |
+          if [[ "$BASE" == "staging" ]]; then
+            if [[ "$BRANCH" != "development" && ! "$BRANCH" =~ ^(feature|bugfix|hotfix|chore|docs|ci)/[a-z0-9-]+$ ]]; then
+              echo "::error::Branch must match: feature/*, bugfix/*, hotfix/*, chore/*, docs/*, ci/*, or development"
+              echo "Example: feature/hero-cta"
+              echo "Got: $BRANCH -> $BASE"
+              exit 1
+            fi
+          fi
+
+          if [[ "$BASE" == "main" ]]; then
+            if [[ "$BRANCH" != "staging" ]]; then
+              echo "::error::Only staging can be merged to main"
+              echo "Got: $BRANCH -> $BASE"
+              exit 1
+            fi
+          fi
+
+          echo "Branch naming OK: $BRANCH -> $BASE"

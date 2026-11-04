@@ -33,6 +33,16 @@ npm run build
 npm start
 ```
 
+## Deployment
+
+- Merge to **`staging`** → GitHub Actions deploys to **Netlify** (PR approval only; no Actions issue gate).
+- Merge to **`main`** → Actions issue approval → FTP to **GoDaddy** (`arcwellness.net`).
+- **`development`** does not deploy; disable Netlify Git continuous deployment so pushes there do nothing.
+
+Full details: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+Branch / commit / PR naming: [`.cursor/rules/git-workflow.mdc`](.cursor/rules/git-workflow.mdc) (always applied).
+
 ## Agent notes
 
 See `AGENTS.md` and `CLAUDE.md` for Next.js agent guidance.

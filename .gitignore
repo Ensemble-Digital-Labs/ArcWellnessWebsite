@@ -30,9 +30,12 @@
 /local-envdev/
 /scripts/*
 !/scripts/build-godaddy-static.mjs
+!/scripts/resolve-deploy-parent-issue.mjs
 /design/
 /documents/
-/.cursor/
+/.cursor/*
+!/.cursor/rules/
+!/.cursor/rules/**
 /.vscode/
 
 # Agent IDE hints (not part of the site build)
