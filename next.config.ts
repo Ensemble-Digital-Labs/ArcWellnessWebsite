@@ -8,13 +8,17 @@ const appRoot = path.resolve(__dirname);
 /** iPhone / LAN dev — Next.js blocks `/_next/*` unless the host IP is allowlisted. */
 function getDevLanOrigins(): string[] {
   const hosts = new Set<string>(["localhost", "127.0.0.1"]);
-  for (const ifaces of Object.values(os.networkInterfaces())) {
-    if (!ifaces) continue;
-    for (const iface of ifaces) {
-      if (iface.family === "IPv4" && !iface.internal) {
-        hosts.add(iface.address);
+  try {
+    for (const ifaces of Object.values(os.networkInterfaces())) {
+      if (!ifaces) continue;
+      for (const iface of ifaces) {
+        if (iface.family === "IPv4" && !iface.internal) {
+          hosts.add(iface.address);
+        }
       }
     }
+  } catch {
+    // Some sandboxes / CI runners block os.networkInterfaces(); localhost is enough for builds.
   }
   return [...hosts];
 }

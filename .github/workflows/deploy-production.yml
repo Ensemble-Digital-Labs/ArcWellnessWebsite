@@ -1,0 +1,130 @@
+# Merge to main → manual approval issue → GoDaddy static export + FTP deploy.
+# Set repo variable PRODUCTION_DEPLOY_APPROVERS (comma-separated GitHub usernames).
+
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production-${{ github.sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  approval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4320
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Require PRODUCTION_DEPLOY_APPROVERS variable
+        run: |
+          if [ -z "${{ vars.PRODUCTION_DEPLOY_APPROVERS }}" ]; then
+            echo "::error::Set Settings → Secrets and variables → Actions → Variables → PRODUCTION_DEPLOY_APPROVERS (comma-separated GitHub usernames)"
+            exit 1
+          fi
+
+      - name: Resolve parent issue from merged PR
+        if: github.event_name == 'push'
+        id: parent
+        env:
+          ACTIONS_GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: node scripts/resolve-deploy-parent-issue.mjs
+
+      - name: Manual deploy approval
+        uses: ./.github/actions/manual-approval
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        with:
+          github-token: ${{ github.token }}
+          approvers: ${{ vars.PRODUCTION_DEPLOY_APPROVERS }}
+          minimum-approvals: "1"
+          exclude-workflow-initiator: "true"
+          workflow-actor: ${{ github.actor }}
+          parent-issue-number: ${{ steps.parent.outputs.issue_number || '' }}
+          pr-number: ${{ steps.parent.outputs.pr_number || '' }}
+          issue-title: "Approve production deploy — ${{ github.sha }}"
+          issue-body: |
+            **Production deploy** waiting for approval (1 approver required).
+
+            | | |
+            |---|---|
+            | Commit | `${{ github.sha }}` |
+            | Tracking issue | ${{ steps.parent.outputs.issue_number }} |
+            | Pull request | ${{ steps.parent.outputs.pr_number }} |
+            | Target | https://arcwellness.net |
+            | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+
+            Reply with **only** one of: `approve`, `approved`, `lgtm`, `deny`, or `denied`
+            (exact word — the person who triggered this run cannot approve it).
+
+  deploy:
+    needs: [approval]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment:
+      name: production
+      url: https://arcwellness.net
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build GoDaddy static export
+        run: npm run build:godaddy
+
+      - name: Deploy to cPanel (production)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR_PROD }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+          if [ -z "${FTP_SERVER}" ] || [ -z "${FTP_USERNAME}" ] || [ -z "${FTP_PASSWORD}" ] || [ -z "${FTP_SERVER_DIR}" ]; then
+            echo "One or more required FTP secrets are empty"
+            exit 1
+          fi
+
+          if [ ! -d ./out ]; then
+            echo "Build output directory ./out is missing"
+            exit 1
+          fi
+
+          getent hosts "${FTP_SERVER}" > /dev/null || {
+            echo "FTP_SERVER does not resolve via DNS. Use cbsurgery.com (not ftp.cbsurgery.com)."
+            exit 1
+          }
+
+          lftp \
+            -u "${FTP_USERNAME},${FTP_PASSWORD}" \
+            -e "set ftp:ssl-allow no; set ftp:passive-mode true; mirror --reverse --delete --verbose --no-perms ./out/ ${FTP_SERVER_DIR}/; bye" \
+            "${FTP_SERVER}"
+
+      - name: Deploy summary
+        if: always()
+        run: |
+          echo "## Production deploy finished" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Commit: ${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- URL: https://arcwellness.net" >> "$GITHUB_STEP_SUMMARY"
