@@ -1,28 +1,41 @@
 ---
-description: Branch, commit, and PR naming conventions for Arc Wellness
+description: Always follow Arc branch/commit/PR conventions when committing, pushing, or opening PRs
 alwaysApply: true
 ---
 
 # Git workflow conventions
 
-Follow these whenever creating branches, commits, or pull requests. Do not invent alternate formats.
+**Mandatory.** When the user asks to **commit**, **push**, and/or **create a PR**, follow this file end-to-end. Do not skip steps or invent alternate formats.
+
+## When the user asks to commit / push / open a PR
+
+Run this playbook every time (unless the user explicitly overrides a step):
+
+1. **Base from staging** — If not already on a correctly named working branch created from current `staging` for *this* change set:
+   ```bash
+   git fetch origin
+   git checkout staging
+   git pull origin staging
+   git checkout -b <type>/<short-kebab-description>
+   ```
+   Move uncommitted work onto that branch (stash/pop or equivalent) before committing.
+2. **Never commit on** `staging`, `main`, or `development`.
+3. **Commit** using the Conventional Commit format below (HEREDOC). Only commit when asked.
+4. **Push** the working branch with `-u` when asked to push: `git push -u origin HEAD` (never force-push to `staging`/`main`).
+5. **PR into `staging`** (default) when asked to create a PR — not into `main`, unless the user is explicitly promoting `staging` → `main`.
+6. **PR title + body** must match the conventions and `.github/PULL_REQUEST_TEMPLATE.md` below.
+7. Return the PR URL when done.
+
+Promotion to production is a separate PR: **`staging` → `main`** only.
 
 ## Starting work (required)
 
 Always start from an up-to-date **`staging`**, then create a **new** branch for the work. Commit only on that branch.
 
-```bash
-git fetch origin
-git checkout staging
-git pull origin staging
-git checkout -b <type>/<short-kebab-description>
-```
-
 Rules:
 - **Never** commit directly on `staging`, `main`, or `development`
 - **Never** continue unrelated work on someone else’s or a stale feature branch — open a new branch from `staging`
 - After commits, open a PR **into `staging`** (not `main`)
-- Only create the branch/commit/PR when the user asks to commit or open a PR; still use this base/branch flow when they do
 
 ## Branch names
 
