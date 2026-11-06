@@ -1,0 +1,43 @@
+# Org-owned action (allowed by Ensemble-Digital-Labs Actions policy).
+name: Manual approval
+description: Wait for listed GitHub users to approve or deny via issue comments
+inputs:
+  approvers:
+    description: Comma-separated GitHub usernames
+    required: true
+  minimum-approvals:
+    description: Minimum distinct approvers required
+    required: false
+    default: '1'
+  issue-title:
+    description: Title for the approval issue
+    required: true
+  issue-body:
+    description: Body for the approval issue (markdown)
+    required: true
+  exclude-workflow-initiator:
+    description: If true, the workflow actor cannot count as an approver
+    required: false
+    default: 'true'
+  workflow-actor:
+    description: Login that triggered the workflow (github.actor)
+    required: false
+    default: ''
+  polling-interval-seconds:
+    description: Seconds between polling issue comments
+    required: false
+    default: '10'
+  parent-issue-number:
+    description: Optional parent tracking issue number (approval is tagged/linked back)
+    required: false
+    default: ''
+  pr-number:
+    description: Optional merged PR number (approval is commented on the PR)
+    required: false
+    default: ''
+  github-token:
+    description: GitHub token with issues:write (use github.token from the workflow)
+    required: true
+runs:
+  using: node24
+  main: index.mjs

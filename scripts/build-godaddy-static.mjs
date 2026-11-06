@@ -188,7 +188,8 @@ try {
   const outDir = path.join(root, "out");
   if (existsSync(outDir)) rmSync(outDir, { recursive: true, force: true });
 
-  run("npx", ["next", "build"], {
+  // Use webpack: Next 16 defaults to Turbopack, which breaks next/font/google in CI.
+  run("npx", ["next", "build", "--webpack"], {
     GODADDY_STATIC: "1",
     NEXT_PUBLIC_STATIC_EXPORT: "1",
     NEXT_PUBLIC_SITE_URL: "https://arcwellness.net",

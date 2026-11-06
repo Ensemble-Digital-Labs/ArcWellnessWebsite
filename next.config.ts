@@ -8,13 +8,17 @@ const appRoot = path.resolve(__dirname);
 /** iPhone / LAN dev — Next.js blocks `/_next/*` unless the host IP is allowlisted. */
 function getDevLanOrigins(): string[] {
   const hosts = new Set<string>(["localhost", "127.0.0.1"]);
-  for (const ifaces of Object.values(os.networkInterfaces())) {
-    if (!ifaces) continue;
-    for (const iface of ifaces) {
-      if (iface.family === "IPv4" && !iface.internal) {
-        hosts.add(iface.address);
+  try {
+    for (const ifaces of Object.values(os.networkInterfaces())) {
+      if (!ifaces) continue;
+      for (const iface of ifaces) {
+        if (iface.family === "IPv4" && !iface.internal) {
+          hosts.add(iface.address);
+        }
       }
     }
+  } catch {
+    // Some sandboxes / CI runners block os.networkInterfaces(); localhost is enough for builds.
   }
   return [...hosts];
 }
@@ -97,6 +101,12 @@ const nextConfig: NextConfig = {
 };
 
 if (!isGodaddyStatic) {
+  nextConfig.headers = async () => [
+    {
+      source: "/assets/:path*",
+      headers: [{ key: "Accept-Ranges", value: "bytes" }],
+    },
+  ];
   nextConfig.redirects = async () => [
     {
       source: "/book",
@@ -196,6 +206,31 @@ if (!isGodaddyStatic) {
     {
       source: "/blog/all-calories-arent-created-equal",
       destination: "/blogs/all-calories-arent-created-equal",
+      permanent: true,
+    },
+    {
+      source: "/blog/not-all-preservatives-are-created-equal",
+      destination: "/blogs/not-all-preservatives-are-created-equal",
+      permanent: true,
+    },
+    {
+      source: "/blog/winter-blues-seasonal-mood-changes",
+      destination: "/blogs/winter-blues-seasonal-mood-changes",
+      permanent: true,
+    },
+    {
+      source: "/blog/why-sleep-matters-for-your-health",
+      destination: "/blogs/why-sleep-matters-for-your-health",
+      permanent: true,
+    },
+    {
+      source: "/blog/your-skin-is-talking",
+      destination: "/blogs/your-skin-is-talking",
+      permanent: true,
+    },
+    {
+      source: "/blog/what-is-functional-health",
+      destination: "/blogs/what-is-functional-health",
       permanent: true,
     },
   ];

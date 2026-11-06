@@ -7,6 +7,7 @@ import {
 import { insightHref } from "@/content/pages/insights";
 import { getAllTreatmentSlugs } from "@/content/pages/treatments";
 import { getInsightEntries } from "@/lib/insightsStore";
+import { isPublishedBlog } from "@/lib/publishedBlogSlugs";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
@@ -43,7 +44,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
-  const insightRoutes: MetadataRoute.Sitemap = getInsightEntries().map(
+  const insightRoutes: MetadataRoute.Sitemap = getInsightEntries()
+    .filter((entry) => entry.kind !== "blog" || isPublishedBlog(entry.slug))
+    .map(
     (entry) => ({
       url: `${SITE_URL}${insightHref(entry)}`,
       changeFrequency: "monthly" as const,

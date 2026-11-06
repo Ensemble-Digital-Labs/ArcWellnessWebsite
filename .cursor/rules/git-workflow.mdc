@@ -1,0 +1,128 @@
+---
+description: Always follow Arc branch/commit/PR conventions when committing, pushing, or opening PRs
+alwaysApply: true
+---
+
+# Git workflow conventions
+
+**Mandatory.** When the user asks to **commit**, **push**, and/or **create a PR**, follow this file end-to-end. Do not skip steps or invent alternate formats.
+
+## When the user asks to commit / push / open a PR
+
+Run this playbook every time (unless the user explicitly overrides a step):
+
+1. **Base from staging** — If not already on a correctly named working branch created from current `staging` for *this* change set:
+   ```bash
+   git fetch origin
+   git checkout staging
+   git pull origin staging
+   git checkout -b <type>/<short-kebab-description>
+   ```
+   Move uncommitted work onto that branch (stash/pop or equivalent) before committing.
+2. **Never commit on** `staging`, `main`, or `development`.
+3. **Commit** using the Conventional Commit format below (HEREDOC). Only commit when asked.
+4. **Push** the working branch with `-u` when asked to push: `git push -u origin HEAD` (never force-push to `staging`/`main`).
+5. **PR into `staging`** (default) when asked to create a PR — not into `main`, unless the user is explicitly promoting `staging` → `main`.
+6. **PR title + body** must match the conventions and `.github/PULL_REQUEST_TEMPLATE.md` below.
+7. Return the PR URL when done.
+
+Promotion to production is a separate PR: **`staging` → `main`** only.
+
+## Starting work (required)
+
+Always start from an up-to-date **`staging`**, then create a **new** branch for the work. Commit only on that branch.
+
+Rules:
+- **Never** commit directly on `staging`, `main`, or `development`
+- **Never** continue unrelated work on someone else’s or a stale feature branch — open a new branch from `staging`
+- After commits, open a PR **into `staging`** (not `main`)
+
+## Branch names
+
+Pattern: `<type>/<short-kebab-description>`
+
+Allowed types: `feature`, `bugfix`, `hotfix`, `chore`, `docs`, `ci`
+
+Rules:
+- Lowercase kebab-case only (`a-z`, `0-9`, `-`)
+- Optional ticket: `feature/arc-123-hero-cta` or `feature/hero-cta`
+- No spaces, underscores, or PascalCase
+
+Examples:
+- `feature/staging-netlify-deploy`
+- `bugfix/mobile-nav-overflow`
+- `chore/update-dependencies`
+- `ci/add-pr-naming-checks`
+
+### Merge targets
+
+| From | Into | Notes |
+|------|------|--------|
+| `feature/*`, `bugfix/*`, `chore/*`, `docs/*`, `ci/*` | `staging` | Branched from `staging`; PR back to `staging` |
+| `hotfix/*` | `staging` (prefer) or `main` only for prod emergencies | Still prefer branching from `staging` |
+| `staging` | `main` | Only `staging` may PR into `main` |
+| `development` | `staging` | Integration branch; does not deploy |
+
+Never open a feature-branch PR directly into `main`.
+
+## Commit messages
+
+Use Conventional Commits:
+
+```
+<type>(optional-scope): <imperative summary>
+
+Optional body — why, not what.
+```
+
+Allowed types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `ci`, `build`, `perf`
+
+Rules:
+- Subject ≤ ~72 chars, imperative mood, no trailing period
+- Focus on **why**; keep the body short
+- Pass the message via HEREDOC when committing from the agent
+- Do not commit unless the user asked
+
+Examples:
+- `feat(staging): deploy Netlify from Actions after merge`
+- `fix: restore FAQ accordion on mobile`
+- `ci: add PR and branch naming checks`
+- `docs: document staging and production deploy flow`
+
+## PR titles
+
+Same shape as commits (ticket optional):
+
+```
+[TICKET-ID] type(scope): description
+```
+
+or without ticket:
+
+```
+type(scope): description
+```
+
+Examples:
+- `[ARC-42] feat: add staging Netlify deploy workflow`
+- `fix: correct GoDaddy .htaccess canonical redirects`
+- `ci: enforce branch and PR title conventions`
+
+## PR body
+
+When opening or drafting a PR, use this structure (match `.github/PULL_REQUEST_TEMPLATE.md`):
+
+```markdown
+## Summary
+- 
+
+## Test plan
+- [ ] 
+
+## Deploy notes
+- Target branch: `staging` | `main`
+- Staging → Netlify via Actions after merge (no issue gate)
+- Main → production issue approval, then GoDaddy FTP
+```
+
+Fill Summary with 1–3 concrete bullets. Prefer a checklist in Test plan. Note env/secret or Netlify/GoDaddy impact under Deploy notes when relevant.

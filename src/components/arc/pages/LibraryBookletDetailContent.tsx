@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 
@@ -15,6 +16,7 @@ import {
 import { homeInvestSupport } from "@/content/homepage";
 import { images } from "@/content/site";
 import { ARC_PAGE_RAIL_MAX } from "@/lib/arc-layout";
+import { prefetchLibraryPdf } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
 
 export function LibraryBookletDetailContent({
@@ -27,6 +29,10 @@ export function LibraryBookletDetailContent({
   backLabel?: string;
 }) {
   const canDownload = libraryBookletAllowsDownload(booklet);
+
+  useEffect(() => {
+    prefetchLibraryPdf(booklet.pdfSrc);
+  }, [booklet.pdfSrc]);
 
   return (
     <>
@@ -92,7 +98,7 @@ export function LibraryBookletDetailContent({
               />
             ) : libraryBookletUsesFlipReader(booklet) ? (
               <div className="flex min-h-[70dvh] max-h-[80dvh] flex-col bg-[#ebe4d6]">
-                <LibraryBookFlipReader src={booklet.pdfSrc} />
+                <LibraryBookFlipReader src={booklet.pdfSrc} coverSrc={booklet.coverSrc} />
               </div>
             ) : (
               <LibraryPdfScroller className="max-h-[80dvh] min-h-[70dvh] bg-[#ebe4d6]">

@@ -2,15 +2,13 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type {
-  PDFDocumentLoadingTask,
   PDFDocumentProxy,
   PDFPageProxy,
   RenderTask,
 } from "pdfjs-dist";
 
+import { loadLibraryPdfDocument } from "@/lib/libraryPdfCache";
 import { cn } from "@/lib/utils";
-
-const WORKER_SRC = "/assets/library/pdf.worker.min.mjs";
 
 /** Phone CSS width is small; undersampled canvases look soft, especially photo spreads. */
 const MIN_BITMAP_WIDTH_NARROW = 2000;
@@ -310,28 +308,10 @@ export function LibraryPdfPages({ src }: { src: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    let loadingTask: PDFDocumentLoadingTask | null = null;
-
-    const destroyTask = () => {
-      const task = loadingTask;
-      loadingTask = null;
-      if (typeof task?.destroy !== "function") return;
-      void task.destroy().catch(() => {});
-    };
 
     const load = async () => {
-      const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
-      loadingTask = pdfjs.getDocument({
-        url: src,
-        disableRange: true,
-        disableStream: true,
-      });
-      const doc = await loadingTask.promise;
-      if (cancelled) {
-        destroyTask();
-        return;
-      }
+      const doc = await loadLibraryPdfDocument(src);
+      if (cancelled) return;
 
       try {
         const first = await doc.getPage(1);
@@ -343,15 +323,11 @@ export function LibraryPdfPages({ src }: { src: string }) {
         /* keep default placeholder ratio */
       }
 
-      if (cancelled) {
-        destroyTask();
-        return;
-      }
+      if (cancelled) return;
       setPdf(doc);
     };
 
     void load().catch((reason: unknown) => {
-      destroyTask();
       if (cancelled) return;
       if (isPdfjsCancelled(reason)) return;
       setError("This booklet could not be opened here. Close and try again.");
@@ -359,7 +335,6 @@ export function LibraryPdfPages({ src }: { src: string }) {
 
     return () => {
       cancelled = true;
-      destroyTask();
     };
   }, [src]);
 
