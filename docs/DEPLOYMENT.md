@@ -66,7 +66,7 @@ GitHub → **Settings → Secrets and variables → Actions → Variables**
 
 - `PRODUCTION_DEPLOY_APPROVERS` — comma-separated GitHub usernames
 
-Approvers reply with **exactly** `approve`, `approved`, `lgtm`, `deny`, or `denied` on the auto-created deploy issue (the workflow initiator cannot self-approve).
+Approvers reply with **exactly** `approve`, `approved`, `lgtm`, `deny`, or `denied` on the auto-created deploy issue (the workflow initiator may self-approve if they are listed in `PRODUCTION_DEPLOY_APPROVERS`).
 
 ## Local builds
 
