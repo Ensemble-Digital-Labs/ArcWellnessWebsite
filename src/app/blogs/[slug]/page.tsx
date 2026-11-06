@@ -3,10 +3,9 @@ import { notFound } from "next/navigation";
 import { ArcMarketingShell } from "@/components/arc/ArcMarketingShell";
 import { InsightDetailContent } from "@/components/arc/pages/InsightDetailContent";
 import type { InsightEntry } from "@/content/pages/insights";
-import {
-  getAllInsightSlugs,
-  getInsightEntryBySlug,
-} from "@/lib/insightsQueries";
+import { getInsightEntryBySlug } from "@/lib/insightsQueries";
+import { isPublishedBlog } from "@/lib/publishedBlogSlugs";
+import { getInsightEntries } from "@/lib/insightsStore";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -178,13 +177,17 @@ function buildBlogJsonLd(entry: InsightEntry) {
 
 /** Article detail under the `/blogs` hub (blogs + desk posts). */
 export function generateStaticParams() {
-  return getAllInsightSlugs().map((slug) => ({ slug }));
+  return getInsightEntries()
+    .filter((entry) => entry.kind !== "blog" || isPublishedBlog(entry.slug))
+    .map((entry) => ({ slug: entry.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const entry = getInsightEntryBySlug(slug);
-  if (!entry) return { title: "Education | Arc Wellness" };
+  if (!entry || (entry.kind === "blog" && !isPublishedBlog(slug))) {
+    return { title: "Education | Arc Wellness" };
+  }
   const title =
     entry.seo?.title?.trim() || `${entry.title} | Arc Wellness`;
   const description =
@@ -199,7 +202,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BlogsArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const entry = getInsightEntryBySlug(slug);
-  if (!entry) notFound();
+  if (!entry || (entry.kind === "blog" && !isPublishedBlog(slug))) notFound();
 
   const jsonLd = buildBlogJsonLd(entry);
 

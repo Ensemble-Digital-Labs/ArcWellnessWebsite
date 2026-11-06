@@ -28,6 +28,7 @@ import { ARC_PINNED_CLEAR_BELOW_LOGO } from "@/lib/arc-layout";
 import { cn } from "@/lib/utils";
 import { ArcSectionSeamBlend } from "@/components/arc/ArcSectionSeamBlend";
 import { ArcWindowFrame } from "@/components/arc/ArcWindowFrame";
+import { PUBLISHED_BLOG_SLUGS } from "@/lib/publishedBlogSlugs";
 
 
 const DEFAULT_EDUCATION_MASTHEAD: ArcLibraryMastheadCopy =
@@ -35,28 +36,7 @@ const DEFAULT_EDUCATION_MASTHEAD: ArcLibraryMastheadCopy =
 
 type InsightFilter = "all" | InsightKind;
 
-/**
- * Blog slugs ready to show on the Arc Desk feed. Others stay hidden until
- * their editorial layout / copy is finished. `null` = show every blog.
- */
-const INSIGHTS_READY_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
-  "gratitude-connection-and-longevity",
-  "blood-sugar-isnt-just-about-diabetes",
-  "insulin-resistance-signs-symptoms",
-  "hormones-through-the-decades-st-louis-mo",
-  "understanding-chronic-inflammation",
-  "is-your-gut-trying-to-tell-you-something",
-  "why-youre-tired-even-when-your-labs-are-normal",
-  "hair-loss-on-a-glp-1-explained",
-  "nervous-system-dysregulation-symptoms-causes-healing",
-  "the-skinny-on-fiber",
-  "all-calories-arent-created-equal",
-  "not-all-preservatives-are-created-equal",
-  "winter-blues-seasonal-mood-changes",
-  "why-sleep-matters-for-your-health",
-  "your-skin-is-talking",
-  "what-is-functional-health",
-]);
+const INSIGHTS_READY_BLOG_SLUGS = PUBLISHED_BLOG_SLUGS;
 
 const INSIGHTS_PAGE_SIZE = 12;
 

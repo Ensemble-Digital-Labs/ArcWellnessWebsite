@@ -240,14 +240,14 @@
     ],
     "excerpt": "The surprising connection between sugar, energy, cravings, hormones, inflammation, and your long-term health",
     "publishedAt": "06 Nov 2026",
-    "imageSrc": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261028",
-    "imageAlt": "Hands holding a home glucose meter reading 96 mg/dL, with fresh vegetables on the table",
+    "imageSrc": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261106",
+    "imageAlt": "Breakfast table with oatmeal, berries, a glucose meter reading 96 mg/dL, water, and an apple while someone eats a salad",
     "seo": {
       "title": "Blood Sugar Isn't Just About Diabetes | St. Louis",
       "description": "Fatigue, cravings, belly fat, and brain fog can be tied to blood sugar. Learn how insulin resistance affects your health and how Arc Wellness can help.",
       "schemaHeadline": "Blood Sugar Isn't Just About Diabetes",
       "schemaDescription": "Fatigue, cravings, belly fat, and brain fog can be tied to blood sugar. Learn how insulin resistance affects your health and how Arc Wellness can help.",
-      "schemaImage": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261028",
+      "schemaImage": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261106",
       "focusKeyword": "blood sugar",
       "secondaryKeywords": [
         "insulin resistance",
@@ -275,8 +275,8 @@
     },
     "article": {
       "overviewImage": {
-        "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261028",
-        "alt": "Hands holding a home glucose meter reading 96 mg/dL, with fresh vegetables on the table"
+        "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/featured.webp?v=20261106",
+        "alt": "Breakfast table with oatmeal, berries, a glucose meter reading 96 mg/dL, water, and an apple while someone eats a salad"
       },
       "overview": [
         "When you hear the words **blood sugar**, what comes to mind? For most people, it's diabetes. And if you've never been diagnosed with diabetes, chances are you haven't given your blood sugar much thought. Your annual bloodwork looks fine, your doctor hasn't mentioned any concerns, and you assume everything is working exactly as it should.",
@@ -323,8 +323,8 @@
         {
           "title": "The Hidden Sugars We Don't Always See",
           "image": {
-            "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/added-sugars.webp?v=20261028",
-            "alt": "Donut, cookie, muffin, gummy candy, soda, and a caramel iced coffee crowded together on a table"
+            "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/added-sugars.webp?v=20261106",
+            "alt": "Sauces, bread, cereal, yogurt, granola bars, and sweetened drinks that can hide added sugar"
           },
           "body": [
             "Now let's talk about something that surprises many people.",
@@ -399,8 +399,8 @@
         {
           "title": "Small Changes That Make a Big Difference",
           "image": {
-            "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/balanced-meal.webp?v=20261028",
-            "alt": "Grilled chicken with quinoa, leafy salad, avocado, and tomatoes, with berries, almonds, and lemon water"
+            "src": "/assets/insights/blood-sugar-isnt-just-about-diabetes/balanced-meal.webp?v=20261106",
+            "alt": "A salmon and salad meal, a woman walking outdoors, and a woman sleeping"
           },
           "body": [
             "The good news is that supporting healthy blood sugar doesn't require a complicated diet, [expensive supplements](/treatments/supplements), or eliminating every food you enjoy.",
@@ -424,7 +424,7 @@
         ],
         "cta": {
           "lead": "Ready to look beyond a single blood sugar number?",
-          "body": "Book a consultation with Arc Wellness to review your energy, cravings, hormones, and metabolic health — and map practical next steps.",
+          "body": "Book a consultation with Arc Wellness to review your energy, cravings, hormones, and metabolic health and map practical next steps.",
           "label": "Book a consultation"
         }
       },
