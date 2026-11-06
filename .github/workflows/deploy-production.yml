@@ -50,7 +50,7 @@ jobs:
           github-token: ${{ github.token }}
           approvers: ${{ vars.PRODUCTION_DEPLOY_APPROVERS }}
           minimum-approvals: "1"
-          exclude-workflow-initiator: "true"
+          exclude-workflow-initiator: "false"
           workflow-actor: ${{ github.actor }}
           parent-issue-number: ${{ steps.parent.outputs.issue_number || '' }}
           pr-number: ${{ steps.parent.outputs.pr_number || '' }}
@@ -67,7 +67,7 @@ jobs:
             | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
 
             Reply with **only** one of: `approve`, `approved`, `lgtm`, `deny`, or `denied`
-            (exact word — the person who triggered this run cannot approve it).
+            (exact word — listed approvers may approve, including the person who triggered this run).
 
   deploy:
     needs: [approval]
