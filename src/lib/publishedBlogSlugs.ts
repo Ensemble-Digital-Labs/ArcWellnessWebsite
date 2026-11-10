@@ -4,7 +4,6 @@
  */
 export const PUBLISHED_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "holiday-plate-healthy-holiday-eating",
-  "gratitude-connection-and-longevity",
   "blood-sugar-isnt-just-about-diabetes",
   "insulin-resistance-signs-symptoms",
   "hormones-through-the-decades-st-louis-mo",
