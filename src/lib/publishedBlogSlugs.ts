@@ -3,7 +3,7 @@
  * `null` = show every blog.
  */
 export const PUBLISHED_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
-  "gratitude-connection-and-longevity",
+  "holiday-plate-healthy-holiday-eating",
   "blood-sugar-isnt-just-about-diabetes",
   "insulin-resistance-signs-symptoms",
   "hormones-through-the-decades-st-louis-mo",
