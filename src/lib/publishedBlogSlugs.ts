@@ -4,6 +4,7 @@
  */
 export const PUBLISHED_BLOG_SLUGS: ReadonlySet<string> | null = new Set([
   "muscle-is-more-than-strength",
+  "gratitude-connection-and-longevity",
   "holiday-plate-healthy-holiday-eating",
   "blood-sugar-isnt-just-about-diabetes",
   "insulin-resistance-signs-symptoms",
